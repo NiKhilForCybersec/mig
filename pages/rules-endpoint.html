@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Endpoint Threats Rules - RSA to Sentinel Migration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0a0f; --bg-secondary: #12121a; --bg-tertiary: #1a1a2e; --accent-blue: #3b82f6; --text-primary: #f8fafc; --text-secondary: #94a3b8; --border-color: #2a2a3e; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); margin: 0; min-height: 100vh; }
+        code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+        .hero-bg { background: radial-gradient(ellipse at 20% 30%, rgba(139, 92, 246, 0.1) 0%, transparent 50%), var(--bg-primary); }
+        .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; }
+        .nav-link { color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+        .nav-link:hover { color: var(--text-primary); }
+        .badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+        .badge-red { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+        .badge-purple { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .badge-orange { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        pre { background: #0d0d14; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; overflow-x: auto; font-size: 13px; line-height: 1.6; }
+        .code-rsa { border-left: 3px solid #ef4444; }
+        .code-kql { border-left: 3px solid #10b981; }
+        .tab-btn { padding: 8px 16px; border-radius: 6px; font-weight: 500; transition: all 0.2s; cursor: pointer; border: none; }
+        .tab-btn.active { background: var(--accent-blue); color: white; }
+        .tab-btn:not(.active) { background: var(--bg-tertiary); color: var(--text-secondary); }
+        .copy-btn { position: absolute; top: 8px; right: 8px; padding: 6px; border-radius: 6px; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-secondary); cursor: pointer; }
+        .copy-btn:hover { color: white; border-color: var(--accent-blue); }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        .keyword { color: #ff7b72; }
+        .string { color: #a5d6ff; }
+        .comment { color: #8b949e; font-style: italic; }
+        .function { color: #d2a8ff; }
+        .number { color: #79c0ff; }
+    </style>
+</head>
+<body class="hero-bg">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-[#2a2a3e]">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <div><h1 class="text-lg font-bold text-white">RSA → Sentinel</h1></div>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="../index.html" class="nav-link font-medium">Home</a>
+                    <a href="overview.html" class="nav-link font-medium">Overview</a>
+                    <a href="defender-stack.html" class="nav-link font-medium">Defender XDR</a>
+                    <a href="rules-catalog.html" class="nav-link font-medium text-purple-400">Rules</a>
+                    <a href="dlp-migration.html" class="nav-link font-medium">DLP</a>
+                    <a href="playbooks.html" class="nav-link font-medium">Playbooks</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                    <a href="../index.html" class="hover:text-blue-400">Home</a>
+                    <span>/</span>
+                    <a href="rules-catalog.html" class="hover:text-blue-400">Rules</a>
+                    <span>/</span>
+                    <span class="text-gray-400">Endpoint Threats</span>
+                </div>
+                <div class="flex items-center gap-4 mb-4">
+                    <h1 class="text-4xl font-bold text-white">Endpoint Threats</h1>
+                    <span class="badge badge-red">Critical</span>
+                </div>
+                <p class="text-xl text-gray-400 max-w-3xl mb-6">
+                    35 RSA rules migrated to 33 Sentinel analytics rules for detecting PowerShell attacks, LSASS access, process injection, and persistence mechanisms.
+                </p>
+                <div class="flex items-center gap-4">
+                    <span class="text-sm text-gray-500">MITRE Techniques:</span>
+                    <span class="badge badge-purple">T1059.001</span>
+                    <span class="badge badge-purple">T1003</span>
+                    <span class="badge badge-purple">T1055</span>
+                </div>
+            </div>
+
+            <!-- Rule 1: Suspicious PowerShell -->
+            <div class="card p-6 mb-8" id="powershell">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-semibold text-white">6.1 Suspicious PowerShell Execution</h2>
+                            <span class="badge badge-red">Critical</span>
+                        </div>
+                        <p class="text-gray-400">Detects encoded commands and suspicious PowerShell patterns</p>
+                    </div>
+                    <span class="badge badge-purple">T1059.001</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'ps-rsa')">RSA NetWitness</button>
+                        <button class="tab-btn" onclick="showTab(this, 'ps-kql')">Microsoft Sentinel</button>
+                    </div>
+                    
+                    <div id="ps-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-rsa"><span class="comment">-- Rule: Suspicious_PowerShell</span>
+<span class="keyword">@RSA_Rule</span> <span class="string">"Suspicious_PowerShell"</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Event
+<span class="keyword">WHERE</span> 
+    process_name = <span class="string">'powershell.exe'</span> <span class="keyword">AND</span>
+    (command_line <span class="keyword">MATCHES</span> <span class="string">'*-enc*|*-e *|*bypass*|*hidden*|*downloadstring*'</span>)
+<span class="keyword">ALERT</span> severity = <span class="string">'critical'</span>,
+      technique = <span class="string">'T1059.001'</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="ps-kql" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-kql"><span class="comment">// Rule: Suspicious PowerShell Execution</span>
+<span class="comment">// MITRE: T1059.001 - Command and Scripting Interpreter: PowerShell</span>
+
+<span class="keyword">let</span> suspiciousPatterns = <span class="function">dynamic</span>([
+    <span class="string">"-encodedcommand"</span>, <span class="string">"-enc "</span>, <span class="string">"-e "</span>, <span class="string">"-ec "</span>,
+    <span class="string">"bypass"</span>, <span class="string">"-nop"</span>, <span class="string">"-w hidden"</span>, <span class="string">"-windowstyle hidden"</span>,
+    <span class="string">"downloadstring"</span>, <span class="string">"downloadfile"</span>, <span class="string">"invoke-webrequest"</span>,
+    <span class="string">"invoke-expression"</span>, <span class="string">"iex"</span>, <span class="string">"invoke-mimikatz"</span>,
+    <span class="string">"invoke-shellcode"</span>, <span class="string">"new-object net.webclient"</span>
+]);
+
+DeviceProcessEvents
+| <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(<span class="number">1h</span>)
+| <span class="keyword">where</span> FileName <span class="keyword">in~</span> (<span class="string">"powershell.exe"</span>, <span class="string">"pwsh.exe"</span>)
+| <span class="keyword">extend</span> CmdLower = <span class="function">tolower</span>(ProcessCommandLine)
+| <span class="keyword">where</span> CmdLower <span class="keyword">has_any</span> (suspiciousPatterns)
+| <span class="keyword">extend</span>
+    IsEncoded = CmdLower <span class="keyword">has_any</span> (<span class="string">"-encodedcommand"</span>, <span class="string">"-enc "</span>, <span class="string">"-e "</span>),
+    IsHidden = CmdLower <span class="keyword">has_any</span> (<span class="string">"hidden"</span>, <span class="string">"-w h"</span>),
+    IsDownload = CmdLower <span class="keyword">has_any</span> (<span class="string">"downloadstring"</span>, <span class="string">"downloadfile"</span>, <span class="string">"webclient"</span>),
+    IsBypass = CmdLower <span class="keyword">contains</span> <span class="string">"bypass"</span>
+| <span class="keyword">extend</span> RiskScore = 
+    (<span class="function">toint</span>(IsEncoded) * <span class="number">40</span>) + 
+    (<span class="function">toint</span>(IsHidden) * <span class="number">20</span>) + 
+    (<span class="function">toint</span>(IsDownload) * <span class="number">30</span>) + 
+    (<span class="function">toint</span>(IsBypass) * <span class="number">10</span>)
+| <span class="keyword">project</span>
+    TimeGenerated,
+    DeviceName,
+    AccountName,
+    ProcessCommandLine,
+    InitiatingProcessFileName,
+    InitiatingProcessCommandLine,
+    RiskScore,
+    Severity = <span class="function">case</span>(
+        RiskScore >= <span class="number">70</span>, <span class="string">"Critical"</span>,
+        RiskScore >= <span class="number">40</span>, <span class="string">"High"</span>,
+        <span class="string">"Medium"</span>
+    ),
+    MITRETechnique = <span class="string">"T1059.001"</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rule 2: LSASS Access -->
+            <div class="card p-6 mb-8" id="lsass">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-semibold text-white">6.2 LSASS Memory Access</h2>
+                            <span class="badge badge-red">Critical</span>
+                        </div>
+                        <p class="text-gray-400">Detects processes accessing LSASS for credential dumping</p>
+                    </div>
+                    <span class="badge badge-purple">T1003.001</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'lsass-rsa')">RSA NetWitness</button>
+                        <button class="tab-btn" onclick="showTab(this, 'lsass-kql')">Microsoft Sentinel</button>
+                    </div>
+                    
+                    <div id="lsass-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-rsa"><span class="comment">-- Rule: LSASS_Access</span>
+<span class="keyword">@RSA_Rule</span> <span class="string">"LSASS_Access"</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Event
+<span class="keyword">WHERE</span> 
+    target_process = <span class="string">'lsass.exe'</span> <span class="keyword">AND</span>
+    access_mask <span class="keyword">IN</span> (<span class="string">'0x1010'</span>, <span class="string">'0x1410'</span>, <span class="string">'0x1F1FFF'</span>) <span class="keyword">AND</span>
+    source_process <span class="keyword">NOT IN</span> (legitimate_processes)
+<span class="keyword">ALERT</span> severity = <span class="string">'critical'</span>,
+      technique = <span class="string">'T1003.001'</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="lsass-kql" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-kql"><span class="comment">// Rule: LSASS Memory Access Detection</span>
+<span class="comment">// MITRE: T1003.001 - OS Credential Dumping: LSASS Memory</span>
+
+<span class="keyword">let</span> legitimateProcesses = <span class="function">dynamic</span>([
+    <span class="string">"csrss.exe"</span>, <span class="string">"wininit.exe"</span>, <span class="string">"smss.exe"</span>,
+    <span class="string">"services.exe"</span>, <span class="string">"mrt.exe"</span>, <span class="string">"taskmgr.exe"</span>,
+    <span class="string">"vmtoolsd.exe"</span>, <span class="string">"svchost.exe"</span>
+]);
+
+SecurityEvent
+| <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(<span class="number">1h</span>)
+| <span class="keyword">where</span> EventID == <span class="number">4663</span>
+| <span class="keyword">where</span> ObjectName <span class="keyword">endswith</span> <span class="string">"lsass.exe"</span>
+| <span class="keyword">where</span> ProcessName !<span class="keyword">in~</span> (legitimateProcesses)
+| <span class="keyword">where</span> AccessMask <span class="keyword">in</span> (<span class="string">"0x1010"</span>, <span class="string">"0x1410"</span>, <span class="string">"0x1F1FFF"</span>, <span class="string">"0x143A"</span>)
+| <span class="keyword">project</span>
+    TimeGenerated,
+    Computer,
+    Account,
+    ProcessName,
+    ProcessId,
+    AccessMask,
+    AccessList,
+    Severity = <span class="string">"Critical"</span>,
+    MITRETechnique = <span class="string">"T1003.001"</span>,
+    RecommendedAction = <span class="string">"Isolate device, investigate process origin"</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rule 3: Process Injection -->
+            <div class="card p-6 mb-8" id="injection">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-semibold text-white">6.3 Process Injection Detection</h2>
+                            <span class="badge badge-orange">High</span>
+                        </div>
+                        <p class="text-gray-400">Detects process injection using CreateRemoteThread and similar APIs</p>
+                    </div>
+                    <span class="badge badge-purple">T1055</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'inj-rsa')">RSA NetWitness</button>
+                        <button class="tab-btn" onclick="showTab(this, 'inj-kql')">Microsoft Sentinel</button>
+                    </div>
+                    
+                    <div id="inj-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-rsa"><span class="comment">-- Rule: Process_Injection</span>
+<span class="keyword">@RSA_Rule</span> <span class="string">"Process_Injection"</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Event
+<span class="keyword">WHERE</span> 
+    api_call <span class="keyword">IN</span> (<span class="string">'CreateRemoteThread'</span>, <span class="string">'NtQueueApcThread'</span>, <span class="string">'SetWindowsHookEx'</span>) <span class="keyword">AND</span>
+    source_process != target_process
+<span class="keyword">ALERT</span> severity = <span class="string">'high'</span>,
+      technique = <span class="string">'T1055'</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="inj-kql" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-kql"><span class="comment">// Rule: Process Injection Detection</span>
+<span class="comment">// MITRE: T1055 - Process Injection</span>
+
+DeviceEvents
+| <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(<span class="number">1h</span>)
+| <span class="keyword">where</span> ActionType <span class="keyword">in</span> (<span class="string">"CreateRemoteThreadApiCall"</span>, <span class="string">"QueueUserApcRemoteApiCall"</span>)
+| <span class="keyword">where</span> InitiatingProcessId != ProcessId
+| <span class="keyword">extend</span>
+    InjectionType = <span class="function">case</span>(
+        ActionType == <span class="string">"CreateRemoteThreadApiCall"</span>, <span class="string">"CreateRemoteThread"</span>,
+        ActionType == <span class="string">"QueueUserApcRemoteApiCall"</span>, <span class="string">"APC Injection"</span>,
+        <span class="string">"Unknown"</span>
+    )
+| <span class="keyword">project</span>
+    TimeGenerated,
+    DeviceName,
+    InitiatingProcessFileName,
+    InitiatingProcessCommandLine,
+    FileName,
+    ProcessCommandLine,
+    InjectionType,
+    Severity = <span class="string">"High"</span>,
+    MITRETechnique = <span class="string">"T1055"</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex items-center justify-between mt-12">
+                <a href="rules-salesforce.html" class="text-gray-400 hover:text-white flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Previous: Salesforce Security
+                </a>
+                <a href="rules-catalog.html" class="text-blue-400 hover:text-blue-300 flex items-center gap-2">
+                    Back to Catalog
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function showTab(btn, tabId) {
+            const parent = btn.closest('.card');
+            parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            parent.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            btn.classList.add('active');
+            document.getElementById(tabId).classList.remove('hidden');
+        }
+
+        function copyCode(btn) {
+            const pre = btn.nextElementSibling;
+            navigator.clipboard.writeText(pre.textContent).then(() => {
+                btn.innerHTML = '<svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+                setTimeout(() => {
+                    btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

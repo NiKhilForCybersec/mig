@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Security Rules - RSA to Sentinel Migration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0a0f; --bg-secondary: #12121a; --bg-tertiary: #1a1a2e; --accent-blue: #3b82f6; --text-primary: #f8fafc; --text-secondary: #94a3b8; --border-color: #2a2a3e; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); margin: 0; min-height: 100vh; }
+        code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+        .hero-bg { background: radial-gradient(ellipse at 20% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 50%), var(--bg-primary); }
+        .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; }
+        .nav-link { color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+        .nav-link:hover { color: var(--text-primary); }
+        .badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+        .badge-red { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+        .badge-purple { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .badge-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .badge-orange { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        pre { background: #0d0d14; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; overflow-x: auto; font-size: 13px; line-height: 1.6; }
+        .code-rsa { border-left: 3px solid #ef4444; }
+        .code-kql { border-left: 3px solid #10b981; }
+        .tab-btn { padding: 8px 16px; border-radius: 6px; font-weight: 500; transition: all 0.2s; cursor: pointer; border: none; }
+        .tab-btn.active { background: var(--accent-blue); color: white; }
+        .tab-btn:not(.active) { background: var(--bg-tertiary); color: var(--text-secondary); }
+        .copy-btn { position: absolute; top: 8px; right: 8px; padding: 6px; border-radius: 6px; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-secondary); cursor: pointer; }
+        .copy-btn:hover { color: white; border-color: var(--accent-blue); }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        .keyword { color: #ff7b72; }
+        .string { color: #a5d6ff; }
+        .comment { color: #8b949e; font-style: italic; }
+        .function { color: #d2a8ff; }
+        .number { color: #79c0ff; }
+    </style>
+</head>
+<body class="hero-bg">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-[#2a2a3e]">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <div><h1 class="text-lg font-bold text-white">RSA → Sentinel</h1></div>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="../index.html" class="nav-link font-medium">Home</a>
+                    <a href="overview.html" class="nav-link font-medium">Overview</a>
+                    <a href="defender-stack.html" class="nav-link font-medium">Defender XDR</a>
+                    <a href="rules-catalog.html" class="nav-link font-medium text-blue-400">Rules</a>
+                    <a href="dlp-migration.html" class="nav-link font-medium">DLP</a>
+                    <a href="playbooks.html" class="nav-link font-medium">Playbooks</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                    <a href="../index.html" class="hover:text-blue-400">Home</a>
+                    <span>/</span>
+                    <a href="rules-catalog.html" class="hover:text-blue-400">Rules</a>
+                    <span>/</span>
+                    <span class="text-gray-400">Cloud Security</span>
+                </div>
+                <div class="flex items-center gap-4 mb-4">
+                    <h1 class="text-4xl font-bold text-white">Cloud Security</h1>
+                    <span class="badge badge-blue">Azure</span>
+                </div>
+                <p class="text-xl text-gray-400 max-w-3xl mb-6">
+                    22 RSA rules migrated to 24 Sentinel analytics rules for detecting Azure resource deletion, Key Vault access, NSG modifications, and RBAC changes.
+                </p>
+                <div class="flex items-center gap-4">
+                    <span class="text-sm text-gray-500">MITRE Techniques:</span>
+                    <span class="badge badge-purple">T1485</span>
+                    <span class="badge badge-purple">T1552</span>
+                    <span class="badge badge-purple">T1562</span>
+                </div>
+            </div>
+
+            <!-- Rule 1: Mass Resource Deletion -->
+            <div class="card p-6 mb-8" id="resource-delete">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-semibold text-white">7.1 Mass Azure Resource Deletion</h2>
+                            <span class="badge badge-red">Critical</span>
+                        </div>
+                        <p class="text-gray-400">Detects bulk deletion of Azure resources within a short timeframe</p>
+                    </div>
+                    <span class="badge badge-purple">T1485</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'del-rsa')">RSA NetWitness</button>
+                        <button class="tab-btn" onclick="showTab(this, 'del-kql')">Microsoft Sentinel</button>
+                    </div>
+                    
+                    <div id="del-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-rsa"><span class="comment">-- Rule: Mass_Azure_Resource_Delete</span>
+<span class="keyword">@RSA_Rule</span> <span class="string">"Azure_Mass_Delete"</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Event
+<span class="keyword">WHERE</span> 
+    event_source = <span class="string">'azure'</span> <span class="keyword">AND</span>
+    operation <span class="keyword">MATCHES</span> <span class="string">'*/delete'</span> <span class="keyword">AND</span>
+    status = <span class="string">'Succeeded'</span>
+<span class="keyword">GROUP BY</span> caller_id
+<span class="keyword">HAVING</span> <span class="function">COUNT</span>(*) > <span class="number">10</span>
+<span class="keyword">WINDOW SLIDING</span> <span class="number">15</span> MINUTES
+<span class="keyword">ALERT</span> severity = <span class="string">'critical'</span>,
+      technique = <span class="string">'T1485'</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="del-kql" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-kql"><span class="comment">// Rule: Mass Azure Resource Deletion</span>
+<span class="comment">// MITRE: T1485 - Data Destruction</span>
+
+<span class="keyword">let</span> deletionThreshold = <span class="number">10</span>;
+<span class="keyword">let</span> timeWindow = <span class="number">15m</span>;
+
+AzureActivity
+| <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(<span class="number">1h</span>)
+| <span class="keyword">where</span> OperationNameValue <span class="keyword">endswith</span> <span class="string">"/delete"</span>
+| <span class="keyword">where</span> ActivityStatusValue == <span class="string">"Success"</span>
+| <span class="function">summarize</span>
+    DeleteCount = <span class="function">count</span>(),
+    ResourcesDeleted = <span class="function">make_set</span>(Resource, <span class="number">20</span>),
+    ResourceTypes = <span class="function">make_set</span>(ResourceProviderValue),
+    Subscriptions = <span class="function">make_set</span>(SubscriptionId)
+    <span class="keyword">by</span> Caller, bin(TimeGenerated, timeWindow)
+| <span class="keyword">where</span> DeleteCount > deletionThreshold
+| <span class="keyword">extend</span>
+    Severity = <span class="function">case</span>(
+        DeleteCount > <span class="number">50</span>, <span class="string">"Critical"</span>,
+        DeleteCount > <span class="number">25</span>, <span class="string">"High"</span>,
+        <span class="string">"Medium"</span>
+    )
+| <span class="keyword">project</span>
+    TimeGenerated,
+    Caller,
+    DeleteCount,
+    ResourcesDeleted,
+    ResourceTypes,
+    Subscriptions,
+    Severity,
+    MITRETechnique = <span class="string">"T1485"</span>,
+    RecommendedAction = <span class="string">"Verify authorized maintenance or investigate for attack"</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rule 2: Key Vault Access -->
+            <div class="card p-6 mb-8" id="keyvault">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-semibold text-white">7.2 Sensitive Key Vault Access</h2>
+                            <span class="badge badge-red">Critical</span>
+                        </div>
+                        <p class="text-gray-400">Detects unusual access to Key Vault secrets from new principals</p>
+                    </div>
+                    <span class="badge badge-purple">T1552.001</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'kv-rsa')">RSA NetWitness</button>
+                        <button class="tab-btn" onclick="showTab(this, 'kv-kql')">Microsoft Sentinel</button>
+                    </div>
+                    
+                    <div id="kv-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-rsa"><span class="comment">-- Rule: KeyVault_Sensitive_Access</span>
+<span class="keyword">@RSA_Rule</span> <span class="string">"KeyVault_Access"</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Event
+<span class="keyword">WHERE</span> 
+    resource_type = <span class="string">'Microsoft.KeyVault'</span> <span class="keyword">AND</span>
+    operation <span class="keyword">MATCHES</span> <span class="string">'*SecretGet*|*KeyDecrypt*'</span> <span class="keyword">AND</span>
+    caller_id <span class="keyword">NOT IN</span> (authorized_apps)
+<span class="keyword">ALERT</span> severity = <span class="string">'critical'</span>,
+      technique = <span class="string">'T1552.001'</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="kv-kql" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-kql"><span class="comment">// Rule: Sensitive Key Vault Access Detection</span>
+<span class="comment">// MITRE: T1552.001 - Unsecured Credentials: Credentials In Files</span>
+
+<span class="keyword">let</span> sensitiveOperations = <span class="function">dynamic</span>([
+    <span class="string">"SecretGet"</span>, <span class="string">"SecretList"</span>, <span class="string">"KeyDecrypt"</span>, 
+    <span class="string">"KeySign"</span>, <span class="string">"CertificateGet"</span>
+]);
+
+<span class="comment">// Baseline of known accessors (30 day lookback)</span>
+<span class="keyword">let</span> knownAccessors = AzureDiagnostics
+    | <span class="keyword">where</span> TimeGenerated <span class="keyword">between</span> (<span class="function">ago</span>(<span class="number">30d</span>) .. <span class="function">ago</span>(<span class="number">1d</span>))
+    | <span class="keyword">where</span> ResourceType == <span class="string">"VAULTS"</span>
+    | <span class="keyword">where</span> OperationName <span class="keyword">has_any</span> (sensitiveOperations)
+    | <span class="keyword">distinct</span> CallerIPAddress, identity_claim_upn_s;
+
+AzureDiagnostics
+| <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(<span class="number">1h</span>)
+| <span class="keyword">where</span> ResourceType == <span class="string">"VAULTS"</span>
+| <span class="keyword">where</span> OperationName <span class="keyword">has_any</span> (sensitiveOperations)
+| <span class="keyword">where</span> ResultType == <span class="string">"Success"</span>
+| <span class="keyword">join kind</span>=leftanti (knownAccessors) 
+    <span class="keyword">on</span> $left.identity_claim_upn_s == $right.identity_claim_upn_s
+| <span class="keyword">project</span>
+    TimeGenerated,
+    KeyVaultName = Resource,
+    Operation = OperationName,
+    CallerPrincipal = identity_claim_upn_s,
+    CallerIP = CallerIPAddress,
+    SecretName = <span class="function">tostring</span>(<span class="function">split</span>(id_s, <span class="string">"/"</span>)[-<span class="number">1</span>]),
+    Severity = <span class="string">"Critical"</span>,
+    MITRETechnique = <span class="string">"T1552.001"</span>,
+    RecommendedAction = <span class="string">"Verify access authorization, check for credential theft"</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rule 3: NSG Modification -->
+            <div class="card p-6 mb-8" id="nsg">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-semibold text-white">7.3 Network Security Group Modification</h2>
+                            <span class="badge badge-orange">High</span>
+                        </div>
+                        <p class="text-gray-400">Detects NSG rule changes that expose services to the internet</p>
+                    </div>
+                    <span class="badge badge-purple">T1562.007</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'nsg-rsa')">RSA NetWitness</button>
+                        <button class="tab-btn" onclick="showTab(this, 'nsg-kql')">Microsoft Sentinel</button>
+                    </div>
+                    
+                    <div id="nsg-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-rsa"><span class="comment">-- Rule: NSG_Internet_Exposure</span>
+<span class="keyword">@RSA_Rule</span> <span class="string">"NSG_Modification"</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Event
+<span class="keyword">WHERE</span> 
+    resource_type = <span class="string">'networkSecurityGroups'</span> <span class="keyword">AND</span>
+    operation = <span class="string">'write'</span> <span class="keyword">AND</span>
+    properties <span class="keyword">MATCHES</span> <span class="string">'*0.0.0.0*|*Any*'</span>
+<span class="keyword">ALERT</span> severity = <span class="string">'high'</span>,
+      technique = <span class="string">'T1562.007'</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="nsg-kql" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-kql"><span class="comment">// Rule: NSG Internet Exposure Detection</span>
+<span class="comment">// MITRE: T1562.007 - Impair Defenses: Disable or Modify Cloud Firewall</span>
+
+<span class="keyword">let</span> riskyPorts = <span class="function">dynamic</span>([<span class="number">22</span>, <span class="number">3389</span>, <span class="number">445</span>, <span class="number">1433</span>, <span class="number">3306</span>, <span class="number">5432</span>]);
+
+AzureActivity
+| <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(<span class="number">1h</span>)
+| <span class="keyword">where</span> ResourceProviderValue == <span class="string">"MICROSOFT.NETWORK"</span>
+| <span class="keyword">where</span> OperationNameValue <span class="keyword">has</span> <span class="string">"networkSecurityGroups"</span>
+| <span class="keyword">where</span> OperationNameValue <span class="keyword">has</span> <span class="string">"write"</span>
+| <span class="keyword">where</span> ActivityStatusValue == <span class="string">"Success"</span>
+| <span class="keyword">extend</span> Props = <span class="function">parse_json</span>(Properties)
+| <span class="keyword">extend</span> RequestBody = <span class="function">parse_json</span>(<span class="function">tostring</span>(Props.requestBody))
+| <span class="keyword">where</span> RequestBody <span class="keyword">has</span> <span class="string">"0.0.0.0"</span> <span class="keyword">or</span> RequestBody <span class="keyword">has</span> <span class="string">"*"</span> <span class="keyword">or</span> RequestBody <span class="keyword">has</span> <span class="string">"Internet"</span>
+| <span class="keyword">extend</span>
+    NSGName = <span class="function">tostring</span>(<span class="function">split</span>(Resource, <span class="string">"/"</span>)[-<span class="number">1</span>]),
+    RuleDirection = <span class="function">iff</span>(RequestBody <span class="keyword">has</span> <span class="string">"Inbound"</span>, <span class="string">"Inbound"</span>, <span class="string">"Outbound"</span>),
+    RuleAction = <span class="function">iff</span>(RequestBody <span class="keyword">has</span> <span class="string">"Allow"</span>, <span class="string">"Allow"</span>, <span class="string">"Deny"</span>)
+| <span class="keyword">where</span> RuleDirection == <span class="string">"Inbound"</span> <span class="keyword">and</span> RuleAction == <span class="string">"Allow"</span>
+| <span class="keyword">project</span>
+    TimeGenerated,
+    Caller,
+    NSGName,
+    SubscriptionId,
+    RuleDirection,
+    RuleAction,
+    Severity = <span class="string">"High"</span>,
+    MITRETechnique = <span class="string">"T1562.007"</span>,
+    RecommendedAction = <span class="string">"Review NSG change, verify it doesn't expose sensitive services"</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rule 4: RBAC Elevation -->
+            <div class="card p-6 mb-8" id="rbac">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-semibold text-white">7.4 Azure RBAC Privilege Elevation</h2>
+                            <span class="badge badge-red">Critical</span>
+                        </div>
+                        <p class="text-gray-400">Detects assignment of Owner or Contributor roles at subscription level</p>
+                    </div>
+                    <span class="badge badge-purple">T1098.001</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'rbac-rsa')">RSA NetWitness</button>
+                        <button class="tab-btn" onclick="showTab(this, 'rbac-kql')">Microsoft Sentinel</button>
+                    </div>
+                    
+                    <div id="rbac-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-rsa"><span class="comment">-- Rule: Azure_RBAC_Elevation</span>
+<span class="keyword">@RSA_Rule</span> <span class="string">"RBAC_Elevation"</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Event
+<span class="keyword">WHERE</span> 
+    operation = <span class="string">'Microsoft.Authorization/roleAssignments/write'</span> <span class="keyword">AND</span>
+    role_name <span class="keyword">IN</span> (<span class="string">'Owner'</span>, <span class="string">'Contributor'</span>, <span class="string">'User Access Administrator'</span>)
+<span class="keyword">ALERT</span> severity = <span class="string">'critical'</span>,
+      technique = <span class="string">'T1098.001'</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="rbac-kql" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-kql"><span class="comment">// Rule: Azure RBAC Privilege Elevation</span>
+<span class="comment">// MITRE: T1098.001 - Account Manipulation: Additional Cloud Credentials</span>
+
+<span class="keyword">let</span> highPrivilegeRoles = <span class="function">dynamic</span>([
+    <span class="string">"Owner"</span>, <span class="string">"Contributor"</span>, <span class="string">"User Access Administrator"</span>,
+    <span class="string">"8e3af657-a8ff-443c-a75c-2fe8c4bcb635"</span>, <span class="comment">// Owner GUID</span>
+    <span class="string">"b24988ac-6180-42a0-ab88-20f7382dd24c"</span>, <span class="comment">// Contributor GUID</span>
+    <span class="string">"18d7d88d-d35e-4fb5-a5c3-7773c20a72d9"</span>  <span class="comment">// User Access Admin GUID</span>
+]);
+
+AzureActivity
+| <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(<span class="number">1h</span>)
+| <span class="keyword">where</span> OperationNameValue == <span class="string">"Microsoft.Authorization/roleAssignments/write"</span>
+| <span class="keyword">where</span> ActivityStatusValue == <span class="string">"Success"</span>
+| <span class="keyword">extend</span> Props = <span class="function">parse_json</span>(Properties)
+| <span class="keyword">extend</span> 
+    RoleDefinitionId = <span class="function">tostring</span>(Props.requestbody.roleDefinitionId),
+    PrincipalId = <span class="function">tostring</span>(Props.requestbody.principalId),
+    Scope = <span class="function">tostring</span>(Props.requestbody.scope)
+| <span class="keyword">where</span> RoleDefinitionId <span class="keyword">has_any</span> (highPrivilegeRoles)
+| <span class="keyword">extend</span>
+    IsSubscriptionScope = Scope <span class="keyword">matches regex</span> <span class="string">@"^/subscriptions/[^/]+$"</span>,
+    RoleName = <span class="function">case</span>(
+        RoleDefinitionId <span class="keyword">contains</span> <span class="string">"8e3af657"</span>, <span class="string">"Owner"</span>,
+        RoleDefinitionId <span class="keyword">contains</span> <span class="string">"b24988ac"</span>, <span class="string">"Contributor"</span>,
+        RoleDefinitionId <span class="keyword">contains</span> <span class="string">"18d7d88d"</span>, <span class="string">"User Access Administrator"</span>,
+        <span class="string">"High Privilege Role"</span>
+    )
+| <span class="keyword">project</span>
+    TimeGenerated,
+    Caller,
+    TargetPrincipal = PrincipalId,
+    RoleName,
+    Scope,
+    IsSubscriptionScope,
+    SubscriptionId,
+    Severity = <span class="function">iff</span>(IsSubscriptionScope, <span class="string">"Critical"</span>, <span class="string">"High"</span>),
+    MITRETechnique = <span class="string">"T1098.001"</span>,
+    RecommendedAction = <span class="string">"Verify role assignment through change management"</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex items-center justify-between mt-12">
+                <a href="rules-privilege.html" class="text-gray-400 hover:text-white flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Previous: Privilege Escalation
+                </a>
+                <a href="rules-insider.html" class="text-blue-400 hover:text-blue-300 flex items-center gap-2">
+                    Next: Insider Threats
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function showTab(btn, tabId) {
+            const parent = btn.closest('.card');
+            parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            parent.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            btn.classList.add('active');
+            document.getElementById(tabId).classList.remove('hidden');
+        }
+
+        function copyCode(btn) {
+            const pre = btn.nextElementSibling;
+            navigator.clipboard.writeText(pre.textContent).then(() => {
+                btn.innerHTML = '<svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+                setTimeout(() => {
+                    btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

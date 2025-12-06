@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSA NetWitness to Microsoft Sentinel Migration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a2e;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --accent-purple: #8b5cf6;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: #2a2a3e;
+        }
+        
+        * { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            margin: 0;
+            min-height: 100vh;
+        }
+        
+        code, pre, .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        /* Animated background */
+        .hero-bg {
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(6, 182, 212, 0.05) 0%, transparent 70%),
+                var(--bg-primary);
+        }
+        
+        /* Grid pattern overlay */
+        .grid-pattern {
+            background-image: 
+                linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        
+        /* Glow effects */
+        .glow-blue { box-shadow: 0 0 40px rgba(59, 130, 246, 0.3); }
+        .glow-purple { box-shadow: 0 0 40px rgba(139, 92, 246, 0.3); }
+        .glow-cyan { box-shadow: 0 0 40px rgba(6, 182, 212, 0.3); }
+        
+        /* Card styles */
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* Navigation */
+        .nav-link {
+            position: relative;
+            color: var(--text-secondary);
+            transition: color 0.2s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-blue);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Stat cards */
+        .stat-card {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+        }
+        
+        /* Section cards */
+        .section-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .section-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+        
+        .section-card .icon-bg {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        /* Badge styles */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .badge-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .badge-green { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .badge-purple { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .badge-orange { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        .badge-red { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+        .badge-cyan { background: rgba(6, 182, 212, 0.2); color: #22d3ee; }
+        
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Progress bars */
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+        
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-blue);
+        }
+    </style>
+</head>
+<body class="hero-bg grid-pattern">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-[#2a2a3e]">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-white">RSA → Sentinel Migration</h1>
+                        <p class="text-xs text-gray-500">Enterprise SIEM Documentation</p>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="index.html" class="nav-link font-medium text-blue-400">Home</a>
+                    <a href="pages/overview.html" class="nav-link font-medium">Overview</a>
+                    <a href="pages/defender-stack.html" class="nav-link font-medium">Defender XDR</a>
+                    <a href="pages/rules-catalog.html" class="nav-link font-medium">Rules</a>
+                    <a href="pages/dlp-migration.html" class="nav-link font-medium">DLP</a>
+                    <a href="pages/playbooks.html" class="nav-link font-medium">Playbooks</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 opacity-0 animate-fade-in-up" style="animation-delay: 0.1s; animation-fill-mode: forwards;">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 mb-6">
+                    <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                    <span class="text-sm text-blue-400 font-medium">Migration Complete • 302 SIEM Rules + 180 DLP Policies</span>
+                </div>
+                <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                    <span class="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                        Enterprise Security Migration
+                    </span>
+                </h1>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto mb-2">
+                    RSA NetWitness → Microsoft Sentinel SIEM
+                </p>
+                <p class="text-lg text-gray-500 max-w-3xl mx-auto mb-8">
+                    Symantec DLP → Microsoft Purview + Full Defender XDR Stack
+                </p>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto mb-8">
+                    Comprehensive enterprise SIEM migration documentation for a Fortune 500 predictive analytics company. 
+                    302 detection rules, custom parsers, automated playbooks, and full MITRE ATT&CK coverage.
+                </p>
+                <div class="flex items-center justify-center gap-4">
+                    <a href="pages/overview.html" class="btn-primary">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                        </svg>
+                        View Documentation
+                    </a>
+                    <a href="pages/tools.html" class="btn-secondary">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                        </svg>
+                        RSA → KQL Translator
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-20 opacity-0 animate-fade-in-up" style="animation-delay: 0.3s; animation-fill-mode: forwards;">
+                <div class="stat-card">
+                    <p class="text-3xl font-bold text-white mb-1">302</p>
+                    <p class="text-sm text-gray-400">Rules Migrated</p>
+                </div>
+                <div class="stat-card">
+                    <p class="text-3xl font-bold text-green-400 mb-1">86%</p>
+                    <p class="text-sm text-gray-400">MITRE Coverage</p>
+                </div>
+                <div class="stat-card">
+                    <p class="text-3xl font-bold text-cyan-400 mb-1">28min</p>
+                    <p class="text-sm text-gray-400">Avg. MTTD</p>
+                </div>
+                <div class="stat-card">
+                    <p class="text-3xl font-bold text-purple-400 mb-1">62%</p>
+                    <p class="text-sm text-gray-400">Automation</p>
+                </div>
+            </div>
+
+            <!-- Company Profile -->
+            <div class="rounded-2xl border border-[#2a2a3e] bg-[#12121a] p-8 mb-20 opacity-0 animate-fade-in-up" style="animation-delay: 0.4s; animation-fill-mode: forwards;">
+                <div class="flex items-start gap-6 mb-6">
+                    <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white mb-2">Enterprise Profile</h2>
+                        <p class="text-gray-400">Global Trend & Prediction Analytics Company</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Industry</p>
+                        <p class="text-white font-medium">Business Intelligence</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Employees</p>
+                        <p class="text-white font-medium">15,000 Global</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Customers</p>
+                        <p class="text-white font-medium">Fortune 500</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Data Sensitivity</p>
+                        <p class="text-red-400 font-medium">HIGH</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Compliance</p>
+                        <div class="flex flex-wrap gap-1 mt-1">
+                            <span class="badge badge-blue">SOC 2</span>
+                            <span class="badge badge-green">ISO 27001</span>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Additional Compliance</p>
+                        <div class="flex flex-wrap gap-1 mt-1">
+                            <span class="badge badge-purple">GDPR</span>
+                            <span class="badge badge-orange">CCPA</span>
+                        </div>
+                    </div>
+                    <div class="col-span-2">
+                        <p class="text-sm text-gray-500 mb-1">Salesforce Usage</p>
+                        <p class="text-white font-medium">Sales Cloud, Service Cloud, Einstein Analytics, Marketing Cloud</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documentation Sections -->
+            <h2 class="text-3xl font-bold text-white mb-8 text-center">Documentation Sections</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
+                <!-- Executive Overview -->
+                <a href="pages/overview.html" class="section-card group">
+                    <div class="icon-bg bg-blue-500/20">
+                        <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Executive Overview</h3>
+                    <p class="text-gray-400 text-sm mb-4">Project summary, metrics, business impact, and migration timeline.</p>
+                    <span class="text-blue-400 text-sm font-medium group-hover:underline">View Section →</span>
+                </a>
+
+                <!-- Architecture -->
+                <a href="pages/architecture.html" class="section-card group">
+                    <div class="icon-bg bg-purple-500/20">
+                        <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Architecture</h3>
+                    <p class="text-gray-400 text-sm mb-4">Before/after diagrams, Azure security stack, data flow architecture.</p>
+                    <span class="text-purple-400 text-sm font-medium group-hover:underline">View Section →</span>
+                </a>
+
+                <!-- Rule Categories -->
+                <a href="pages/rules-catalog.html" class="section-card group">
+                    <div class="icon-bg bg-cyan-500/20">
+                        <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Detection Rules</h3>
+                    <p class="text-gray-400 text-sm mb-4">All 8 categories with 302 RSA to KQL translations.</p>
+                    <span class="text-cyan-400 text-sm font-medium group-hover:underline">View Section →</span>
+                </a>
+
+                <!-- Salesforce Security -->
+                <a href="pages/rules-salesforce.html" class="section-card group">
+                    <div class="icon-bg bg-green-500/20">
+                        <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Salesforce Security</h3>
+                    <p class="text-gray-400 text-sm mb-4">Custom parser, 6 detection rules, session monitoring.</p>
+                    <span class="text-green-400 text-sm font-medium group-hover:underline">View Section →</span>
+                </a>
+
+                <!-- Correlation Rules -->
+                <a href="pages/correlation.html" class="section-card group">
+                    <div class="icon-bg bg-orange-500/20">
+                        <svg class="w-8 h-8 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Correlation Rules</h3>
+                    <p class="text-gray-400 text-sm mb-4">Multi-stage attack chain detection with Fusion ML.</p>
+                    <span class="text-orange-400 text-sm font-medium group-hover:underline">View Section →</span>
+                </a>
+
+                <!-- Playbooks -->
+                <a href="pages/playbooks.html" class="section-card group">
+                    <div class="icon-bg bg-red-500/20">
+                        <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Playbook Migration</h3>
+                    <p class="text-gray-400 text-sm mb-4">RSA playbooks to Azure Logic Apps with full code.</p>
+                    <span class="text-red-400 text-sm font-medium group-hover:underline">View Section →</span>
+                </a>
+
+                <!-- Custom Parsers -->
+                <a href="pages/parsers.html" class="section-card group">
+                    <div class="icon-bg bg-yellow-500/20">
+                        <svg class="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Custom Parsers</h3>
+                    <p class="text-gray-400 text-sm mb-4">Salesforce, CEF, Windows Events, Azure Activity parsers.</p>
+                    <span class="text-yellow-400 text-sm font-medium group-hover:underline">View Section →</span>
+                </a>
+
+                <!-- Metrics Dashboard -->
+                <a href="pages/metrics.html" class="section-card group">
+                    <div class="icon-bg bg-pink-500/20">
+                        <svg class="w-8 h-8 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Metrics Dashboard</h3>
+                    <p class="text-gray-400 text-sm mb-4">KPIs, MTTD/MTTR tracking, coverage analysis.</p>
+                    <span class="text-pink-400 text-sm font-medium group-hover:underline">View Section →</span>
+                </a>
+
+                <!-- Defender XDR Stack -->
+                <a href="pages/defender-stack.html" class="section-card group">
+                    <div class="icon-bg bg-blue-500/20">
+                        <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Microsoft Defender XDR</h3>
+                    <p class="text-gray-400 text-sm mb-4">Unified MDE, MDI, MDO, MCAS integration with Sentinel.</p>
+                    <span class="text-blue-400 text-sm font-medium group-hover:underline">View Section →</span>
+                </a>
+
+                <!-- DLP Migration -->
+                <a href="pages/dlp-migration.html" class="section-card group">
+                    <div class="icon-bg bg-purple-500/20">
+                        <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">DLP Migration</h3>
+                    <p class="text-gray-400 text-sm mb-4">Symantec DLP to Microsoft Purview, 180 policies migrated.</p>
+                    <span class="text-purple-400 text-sm font-medium group-hover:underline">View Section →</span>
+                </a>
+
+                <!-- CASB Salesforce -->
+                <a href="pages/casb-salesforce.html" class="section-card group">
+                    <div class="icon-bg bg-cyan-500/20">
+                        <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Salesforce CASB</h3>
+                    <p class="text-gray-400 text-sm mb-4">Defender for Cloud Apps, session controls, DLP for CRM.</p>
+                    <span class="text-cyan-400 text-sm font-medium group-hover:underline">View Section →</span>
+                </a>
+
+                <!-- Interactive Tools -->
+                <a href="pages/tools.html" class="section-card group">
+                    <div class="icon-bg bg-indigo-500/20">
+                        <svg class="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Interactive Tools</h3>
+                    <p class="text-gray-400 text-sm mb-4">RSA→KQL translator, rule catalog browser, search.</p>
+                    <span class="text-indigo-400 text-sm font-medium group-hover:underline">View Section →</span>
+                </a>
+            </div>
+
+            <!-- Rule Categories Summary -->
+            <div class="rounded-2xl border border-[#2a2a3e] bg-[#12121a] p-8 mb-20">
+                <h2 class="text-2xl font-bold text-white mb-6">Rule Categories Overview</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-[#2a2a3e]">
+                                <th class="text-left py-3 px-4 text-gray-400 font-medium">Category</th>
+                                <th class="text-center py-3 px-4 text-gray-400 font-medium">RSA Rules</th>
+                                <th class="text-center py-3 px-4 text-gray-400 font-medium">Sentinel Rules</th>
+                                <th class="text-center py-3 px-4 text-gray-400 font-medium">Priority</th>
+                                <th class="text-right py-3 px-4 text-gray-400 font-medium">Link</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-[#2a2a3e]/50 hover:bg-[#1a1a2e]">
+                                <td class="py-4 px-4 text-white">Authentication & Access</td>
+                                <td class="py-4 px-4 text-center text-gray-300">45</td>
+                                <td class="py-4 px-4 text-center text-green-400">42</td>
+                                <td class="py-4 px-4 text-center"><span class="badge badge-red">Critical</span></td>
+                                <td class="py-4 px-4 text-right"><a href="pages/rules-auth.html" class="text-blue-400 hover:underline">View →</a></td>
+                            </tr>
+                            <tr class="border-b border-[#2a2a3e]/50 hover:bg-[#1a1a2e]">
+                                <td class="py-4 px-4 text-white">Malware & Threat Intel</td>
+                                <td class="py-4 px-4 text-center text-gray-300">38</td>
+                                <td class="py-4 px-4 text-center text-green-400">35</td>
+                                <td class="py-4 px-4 text-center"><span class="badge badge-red">Critical</span></td>
+                                <td class="py-4 px-4 text-right"><a href="pages/rules-malware.html" class="text-blue-400 hover:underline">View →</a></td>
+                            </tr>
+                            <tr class="border-b border-[#2a2a3e]/50 hover:bg-[#1a1a2e]">
+                                <td class="py-4 px-4 text-white">Data Exfiltration</td>
+                                <td class="py-4 px-4 text-center text-gray-300">32</td>
+                                <td class="py-4 px-4 text-center text-green-400">30</td>
+                                <td class="py-4 px-4 text-center"><span class="badge badge-red">Critical</span></td>
+                                <td class="py-4 px-4 text-right"><a href="pages/rules-exfil.html" class="text-blue-400 hover:underline">View →</a></td>
+                            </tr>
+                            <tr class="border-b border-[#2a2a3e]/50 hover:bg-[#1a1a2e]">
+                                <td class="py-4 px-4 text-white">Privilege Escalation</td>
+                                <td class="py-4 px-4 text-center text-gray-300">28</td>
+                                <td class="py-4 px-4 text-center text-green-400">26</td>
+                                <td class="py-4 px-4 text-center"><span class="badge badge-orange">High</span></td>
+                                <td class="py-4 px-4 text-right"><a href="pages/rules-privilege.html" class="text-blue-400 hover:underline">View →</a></td>
+                            </tr>
+                            <tr class="border-b border-[#2a2a3e]/50 hover:bg-[#1a1a2e]">
+                                <td class="py-4 px-4 text-white">Lateral Movement</td>
+                                <td class="py-4 px-4 text-center text-gray-300">25</td>
+                                <td class="py-4 px-4 text-center text-green-400">24</td>
+                                <td class="py-4 px-4 text-center"><span class="badge badge-orange">High</span></td>
+                                <td class="py-4 px-4 text-right"><a href="pages/rules-privilege.html" class="text-blue-400 hover:underline">View →</a></td>
+                            </tr>
+                            <tr class="border-b border-[#2a2a3e]/50 hover:bg-[#1a1a2e]">
+                                <td class="py-4 px-4 text-white">Endpoint Threats</td>
+                                <td class="py-4 px-4 text-center text-gray-300">35</td>
+                                <td class="py-4 px-4 text-center text-green-400">33</td>
+                                <td class="py-4 px-4 text-center"><span class="badge badge-red">Critical</span></td>
+                                <td class="py-4 px-4 text-right"><a href="pages/rules-endpoint.html" class="text-blue-400 hover:underline">View →</a></td>
+                            </tr>
+                            <tr class="border-b border-[#2a2a3e]/50 hover:bg-[#1a1a2e]">
+                                <td class="py-4 px-4 text-white">Cloud Security (Azure)</td>
+                                <td class="py-4 px-4 text-center text-gray-300">18</td>
+                                <td class="py-4 px-4 text-center text-green-400">22</td>
+                                <td class="py-4 px-4 text-center"><span class="badge badge-orange">High</span></td>
+                                <td class="py-4 px-4 text-right"><a href="pages/rules-cloud.html" class="text-blue-400 hover:underline">View →</a></td>
+                            </tr>
+                            <tr class="border-b border-[#2a2a3e]/50 hover:bg-[#1a1a2e]">
+                                <td class="py-4 px-4 text-white">Salesforce Security</td>
+                                <td class="py-4 px-4 text-center text-gray-300">24</td>
+                                <td class="py-4 px-4 text-center text-green-400">28</td>
+                                <td class="py-4 px-4 text-center"><span class="badge badge-red">Critical</span></td>
+                                <td class="py-4 px-4 text-right"><a href="pages/rules-salesforce.html" class="text-blue-400 hover:underline">View →</a></td>
+                            </tr>
+                            <tr class="border-b border-[#2a2a3e]/50 hover:bg-[#1a1a2e]">
+                                <td class="py-4 px-4 text-white">Insider Threat</td>
+                                <td class="py-4 px-4 text-center text-gray-300">12</td>
+                                <td class="py-4 px-4 text-center text-green-400">15</td>
+                                <td class="py-4 px-4 text-center"><span class="badge badge-orange">High</span></td>
+                                <td class="py-4 px-4 text-right"><a href="pages/rules-insider.html" class="text-blue-400 hover:underline">View →</a></td>
+                            </tr>
+                            <tr class="hover:bg-[#1a1a2e] font-semibold">
+                                <td class="py-4 px-4 text-white">Total</td>
+                                <td class="py-4 px-4 text-center text-gray-300">302</td>
+                                <td class="py-4 px-4 text-center text-green-400">305</td>
+                                <td class="py-4 px-4 text-center">—</td>
+                                <td class="py-4 px-4 text-right">—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <a href="pages/challenges.html" class="p-6 rounded-xl border border-[#2a2a3e] bg-[#12121a] hover:border-blue-500 transition-all group">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-lg bg-amber-500/20 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-white group-hover:text-blue-400">Challenges & Solutions</h3>
+                            <p class="text-sm text-gray-400">Migration lessons learned</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="pages/reference.html" class="p-6 rounded-xl border border-[#2a2a3e] bg-[#12121a] hover:border-blue-500 transition-all group">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-white group-hover:text-blue-400">Reference Guide</h3>
+                            <p class="text-sm text-gray-400">Full mapping tables & inventory</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-[#2a2a3e] py-8 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <p class="text-gray-500 text-sm">RSA NetWitness to Microsoft Sentinel Migration Documentation</p>
+            <p class="text-gray-500 text-sm">Enterprise Security Engineering • 2024</p>
+        </div>
+    </footer>
+</body>
+</html>

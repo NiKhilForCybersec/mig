@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DLP Migration - Symantec to Purview</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0a0f; --bg-secondary: #12121a; --bg-tertiary: #1a1a2e; --accent-blue: #3b82f6; --text-primary: #f8fafc; --text-secondary: #94a3b8; --border-color: #2a2a3e; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); margin: 0; min-height: 100vh; }
+        code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+        .hero-bg { background: radial-gradient(ellipse at 20% 30%, rgba(168, 85, 247, 0.12) 0%, transparent 50%), var(--bg-primary); }
+        .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; }
+        .nav-link { color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+        .nav-link:hover { color: var(--text-primary); }
+        .badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+        .badge-purple { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .badge-green { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .badge-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .badge-orange { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        .badge-cyan { background: rgba(6, 182, 212, 0.2); color: #22d3ee; }
+        pre { background: #0d0d14; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; overflow-x: auto; font-size: 13px; line-height: 1.6; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 12px 16px; color: var(--text-secondary); font-weight: 500; border-bottom: 1px solid var(--border-color); background: var(--bg-tertiary); }
+        td { padding: 12px 16px; border-bottom: 1px solid rgba(42, 42, 62, 0.5); }
+        tr:hover { background: rgba(139, 92, 246, 0.05); }
+        .tab-btn { padding: 10px 20px; border-radius: 8px; font-weight: 500; transition: all 0.2s; cursor: pointer; border: 1px solid transparent; }
+        .tab-btn.active { background: #8b5cf6; color: white; }
+        .tab-btn:not(.active) { background: var(--bg-tertiary); color: var(--text-secondary); border-color: var(--border-color); }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        .keyword { color: #ff7b72; }
+        .string { color: #a5d6ff; }
+        .comment { color: #8b949e; font-style: italic; }
+        .progress-step { position: relative; }
+        .progress-step::after { content: ''; position: absolute; top: 20px; left: 40px; width: calc(100% - 40px); height: 2px; background: var(--border-color); }
+        .progress-step:last-child::after { display: none; }
+    </style>
+</head>
+<body class="hero-bg">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-[#2a2a3e]">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <div><h1 class="text-lg font-bold text-white">RSA → Sentinel</h1></div>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="../index.html" class="nav-link font-medium">Home</a>
+                    <a href="overview.html" class="nav-link font-medium">Overview</a>
+                    <a href="defender-stack.html" class="nav-link font-medium">Defender XDR</a>
+                    <a href="rules-catalog.html" class="nav-link font-medium">Rules</a>
+                    <a href="dlp-migration.html" class="nav-link font-medium text-purple-400">DLP</a>
+                    <a href="playbooks.html" class="nav-link font-medium">Playbooks</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                    <a href="../index.html" class="hover:text-blue-400">Home</a>
+                    <span>/</span>
+                    <span class="text-gray-400">DLP Migration</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Symantec DLP → Microsoft Purview</h1>
+                <p class="text-xl text-gray-400 max-w-3xl mb-6">
+                    Enterprise DLP migration from Symantec Data Loss Prevention to Microsoft Purview DLP across endpoints, cloud apps, and email channels.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="badge badge-purple">180 Policies Migrated</span>
+                    <span class="badge badge-green">Endpoint + Cloud + Email</span>
+                    <span class="badge badge-blue">SOC 2 / GDPR / CCPA</span>
+                </div>
+            </div>
+
+            <!-- Migration Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="card p-6 text-center">
+                    <div class="text-3xl font-bold text-purple-400 mb-2">180</div>
+                    <p class="text-gray-400 text-sm">DLP Policies</p>
+                </div>
+                <div class="card p-6 text-center">
+                    <div class="text-3xl font-bold text-green-400 mb-2">45</div>
+                    <p class="text-gray-400 text-sm">Custom SITs</p>
+                </div>
+                <div class="card p-6 text-center">
+                    <div class="text-3xl font-bold text-blue-400 mb-2">185K</div>
+                    <p class="text-gray-400 text-sm">Endpoints</p>
+                </div>
+                <div class="card p-6 text-center">
+                    <div class="text-3xl font-bold text-cyan-400 mb-2">99.2%</div>
+                    <p class="text-gray-400 text-sm">Detection Parity</p>
+                </div>
+            </div>
+
+            <!-- Migration Architecture -->
+            <div class="card p-8 mb-8">
+                <h2 class="text-2xl font-bold text-white mb-6">Migration Architecture</h2>
+                <pre class="text-sm text-gray-300 leading-relaxed">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                              DLP MIGRATION ARCHITECTURE                              │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│   SYMANTEC DLP (LEGACY)                    MICROSOFT PURVIEW (TARGET)               │
+│   ─────────────────────                    ──────────────────────────               │
+│                                                                                      │
+│   ┌─────────────────┐                      ┌─────────────────┐                      │
+│   │  Enforce Server │  ──────────────────► │  Purview Portal │                      │
+│   │  (On-Premises)  │     Policy           │  (Cloud-Native) │                      │
+│   └────────┬────────┘     Migration        └────────┬────────┘                      │
+│            │                                        │                               │
+│   ┌────────┴────────┐                      ┌────────┴────────┐                      │
+│   │                 │                      │                 │                      │
+│   ▼                 ▼                      ▼                 ▼                      │
+│ ┌───────┐     ┌───────┐              ┌───────┐         ┌───────┐                   │
+│ │Network│     │Endpoint│              │Endpoint│         │ Cloud │                   │
+│ │ DLP   │     │  DLP   │              │  DLP   │         │  DLP  │                   │
+│ │(Proxy)│     │(Agent) │              │ (MDE)  │         │(MCAS) │                   │
+│ └───┬───┘     └───┬───┘              └───┬───┘         └───┬───┘                   │
+│     │             │                      │                 │                        │
+│     ▼             ▼                      ▼                 ▼                        │
+│ ┌─────────────────────┐              ┌─────────────────────────────┐               │
+│ │   Incident Manager  │              │   Purview Data Loss         │               │
+│ │   (Enforce Server)  │              │   Prevention Dashboard      │               │
+│ └─────────────────────┘              └──────────────┬──────────────┘               │
+│                                                     │                               │
+│                                                     ▼                               │
+│                                      ┌─────────────────────────────┐               │
+│                                      │   Microsoft Sentinel        │               │
+│                                      │   (SIEM Integration)        │               │
+│                                      └─────────────────────────────┘               │
+│                                                                                      │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                </pre>
+            </div>
+
+            <!-- Policy Mapping -->
+            <div class="card p-8 mb-8">
+                <h2 class="text-2xl font-bold text-white mb-6">Symantec → Purview Policy Mapping</h2>
+                
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Symantec Component</th>
+                                <th>Purview Equivalent</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-300">
+                            <tr>
+                                <td class="mono text-red-400">Data Identifier</td>
+                                <td class="mono text-green-400">Sensitive Information Type (SIT)</td>
+                                <td>Built-in + Custom SITs available</td>
+                            </tr>
+                            <tr>
+                                <td class="mono text-red-400">Policy Group</td>
+                                <td class="mono text-green-400">DLP Policy</td>
+                                <td>Scope by location, users, groups</td>
+                            </tr>
+                            <tr>
+                                <td class="mono text-red-400">Response Rule</td>
+                                <td class="mono text-green-400">Policy Action</td>
+                                <td>Block, Warn, Audit, Encrypt</td>
+                            </tr>
+                            <tr>
+                                <td class="mono text-red-400">Exception</td>
+                                <td class="mono text-green-400">Policy Exclusion</td>
+                                <td>User/Group/Domain exclusions</td>
+                            </tr>
+                            <tr>
+                                <td class="mono text-red-400">Keyword Dictionary</td>
+                                <td class="mono text-green-400">Keyword Dictionary</td>
+                                <td>Direct migration supported</td>
+                            </tr>
+                            <tr>
+                                <td class="mono text-red-400">Regular Expression</td>
+                                <td class="mono text-green-400">Custom SIT (Regex)</td>
+                                <td>Requires validation testing</td>
+                            </tr>
+                            <tr>
+                                <td class="mono text-red-400">Fingerprint</td>
+                                <td class="mono text-green-400">Exact Data Match (EDM)</td>
+                                <td>Upload structured data</td>
+                            </tr>
+                            <tr>
+                                <td class="mono text-red-400">Vector ML</td>
+                                <td class="mono text-green-400">Trainable Classifier</td>
+                                <td>Requires training samples</td>
+                            </tr>
+                            <tr>
+                                <td class="mono text-red-400">Described Content</td>
+                                <td class="mono text-green-400">Sensitivity Label</td>
+                                <td>Auto-labeling policies</td>
+                            </tr>
+                            <tr>
+                                <td class="mono text-red-400">Network Monitor</td>
+                                <td class="mono text-green-400">Defender for Cloud Apps</td>
+                                <td>CASB for cloud DLP</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Custom SIT Examples -->
+            <div class="card p-8 mb-8">
+                <h2 class="text-2xl font-bold text-white mb-6">Custom Sensitive Information Types</h2>
+                <p class="text-gray-400 mb-6">Migrated regex patterns from Symantec Data Identifiers to Purview Custom SITs.</p>
+                
+                <div class="space-y-6">
+                    <!-- Canadian SIN -->
+                    <div class="p-4 rounded-xl bg-[#1a1a2e]">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="text-white font-semibold">Canadian Social Insurance Number (SIN)</h4>
+                            <span class="badge badge-green">Production</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-gray-500 text-sm mb-2">Symantec Regex:</p>
+                                <pre class="text-sm"><span class="string">\b[0-9]{3}[-\s]?[0-9]{3}[-\s]?[0-9]{3}\b</span></pre>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 text-sm mb-2">Purview SIT XML:</p>
+                                <pre class="text-sm"><span class="keyword">&lt;Pattern</span> confidenceLevel=<span class="string">"85"</span><span class="keyword">&gt;</span>
+  <span class="keyword">&lt;IdMatch</span> idRef=<span class="string">"Regex_CA_SIN"</span><span class="keyword">/&gt;</span>
+  <span class="keyword">&lt;Match</span> idRef=<span class="string">"Keyword_SIN"</span><span class="keyword">/&gt;</span>
+<span class="keyword">&lt;/Pattern&gt;</span></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Credit Card -->
+                    <div class="p-4 rounded-xl bg-[#1a1a2e]">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="text-white font-semibold">Credit Card Number (PCI-DSS)</h4>
+                            <span class="badge badge-green">Production</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-gray-500 text-sm mb-2">Symantec (Luhn + Pattern):</p>
+                                <pre class="text-sm"><span class="string">\b(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14})\b</span>
+<span class="comment">+ Luhn checksum validation</span></pre>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 text-sm mb-2">Purview (Built-in):</p>
+                                <pre class="text-sm"><span class="comment">// Use built-in SIT:</span>
+<span class="string">"Credit Card Number"</span>
+<span class="comment">// Includes Luhn validation</span></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Internal Project Code -->
+                    <div class="p-4 rounded-xl bg-[#1a1a2e]">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="text-white font-semibold">Internal Project Code (Custom)</h4>
+                            <span class="badge badge-cyan">Custom SIT</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-gray-500 text-sm mb-2">Symantec Regex:</p>
+                                <pre class="text-sm"><span class="string">\bPROJ-[A-Z]{2}-[0-9]{4,6}\b</span></pre>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 text-sm mb-2">Purview Custom SIT PowerShell:</p>
+                                <pre class="text-sm"><span class="keyword">New-DlpSensitiveInformationType</span>
+  -Name <span class="string">"Internal Project Code"</span>
+  -Regex <span class="string">"\bPROJ-[A-Z]{2}-\d{4,6}\b"</span>
+  -Description <span class="string">"Company project IDs"</span></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Channel Coverage -->
+            <div class="card p-8 mb-8">
+                <h2 class="text-2xl font-bold text-white mb-6">DLP Channel Coverage</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Endpoint DLP -->
+                    <div class="p-6 rounded-xl bg-[#1a1a2e] border border-purple-500/30">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-white font-semibold">Endpoint DLP</h3>
+                        </div>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                USB/Removable media
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Print to local/network
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Clipboard copy/paste
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Browser upload
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                File access audit
+                            </li>
+                        </ul>
+                        <div class="mt-4 pt-4 border-t border-gray-700">
+                            <p class="text-cyan-400 mono text-sm">Via: MDE + Purview Extension</p>
+                        </div>
+                    </div>
+
+                    <!-- Cloud DLP -->
+                    <div class="p-6 rounded-xl bg-[#1a1a2e] border border-blue-500/30">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-white font-semibold">Cloud DLP</h3>
+                        </div>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                SharePoint Online
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                OneDrive for Business
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Microsoft Teams
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Salesforce (via MCAS)
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Box, Dropbox (via MCAS)
+                            </li>
+                        </ul>
+                        <div class="mt-4 pt-4 border-t border-gray-700">
+                            <p class="text-cyan-400 mono text-sm">Via: Purview + MCAS</p>
+                        </div>
+                    </div>
+
+                    <!-- Email DLP -->
+                    <div class="p-6 rounded-xl bg-[#1a1a2e] border border-orange-500/30">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-white font-semibold">Email DLP</h3>
+                        </div>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Exchange Online
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Email body scanning
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Attachment inspection
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Auto-encryption
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Policy tips (Outlook)
+                            </li>
+                        </ul>
+                        <div class="mt-4 pt-4 border-t border-gray-700">
+                            <p class="text-cyan-400 mono text-sm">Via: Exchange DLP + MDO</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Migration Phases -->
+            <div class="card p-8 mb-8">
+                <h2 class="text-2xl font-bold text-white mb-6">Migration Phases</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    <div class="text-center">
+                        <div class="w-12 h-12 rounded-full bg-green-500/20 border-2 border-green-500 flex items-center justify-center mx-auto mb-3">
+                            <span class="text-green-400 font-bold">1</span>
+                        </div>
+                        <h4 class="text-white font-semibold text-sm mb-1">Discovery</h4>
+                        <p class="text-gray-500 text-xs">Audit existing policies, SITs, exceptions</p>
+                        <span class="badge badge-green text-xs mt-2">Complete</span>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 rounded-full bg-green-500/20 border-2 border-green-500 flex items-center justify-center mx-auto mb-3">
+                            <span class="text-green-400 font-bold">2</span>
+                        </div>
+                        <h4 class="text-white font-semibold text-sm mb-1">Mapping</h4>
+                        <p class="text-gray-500 text-xs">Map Symantec → Purview components</p>
+                        <span class="badge badge-green text-xs mt-2">Complete</span>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 rounded-full bg-green-500/20 border-2 border-green-500 flex items-center justify-center mx-auto mb-3">
+                            <span class="text-green-400 font-bold">3</span>
+                        </div>
+                        <h4 class="text-white font-semibold text-sm mb-1">Pilot</h4>
+                        <p class="text-gray-500 text-xs">Deploy in audit mode, validate detections</p>
+                        <span class="badge badge-green text-xs mt-2">Complete</span>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 rounded-full bg-blue-500/20 border-2 border-blue-500 flex items-center justify-center mx-auto mb-3">
+                            <span class="text-blue-400 font-bold">4</span>
+                        </div>
+                        <h4 class="text-white font-semibold text-sm mb-1">Enforcement</h4>
+                        <p class="text-gray-500 text-xs">Enable block/warn actions</p>
+                        <span class="badge badge-blue text-xs mt-2">In Progress</span>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 rounded-full bg-gray-500/20 border-2 border-gray-500 flex items-center justify-center mx-auto mb-3">
+                            <span class="text-gray-400 font-bold">5</span>
+                        </div>
+                        <h4 class="text-white font-semibold text-sm mb-1">Decommission</h4>
+                        <p class="text-gray-500 text-xs">Retire Symantec infrastructure</p>
+                        <span class="badge badge-orange text-xs mt-2">Planned</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <a href="defender-stack.html" class="card p-6 hover:border-blue-500/50 transition-colors">
+                    <h3 class="text-white font-semibold mb-2">← Defender XDR Stack</h3>
+                    <p class="text-gray-400 text-sm">Full Microsoft security platform overview</p>
+                </a>
+                <a href="casb-salesforce.html" class="card p-6 hover:border-cyan-500/50 transition-colors">
+                    <h3 class="text-white font-semibold mb-2">Salesforce CASB →</h3>
+                    <p class="text-gray-400 text-sm">Cloud App Security for Salesforce DLP</p>
+                </a>
+                <a href="metrics.html" class="card p-6 hover:border-green-500/50 transition-colors">
+                    <h3 class="text-white font-semibold mb-2">Migration Metrics →</h3>
+                    <p class="text-gray-400 text-sm">KPIs and success metrics dashboard</p>
+                </a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

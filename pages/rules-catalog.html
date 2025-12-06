@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detection Rules Catalog - RSA to Sentinel Migration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0a0f; --bg-secondary: #12121a; --bg-tertiary: #1a1a2e; --accent-blue: #3b82f6; --text-primary: #f8fafc; --text-secondary: #94a3b8; --border-color: #2a2a3e; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); margin: 0; min-height: 100vh; }
+        code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+        .hero-bg { background: radial-gradient(ellipse at 20% 30%, rgba(6, 182, 212, 0.1) 0%, transparent 50%), var(--bg-primary); }
+        .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; transition: all 0.3s ease; }
+        .card:hover { border-color: var(--accent-blue); transform: translateY(-2px); }
+        .nav-link { position: relative; color: var(--text-secondary); transition: color 0.2s ease; text-decoration: none; }
+        .nav-link:hover { color: var(--text-primary); }
+        .badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+        .badge-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .badge-green { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .badge-purple { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .badge-orange { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        .badge-red { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+        .badge-cyan { background: rgba(6, 182, 212, 0.2); color: #22d3ee; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+    </style>
+</head>
+<body class="hero-bg">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-[#2a2a3e]">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <div><h1 class="text-lg font-bold text-white">RSA → Sentinel</h1></div>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="../index.html" class="nav-link font-medium">Home</a>
+                    <a href="overview.html" class="nav-link font-medium">Overview</a>
+                    <a href="defender-stack.html" class="nav-link font-medium">Defender XDR</a>
+                    <a href="rules-catalog.html" class="nav-link font-medium text-cyan-400">Rules</a>
+                    <a href="dlp-migration.html" class="nav-link font-medium">DLP</a>
+                    <a href="playbooks.html" class="nav-link font-medium">Playbooks</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                    <a href="../index.html" class="hover:text-blue-400">Home</a>
+                    <span>/</span>
+                    <span class="text-gray-400">Detection Rules</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Detection Rules Catalog</h1>
+                <p class="text-xl text-gray-400 max-w-3xl">
+                    302 RSA NetWitness ESA rules translated to Microsoft Sentinel KQL across 8 major categories.
+                </p>
+            </div>
+
+            <!-- Summary Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+                <div class="p-5 rounded-xl bg-[#12121a] border border-[#2a2a3e]">
+                    <p class="text-3xl font-bold text-white">302</p>
+                    <p class="text-sm text-gray-400">RSA Rules</p>
+                </div>
+                <div class="p-5 rounded-xl bg-[#12121a] border border-[#2a2a3e]">
+                    <p class="text-3xl font-bold text-green-400">305</p>
+                    <p class="text-sm text-gray-400">Sentinel Rules</p>
+                </div>
+                <div class="p-5 rounded-xl bg-[#12121a] border border-[#2a2a3e]">
+                    <p class="text-3xl font-bold text-cyan-400">8</p>
+                    <p class="text-sm text-gray-400">Categories</p>
+                </div>
+                <div class="p-5 rounded-xl bg-[#12121a] border border-[#2a2a3e]">
+                    <p class="text-3xl font-bold text-purple-400">86%</p>
+                    <p class="text-sm text-gray-400">MITRE Coverage</p>
+                </div>
+            </div>
+
+            <!-- Category Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                <!-- Authentication & Access -->
+                <a href="rules-auth.html" class="card p-6 group">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-14 h-14 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                            <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                            </svg>
+                        </div>
+                        <span class="badge badge-red">Critical</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Authentication & Access</h3>
+                    <p class="text-gray-400 text-sm mb-4">Brute force, impossible travel, MFA fatigue, service account abuse, after-hours access</p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <span class="text-sm text-gray-500">RSA: <span class="text-white">45</span></span>
+                            <span class="text-sm text-gray-500">Sentinel: <span class="text-green-400">42</span></span>
+                        </div>
+                        <span class="text-blue-400 text-sm group-hover:underline">View Rules →</span>
+                    </div>
+                </a>
+
+                <!-- Malware & Threat Intel -->
+                <a href="rules-malware.html" class="card p-6 group">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-14 h-14 rounded-xl bg-red-500/20 flex items-center justify-center">
+                            <svg class="w-7 h-7 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                        </div>
+                        <span class="badge badge-red">Critical</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Malware & Threat Intel</h3>
+                    <p class="text-gray-400 text-sm mb-4">Known malicious IPs, DNS tunneling, C2 beaconing, threat intelligence matches</p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <span class="text-sm text-gray-500">RSA: <span class="text-white">38</span></span>
+                            <span class="text-sm text-gray-500">Sentinel: <span class="text-green-400">35</span></span>
+                        </div>
+                        <span class="text-blue-400 text-sm group-hover:underline">View Rules →</span>
+                    </div>
+                </a>
+
+                <!-- Data Exfiltration -->
+                <a href="rules-exfil.html" class="card p-6 group">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-14 h-14 rounded-xl bg-orange-500/20 flex items-center justify-center">
+                            <svg class="w-7 h-7 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                            </svg>
+                        </div>
+                        <span class="badge badge-red">Critical</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Data Exfiltration</h3>
+                    <p class="text-gray-400 text-sm mb-4">Large data transfers, cloud storage uploads, email exfiltration, USB activity</p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <span class="text-sm text-gray-500">RSA: <span class="text-white">32</span></span>
+                            <span class="text-sm text-gray-500">Sentinel: <span class="text-green-400">30</span></span>
+                        </div>
+                        <span class="text-blue-400 text-sm group-hover:underline">View Rules →</span>
+                    </div>
+                </a>
+
+                <!-- Salesforce Security -->
+                <a href="rules-salesforce.html" class="card p-6 group">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center">
+                            <svg class="w-7 h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/>
+                            </svg>
+                        </div>
+                        <span class="badge badge-red">Critical</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Salesforce Security</h3>
+                    <p class="text-gray-400 text-sm mb-4">Mass export, permission escalation, API abuse, session hijacking, suspicious login</p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <span class="text-sm text-gray-500">RSA: <span class="text-white">24</span></span>
+                            <span class="text-sm text-gray-500">Sentinel: <span class="text-green-400">28</span></span>
+                        </div>
+                        <span class="text-blue-400 text-sm group-hover:underline">View Rules →</span>
+                    </div>
+                </a>
+
+                <!-- Privilege Escalation -->
+                <a href="rules-privilege.html" class="card p-6 group">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-14 h-14 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                            <svg class="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                        </div>
+                        <span class="badge badge-orange">High</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Privilege Escalation</h3>
+                    <p class="text-gray-400 text-sm mb-4">Admin group modification, sudo abuse, UAC bypass, token manipulation</p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <span class="text-sm text-gray-500">RSA: <span class="text-white">28</span></span>
+                            <span class="text-sm text-gray-500">Sentinel: <span class="text-green-400">26</span></span>
+                        </div>
+                        <span class="text-blue-400 text-sm group-hover:underline">View Rules →</span>
+                    </div>
+                </a>
+
+                <!-- Endpoint Threats -->
+                <a href="rules-endpoint.html" class="card p-6 group">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-14 h-14 rounded-xl bg-pink-500/20 flex items-center justify-center">
+                            <svg class="w-7 h-7 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <span class="badge badge-red">Critical</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Endpoint Threats</h3>
+                    <p class="text-gray-400 text-sm mb-4">PowerShell attacks, LSASS access, process injection, persistence mechanisms</p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <span class="text-sm text-gray-500">RSA: <span class="text-white">35</span></span>
+                            <span class="text-sm text-gray-500">Sentinel: <span class="text-green-400">33</span></span>
+                        </div>
+                        <span class="text-blue-400 text-sm group-hover:underline">View Rules →</span>
+                    </div>
+                </a>
+
+                <!-- Cloud Security -->
+                <a href="rules-cloud.html" class="card p-6 group">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-14 h-14 rounded-xl bg-green-500/20 flex items-center justify-center">
+                            <svg class="w-7 h-7 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/>
+                            </svg>
+                        </div>
+                        <span class="badge badge-orange">High</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Cloud Security (Azure)</h3>
+                    <p class="text-gray-400 text-sm mb-4">Resource deletion, Key Vault access, RBAC changes, NSG modifications</p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <span class="text-sm text-gray-500">RSA: <span class="text-white">18</span></span>
+                            <span class="text-sm text-gray-500">Sentinel: <span class="text-green-400">22</span></span>
+                        </div>
+                        <span class="text-blue-400 text-sm group-hover:underline">View Rules →</span>
+                    </div>
+                </a>
+
+                <!-- Insider Threat -->
+                <a href="rules-insider.html" class="card p-6 group">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-14 h-14 rounded-xl bg-yellow-500/20 flex items-center justify-center">
+                            <svg class="w-7 h-7 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+                        </div>
+                        <span class="badge badge-orange">High</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Insider Threat</h3>
+                    <p class="text-gray-400 text-sm mb-4">Data hoarding, email forwarding, departing employee, anomalous behavior</p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <span class="text-sm text-gray-500">RSA: <span class="text-white">12</span></span>
+                            <span class="text-sm text-gray-500">Sentinel: <span class="text-green-400">15</span></span>
+                        </div>
+                        <span class="text-blue-400 text-sm group-hover:underline">View Rules →</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <a href="correlation.html" class="p-5 rounded-xl bg-[#12121a] border border-[#2a2a3e] hover:border-blue-500 transition-all">
+                    <h4 class="text-white font-semibold mb-1">Correlation Rules</h4>
+                    <p class="text-gray-400 text-sm">Multi-stage attack detection</p>
+                </a>
+                <a href="parsers.html" class="p-5 rounded-xl bg-[#12121a] border border-[#2a2a3e] hover:border-blue-500 transition-all">
+                    <h4 class="text-white font-semibold mb-1">Custom Parsers</h4>
+                    <p class="text-gray-400 text-sm">KQL functions for log normalization</p>
+                </a>
+                <a href="tools.html" class="p-5 rounded-xl bg-[#12121a] border border-[#2a2a3e] hover:border-blue-500 transition-all">
+                    <h4 class="text-white font-semibold mb-1">RSA → KQL Translator</h4>
+                    <p class="text-gray-400 text-sm">Interactive rule converter</p>
+                </a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privilege Escalation Rules - RSA to Sentinel Migration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0a0f; --bg-secondary: #12121a; --bg-tertiary: #1a1a2e; --accent-blue: #3b82f6; --text-primary: #f8fafc; --text-secondary: #94a3b8; --border-color: #2a2a3e; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); margin: 0; min-height: 100vh; }
+        code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+        .hero-bg { background: radial-gradient(ellipse at 20% 30%, rgba(251, 146, 60, 0.1) 0%, transparent 50%), var(--bg-primary); }
+        .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; }
+        .nav-link { color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+        .nav-link:hover { color: var(--text-primary); }
+        .badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+        .badge-red { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+        .badge-purple { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .badge-orange { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        pre { background: #0d0d14; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; overflow-x: auto; font-size: 13px; line-height: 1.6; }
+        .code-rsa { border-left: 3px solid #ef4444; }
+        .code-kql { border-left: 3px solid #10b981; }
+        .tab-btn { padding: 8px 16px; border-radius: 6px; font-weight: 500; transition: all 0.2s; cursor: pointer; border: none; }
+        .tab-btn.active { background: var(--accent-blue); color: white; }
+        .tab-btn:not(.active) { background: var(--bg-tertiary); color: var(--text-secondary); }
+        .copy-btn { position: absolute; top: 8px; right: 8px; padding: 6px; border-radius: 6px; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-secondary); cursor: pointer; }
+        .copy-btn:hover { color: white; border-color: var(--accent-blue); }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        .keyword { color: #ff7b72; }
+        .string { color: #a5d6ff; }
+        .comment { color: #8b949e; font-style: italic; }
+        .function { color: #d2a8ff; }
+        .number { color: #79c0ff; }
+    </style>
+</head>
+<body class="hero-bg">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-[#2a2a3e]">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <div><h1 class="text-lg font-bold text-white">RSA → Sentinel</h1></div>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="../index.html" class="nav-link font-medium">Home</a>
+                    <a href="overview.html" class="nav-link font-medium">Overview</a>
+                    <a href="defender-stack.html" class="nav-link font-medium">Defender XDR</a>
+                    <a href="rules-catalog.html" class="nav-link font-medium text-orange-400">Rules</a>
+                    <a href="dlp-migration.html" class="nav-link font-medium">DLP</a>
+                    <a href="playbooks.html" class="nav-link font-medium">Playbooks</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                    <a href="../index.html" class="hover:text-blue-400">Home</a>
+                    <span>/</span>
+                    <a href="rules-catalog.html" class="hover:text-blue-400">Rules</a>
+                    <span>/</span>
+                    <span class="text-gray-400">Privilege Escalation</span>
+                </div>
+                <div class="flex items-center gap-4 mb-4">
+                    <h1 class="text-4xl font-bold text-white">Privilege Escalation</h1>
+                    <span class="badge badge-red">Critical</span>
+                </div>
+                <p class="text-xl text-gray-400 max-w-3xl mb-6">
+                    28 RSA rules migrated to 26 Sentinel analytics rules for detecting admin group modifications, DCSync attacks, and token manipulation.
+                </p>
+                <div class="flex items-center gap-4">
+                    <span class="text-sm text-gray-500">MITRE Techniques:</span>
+                    <span class="badge badge-purple">T1078</span>
+                    <span class="badge badge-purple">T1003.006</span>
+                    <span class="badge badge-purple">T1134</span>
+                </div>
+            </div>
+
+            <!-- Rule 1: Admin Group Modification -->
+            <div class="card p-6 mb-8" id="admin-group">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-semibold text-white">5.1 Admin Group Modification</h2>
+                            <span class="badge badge-red">Critical</span>
+                        </div>
+                        <p class="text-gray-400">Detects additions to privileged Active Directory groups</p>
+                    </div>
+                    <span class="badge badge-purple">T1078.002</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'admin-rsa')">RSA NetWitness</button>
+                        <button class="tab-btn" onclick="showTab(this, 'admin-kql')">Microsoft Sentinel</button>
+                    </div>
+                    
+                    <div id="admin-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-rsa"><span class="comment">-- Rule: Admin_Group_Modification</span>
+<span class="keyword">@RSA_Rule</span> <span class="string">"Admin_Group_Mod"</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Event
+<span class="keyword">WHERE</span> 
+    event_id <span class="keyword">IN</span> (<span class="number">4728</span>, <span class="number">4732</span>, <span class="number">4756</span>) <span class="keyword">AND</span>
+    target_group <span class="keyword">MATCHES</span> <span class="string">'*Admin*|*Domain Admins*|*Enterprise Admins*'</span>
+<span class="keyword">ALERT</span> severity = <span class="string">'critical'</span>,
+      technique = <span class="string">'T1078.002'</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="admin-kql" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-kql"><span class="comment">// Rule: Admin Group Modification Detection</span>
+<span class="comment">// MITRE: T1078.002 - Valid Accounts: Domain Accounts</span>
+
+<span class="keyword">let</span> privilegedGroups = <span class="function">dynamic</span>([
+    <span class="string">"Domain Admins"</span>, <span class="string">"Enterprise Admins"</span>, <span class="string">"Schema Admins"</span>,
+    <span class="string">"Administrators"</span>, <span class="string">"Account Operators"</span>, <span class="string">"Backup Operators"</span>,
+    <span class="string">"Server Operators"</span>, <span class="string">"DnsAdmins"</span>, <span class="string">"DHCP Administrators"</span>
+]);
+
+SecurityEvent
+| <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(<span class="number">1h</span>)
+| <span class="keyword">where</span> EventID <span class="keyword">in</span> (<span class="number">4728</span>, <span class="number">4732</span>, <span class="number">4756</span>) <span class="comment">// Member added to security-enabled group</span>
+| <span class="keyword">extend</span> TargetGroup = TargetUserName
+| <span class="keyword">where</span> TargetGroup <span class="keyword">has_any</span> (privilegedGroups)
+| <span class="keyword">extend</span>
+    GroupType = <span class="function">case</span>(
+        EventID == <span class="number">4728</span>, <span class="string">"Global"</span>,
+        EventID == <span class="number">4732</span>, <span class="string">"Local"</span>,
+        EventID == <span class="number">4756</span>, <span class="string">"Universal"</span>,
+        <span class="string">"Unknown"</span>
+    )
+| <span class="keyword">project</span>
+    TimeGenerated,
+    Computer,
+    Actor = SubjectUserName,
+    ActorDomain = SubjectDomainName,
+    MemberAdded = MemberName,
+    TargetGroup,
+    GroupType,
+    Severity = <span class="string">"Critical"</span>,
+    MITRETechnique = <span class="string">"T1078.002"</span>,
+    RecommendedAction = <span class="string">"Verify change was authorized through change management"</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rule 2: DCSync Attack -->
+            <div class="card p-6 mb-8" id="dcsync">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-semibold text-white">5.2 DCSync Attack Detection</h2>
+                            <span class="badge badge-red">Critical</span>
+                        </div>
+                        <p class="text-gray-400">Detects replication requests from non-DC systems indicating DCSync</p>
+                    </div>
+                    <span class="badge badge-purple">T1003.006</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'dc-rsa')">RSA NetWitness</button>
+                        <button class="tab-btn" onclick="showTab(this, 'dc-kql')">Microsoft Sentinel</button>
+                    </div>
+                    
+                    <div id="dc-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-rsa"><span class="comment">-- Rule: DCSync_Attack</span>
+<span class="keyword">@RSA_Rule</span> <span class="string">"DCSync_Detection"</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Event
+<span class="keyword">WHERE</span> 
+    event_id = <span class="number">4662</span> <span class="keyword">AND</span>
+    access_mask = <span class="string">'0x100'</span> <span class="keyword">AND</span>
+    properties <span class="keyword">MATCHES</span> <span class="string">'*Replicating Directory Changes*'</span> <span class="keyword">AND</span>
+    source_host <span class="keyword">NOT IN</span> (domain_controllers)
+<span class="keyword">ALERT</span> severity = <span class="string">'critical'</span>,
+      technique = <span class="string">'T1003.006'</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="dc-kql" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-kql"><span class="comment">// Rule: DCSync Attack Detection</span>
+<span class="comment">// MITRE: T1003.006 - OS Credential Dumping: DCSync</span>
+
+<span class="keyword">let</span> domainControllers = _GetWatchlist(<span class="string">'DomainControllers'</span>);
+<span class="keyword">let</span> replicationGUIDs = <span class="function">dynamic</span>([
+    <span class="string">"{1131f6aa-9c07-11d1-f79f-00c04fc2dcd2}"</span>, <span class="comment">// DS-Replication-Get-Changes</span>
+    <span class="string">"{1131f6ad-9c07-11d1-f79f-00c04fc2dcd2}"</span>, <span class="comment">// DS-Replication-Get-Changes-All</span>
+    <span class="string">"{89e95b76-444d-4c62-991a-0facbeda640c}"</span>  <span class="comment">// DS-Replication-Get-Changes-In-Filtered-Set</span>
+]);
+
+SecurityEvent
+| <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(<span class="number">1h</span>)
+| <span class="keyword">where</span> EventID == <span class="number">4662</span>
+| <span class="keyword">where</span> ObjectServer == <span class="string">"DS"</span>
+| <span class="keyword">where</span> Properties <span class="keyword">has_any</span> (replicationGUIDs)
+| <span class="keyword">extend</span> SourceComputer = <span class="function">tostring</span>(<span class="function">split</span>(SubjectUserName, <span class="string">"$"</span>)[<span class="number">0</span>])
+| <span class="keyword">where</span> SourceComputer !<span class="keyword">in</span> (domainControllers)
+| <span class="keyword">project</span>
+    TimeGenerated,
+    Computer,
+    SubjectAccount = SubjectUserName,
+    SubjectDomain = SubjectDomainName,
+    SourceIP = IpAddress,
+    ObjectName,
+    OperationType,
+    Properties,
+    Severity = <span class="string">"Critical"</span>,
+    MITRETechnique = <span class="string">"T1003.006"</span>,
+    RecommendedAction = <span class="string">"Immediate investigation - potential credential theft"</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rule 3: Token Manipulation -->
+            <div class="card p-6 mb-8" id="token">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-semibold text-white">5.3 Access Token Manipulation</h2>
+                            <span class="badge badge-orange">High</span>
+                        </div>
+                        <p class="text-gray-400">Detects token impersonation and privilege token theft</p>
+                    </div>
+                    <span class="badge badge-purple">T1134</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'token-rsa')">RSA NetWitness</button>
+                        <button class="tab-btn" onclick="showTab(this, 'token-kql')">Microsoft Sentinel</button>
+                    </div>
+                    
+                    <div id="token-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-rsa"><span class="comment">-- Rule: Token_Manipulation</span>
+<span class="keyword">@RSA_Rule</span> <span class="string">"Token_Manipulation"</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Event
+<span class="keyword">WHERE</span> 
+    event_id = <span class="number">4624</span> <span class="keyword">AND</span>
+    logon_type = <span class="number">9</span> <span class="keyword">AND</span>  <span class="comment">-- NewCredentials</span>
+    impersonation_level <span class="keyword">IN</span> (<span class="string">'Impersonation'</span>, <span class="string">'Delegation'</span>)
+<span class="keyword">ALERT</span> severity = <span class="string">'high'</span>,
+      technique = <span class="string">'T1134'</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="token-kql" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-kql"><span class="comment">// Rule: Access Token Manipulation Detection</span>
+<span class="comment">// MITRE: T1134 - Access Token Manipulation</span>
+
+<span class="comment">// Detect suspicious token impersonation via NewCredentials logon</span>
+SecurityEvent
+| <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(<span class="number">1h</span>)
+| <span class="keyword">where</span> EventID == <span class="number">4624</span>
+| <span class="keyword">where</span> LogonType == <span class="number">9</span> <span class="comment">// NewCredentials - runas /netonly</span>
+| <span class="keyword">where</span> ImpersonationLevel <span class="keyword">in</span> (<span class="string">"%%1833"</span>, <span class="string">"%%1840"</span>) <span class="comment">// Impersonation or Delegation</span>
+| <span class="keyword">extend</span> ImpersonationDesc = <span class="function">case</span>(
+    ImpersonationLevel == <span class="string">"%%1833"</span>, <span class="string">"Impersonation"</span>,
+    ImpersonationLevel == <span class="string">"%%1840"</span>, <span class="string">"Delegation"</span>,
+    <span class="string">"Unknown"</span>
+)
+| <span class="keyword">project</span>
+    TimeGenerated,
+    Computer,
+    TargetUserName,
+    TargetDomainName,
+    SubjectUserName,
+    ProcessName,
+    ImpersonationDesc,
+    LogonProcessName,
+    AuthenticationPackageName,
+    Severity = <span class="string">"High"</span>,
+    MITRETechnique = <span class="string">"T1134"</span>,
+    RecommendedAction = <span class="string">"Review if token usage is legitimate"</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex items-center justify-between mt-12">
+                <a href="rules-endpoint.html" class="text-gray-400 hover:text-white flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Previous: Endpoint Threats
+                </a>
+                <a href="rules-cloud.html" class="text-blue-400 hover:text-blue-300 flex items-center gap-2">
+                    Next: Cloud Security
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function showTab(btn, tabId) {
+            const parent = btn.closest('.card');
+            parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            parent.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            btn.classList.add('active');
+            document.getElementById(tabId).classList.remove('hidden');
+        }
+
+        function copyCode(btn) {
+            const pre = btn.nextElementSibling;
+            navigator.clipboard.writeText(pre.textContent).then(() => {
+                btn.innerHTML = '<svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+                setTimeout(() => {
+                    btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insider Threat Rules - RSA to Sentinel Migration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0a0f; --bg-secondary: #12121a; --bg-tertiary: #1a1a2e; --accent-blue: #3b82f6; --text-primary: #f8fafc; --text-secondary: #94a3b8; --border-color: #2a2a3e; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); margin: 0; min-height: 100vh; }
+        code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+        .hero-bg { background: radial-gradient(ellipse at 20% 30%, rgba(236, 72, 153, 0.1) 0%, transparent 50%), var(--bg-primary); }
+        .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; }
+        .nav-link { color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+        .nav-link:hover { color: var(--text-primary); }
+        .badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+        .badge-red { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+        .badge-purple { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .badge-orange { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        .badge-pink { background: rgba(236, 72, 153, 0.2); color: #f472b6; }
+        pre { background: #0d0d14; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; overflow-x: auto; font-size: 13px; line-height: 1.6; }
+        .code-rsa { border-left: 3px solid #ef4444; }
+        .code-kql { border-left: 3px solid #10b981; }
+        .tab-btn { padding: 8px 16px; border-radius: 6px; font-weight: 500; transition: all 0.2s; cursor: pointer; border: none; }
+        .tab-btn.active { background: var(--accent-blue); color: white; }
+        .tab-btn:not(.active) { background: var(--bg-tertiary); color: var(--text-secondary); }
+        .copy-btn { position: absolute; top: 8px; right: 8px; padding: 6px; border-radius: 6px; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-secondary); cursor: pointer; }
+        .copy-btn:hover { color: white; border-color: var(--accent-blue); }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        .keyword { color: #ff7b72; }
+        .string { color: #a5d6ff; }
+        .comment { color: #8b949e; font-style: italic; }
+        .function { color: #d2a8ff; }
+        .number { color: #79c0ff; }
+    </style>
+</head>
+<body class="hero-bg">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-[#2a2a3e]">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <div><h1 class="text-lg font-bold text-white">RSA → Sentinel</h1></div>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="../index.html" class="nav-link font-medium">Home</a>
+                    <a href="overview.html" class="nav-link font-medium">Overview</a>
+                    <a href="defender-stack.html" class="nav-link font-medium">Defender XDR</a>
+                    <a href="rules-catalog.html" class="nav-link font-medium text-pink-400">Rules</a>
+                    <a href="dlp-migration.html" class="nav-link font-medium">DLP</a>
+                    <a href="playbooks.html" class="nav-link font-medium">Playbooks</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                    <a href="../index.html" class="hover:text-blue-400">Home</a>
+                    <span>/</span>
+                    <a href="rules-catalog.html" class="hover:text-blue-400">Rules</a>
+                    <span>/</span>
+                    <span class="text-gray-400">Insider Threats</span>
+                </div>
+                <div class="flex items-center gap-4 mb-4">
+                    <h1 class="text-4xl font-bold text-white">Insider Threats</h1>
+                    <span class="badge badge-orange">High</span>
+                </div>
+                <p class="text-xl text-gray-400 max-w-3xl mb-6">
+                    22 RSA UEBA rules migrated to 24 Sentinel analytics rules with behavioral baselines for detecting data hoarding, departing employee risk, and privileged user anomalies.
+                </p>
+                <div class="flex items-center gap-4">
+                    <span class="text-sm text-gray-500">MITRE Techniques:</span>
+                    <span class="badge badge-purple">T1074</span>
+                    <span class="badge badge-purple">T1114</span>
+                    <span class="badge badge-purple">T1078</span>
+                </div>
+            </div>
+
+            <!-- Rule 1: Data Hoarding -->
+            <div class="card p-6 mb-8" id="data-hoarding">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-semibold text-white">7.1 Data Hoarding Detection</h2>
+                            <span class="badge badge-orange">High</span>
+                        </div>
+                        <p class="text-gray-400">Detects unusual file access patterns indicating data staging for exfiltration</p>
+                    </div>
+                    <span class="badge badge-purple">T1074</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'hoard-rsa')">RSA NetWitness</button>
+                        <button class="tab-btn" onclick="showTab(this, 'hoard-kql')">Microsoft Sentinel</button>
+                    </div>
+                    
+                    <div id="hoard-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-rsa"><span class="comment">-- Rule: Data_Hoarding_Detection</span>
+<span class="keyword">@RSA_Rule</span> <span class="string">"Data_Hoarding"</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Event
+<span class="keyword">WHERE</span> 
+    event_type = <span class="string">'file_access'</span> <span class="keyword">AND</span>
+    action = <span class="string">'copy'</span>
+<span class="keyword">GROUP BY</span> user_name
+<span class="keyword">HAVING</span> <span class="function">COUNT</span>(<span class="keyword">DISTINCT</span> file_path) > <span class="number">100</span>
+<span class="keyword">WINDOW SLIDING</span> <span class="number">24</span> HOURS
+<span class="keyword">ALERT</span> severity = <span class="string">'high'</span>,
+      technique = <span class="string">'T1074'</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="hoard-kql" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-kql"><span class="comment">// Rule: Data Hoarding Detection</span>
+<span class="comment">// MITRE: T1074 - Data Staged</span>
+
+<span class="keyword">let</span> fileThreshold = <span class="number">100</span>;
+<span class="keyword">let</span> lookback = <span class="number">24h</span>;
+
+<span class="comment">// Get baseline for normal user activity</span>
+<span class="keyword">let</span> baseline = DeviceFileEvents
+    | <span class="keyword">where</span> TimeGenerated <span class="keyword">between</span> (<span class="function">ago</span>(<span class="number">14d</span>) .. <span class="function">ago</span>(<span class="number">1d</span>))
+    | <span class="keyword">where</span> ActionType <span class="keyword">in</span> (<span class="string">"FileCreated"</span>, <span class="string">"FileCopied"</span>, <span class="string">"FileModified"</span>)
+    | <span class="function">summarize</span> AvgDailyFiles = <span class="function">count</span>() / <span class="number">13</span> <span class="keyword">by</span> InitiatingProcessAccountName
+    | <span class="keyword">where</span> AvgDailyFiles > <span class="number">0</span>;
+
+DeviceFileEvents
+| <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(lookback)
+| <span class="keyword">where</span> ActionType <span class="keyword">in</span> (<span class="string">"FileCreated"</span>, <span class="string">"FileCopied"</span>, <span class="string">"FileModified"</span>)
+| <span class="function">summarize</span>
+    UniqueFiles = <span class="function">dcount</span>(FileName),
+    UniqueFolders = <span class="function">dcount</span>(FolderPath),
+    TotalBytes = <span class="function">sum</span>(FileSize),
+    FileTypes = <span class="function">make_set</span>(<span class="function">tostring</span>(<span class="function">split</span>(FileName, <span class="string">"."</span>)[-<span class="number">1</span>]), <span class="number">10</span>),
+    SampleFiles = <span class="function">make_set</span>(FileName, <span class="number">5</span>)
+    <span class="keyword">by</span> InitiatingProcessAccountName, DeviceName
+| <span class="keyword">where</span> UniqueFiles > fileThreshold
+| <span class="keyword">join kind</span>=leftouter (baseline) <span class="keyword">on</span> InitiatingProcessAccountName
+| <span class="keyword">extend</span> 
+    DeviationFactor = <span class="function">iff</span>(AvgDailyFiles > <span class="number">0</span>, UniqueFiles / AvgDailyFiles, <span class="number">999</span>),
+    DataSizeMB = <span class="function">round</span>(TotalBytes / (<span class="number">1024.0</span> * <span class="number">1024</span>), <span class="number">2</span>)
+| <span class="keyword">where</span> DeviationFactor > <span class="number">3</span> <span class="comment">// 3x normal activity</span>
+| <span class="keyword">project</span>
+    TimeGenerated = <span class="function">now</span>(),
+    UserName = InitiatingProcessAccountName,
+    DeviceName,
+    UniqueFilesAccessed = UniqueFiles,
+    UniqueFolders,
+    DataSizeMB,
+    DeviationFactor = <span class="function">round</span>(DeviationFactor, <span class="number">2</span>),
+    FileTypes,
+    SampleFiles,
+    Severity = <span class="function">case</span>(
+        DeviationFactor > <span class="number">10</span>, <span class="string">"Critical"</span>,
+        DeviationFactor > <span class="number">5</span>, <span class="string">"High"</span>,
+        <span class="string">"Medium"</span>
+    ),
+    MITRETechnique = <span class="string">"T1074"</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rule 2: Email Forwarding -->
+            <div class="card p-6 mb-8" id="email-forward">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-semibold text-white">7.2 Suspicious Email Forwarding</h2>
+                            <span class="badge badge-orange">High</span>
+                        </div>
+                        <p class="text-gray-400">Detects email forwarding rules to external addresses</p>
+                    </div>
+                    <span class="badge badge-purple">T1114.003</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'email-rsa')">RSA NetWitness</button>
+                        <button class="tab-btn" onclick="showTab(this, 'email-kql')">Microsoft Sentinel</button>
+                    </div>
+                    
+                    <div id="email-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-rsa"><span class="comment">-- Rule: Suspicious_Email_Forwarding</span>
+<span class="keyword">@RSA_Rule</span> <span class="string">"Email_Forward_External"</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Event
+<span class="keyword">WHERE</span> 
+    event_source = <span class="string">'exchange'</span> <span class="keyword">AND</span>
+    operation = <span class="string">'New-InboxRule'</span> <span class="keyword">AND</span>
+    (forward_to <span class="keyword">NOT LIKE</span> <span class="string">'*@company.com'</span> <span class="keyword">OR</span>
+     redirect_to <span class="keyword">NOT LIKE</span> <span class="string">'*@company.com'</span>)
+<span class="keyword">ALERT</span> severity = <span class="string">'high'</span>,
+      technique = <span class="string">'T1114.003'</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="email-kql" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-kql"><span class="comment">// Rule: Suspicious Email Forwarding Detection</span>
+<span class="comment">// MITRE: T1114.003 - Email Collection: Email Forwarding Rule</span>
+
+<span class="keyword">let</span> corporateDomains = <span class="function">dynamic</span>([<span class="string">"@company.com"</span>, <span class="string">"@subsidiary.com"</span>]);
+
+OfficeActivity
+| <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(<span class="number">1d</span>)
+| <span class="keyword">where</span> Operation <span class="keyword">in</span> (<span class="string">"New-InboxRule"</span>, <span class="string">"Set-InboxRule"</span>, <span class="string">"Set-Mailbox"</span>)
+| <span class="keyword">extend</span> Parameters = <span class="function">parse_json</span>(Parameters)
+| <span class="keyword">mv-expand</span> Parameters
+| <span class="keyword">where</span> Parameters.Name <span class="keyword">in</span> (<span class="string">"ForwardTo"</span>, <span class="string">"ForwardAsAttachmentTo"</span>, <span class="string">"RedirectTo"</span>, <span class="string">"ForwardingSmtpAddress"</span>)
+| <span class="keyword">extend</span> ForwardAddress = <span class="function">tostring</span>(Parameters.Value)
+| <span class="keyword">where</span> <span class="function">isnotempty</span>(ForwardAddress)
+| <span class="keyword">where</span> <span class="keyword">not</span>(ForwardAddress <span class="keyword">has_any</span> (corporateDomains))
+| <span class="keyword">project</span>
+    TimeGenerated,
+    UserId,
+    Operation,
+    ForwardAddress,
+    ClientIP,
+    OriginatingServer,
+    Severity = <span class="string">"High"</span>,
+    MITRETechnique = <span class="string">"T1114.003"</span>,
+    RecommendedAction = <span class="string">"Remove forwarding rule, investigate user activity"</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rule 3: Departing Employee Risk -->
+            <div class="card p-6 mb-8" id="departing">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-semibold text-white">7.3 Departing Employee Activity</h2>
+                            <span class="badge badge-red">Critical</span>
+                        </div>
+                        <p class="text-gray-400">Monitors employees on termination list for data exfiltration indicators</p>
+                    </div>
+                    <span class="badge badge-purple">T1078</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'depart-rsa')">RSA NetWitness</button>
+                        <button class="tab-btn" onclick="showTab(this, 'depart-kql')">Microsoft Sentinel</button>
+                    </div>
+                    
+                    <div id="depart-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-rsa"><span class="comment">-- Rule: Departing_Employee_Risk</span>
+<span class="keyword">@RSA_Rule</span> <span class="string">"Departing_Employee"</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Event
+<span class="keyword">WHERE</span> 
+    user_name <span class="keyword">IN</span> (<span class="keyword">SELECT</span> user <span class="keyword">FROM</span> hr.termination_list) <span class="keyword">AND</span>
+    (event_type = <span class="string">'file_copy'</span> <span class="keyword">OR</span>
+     event_type = <span class="string">'usb_access'</span> <span class="keyword">OR</span>
+     bytes_transferred > <span class="number">10485760</span>)
+<span class="keyword">ALERT</span> severity = <span class="string">'critical'</span>,
+      technique = <span class="string">'T1078'</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="depart-kql" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-kql"><span class="comment">// Rule: Departing Employee Risk Monitoring</span>
+<span class="comment">// MITRE: T1078 - Valid Accounts</span>
+<span class="comment">// Requires: HR_TerminationList watchlist with columns: UserPrincipalName, TerminationDate</span>
+
+<span class="keyword">let</span> departingUsers = <span class="function">_GetWatchlist</span>(<span class="string">'HR_TerminationList'</span>)
+    | <span class="keyword">project</span> UPN = <span class="function">tolower</span>(UserPrincipalName), TermDate = TerminationDate;
+
+<span class="keyword">let</span> fileActivity = DeviceFileEvents
+    | <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(<span class="number">1d</span>)
+    | <span class="keyword">extend</span> UPN = <span class="function">tolower</span>(InitiatingProcessAccountUpn)
+    | <span class="keyword">join kind</span>=inner (departingUsers) <span class="keyword">on</span> UPN
+    | <span class="function">summarize</span> 
+        FilesCopied = <span class="function">countif</span>(ActionType == <span class="string">"FileCopied"</span>),
+        FilesCreated = <span class="function">countif</span>(ActionType == <span class="string">"FileCreated"</span>),
+        TotalBytes = <span class="function">sum</span>(FileSize)
+        <span class="keyword">by</span> UPN, TermDate;
+
+<span class="keyword">let</span> usbActivity = DeviceEvents
+    | <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(<span class="number">1d</span>)
+    | <span class="keyword">where</span> ActionType == <span class="string">"UsbDriveMounted"</span>
+    | <span class="keyword">extend</span> UPN = <span class="function">tolower</span>(InitiatingProcessAccountUpn)
+    | <span class="keyword">join kind</span>=inner (departingUsers) <span class="keyword">on</span> UPN
+    | <span class="function">summarize</span> USBConnections = <span class="function">count</span>() <span class="keyword">by</span> UPN;
+
+fileActivity
+| <span class="keyword">join kind</span>=leftouter (usbActivity) <span class="keyword">on</span> UPN
+| <span class="keyword">extend</span> 
+    USBConnections = <span class="function">coalesce</span>(USBConnections, <span class="number">0</span>),
+    DataSizeMB = <span class="function">round</span>(TotalBytes / (<span class="number">1024.0</span> * <span class="number">1024</span>), <span class="number">2</span>)
+| <span class="keyword">extend</span> RiskScore = 
+    (<span class="function">toint</span>(FilesCopied > <span class="number">50</span>) * <span class="number">30</span>) +
+    (<span class="function">toint</span>(USBConnections > <span class="number">0</span>) * <span class="number">40</span>) +
+    (<span class="function">toint</span>(DataSizeMB > <span class="number">100</span>) * <span class="number">30</span>)
+| <span class="keyword">where</span> RiskScore > <span class="number">0</span>
+| <span class="keyword">project</span>
+    TimeGenerated = <span class="function">now</span>(),
+    UserPrincipalName = UPN,
+    TerminationDate = TermDate,
+    FilesCopied,
+    FilesCreated,
+    USBConnections,
+    DataSizeMB,
+    RiskScore,
+    Severity = <span class="function">case</span>(
+        RiskScore >= <span class="number">70</span>, <span class="string">"Critical"</span>,
+        RiskScore >= <span class="number">40</span>, <span class="string">"High"</span>,
+        <span class="string">"Medium"</span>
+    ),
+    MITRETechnique = <span class="string">"T1078"</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex items-center justify-between mt-12">
+                <a href="rules-cloud.html" class="text-gray-400 hover:text-white flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Previous: Cloud Security
+                </a>
+                <a href="correlation.html" class="text-blue-400 hover:text-blue-300 flex items-center gap-2">
+                    Next: Correlation Rules
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function showTab(btn, tabId) {
+            const parent = btn.closest('.card');
+            parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            parent.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            btn.classList.add('active');
+            document.getElementById(tabId).classList.remove('hidden');
+        }
+
+        function copyCode(btn) {
+            const pre = btn.nextElementSibling;
+            navigator.clipboard.writeText(pre.textContent).then(() => {
+                btn.innerHTML = '<svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+                setTimeout(() => {
+                    btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

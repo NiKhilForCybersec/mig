@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication & Access Rules - RSA to Sentinel Migration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0a0f; --bg-secondary: #12121a; --bg-tertiary: #1a1a2e; --accent-blue: #3b82f6; --text-primary: #f8fafc; --text-secondary: #94a3b8; --border-color: #2a2a3e; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); margin: 0; min-height: 100vh; }
+        code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+        .hero-bg { background: radial-gradient(ellipse at 20% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 50%), var(--bg-primary); }
+        .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; }
+        .nav-link { position: relative; color: var(--text-secondary); transition: color 0.2s ease; text-decoration: none; }
+        .nav-link:hover { color: var(--text-primary); }
+        .badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+        .badge-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .badge-green { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .badge-purple { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .badge-orange { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        .badge-red { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+        .badge-cyan { background: rgba(6, 182, 212, 0.2); color: #22d3ee; }
+        pre { background: #0d0d14; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; overflow-x: auto; font-size: 13px; line-height: 1.6; }
+        .code-rsa { border-left: 3px solid #ef4444; }
+        .code-kql { border-left: 3px solid #10b981; }
+        .tab-btn { padding: 8px 16px; border-radius: 6px; font-weight: 500; transition: all 0.2s; cursor: pointer; border: none; }
+        .tab-btn.active { background: var(--accent-blue); color: white; }
+        .tab-btn:not(.active) { background: var(--bg-tertiary); color: var(--text-secondary); }
+        .tab-btn:not(.active):hover { color: white; }
+        .copy-btn { position: absolute; top: 8px; right: 8px; padding: 6px; border-radius: 6px; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-secondary); cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { color: white; border-color: var(--accent-blue); }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        .keyword { color: #ff7b72; }
+        .string { color: #a5d6ff; }
+        .comment { color: #8b949e; font-style: italic; }
+        .function { color: #d2a8ff; }
+        .number { color: #79c0ff; }
+    </style>
+</head>
+<body class="hero-bg">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-[#2a2a3e]">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <div><h1 class="text-lg font-bold text-white">RSA → Sentinel</h1></div>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="../index.html" class="nav-link font-medium">Home</a>
+                    <a href="overview.html" class="nav-link font-medium">Overview</a>
+                    <a href="defender-stack.html" class="nav-link font-medium">Defender XDR</a>
+                    <a href="rules-catalog.html" class="nav-link font-medium text-blue-400">Rules</a>
+                    <a href="dlp-migration.html" class="nav-link font-medium">DLP</a>
+                    <a href="playbooks.html" class="nav-link font-medium">Playbooks</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                    <a href="../index.html" class="hover:text-blue-400">Home</a>
+                    <span>/</span>
+                    <a href="rules-catalog.html" class="hover:text-blue-400">Rules</a>
+                    <span>/</span>
+                    <span class="text-gray-400">Authentication & Access</span>
+                </div>
+                <div class="flex items-center gap-4 mb-4">
+                    <h1 class="text-4xl font-bold text-white">Authentication & Access</h1>
+                    <span class="badge badge-red">Critical</span>
+                </div>
+                <p class="text-xl text-gray-400 max-w-3xl mb-6">
+                    45 RSA rules migrated to 42 Sentinel analytics rules covering authentication threats, identity attacks, and access control violations.
+                </p>
+                <div class="flex items-center gap-4">
+                    <span class="text-sm text-gray-500">MITRE Techniques:</span>
+                    <span class="badge badge-purple">T1110</span>
+                    <span class="badge badge-purple">T1078</span>
+                    <span class="badge badge-purple">T1621</span>
+                    <span class="badge badge-purple">T1133</span>
+                </div>
+            </div>
+
+            <!-- Rule 1: Brute Force Detection -->
+            <div class="card p-6 mb-8" id="brute-force">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-semibold text-white">1.1 Brute Force Login Attempts</h2>
+                            <span class="badge badge-orange">High</span>
+                        </div>
+                        <p class="text-gray-400">Detects 10+ failed login attempts from the same source IP within 5 minutes</p>
+                    </div>
+                    <span class="badge badge-purple">T1110</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'brute-rsa')">RSA NetWitness</button>
+                        <button class="tab-btn" onclick="showTab(this, 'brute-kql')">Microsoft Sentinel</button>
+                    </div>
+                    
+                    <div id="brute-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-rsa"><span class="comment">-- Rule: Brute_Force_Login_Attempts</span>
+<span class="comment">-- Trigger: 10+ failed logins from same source in 5 minutes</span>
+
+<span class="keyword">@RSA_Rule</span> <span class="string">"Brute_Force_Detection"</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Event
+<span class="keyword">WHERE</span> 
+    event_category = <span class="string">'authentication'</span> <span class="keyword">AND</span>
+    event_outcome = <span class="string">'failure'</span> <span class="keyword">AND</span>
+    device_type <span class="keyword">IN</span> (<span class="string">'windows'</span>, <span class="string">'linux'</span>, <span class="string">'activedirectory'</span>)
+<span class="keyword">GROUP BY</span> source_ip, destination_user
+<span class="keyword">HAVING</span> <span class="function">COUNT</span>(*) >= <span class="number">10</span>
+<span class="keyword">WINDOW SLIDING</span> <span class="number">5</span> MINUTES
+<span class="keyword">ALERT</span> severity = <span class="string">'high'</span>, 
+      module = <span class="string">'authentication'</span>,
+      technique = <span class="string">'T1110'</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="brute-kql" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-kql"><span class="comment">// Rule: Brute Force Login Attempts</span>
+<span class="comment">// MITRE: T1110 - Brute Force</span>
+
+<span class="keyword">let</span> threshold = <span class="number">10</span>;
+<span class="keyword">let</span> timeWindow = <span class="number">5m</span>;
+
+SigninLogs
+| <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(timeWindow)
+| <span class="keyword">where</span> ResultType != <span class="number">0</span>  <span class="comment">// Failed logins</span>
+| <span class="function">summarize</span> 
+    FailedAttempts = <span class="function">count</span>(),
+    TargetAccounts = <span class="function">make_set</span>(UserPrincipalName),
+    FirstAttempt = <span class="function">min</span>(TimeGenerated),
+    LastAttempt = <span class="function">max</span>(TimeGenerated)
+    <span class="keyword">by</span> IPAddress, Location
+| <span class="keyword">where</span> FailedAttempts >= threshold
+| <span class="keyword">extend</span> 
+    AccountsTargeted = <span class="function">array_length</span>(TargetAccounts),
+    AttackDuration = LastAttempt - FirstAttempt
+| <span class="keyword">project</span>
+    TimeGenerated = LastAttempt,
+    IPAddress,
+    Location,
+    FailedAttempts,
+    AccountsTargeted,
+    TargetAccounts,
+    AttackDuration,
+    Severity = <span class="function">case</span>(
+        FailedAttempts >= <span class="number">50</span>, <span class="string">"High"</span>,
+        FailedAttempts >= <span class="number">25</span>, <span class="string">"Medium"</span>,
+        <span class="string">"Low"</span>
+    ),
+    MITRETechnique = <span class="string">"T1110"</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rule 2: Impossible Travel -->
+            <div class="card p-6 mb-8" id="impossible-travel">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-semibold text-white">1.2 Impossible Travel Detection</h2>
+                            <span class="badge badge-red">Critical</span>
+                        </div>
+                        <p class="text-gray-400">Detects authentication from geographically distant locations within impossible timeframes</p>
+                    </div>
+                    <span class="badge badge-purple">T1078</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'travel-rsa')">RSA NetWitness</button>
+                        <button class="tab-btn" onclick="showTab(this, 'travel-kql')">Microsoft Sentinel</button>
+                    </div>
+                    
+                    <div id="travel-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-rsa"><span class="comment">-- Rule: Impossible_Travel_Detection</span>
+<span class="comment">-- Trigger: Same user authenticates from distant locations</span>
+
+<span class="keyword">@RSA_Rule</span> <span class="string">"Impossible_Travel"</span>
+<span class="keyword">SELECT</span> 
+    user_name,
+    source_geo_country <span class="keyword">AS</span> country1,
+    <span class="function">LAST</span>(source_geo_country) <span class="keyword">AS</span> country2,
+    source_ip <span class="keyword">AS</span> ip1,
+    <span class="function">LAST</span>(source_ip) <span class="keyword">AS</span> ip2,
+    timestamp <span class="keyword">AS</span> time1,
+    <span class="function">LAST</span>(timestamp) <span class="keyword">AS</span> time2
+<span class="keyword">FROM</span> Event
+<span class="keyword">WHERE</span> 
+    event_category = <span class="string">'authentication'</span> <span class="keyword">AND</span>
+    event_outcome = <span class="string">'success'</span>
+<span class="keyword">GROUP BY</span> user_name
+<span class="keyword">HAVING</span> 
+    country1 != country2 <span class="keyword">AND</span>
+    <span class="function">TIMEDIFF</span>(time2, time1) < <span class="number">120</span> MINUTES <span class="keyword">AND</span>
+    <span class="function">GEO_DISTANCE</span>(country1, country2) > <span class="number">500</span>
+<span class="keyword">WINDOW SLIDING</span> <span class="number">2</span> HOURS
+<span class="keyword">ALERT</span> severity = <span class="string">'critical'</span>,
+      module = <span class="string">'identity'</span>,
+      technique = <span class="string">'T1078'</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="travel-kql" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-kql"><span class="comment">// Rule: Impossible Travel Detection</span>
+<span class="comment">// MITRE: T1078 - Valid Accounts</span>
+
+<span class="keyword">let</span> timeWindow = <span class="number">2h</span>;
+<span class="keyword">let</span> impossibleTravelThresholdKm = <span class="number">500</span>;
+<span class="keyword">let</span> impossibleTravelTimeMinutes = <span class="number">120</span>;
+
+SigninLogs
+| <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(timeWindow)
+| <span class="keyword">where</span> ResultType == <span class="number">0</span>  <span class="comment">// Successful logins</span>
+| <span class="keyword">project</span> 
+    TimeGenerated, 
+    UserPrincipalName, 
+    IPAddress, 
+    Location,
+    Latitude = <span class="function">toreal</span>(LocationDetails.geoCoordinates.latitude),
+    Longitude = <span class="function">toreal</span>(LocationDetails.geoCoordinates.longitude),
+    City = <span class="function">tostring</span>(LocationDetails.city),
+    Country = <span class="function">tostring</span>(LocationDetails.countryOrRegion)
+| <span class="keyword">order by</span> UserPrincipalName, TimeGenerated <span class="keyword">asc</span>
+| <span class="keyword">serialize</span>
+| <span class="keyword">extend</span> 
+    PrevLatitude = <span class="function">prev</span>(Latitude, <span class="number">1</span>),
+    PrevLongitude = <span class="function">prev</span>(Longitude, <span class="number">1</span>),
+    PrevTime = <span class="function">prev</span>(TimeGenerated, <span class="number">1</span>),
+    PrevLocation = <span class="function">prev</span>(Location, <span class="number">1</span>),
+    PrevIP = <span class="function">prev</span>(IPAddress, <span class="number">1</span>),
+    PrevUser = <span class="function">prev</span>(UserPrincipalName, <span class="number">1</span>)
+| <span class="keyword">where</span> UserPrincipalName == PrevUser
+| <span class="keyword">extend</span> 
+    TimeDiffMinutes = <span class="function">datetime_diff</span>(<span class="string">'minute'</span>, TimeGenerated, PrevTime),
+    DistanceKm = <span class="function">geo_distance_2points</span>(Longitude, Latitude, PrevLongitude, PrevLatitude) / <span class="number">1000</span>
+| <span class="keyword">where</span> DistanceKm > impossibleTravelThresholdKm
+| <span class="keyword">where</span> TimeDiffMinutes < impossibleTravelTimeMinutes
+| <span class="keyword">extend</span> 
+    RequiredSpeedKmh = DistanceKm / (TimeDiffMinutes / <span class="number">60.0</span>)
+| <span class="keyword">where</span> RequiredSpeedKmh > <span class="number">800</span>  <span class="comment">// Faster than commercial flight</span>
+| <span class="keyword">project</span>
+    TimeGenerated,
+    UserPrincipalName,
+    CurrentIP = IPAddress,
+    CurrentLocation = Location,
+    PreviousIP = PrevIP,
+    PreviousLocation = PrevLocation,
+    DistanceKm = <span class="function">round</span>(DistanceKm, <span class="number">2</span>),
+    TimeDiffMinutes,
+    RequiredSpeedKmh = <span class="function">round</span>(RequiredSpeedKmh, <span class="number">2</span>),
+    Severity = <span class="string">"High"</span>,
+    MITRETechnique = <span class="string">"T1078"</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rule 3: Service Account Abuse -->
+            <div class="card p-6 mb-8" id="service-account">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-semibold text-white">1.3 Service Account Interactive Logon</h2>
+                            <span class="badge badge-orange">High</span>
+                        </div>
+                        <p class="text-gray-400">Detects service accounts used for interactive login sessions</p>
+                    </div>
+                    <span class="badge badge-purple">T1078.002</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'svc-rsa')">RSA NetWitness</button>
+                        <button class="tab-btn" onclick="showTab(this, 'svc-kql')">Microsoft Sentinel</button>
+                    </div>
+                    
+                    <div id="svc-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-rsa"><span class="comment">-- Rule: Service_Account_Interactive_Logon</span>
+<span class="comment">-- Trigger: Service account used for interactive login</span>
+
+<span class="keyword">@RSA_Rule</span> <span class="string">"Service_Account_Abuse"</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Event
+<span class="keyword">WHERE</span> 
+    event_category = <span class="string">'authentication'</span> <span class="keyword">AND</span>
+    event_outcome = <span class="string">'success'</span> <span class="keyword">AND</span>
+    logon_type <span class="keyword">IN</span> (<span class="number">2</span>, <span class="number">10</span>, <span class="number">11</span>) <span class="keyword">AND</span>  <span class="comment">-- Interactive, RemoteInteractive, CachedInteractive</span>
+    user_name <span class="keyword">MATCHES</span> <span class="string">'svc_*|srv_*|service_*|_svc$'</span>
+<span class="keyword">ALERT</span> severity = <span class="string">'high'</span>,
+      module = <span class="string">'identity'</span>,
+      technique = <span class="string">'T1078.002'</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="svc-kql" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-kql"><span class="comment">// Rule: Service Account Interactive Logon</span>
+<span class="comment">// MITRE: T1078.002 - Domain Accounts</span>
+
+<span class="keyword">let</span> serviceAccountPatterns = <span class="function">dynamic</span>([<span class="string">'svc_'</span>, <span class="string">'srv_'</span>, <span class="string">'service_'</span>, <span class="string">'_svc'</span>, <span class="string">'_service'</span>]);
+
+SecurityEvent
+| <span class="keyword">where</span> EventID == <span class="number">4624</span>  <span class="comment">// Successful logon</span>
+| <span class="keyword">where</span> LogonType <span class="keyword">in</span> (<span class="number">2</span>, <span class="number">10</span>, <span class="number">11</span>)  <span class="comment">// Interactive logons</span>
+| <span class="keyword">where</span> AccountType == <span class="string">"User"</span>
+| <span class="keyword">extend</span> IsServiceAccount = <span class="function">array_length</span>(
+    <span class="function">array_filter</span>(serviceAccountPatterns, p => Account <span class="keyword">contains</span> p)
+) > <span class="number">0</span>
+| <span class="keyword">where</span> IsServiceAccount == <span class="keyword">true</span>
+| <span class="keyword">project</span>
+    TimeGenerated,
+    Account,
+    Computer,
+    LogonType,
+    LogonTypeName = <span class="function">case</span>(
+        LogonType == <span class="number">2</span>, <span class="string">"Interactive"</span>,
+        LogonType == <span class="number">10</span>, <span class="string">"RemoteInteractive"</span>,
+        LogonType == <span class="number">11</span>, <span class="string">"CachedInteractive"</span>,
+        <span class="string">"Unknown"</span>
+    ),
+    IpAddress,
+    WorkstationName,
+    Severity = <span class="string">"High"</span>,
+    MITRETechnique = <span class="string">"T1078.002"</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rule 4: After Hours VPN -->
+            <div class="card p-6 mb-8" id="after-hours">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-semibold text-white">1.4 After-Hours VPN Access</h2>
+                            <span class="badge badge-blue">Medium</span>
+                        </div>
+                        <p class="text-gray-400">Detects VPN access outside business hours for non-exempt users</p>
+                    </div>
+                    <span class="badge badge-purple">T1133</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'vpn-rsa')">RSA NetWitness</button>
+                        <button class="tab-btn" onclick="showTab(this, 'vpn-kql')">Microsoft Sentinel</button>
+                    </div>
+                    
+                    <div id="vpn-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-rsa"><span class="comment">-- Rule: After_Hours_VPN_Access</span>
+<span class="comment">-- Trigger: VPN access outside business hours</span>
+
+<span class="keyword">@RSA_Rule</span> <span class="string">"After_Hours_Access"</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Event
+<span class="keyword">WHERE</span> 
+    event_category = <span class="string">'vpn'</span> <span class="keyword">AND</span>
+    event_outcome = <span class="string">'success'</span> <span class="keyword">AND</span>
+    <span class="function">HOUR</span>(timestamp) <span class="keyword">NOT BETWEEN</span> <span class="number">6</span> <span class="keyword">AND</span> <span class="number">20</span> <span class="keyword">AND</span>
+    <span class="function">DAYOFWEEK</span>(timestamp) <span class="keyword">IN</span> (<span class="number">1</span>, <span class="number">7</span>) <span class="keyword">OR</span>
+    user_department <span class="keyword">NOT IN</span> (<span class="string">'IT'</span>, <span class="string">'Security'</span>, <span class="string">'Executive'</span>)
+<span class="keyword">ALERT</span> severity = <span class="string">'medium'</span>,
+      module = <span class="string">'identity'</span>,
+      technique = <span class="string">'T1133'</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="vpn-kql" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-kql"><span class="comment">// Rule: After Hours VPN Access</span>
+<span class="comment">// MITRE: T1133 - External Remote Services</span>
+
+<span class="keyword">let</span> businessHoursStart = <span class="number">6</span>;
+<span class="keyword">let</span> businessHoursEnd = <span class="number">20</span>;
+<span class="keyword">let</span> exemptDepartments = <span class="function">dynamic</span>([<span class="string">'IT'</span>, <span class="string">'Security'</span>, <span class="string">'Executive'</span>, <span class="string">'Operations'</span>]);
+
+SigninLogs
+| <span class="keyword">where</span> AppDisplayName <span class="keyword">contains</span> <span class="string">"VPN"</span> <span class="keyword">or</span> 
+        ResourceDisplayName <span class="keyword">contains</span> <span class="string">"VPN"</span> <span class="keyword">or</span>
+        ClientAppUsed == <span class="string">"VPN"</span>
+| <span class="keyword">where</span> ResultType == <span class="number">0</span>
+| <span class="keyword">extend</span> 
+    HourOfDay = <span class="function">hourofday</span>(TimeGenerated),
+    DayOfWeek = <span class="function">dayofweek</span>(TimeGenerated),
+    IsWeekend = <span class="function">dayofweek</span>(TimeGenerated) <span class="keyword">in</span> (<span class="number">0d</span>, <span class="number">6d</span>)
+| <span class="keyword">extend</span> 
+    IsAfterHours = HourOfDay < businessHoursStart <span class="keyword">or</span> HourOfDay > businessHoursEnd
+| <span class="keyword">where</span> IsAfterHours <span class="keyword">or</span> IsWeekend
+| <span class="keyword">join kind</span>=leftouter (
+    IdentityInfo
+    | <span class="function">summarize</span> <span class="function">arg_max</span>(TimeGenerated, *) <span class="keyword">by</span> AccountUPN
+    | <span class="keyword">project</span> AccountUPN, Department, JobTitle
+) <span class="keyword">on</span> $left.UserPrincipalName == $right.AccountUPN
+| <span class="keyword">where</span> Department !<span class="keyword">in</span> (exemptDepartments)
+| <span class="keyword">project</span>
+    TimeGenerated,
+    UserPrincipalName,
+    Department,
+    IPAddress,
+    Location,
+    HourOfDay,
+    IsWeekend,
+    DeviceDetail,
+    Severity = <span class="string">"Medium"</span>,
+    MITRETechnique = <span class="string">"T1133"</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rule 5: MFA Fatigue -->
+            <div class="card p-6 mb-8" id="mfa-fatigue">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-semibold text-white">1.5 MFA Fatigue Attack Detection</h2>
+                            <span class="badge badge-red">Critical</span>
+                        </div>
+                        <p class="text-gray-400">Detects multiple MFA push notifications in short period (push fatigue attack)</p>
+                    </div>
+                    <span class="badge badge-purple">T1621</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'mfa-rsa')">RSA NetWitness</button>
+                        <button class="tab-btn" onclick="showTab(this, 'mfa-kql')">Microsoft Sentinel</button>
+                    </div>
+                    
+                    <div id="mfa-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-rsa"><span class="comment">-- Rule: MFA_Fatigue_Attack</span>
+<span class="comment">-- Trigger: Multiple MFA prompts in short period</span>
+
+<span class="keyword">@RSA_Rule</span> <span class="string">"MFA_Fatigue"</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Event
+<span class="keyword">WHERE</span> 
+    event_category = <span class="string">'authentication'</span> <span class="keyword">AND</span>
+    event_type = <span class="string">'mfa_challenge'</span> <span class="keyword">AND</span>
+    event_outcome = <span class="string">'pending'</span>
+<span class="keyword">GROUP BY</span> user_name
+<span class="keyword">HAVING</span> <span class="function">COUNT</span>(*) >= <span class="number">5</span>
+<span class="keyword">WINDOW SLIDING</span> <span class="number">10</span> MINUTES
+<span class="keyword">ALERT</span> severity = <span class="string">'critical'</span>,
+      module = <span class="string">'identity'</span>,
+      technique = <span class="string">'T1621'</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="mfa-kql" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-kql"><span class="comment">// Rule: MFA Fatigue Attack Detection</span>
+<span class="comment">// MITRE: T1621 - Multi-Factor Authentication Request Generation</span>
+
+<span class="keyword">let</span> mfaThreshold = <span class="number">5</span>;
+<span class="keyword">let</span> timeWindow = <span class="number">10m</span>;
+
+SigninLogs
+| <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(timeWindow)
+| <span class="keyword">where</span> ResultType == <span class="number">50074</span>  <span class="comment">// MFA required</span>
+    <span class="keyword">or</span> ResultType == <span class="number">50076</span>   <span class="comment">// MFA required (strong auth)</span>
+    <span class="keyword">or</span> ResultType == <span class="number">50079</span>   <span class="comment">// MFA registration required</span>
+| <span class="function">summarize</span>
+    MFAPrompts = <span class="function">count</span>(),
+    Locations = <span class="function">make_set</span>(Location),
+    IPs = <span class="function">make_set</span>(IPAddress),
+    Devices = <span class="function">make_set</span>(DeviceDetail.deviceId),
+    FirstPrompt = <span class="function">min</span>(TimeGenerated),
+    LastPrompt = <span class="function">max</span>(TimeGenerated)
+    <span class="keyword">by</span> UserPrincipalName
+| <span class="keyword">where</span> MFAPrompts >= mfaThreshold
+| <span class="keyword">extend</span> 
+    UniqueLocations = <span class="function">array_length</span>(Locations),
+    UniqueIPs = <span class="function">array_length</span>(IPs),
+    AttackDuration = LastPrompt - FirstPrompt
+| <span class="keyword">project</span>
+    TimeGenerated = LastPrompt,
+    UserPrincipalName,
+    MFAPrompts,
+    UniqueLocations,
+    UniqueIPs,
+    AttackDuration,
+    Severity = <span class="string">"Critical"</span>,
+    MITRETechnique = <span class="string">"T1621"</span>,
+    RecommendedAction = <span class="string">"Contact user immediately, consider disabling account"</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex items-center justify-between mt-12">
+                <a href="rules-catalog.html" class="text-gray-400 hover:text-white flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Catalog
+                </a>
+                <a href="rules-malware.html" class="text-blue-400 hover:text-blue-300 flex items-center gap-2">
+                    Next: Malware & Threat Intel
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function showTab(btn, tabId) {
+            const parent = btn.closest('.card');
+            parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            parent.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            btn.classList.add('active');
+            document.getElementById(tabId).classList.remove('hidden');
+        }
+
+        function copyCode(btn) {
+            const pre = btn.nextElementSibling;
+            const text = pre.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                btn.innerHTML = '<svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+                setTimeout(() => {
+                    btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

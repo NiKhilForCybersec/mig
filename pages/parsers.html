@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Parsers - RSA to Sentinel Migration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0a0f; --bg-secondary: #12121a; --bg-tertiary: #1a1a2e; --accent-blue: #3b82f6; --text-primary: #f8fafc; --text-secondary: #94a3b8; --border-color: #2a2a3e; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); margin: 0; min-height: 100vh; }
+        code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+        .hero-bg { background: radial-gradient(ellipse at 20% 30%, rgba(245, 158, 11, 0.1) 0%, transparent 50%), var(--bg-primary); }
+        .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; }
+        .nav-link { color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+        .nav-link:hover { color: var(--text-primary); }
+        .badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+        .badge-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .badge-green { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .badge-purple { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .badge-orange { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        .badge-cyan { background: rgba(6, 182, 212, 0.2); color: #22d3ee; }
+        pre { background: #0d0d14; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; overflow-x: auto; font-size: 13px; line-height: 1.6; }
+        .code-kql { border-left: 3px solid #10b981; }
+        .copy-btn { position: absolute; top: 8px; right: 8px; padding: 6px; border-radius: 6px; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-secondary); cursor: pointer; }
+        .copy-btn:hover { color: white; border-color: var(--accent-blue); }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        .keyword { color: #ff7b72; }
+        .string { color: #a5d6ff; }
+        .comment { color: #8b949e; font-style: italic; }
+        .function { color: #d2a8ff; }
+        .number { color: #79c0ff; }
+    </style>
+</head>
+<body class="hero-bg">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-[#2a2a3e]">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <div><h1 class="text-lg font-bold text-white">RSA → Sentinel</h1></div>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="../index.html" class="nav-link font-medium">Home</a>
+                    <a href="overview.html" class="nav-link font-medium">Overview</a>
+                    <a href="defender-stack.html" class="nav-link font-medium">Defender XDR</a>
+                    <a href="rules-catalog.html" class="nav-link font-medium">Rules</a>
+                    <a href="dlp-migration.html" class="nav-link font-medium">DLP</a>
+                    <a href="playbooks.html" class="nav-link font-medium">Playbooks</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                    <a href="../index.html" class="hover:text-blue-400">Home</a>
+                    <span>/</span>
+                    <span class="text-gray-400">Custom Parsers</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Custom Parsers</h1>
+                <p class="text-xl text-gray-400 max-w-3xl mb-6">
+                    KQL functions that normalize and enrich log data from various sources, replacing RSA NetWitness custom parsers with cloud-native solutions.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="badge badge-orange">4 Custom Functions</span>
+                    <span class="badge badge-green">ASIM Compatible</span>
+                    <span class="badge badge-purple">Saved to Workspace</span>
+                </div>
+            </div>
+
+            <!-- Parser 1: Salesforce -->
+            <div class="card p-8 mb-8" id="salesforce">
+                <div class="flex items-start justify-between mb-6">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-2xl font-bold text-white">SalesforceParser</h2>
+                            <span class="badge badge-cyan">Custom</span>
+                        </div>
+                        <p class="text-gray-400">Parses Salesforce Shield Event Monitoring logs and normalizes fields for detection rules.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="p-4 rounded-lg bg-[#1a1a2e]">
+                        <p class="text-sm text-gray-500">Source Table</p>
+                        <p class="text-cyan-400 mono">Salesforce_CL</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-[#1a1a2e]">
+                        <p class="text-sm text-gray-500">Rules Using</p>
+                        <p class="text-white font-semibold">28 rules</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-[#1a1a2e]">
+                        <p class="text-sm text-gray-500">Output Fields</p>
+                        <p class="text-white font-semibold">24 normalized</p>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <button class="copy-btn" onclick="copyCode(this)">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    </button>
+                    <pre class="code-kql"><span class="comment">// Function: SalesforceParser</span>
+<span class="comment">// Purpose: Parse and normalize Salesforce Shield Event Monitoring logs</span>
+<span class="comment">// Usage: SalesforceParser(ago(1h), now())</span>
+
+<span class="keyword">let</span> SalesforceParser = (<span class="function">startTime</span>: datetime, <span class="function">endTime</span>: datetime) {
+    Salesforce_CL
+    | <span class="keyword">where</span> TimeGenerated <span class="keyword">between</span> (startTime .. endTime)
+    | <span class="keyword">extend</span> EventData = <span class="function">parse_json</span>(RawData)
+    | <span class="keyword">extend</span>
+        <span class="comment">// Core event fields</span>
+        SF_Timestamp = <span class="function">todatetime</span>(EventData.TIMESTAMP_DERIVED),
+        SF_EventType = <span class="function">tostring</span>(EventData.EVENT_TYPE),
+        SF_UserId = <span class="function">tostring</span>(EventData.USER_ID),
+        SF_UserName = <span class="function">tostring</span>(EventData.USER_NAME),
+        SF_UserType = <span class="function">tostring</span>(EventData.USER_TYPE),
+        
+        <span class="comment">// Session and client info</span>
+        SF_SessionId = <span class="function">tostring</span>(EventData.SESSION_KEY),
+        SF_ClientIP = <span class="function">tostring</span>(EventData.SOURCE_IP),
+        SF_LoginGeo = EventData.LOGIN_GEO_ID,
+        SF_Browser = <span class="function">tostring</span>(EventData.BROWSER_TYPE),
+        SF_Platform = <span class="function">tostring</span>(EventData.PLATFORM_TYPE),
+        
+        <span class="comment">// API and query fields</span>
+        SF_ApiType = <span class="function">tostring</span>(EventData.API_TYPE),
+        SF_ApiVersion = <span class="function">tostring</span>(EventData.API_VERSION),
+        SF_HttpMethod = <span class="function">tostring</span>(EventData.HTTP_METHOD),
+        SF_Uri = <span class="function">tostring</span>(EventData.URI),
+        SF_Query = <span class="function">tostring</span>(EventData.QUERY),
+        
+        <span class="comment">// Entity and data fields</span>
+        SF_EntityName = <span class="function">tostring</span>(EventData.ENTITY_NAME),
+        SF_RecordId = <span class="function">tostring</span>(EventData.RECORD_ID),
+        SF_RowsProcessed = <span class="function">toint</span>(EventData.ROWS_PROCESSED),
+        SF_RowCount = <span class="function">toint</span>(EventData.ROW_COUNT),
+        
+        <span class="comment">// Report and export fields</span>
+        SF_ReportId = <span class="function">tostring</span>(EventData.REPORT_ID),
+        SF_ReportName = <span class="function">tostring</span>(EventData.REPORT_NAME),
+        SF_ExportType = <span class="function">tostring</span>(EventData.EXPORT_TYPE),
+        
+        <span class="comment">// Login specific</span>
+        SF_LoginStatus = <span class="function">tostring</span>(EventData.LOGIN_STATUS),
+        SF_LoginType = <span class="function">tostring</span>(EventData.LOGIN_TYPE),
+        
+        <span class="comment">// Calculated fields</span>
+        SF_RecordsProcessed = <span class="function">coalesce</span>(<span class="function">toint</span>(EventData.ROWS_PROCESSED), <span class="function">toint</span>(EventData.ROW_COUNT), <span class="number">0</span>)
+    | <span class="keyword">project-away</span> RawData
+};
+<span class="comment">// Save as workspace function in Sentinel</span></pre>
+                </div>
+            </div>
+
+            <!-- Parser 2: CEF Enhanced -->
+            <div class="card p-8 mb-8" id="cef">
+                <div class="flex items-start justify-between mb-6">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-2xl font-bold text-white">CEFEnhancedParser</h2>
+                            <span class="badge badge-blue">Enhanced</span>
+                        </div>
+                        <p class="text-gray-400">Enhanced CEF parser with vendor-specific field extraction and threat intelligence enrichment.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="p-4 rounded-lg bg-[#1a1a2e]">
+                        <p class="text-sm text-gray-500">Source Table</p>
+                        <p class="text-cyan-400 mono">CommonSecurityLog</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-[#1a1a2e]">
+                        <p class="text-sm text-gray-500">Rules Using</p>
+                        <p class="text-white font-semibold">28 rules</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-[#1a1a2e]">
+                        <p class="text-sm text-gray-500">Vendors Supported</p>
+                        <p class="text-white font-semibold">Palo Alto, Fortinet, Cisco</p>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <button class="copy-btn" onclick="copyCode(this)">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    </button>
+                    <pre class="code-kql"><span class="comment">// Function: CEFEnhancedParser</span>
+<span class="comment">// Purpose: Enhanced CEF parsing with vendor normalization</span>
+
+<span class="keyword">let</span> CEFEnhancedParser = (<span class="function">startTime</span>: datetime, <span class="function">endTime</span>: datetime) {
+    CommonSecurityLog
+    | <span class="keyword">where</span> TimeGenerated <span class="keyword">between</span> (startTime .. endTime)
+    | <span class="keyword">extend</span>
+        <span class="comment">// Normalize action across vendors</span>
+        NormalizedAction = <span class="function">case</span>(
+            DeviceAction <span class="keyword">in</span> (<span class="string">"allow"</span>, <span class="string">"permitted"</span>, <span class="string">"pass"</span>, <span class="string">"accept"</span>), <span class="string">"Allow"</span>,
+            DeviceAction <span class="keyword">in</span> (<span class="string">"deny"</span>, <span class="string">"blocked"</span>, <span class="string">"drop"</span>, <span class="string">"reject"</span>), <span class="string">"Block"</span>,
+            DeviceAction <span class="keyword">in</span> (<span class="string">"reset"</span>, <span class="string">"reset-both"</span>, <span class="string">"rst"</span>), <span class="string">"Reset"</span>,
+            <span class="string">"Other"</span>
+        ),
+        
+        <span class="comment">// Normalize severity</span>
+        NormalizedSeverity = <span class="function">case</span>(
+            LogSeverity >= <span class="number">9</span>, <span class="string">"Critical"</span>,
+            LogSeverity >= <span class="number">7</span>, <span class="string">"High"</span>,
+            LogSeverity >= <span class="number">4</span>, <span class="string">"Medium"</span>,
+            LogSeverity >= <span class="number">1</span>, <span class="string">"Low"</span>,
+            <span class="string">"Informational"</span>
+        ),
+        
+        <span class="comment">// Extract vendor-specific threat categories</span>
+        ThreatCategory = <span class="function">case</span>(
+            DeviceVendor == <span class="string">"Palo Alto Networks"</span>, <span class="function">tostring</span>(DeviceCustomString1),
+            DeviceVendor == <span class="string">"Fortinet"</span>, <span class="function">tostring</span>(DeviceCustomString2),
+            DeviceVendor == <span class="string">"Cisco"</span>, Activity,
+            <span class="string">"Unknown"</span>
+        ),
+        
+        <span class="comment">// Calculate bytes transferred</span>
+        TotalBytes = SentBytes + ReceivedBytes,
+        
+        <span class="comment">// Normalize direction</span>
+        TrafficDirection = <span class="function">case</span>(
+            CommunicationDirection == <span class="string">"1"</span> <span class="keyword">or</span> CommunicationDirection == <span class="string">"inbound"</span>, <span class="string">"Inbound"</span>,
+            CommunicationDirection == <span class="string">"0"</span> <span class="keyword">or</span> CommunicationDirection == <span class="string">"outbound"</span>, <span class="string">"Outbound"</span>,
+            <span class="string">"Unknown"</span>
+        )
+    <span class="comment">// Join with Threat Intelligence</span>
+    | <span class="keyword">join kind</span>=leftouter (
+        ThreatIntelligenceIndicator
+        | <span class="keyword">where</span> <span class="function">isnotempty</span>(NetworkIP)
+        | <span class="keyword">summarize</span> <span class="function">arg_max</span>(TimeGenerated, *) <span class="keyword">by</span> NetworkIP
+        | <span class="keyword">project</span> TI_IP = NetworkIP, TI_Type = ThreatType, TI_Confidence = ConfidenceScore
+    ) <span class="keyword">on</span> $left.SourceIP == $right.TI_IP
+    | <span class="keyword">extend</span> IsThreatIntelMatch = <span class="function">isnotempty</span>(TI_IP)
+};</pre>
+                </div>
+            </div>
+
+            <!-- Parser 3: Windows Security Enhanced -->
+            <div class="card p-8 mb-8" id="windows">
+                <div class="flex items-start justify-between mb-6">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-2xl font-bold text-white">WindowsSecurityParser</h2>
+                            <span class="badge badge-purple">ASIM</span>
+                        </div>
+                        <p class="text-gray-400">ASIM-compatible parser for Windows Security Events with logon type decoding and privilege tracking.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="p-4 rounded-lg bg-[#1a1a2e]">
+                        <p class="text-sm text-gray-500">Source Table</p>
+                        <p class="text-cyan-400 mono">SecurityEvent</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-[#1a1a2e]">
+                        <p class="text-sm text-gray-500">Rules Using</p>
+                        <p class="text-white font-semibold">32 rules</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-[#1a1a2e]">
+                        <p class="text-sm text-gray-500">Event IDs Covered</p>
+                        <p class="text-white font-semibold">4624, 4625, 4672, 4688</p>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <button class="copy-btn" onclick="copyCode(this)">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    </button>
+                    <pre class="code-kql"><span class="comment">// Function: WindowsSecurityParser</span>
+<span class="comment">// Purpose: ASIM-compatible Windows Security Event parser</span>
+
+<span class="keyword">let</span> WindowsSecurityParser = (<span class="function">startTime</span>: datetime, <span class="function">endTime</span>: datetime) {
+    SecurityEvent
+    | <span class="keyword">where</span> TimeGenerated <span class="keyword">between</span> (startTime .. endTime)
+    | <span class="keyword">where</span> EventID <span class="keyword">in</span> (<span class="number">4624</span>, <span class="number">4625</span>, <span class="number">4634</span>, <span class="number">4648</span>, <span class="number">4672</span>, <span class="number">4688</span>, <span class="number">4720</span>, <span class="number">4728</span>, <span class="number">4732</span>)
+    | <span class="keyword">extend</span>
+        <span class="comment">// Decode logon type</span>
+        LogonTypeName = <span class="function">case</span>(
+            LogonType == <span class="number">2</span>, <span class="string">"Interactive"</span>,
+            LogonType == <span class="number">3</span>, <span class="string">"Network"</span>,
+            LogonType == <span class="number">4</span>, <span class="string">"Batch"</span>,
+            LogonType == <span class="number">5</span>, <span class="string">"Service"</span>,
+            LogonType == <span class="number">7</span>, <span class="string">"Unlock"</span>,
+            LogonType == <span class="number">8</span>, <span class="string">"NetworkCleartext"</span>,
+            LogonType == <span class="number">9</span>, <span class="string">"NewCredentials"</span>,
+            LogonType == <span class="number">10</span>, <span class="string">"RemoteInteractive"</span>,
+            LogonType == <span class="number">11</span>, <span class="string">"CachedInteractive"</span>,
+            <span class="string">"Unknown"</span>
+        ),
+        
+        <span class="comment">// Determine event category</span>
+        EventCategory = <span class="function">case</span>(
+            EventID <span class="keyword">in</span> (<span class="number">4624</span>, <span class="number">4625</span>, <span class="number">4634</span>, <span class="number">4648</span>), <span class="string">"Authentication"</span>,
+            EventID == <span class="number">4672</span>, <span class="string">"PrivilegeUse"</span>,
+            EventID == <span class="number">4688</span>, <span class="string">"ProcessCreation"</span>,
+            EventID <span class="keyword">in</span> (<span class="number">4720</span>, <span class="number">4728</span>, <span class="number">4732</span>), <span class="string">"AccountManagement"</span>,
+            <span class="string">"Other"</span>
+        ),
+        
+        <span class="comment">// Identify privileged logons</span>
+        IsPrivilegedLogon = EventID == <span class="number">4672</span>,
+        
+        <span class="comment">// Check for service accounts</span>
+        IsServiceAccount = TargetUserName <span class="keyword">matches regex</span> <span class="string">"^(svc_|srv_|service_|SA_)"</span>,
+        
+        <span class="comment">// Parse sensitive privileges</span>
+        HasSensitivePrivileges = PrivilegeList <span class="keyword">has_any</span> (
+            <span class="string">"SeDebugPrivilege"</span>,
+            <span class="string">"SeTcbPrivilege"</span>,
+            <span class="string">"SeLoadDriverPrivilege"</span>,
+            <span class="string">"SeBackupPrivilege"</span>,
+            <span class="string">"SeRestorePrivilege"</span>
+        ),
+        
+        <span class="comment">// ASIM schema mapping</span>
+        EventType = <span class="function">case</span>(
+            EventID == <span class="number">4624</span>, <span class="string">"Logon"</span>,
+            EventID == <span class="number">4625</span>, <span class="string">"Logon"</span>,
+            EventID == <span class="number">4634</span>, <span class="string">"Logoff"</span>,
+            <span class="string">"Other"</span>
+        ),
+        EventResult = <span class="function">iff</span>(EventID == <span class="number">4625</span>, <span class="string">"Failure"</span>, <span class="string">"Success"</span>),
+        DvcHostname = Computer,
+        ActorUsername = <span class="function">strcat</span>(TargetDomainName, <span class="string">"\\"</span>, TargetUserName),
+        SrcIpAddr = IpAddress
+};</pre>
+                </div>
+            </div>
+
+            <!-- Parser 4: Azure Activity Enhanced -->
+            <div class="card p-8 mb-8" id="azure">
+                <div class="flex items-start justify-between mb-6">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-2xl font-bold text-white">AzureActivityParser</h2>
+                            <span class="badge badge-green">Cloud</span>
+                        </div>
+                        <p class="text-gray-400">Parser for Azure Activity logs with resource hierarchy extraction and RBAC change detection.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="p-4 rounded-lg bg-[#1a1a2e]">
+                        <p class="text-sm text-gray-500">Source Table</p>
+                        <p class="text-cyan-400 mono">AzureActivity</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-[#1a1a2e]">
+                        <p class="text-sm text-gray-500">Rules Using</p>
+                        <p class="text-white font-semibold">12 rules</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-[#1a1a2e]">
+                        <p class="text-sm text-gray-500">Categories</p>
+                        <p class="text-white font-semibold">Admin, Policy, Security</p>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <button class="copy-btn" onclick="copyCode(this)">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    </button>
+                    <pre class="code-kql"><span class="comment">// Function: AzureActivityParser</span>
+<span class="comment">// Purpose: Parse Azure Activity logs with resource hierarchy</span>
+
+<span class="keyword">let</span> AzureActivityParser = (<span class="function">startTime</span>: datetime, <span class="function">endTime</span>: datetime) {
+    AzureActivity
+    | <span class="keyword">where</span> TimeGenerated <span class="keyword">between</span> (startTime .. endTime)
+    | <span class="keyword">extend</span>
+        <span class="comment">// Parse resource hierarchy</span>
+        ResourceParts = <span class="function">split</span>(_ResourceId, <span class="string">"/"</span>),
+        SubscriptionId = <span class="function">tostring</span>(<span class="function">split</span>(_ResourceId, <span class="string">"/"</span>)[<span class="number">2</span>]),
+        ResourceGroup = <span class="function">tostring</span>(<span class="function">split</span>(_ResourceId, <span class="string">"/"</span>)[<span class="number">4</span>]),
+        ResourceProvider = <span class="function">tostring</span>(<span class="function">split</span>(_ResourceId, <span class="string">"/"</span>)[<span class="number">6</span>]),
+        ResourceType = <span class="function">tostring</span>(<span class="function">split</span>(_ResourceId, <span class="string">"/"</span>)[<span class="number">7</span>]),
+        ResourceName = <span class="function">tostring</span>(<span class="function">split</span>(_ResourceId, <span class="string">"/"</span>)[<span class="number">8</span>]),
+        
+        <span class="comment">// Identify sensitive operations</span>
+        IsSensitiveOperation = OperationNameValue <span class="keyword">has_any</span> (
+            <span class="string">"Microsoft.Authorization/roleAssignments/write"</span>,
+            <span class="string">"Microsoft.Authorization/roleDefinitions/write"</span>,
+            <span class="string">"Microsoft.KeyVault/vaults/secrets"</span>,
+            <span class="string">"Microsoft.Compute/virtualMachines/delete"</span>,
+            <span class="string">"Microsoft.Storage/storageAccounts/delete"</span>,
+            <span class="string">"Microsoft.Network/networkSecurityGroups/securityRules/write"</span>
+        ),
+        
+        <span class="comment">// Categorize operation type</span>
+        OperationType = <span class="function">case</span>(
+            OperationNameValue <span class="keyword">endswith</span> <span class="string">"/write"</span>, <span class="string">"Create/Update"</span>,
+            OperationNameValue <span class="keyword">endswith</span> <span class="string">"/delete"</span>, <span class="string">"Delete"</span>,
+            OperationNameValue <span class="keyword">endswith</span> <span class="string">"/action"</span>, <span class="string">"Action"</span>,
+            OperationNameValue <span class="keyword">endswith</span> <span class="string">"/read"</span>, <span class="string">"Read"</span>,
+            <span class="string">"Other"</span>
+        ),
+        
+        <span class="comment">// Detect RBAC changes</span>
+        IsRBACChange = OperationNameValue <span class="keyword">startswith</span> <span class="string">"Microsoft.Authorization/roleAssignments"</span>,
+        
+        <span class="comment">// Detect policy changes</span>
+        IsPolicyChange = OperationNameValue <span class="keyword">startswith</span> <span class="string">"Microsoft.Authorization/policyAssignments"</span>,
+        
+        <span class="comment">// Parse caller identity</span>
+        CallerType = <span class="function">case</span>(
+            Caller <span class="keyword">contains</span> <span class="string">"@"</span>, <span class="string">"User"</span>,
+            Caller <span class="keyword">matches regex</span> <span class="string">"^[0-9a-f-]{36}$"</span>, <span class="string">"ServicePrincipal"</span>,
+            <span class="string">"Unknown"</span>
+        ),
+        
+        <span class="comment">// Determine result</span>
+        OperationResult = <span class="function">iff</span>(ActivityStatusValue == <span class="string">"Success"</span>, <span class="string">"Success"</span>, <span class="string">"Failure"</span>)
+    | <span class="keyword">project-reorder</span>
+        TimeGenerated, Caller, CallerType, OperationNameValue, 
+        OperationType, OperationResult, ResourceGroup, ResourceName
+};</pre>
+                </div>
+            </div>
+
+            <!-- Usage Examples -->
+            <div class="card p-8">
+                <h2 class="text-2xl font-bold text-white mb-6">Usage Examples</h2>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-lg font-semibold text-cyan-400 mb-3">Using SalesforceParser in Detection Rules</h3>
+                        <pre class="code-kql"><span class="comment">// Detect mass data exports from Salesforce</span>
+SalesforceParser(<span class="function">ago</span>(<span class="number">1h</span>), <span class="function">now</span>())
+| <span class="keyword">where</span> SF_EventType <span class="keyword">in</span> (<span class="string">"ReportExport"</span>, <span class="string">"DataExport"</span>)
+| <span class="keyword">where</span> SF_RecordsProcessed > <span class="number">10000</span>
+| <span class="keyword">project</span> SF_Timestamp, SF_UserName, SF_EventType, SF_RecordsProcessed</pre>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-purple-400 mb-3">Using WindowsSecurityParser for Privilege Tracking</h3>
+                        <pre class="code-kql"><span class="comment">// Find privileged logons by service accounts</span>
+WindowsSecurityParser(<span class="function">ago</span>(<span class="number">24h</span>), <span class="function">now</span>())
+| <span class="keyword">where</span> IsPrivilegedLogon <span class="keyword">and</span> IsServiceAccount
+| <span class="keyword">where</span> HasSensitivePrivileges
+| <span class="function">summarize</span> PrivilegedLogons = <span class="function">count</span>() <span class="keyword">by</span> ActorUsername, DvcHostname</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function copyCode(btn) {
+            const pre = btn.nextElementSibling;
+            navigator.clipboard.writeText(pre.textContent).then(() => {
+                btn.innerHTML = '<svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+                setTimeout(() => {
+                    btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

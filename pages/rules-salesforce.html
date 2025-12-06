@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salesforce Security Rules - RSA to Sentinel Migration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0a0f; --bg-secondary: #12121a; --bg-tertiary: #1a1a2e; --accent-blue: #3b82f6; --text-primary: #f8fafc; --text-secondary: #94a3b8; --border-color: #2a2a3e; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); margin: 0; min-height: 100vh; }
+        code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+        .hero-bg { background: radial-gradient(ellipse at 20% 30%, rgba(6, 182, 212, 0.1) 0%, transparent 50%), var(--bg-primary); }
+        .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; }
+        .nav-link { color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+        .nav-link:hover { color: var(--text-primary); }
+        .badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+        .badge-red { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+        .badge-purple { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .badge-cyan { background: rgba(6, 182, 212, 0.2); color: #22d3ee; }
+        .badge-orange { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        pre { background: #0d0d14; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; overflow-x: auto; font-size: 13px; line-height: 1.6; }
+        .code-rsa { border-left: 3px solid #ef4444; }
+        .code-kql { border-left: 3px solid #10b981; }
+        .tab-btn { padding: 8px 16px; border-radius: 6px; font-weight: 500; transition: all 0.2s; cursor: pointer; border: none; }
+        .tab-btn.active { background: var(--accent-blue); color: white; }
+        .tab-btn:not(.active) { background: var(--bg-tertiary); color: var(--text-secondary); }
+        .copy-btn { position: absolute; top: 8px; right: 8px; padding: 6px; border-radius: 6px; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-secondary); cursor: pointer; }
+        .copy-btn:hover { color: white; border-color: var(--accent-blue); }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        .keyword { color: #ff7b72; }
+        .string { color: #a5d6ff; }
+        .comment { color: #8b949e; font-style: italic; }
+        .function { color: #d2a8ff; }
+        .number { color: #79c0ff; }
+    </style>
+</head>
+<body class="hero-bg">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-[#2a2a3e]">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <div><h1 class="text-lg font-bold text-white">RSA → Sentinel</h1></div>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="../index.html" class="nav-link font-medium">Home</a>
+                    <a href="overview.html" class="nav-link font-medium">Overview</a>
+                    <a href="defender-stack.html" class="nav-link font-medium">Defender XDR</a>
+                    <a href="rules-catalog.html" class="nav-link font-medium text-cyan-400">Rules</a>
+                    <a href="dlp-migration.html" class="nav-link font-medium">DLP</a>
+                    <a href="playbooks.html" class="nav-link font-medium">Playbooks</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                    <a href="../index.html" class="hover:text-blue-400">Home</a>
+                    <span>/</span>
+                    <a href="rules-catalog.html" class="hover:text-blue-400">Rules</a>
+                    <span>/</span>
+                    <span class="text-gray-400">Salesforce Security</span>
+                </div>
+                <div class="flex items-center gap-4 mb-4">
+                    <h1 class="text-4xl font-bold text-white">Salesforce Security</h1>
+                    <span class="badge badge-red">Critical</span>
+                </div>
+                <p class="text-xl text-gray-400 max-w-3xl mb-6">
+                    24 RSA rules migrated to 28 Sentinel analytics rules with custom Salesforce Shield Event Monitoring parser for comprehensive CRM security.
+                </p>
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="text-sm text-gray-500">MITRE Techniques:</span>
+                    <span class="badge badge-purple">T1567</span>
+                    <span class="badge badge-purple">T1098</span>
+                    <span class="badge badge-purple">T1078</span>
+                </div>
+                
+                <!-- Prerequisites Alert -->
+                <div class="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/30">
+                    <div class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <div>
+                            <h4 class="text-cyan-400 font-semibold mb-1">Prerequisites</h4>
+                            <p class="text-gray-300 text-sm">These rules require Salesforce Shield Event Monitoring connector and the custom <a href="parsers.html#salesforce" class="text-cyan-400 hover:underline">SalesforceParser KQL function</a>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rule 1: Mass Data Export -->
+            <div class="card p-6 mb-8" id="mass-export">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-semibold text-white">4.1 Salesforce Mass Data Export</h2>
+                            <span class="badge badge-red">Critical</span>
+                        </div>
+                        <p class="text-gray-400">Detects export of large datasets (10,000+ records) from Salesforce</p>
+                    </div>
+                    <span class="badge badge-purple">T1567</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'export-rsa')">RSA NetWitness</button>
+                        <button class="tab-btn" onclick="showTab(this, 'export-kql')">Microsoft Sentinel</button>
+                    </div>
+                    
+                    <div id="export-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-rsa"><span class="comment">-- Rule: Salesforce_Mass_Export</span>
+<span class="keyword">@RSA_Rule</span> <span class="string">"SF_Mass_Export"</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Event
+<span class="keyword">WHERE</span> 
+    event_source = <span class="string">'salesforce'</span> <span class="keyword">AND</span>
+    event_type <span class="keyword">IN</span> (<span class="string">'ReportExport'</span>, <span class="string">'DataExport'</span>, <span class="string">'ApiQuery'</span>) <span class="keyword">AND</span>
+    records_exported > <span class="number">10000</span>
+<span class="keyword">ALERT</span> severity = <span class="string">'critical'</span>,
+      technique = <span class="string">'T1567'</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="export-kql" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-kql"><span class="comment">// Rule: Salesforce Mass Data Export Detection</span>
+<span class="comment">// MITRE: T1567 - Exfiltration Over Web Service</span>
+
+<span class="keyword">let</span> exportThreshold = <span class="number">10000</span>;
+
+SalesforceParser(<span class="function">ago</span>(<span class="number">1h</span>), <span class="function">now</span>())
+| <span class="keyword">where</span> SF_EventType <span class="keyword">in</span> (<span class="string">"ReportExport"</span>, <span class="string">"DataExport"</span>, <span class="string">"BulkApi"</span>)
+| <span class="keyword">where</span> SF_RowsProcessed > exportThreshold <span class="keyword">or</span> SF_RowCount > exportThreshold
+| <span class="keyword">extend</span> RecordsExported = <span class="function">coalesce</span>(SF_RowsProcessed, SF_RowCount)
+| <span class="keyword">project</span>
+    TimeGenerated = SF_Timestamp,
+    UserName = SF_UserName,
+    ClientIP = SF_ClientIP,
+    EventType = SF_EventType,
+    EntityName = SF_EntityName,
+    RecordsExported,
+    Severity = <span class="function">case</span>(
+        RecordsExported > <span class="number">100000</span>, <span class="string">"Critical"</span>,
+        RecordsExported > <span class="number">50000</span>, <span class="string">"High"</span>,
+        <span class="string">"Medium"</span>
+    ),
+    MITRETechnique = <span class="string">"T1567"</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rule 2: Permission Escalation -->
+            <div class="card p-6 mb-8" id="permission">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-semibold text-white">4.2 Salesforce Permission Escalation</h2>
+                            <span class="badge badge-red">Critical</span>
+                        </div>
+                        <p class="text-gray-400">Detects assignment of high-privilege permission sets</p>
+                    </div>
+                    <span class="badge badge-purple">T1098</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'perm-rsa')">RSA NetWitness</button>
+                        <button class="tab-btn" onclick="showTab(this, 'perm-kql')">Microsoft Sentinel</button>
+                    </div>
+                    
+                    <div id="perm-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-rsa"><span class="comment">-- Rule: Salesforce_Permission_Escalation</span>
+<span class="keyword">@RSA_Rule</span> <span class="string">"SF_Permission_Escalation"</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Event
+<span class="keyword">WHERE</span> 
+    event_source = <span class="string">'salesforce'</span> <span class="keyword">AND</span>
+    event_type = <span class="string">'PermissionSetAssignment'</span> <span class="keyword">AND</span>
+    permission_set <span class="keyword">IN</span> (<span class="string">'SystemAdministrator'</span>, <span class="string">'ModifyAllData'</span>, <span class="string">'ViewAllData'</span>)
+<span class="keyword">ALERT</span> severity = <span class="string">'high'</span>,
+      technique = <span class="string">'T1098'</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="perm-kql" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-kql"><span class="comment">// Rule: Salesforce Permission Escalation</span>
+<span class="comment">// MITRE: T1098 - Account Manipulation</span>
+
+<span class="keyword">let</span> highPrivilegePermissions = <span class="function">dynamic</span>([
+    <span class="string">'SystemAdministrator'</span>, <span class="string">'ModifyAllData'</span>, <span class="string">'ViewAllData'</span>, 
+    <span class="string">'ManageUsers'</span>, <span class="string">'ManageProfiles'</span>, <span class="string">'ApiEnabled'</span>
+]);
+
+SalesforceParser(<span class="function">ago</span>(<span class="number">1d</span>), <span class="function">now</span>())
+| <span class="keyword">where</span> SF_EventType == <span class="string">"PermissionSetAssignment"</span>
+| <span class="keyword">where</span> SF_PermissionSet <span class="keyword">has_any</span> (highPrivilegePermissions)
+| <span class="keyword">project</span>
+    TimeGenerated = SF_Timestamp,
+    AssigningUser = SF_UserName,
+    TargetUser = SF_DelegateUser,
+    PermissionAssigned = SF_PermissionSet,
+    ClientIP = SF_ClientIP,
+    Severity = <span class="string">"High"</span>,
+    MITRETechnique = <span class="string">"T1098"</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rule 3: Session Hijacking -->
+            <div class="card p-6 mb-8" id="session">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-xl font-semibold text-white">4.3 Salesforce Session Hijacking</h2>
+                            <span class="badge badge-red">Critical</span>
+                        </div>
+                        <p class="text-gray-400">Detects same session used from multiple IP addresses</p>
+                    </div>
+                    <span class="badge badge-purple">T1563</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'sess-rsa')">RSA NetWitness</button>
+                        <button class="tab-btn" onclick="showTab(this, 'sess-kql')">Microsoft Sentinel</button>
+                    </div>
+                    
+                    <div id="sess-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-rsa"><span class="comment">-- Rule: Salesforce_Session_Hijack</span>
+<span class="keyword">@RSA_Rule</span> <span class="string">"SF_Session_Hijack"</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Event
+<span class="keyword">WHERE</span> event_source = <span class="string">'salesforce'</span> <span class="keyword">AND</span> session_id <span class="keyword">IS NOT NULL</span>
+<span class="keyword">GROUP BY</span> session_id
+<span class="keyword">HAVING</span> <span class="function">COUNT</span>(<span class="keyword">DISTINCT</span> source_ip) > <span class="number">1</span>
+<span class="keyword">WINDOW SLIDING</span> <span class="number">30</span> MINUTES
+<span class="keyword">ALERT</span> severity = <span class="string">'critical'</span>, technique = <span class="string">'T1563'</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="sess-kql" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-kql"><span class="comment">// Rule: Salesforce Session Hijacking Detection</span>
+<span class="comment">// MITRE: T1563 - Remote Service Session Hijacking</span>
+
+SalesforceParser(<span class="function">ago</span>(<span class="number">30m</span>), <span class="function">now</span>())
+| <span class="keyword">where</span> <span class="function">isnotempty</span>(SF_SessionId)
+| <span class="function">summarize</span>
+    UniqueIPs = <span class="function">dcount</span>(SF_ClientIP),
+    IPList = <span class="function">make_set</span>(SF_ClientIP),
+    EventCount = <span class="function">count</span>()
+    <span class="keyword">by</span> SF_SessionId, SF_UserName
+| <span class="keyword">where</span> UniqueIPs > <span class="number">1</span>
+| <span class="keyword">project</span>
+    TimeGenerated = <span class="function">now</span>(),
+    SessionId = SF_SessionId,
+    UserName = SF_UserName,
+    UniqueIPs,
+    IPList,
+    Severity = <span class="string">"Critical"</span>,
+    MITRETechnique = <span class="string">"T1563"</span>,
+    RecommendedAction = <span class="string">"Terminate session immediately"</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex items-center justify-between mt-12">
+                <a href="rules-exfil.html" class="text-gray-400 hover:text-white flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Previous: Data Exfiltration
+                </a>
+                <a href="rules-endpoint.html" class="text-blue-400 hover:text-blue-300 flex items-center gap-2">
+                    Next: Endpoint Threats
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function showTab(btn, tabId) {
+            const parent = btn.closest('.card');
+            parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            parent.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            btn.classList.add('active');
+            document.getElementById(tabId).classList.remove('hidden');
+        }
+
+        function copyCode(btn) {
+            const pre = btn.nextElementSibling;
+            navigator.clipboard.writeText(pre.textContent).then(() => {
+                btn.innerHTML = '<svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+                setTimeout(() => {
+                    btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

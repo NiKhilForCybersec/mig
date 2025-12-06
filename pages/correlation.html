@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correlation Rules - RSA to Sentinel Migration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs" type="module"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0a0f; --bg-secondary: #12121a; --bg-tertiary: #1a1a2e; --accent-blue: #3b82f6; --text-primary: #f8fafc; --text-secondary: #94a3b8; --border-color: #2a2a3e; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); margin: 0; min-height: 100vh; }
+        code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+        .hero-bg { background: radial-gradient(ellipse at 20% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 50%), var(--bg-primary); }
+        .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; }
+        .nav-link { color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+        .nav-link:hover { color: var(--text-primary); }
+        .badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+        .badge-red { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+        .badge-purple { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .badge-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .badge-green { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        pre { background: #0d0d14; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; overflow-x: auto; font-size: 13px; line-height: 1.6; }
+        .code-kql { border-left: 3px solid #10b981; }
+        .copy-btn { position: absolute; top: 8px; right: 8px; padding: 6px; border-radius: 6px; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-secondary); cursor: pointer; }
+        .copy-btn:hover { color: white; border-color: var(--accent-blue); }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        .keyword { color: #ff7b72; }
+        .string { color: #a5d6ff; }
+        .comment { color: #8b949e; font-style: italic; }
+        .function { color: #d2a8ff; }
+        .number { color: #79c0ff; }
+        .mermaid { background: #0d0d14; padding: 24px; border-radius: 12px; }
+        .stage-card { transition: transform 0.2s; }
+        .stage-card:hover { transform: translateY(-2px); }
+    </style>
+</head>
+<body class="hero-bg">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-[#2a2a3e]">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <div><h1 class="text-lg font-bold text-white">RSA → Sentinel</h1></div>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="../index.html" class="nav-link font-medium">Home</a>
+                    <a href="overview.html" class="nav-link font-medium">Overview</a>
+                    <a href="defender-stack.html" class="nav-link font-medium">Defender XDR</a>
+                    <a href="rules-catalog.html" class="nav-link font-medium">Rules</a>
+                    <a href="dlp-migration.html" class="nav-link font-medium">DLP</a>
+                    <a href="playbooks.html" class="nav-link font-medium">Playbooks</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                    <a href="../index.html" class="hover:text-blue-400">Home</a>
+                    <span>/</span>
+                    <a href="rules-catalog.html" class="hover:text-blue-400">Rules</a>
+                    <span>/</span>
+                    <span class="text-gray-400">Correlation Rules</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Multi-Stage Attack Correlation</h1>
+                <p class="text-xl text-gray-400 max-w-3xl mb-6">
+                    Advanced correlation rules that chain multiple indicators across the kill chain to detect sophisticated attacks with high fidelity and low false positives.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="badge badge-blue">Entity Correlation</span>
+                    <span class="badge badge-purple">Kill Chain Analysis</span>
+                    <span class="badge badge-green">88% Correlation Rate</span>
+                </div>
+            </div>
+
+            <!-- Attack Chain Visualization -->
+            <div class="card p-8 mb-8">
+                <h2 class="text-2xl font-bold text-white mb-6">Attack Chain: Credential Theft to Exfiltration</h2>
+                <p class="text-gray-400 mb-6">This correlation rule chains 5 stages of an attack, correlating entities across different log sources.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
+                    <div class="stage-card p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-center">
+                        <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-2">
+                            <span class="text-red-400 font-bold">1</span>
+                        </div>
+                        <h4 class="text-red-400 font-semibold text-sm mb-1">Initial Access</h4>
+                        <p class="text-gray-500 text-xs">Brute Force / Phishing</p>
+                    </div>
+                    <div class="stage-card p-4 rounded-xl bg-orange-500/10 border border-orange-500/30 text-center">
+                        <div class="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center mx-auto mb-2">
+                            <span class="text-orange-400 font-bold">2</span>
+                        </div>
+                        <h4 class="text-orange-400 font-semibold text-sm mb-1">Execution</h4>
+                        <p class="text-gray-500 text-xs">PowerShell / Scripts</p>
+                    </div>
+                    <div class="stage-card p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/30 text-center">
+                        <div class="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-2">
+                            <span class="text-yellow-400 font-bold">3</span>
+                        </div>
+                        <h4 class="text-yellow-400 font-semibold text-sm mb-1">Credential Access</h4>
+                        <p class="text-gray-500 text-xs">LSASS / DCSync</p>
+                    </div>
+                    <div class="stage-card p-4 rounded-xl bg-blue-500/10 border border-blue-500/30 text-center">
+                        <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-2">
+                            <span class="text-blue-400 font-bold">4</span>
+                        </div>
+                        <h4 class="text-blue-400 font-semibold text-sm mb-1">Lateral Movement</h4>
+                        <p class="text-gray-500 text-xs">RDP / PsExec</p>
+                    </div>
+                    <div class="stage-card p-4 rounded-xl bg-purple-500/10 border border-purple-500/30 text-center">
+                        <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-2">
+                            <span class="text-purple-400 font-bold">5</span>
+                        </div>
+                        <h4 class="text-purple-400 font-semibold text-sm mb-1">Exfiltration</h4>
+                        <p class="text-gray-500 text-xs">Data Transfer</p>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <button class="copy-btn" onclick="copyCode(this)">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    </button>
+                    <pre class="code-kql"><span class="comment">// Multi-Stage Attack Correlation: Credential Theft to Exfiltration</span>
+<span class="comment">// Chains 5 attack stages using entity correlation</span>
+
+<span class="keyword">let</span> timeWindow = <span class="number">4h</span>;
+
+<span class="comment">// Stage 1: Initial Access (Brute Force or Suspicious Login)</span>
+<span class="keyword">let</span> stage1_InitialAccess = SigninLogs
+    | <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(timeWindow)
+    | <span class="keyword">where</span> ResultType == <span class="number">0</span> <span class="comment">// Successful</span>
+    | <span class="keyword">where</span> RiskLevelDuringSignIn <span class="keyword">in</span> (<span class="string">"medium"</span>, <span class="string">"high"</span>) <span class="keyword">or</span>
+           Location != UserPrincipalName.<span class="function">split</span>(<span class="string">"@"</span>)[<span class="number">1</span>] <span class="comment">// Unusual location</span>
+    | <span class="keyword">project</span> Stage1_Time = TimeGenerated, 
+             UserPrincipalName, 
+             Stage1_IP = IPAddress,
+             Stage1_Device = DeviceDetail.displayName,
+             Stage1_Risk = RiskLevelDuringSignIn;
+
+<span class="comment">// Stage 2: Execution (Suspicious PowerShell)</span>
+<span class="keyword">let</span> stage2_Execution = DeviceProcessEvents
+    | <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(timeWindow)
+    | <span class="keyword">where</span> FileName <span class="keyword">in~</span> (<span class="string">"powershell.exe"</span>, <span class="string">"pwsh.exe"</span>)
+    | <span class="keyword">where</span> ProcessCommandLine <span class="keyword">has_any</span> (<span class="string">"-enc"</span>, <span class="string">"downloadstring"</span>, <span class="string">"bypass"</span>, <span class="string">"hidden"</span>)
+    | <span class="keyword">project</span> Stage2_Time = TimeGenerated,
+             Stage2_User = InitiatingProcessAccountUpn,
+             Stage2_Device = DeviceName,
+             Stage2_Cmd = ProcessCommandLine;
+
+<span class="comment">// Stage 3: Credential Access (LSASS or Kerberos)</span>
+<span class="keyword">let</span> stage3_CredAccess = SecurityEvent
+    | <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(timeWindow)
+    | <span class="keyword">where</span> (EventID == <span class="number">4663</span> <span class="keyword">and</span> ObjectName <span class="keyword">endswith</span> <span class="string">"lsass.exe"</span>)
+        <span class="keyword">or</span> (EventID == <span class="number">4768</span> <span class="keyword">and</span> TicketEncryptionType == <span class="string">"0x17"</span>) <span class="comment">// RC4</span>
+    | <span class="keyword">project</span> Stage3_Time = TimeGenerated,
+             Stage3_User = <span class="function">coalesce</span>(TargetUserName, SubjectUserName),
+             Stage3_Device = Computer,
+             Stage3_EventID = EventID;
+
+<span class="comment">// Stage 4: Lateral Movement (RDP or Remote Execution)</span>
+<span class="keyword">let</span> stage4_Lateral = SecurityEvent
+    | <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(timeWindow)
+    | <span class="keyword">where</span> EventID == <span class="number">4624</span> <span class="keyword">and</span> LogonType == <span class="number">10</span> <span class="comment">// RDP</span>
+    | <span class="keyword">where</span> IpAddress != <span class="string">"127.0.0.1"</span> <span class="keyword">and</span> IpAddress != <span class="string">"-"</span>
+    | <span class="keyword">project</span> Stage4_Time = TimeGenerated,
+             Stage4_User = TargetUserName,
+             Stage4_SourceIP = IpAddress,
+             Stage4_TargetDevice = Computer;
+
+<span class="comment">// Stage 5: Exfiltration (Large Data Transfer)</span>
+<span class="keyword">let</span> stage5_Exfil = DeviceNetworkEvents
+    | <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(timeWindow)
+    | <span class="keyword">where</span> RemoteIPType == <span class="string">"Public"</span>
+    | <span class="function">summarize</span> TotalBytes = <span class="function">sum</span>(SentBytes) <span class="keyword">by</span> DeviceName, InitiatingProcessAccountUpn, bin(TimeGenerated, <span class="number">15m</span>)
+    | <span class="keyword">where</span> TotalBytes > <span class="number">50000000</span> <span class="comment">// 50MB threshold</span>
+    | <span class="keyword">project</span> Stage5_Time = TimeGenerated,
+             Stage5_User = InitiatingProcessAccountUpn,
+             Stage5_Device = DeviceName,
+             Stage5_BytesMB = <span class="function">round</span>(TotalBytes / (<span class="number">1024.0</span> * <span class="number">1024</span>), <span class="number">2</span>);
+
+<span class="comment">// Correlate all stages by user entity</span>
+stage1_InitialAccess
+| <span class="keyword">join kind</span>=inner (stage2_Execution) <span class="keyword">on</span> $left.UserPrincipalName == $right.Stage2_User
+| <span class="keyword">where</span> Stage2_Time > Stage1_Time <span class="keyword">and</span> Stage2_Time < Stage1_Time + <span class="number">2h</span>
+| <span class="keyword">join kind</span>=inner (stage3_CredAccess) <span class="keyword">on</span> $left.Stage2_Device == $right.Stage3_Device
+| <span class="keyword">where</span> Stage3_Time > Stage2_Time <span class="keyword">and</span> Stage3_Time < Stage2_Time + <span class="number">1h</span>
+| <span class="keyword">join kind</span>=inner (stage4_Lateral) <span class="keyword">on</span> $left.UserPrincipalName == $right.Stage4_User
+| <span class="keyword">where</span> Stage4_Time > Stage3_Time <span class="keyword">and</span> Stage4_Time < Stage3_Time + <span class="number">1h</span>
+| <span class="keyword">join kind</span>=inner (stage5_Exfil) <span class="keyword">on</span> $left.UserPrincipalName == $right.Stage5_User
+| <span class="keyword">where</span> Stage5_Time > Stage4_Time
+| <span class="keyword">project</span>
+    AttackStartTime = Stage1_Time,
+    AttackEndTime = Stage5_Time,
+    AttackDuration = Stage5_Time - Stage1_Time,
+    TargetUser = UserPrincipalName,
+    InitialAccessIP = Stage1_IP,
+    ExecutionCommand = Stage2_Cmd,
+    CredentialAccessType = <span class="function">iff</span>(Stage3_EventID == <span class="number">4663</span>, <span class="string">"LSASS Access"</span>, <span class="string">"Kerberoasting"</span>),
+    LateralMovementTarget = Stage4_TargetDevice,
+    DataExfiltratedMB = Stage5_BytesMB,
+    Severity = <span class="string">"Critical"</span>,
+    AttackChain = <span class="string">"InitialAccess -> Execution -> CredentialAccess -> LateralMovement -> Exfiltration"</span>,
+    MITRETactics = <span class="string">"TA0001, TA0002, TA0006, TA0008, TA0010"</span></pre>
+                </div>
+            </div>
+
+            <!-- Correlation Summary -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="card p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-semibold">Entity Correlation</h3>
+                            <p class="text-gray-400 text-sm">Joins by User, Device, IP</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm">Links events across 8 different log sources using common entity identifiers for accurate attribution.</p>
+                </div>
+                
+                <div class="card p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-semibold">Time Windows</h3>
+                            <p class="text-gray-400 text-sm">Temporal sequencing</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm">Enforces logical attack progression with configurable time windows between stages (15min to 4hrs).</p>
+                </div>
+                
+                <div class="card p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-semibold">High Fidelity</h3>
+                            <p class="text-gray-400 text-sm">&lt;2% False Positive Rate</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm">Multi-stage requirements dramatically reduce false positives compared to single-event detection rules.</p>
+                </div>
+            </div>
+
+            <!-- Additional Correlation Rules -->
+            <div class="card p-8">
+                <h2 class="text-2xl font-bold text-white mb-6">Additional Correlation Rules</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-gray-700">
+                                <th class="text-left py-3 px-4 text-gray-400 font-medium">Rule Name</th>
+                                <th class="text-left py-3 px-4 text-gray-400 font-medium">Stages</th>
+                                <th class="text-left py-3 px-4 text-gray-400 font-medium">Data Sources</th>
+                                <th class="text-left py-3 px-4 text-gray-400 font-medium">Severity</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-300">
+                            <tr class="border-b border-gray-800">
+                                <td class="py-3 px-4">Ransomware Attack Chain</td>
+                                <td class="py-3 px-4">Phishing → Macro → Persistence → Encryption</td>
+                                <td class="py-3 px-4">Office365, MDE, SecurityEvent</td>
+                                <td class="py-3 px-4"><span class="badge badge-red">Critical</span></td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-3 px-4">Cloud Account Takeover</td>
+                                <td class="py-3 px-4">MFA Bypass → Config Change → Data Access</td>
+                                <td class="py-3 px-4">SigninLogs, AzureActivity, AuditLogs</td>
+                                <td class="py-3 px-4"><span class="badge badge-red">Critical</span></td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-3 px-4">Insider Data Theft</td>
+                                <td class="py-3 px-4">Resignation → Hoarding → USB → Cloud Upload</td>
+                                <td class="py-3 px-4">HR Watchlist, MDE, O365</td>
+                                <td class="py-3 px-4"><span class="badge badge-purple">High</span></td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-3 px-4">Supply Chain Compromise</td>
+                                <td class="py-3 px-4">Vendor Login → Unusual Access → Privilege Escalation</td>
+                                <td class="py-3 px-4">SigninLogs, AzureActivity, SecurityEvent</td>
+                                <td class="py-3 px-4"><span class="badge badge-red">Critical</span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4">Living Off the Land</td>
+                                <td class="py-3 px-4">LOLBin Execution → Scheduled Task → C2 Beacon</td>
+                                <td class="py-3 px-4">MDE, SecurityEvent, CEF</td>
+                                <td class="py-3 px-4"><span class="badge badge-purple">High</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex items-center justify-between mt-12">
+                <a href="rules-insider.html" class="text-gray-400 hover:text-white flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Previous: Insider Threats
+                </a>
+                <a href="reference.html" class="text-blue-400 hover:text-blue-300 flex items-center gap-2">
+                    Next: Reference Guide
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function copyCode(btn) {
+            const pre = btn.nextElementSibling;
+            navigator.clipboard.writeText(pre.textContent).then(() => {
+                btn.innerHTML = '<svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+                setTimeout(() => {
+                    btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

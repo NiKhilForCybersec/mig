@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playbook Migration - RSA to Sentinel Migration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0a0f; --bg-secondary: #12121a; --bg-tertiary: #1a1a2e; --accent-blue: #3b82f6; --text-primary: #f8fafc; --text-secondary: #94a3b8; --border-color: #2a2a3e; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); margin: 0; min-height: 100vh; }
+        code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+        .hero-bg { background: radial-gradient(ellipse at 20% 30%, rgba(239, 68, 68, 0.1) 0%, transparent 50%), var(--bg-primary); }
+        .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; }
+        .nav-link { position: relative; color: var(--text-secondary); transition: color 0.2s ease; text-decoration: none; }
+        .nav-link:hover { color: var(--text-primary); }
+        .badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+        .badge-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .badge-green { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .badge-purple { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .badge-orange { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        .badge-red { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+        .badge-cyan { background: rgba(6, 182, 212, 0.2); color: #22d3ee; }
+        pre { background: #0d0d14; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; overflow-x: auto; font-size: 12px; line-height: 1.5; max-height: 500px; }
+        .code-yaml { border-left: 3px solid #f59e0b; }
+        .code-json { border-left: 3px solid #3b82f6; }
+        .tab-btn { padding: 8px 16px; border-radius: 6px; font-weight: 500; transition: all 0.2s; cursor: pointer; border: none; }
+        .tab-btn.active { background: var(--accent-blue); color: white; }
+        .tab-btn:not(.active) { background: var(--bg-tertiary); color: var(--text-secondary); }
+        .copy-btn { position: absolute; top: 8px; right: 8px; padding: 6px; border-radius: 6px; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-secondary); cursor: pointer; }
+        .copy-btn:hover { color: white; border-color: var(--accent-blue); }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        .mermaid { background: transparent !important; }
+        .keyword { color: #ff7b72; }
+        .string { color: #a5d6ff; }
+        .comment { color: #8b949e; }
+        .number { color: #79c0ff; }
+    </style>
+</head>
+<body class="hero-bg">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-[#2a2a3e]">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <div><h1 class="text-lg font-bold text-white">RSA → Sentinel</h1></div>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="../index.html" class="nav-link font-medium">Home</a>
+                    <a href="overview.html" class="nav-link font-medium">Overview</a>
+                    <a href="defender-stack.html" class="nav-link font-medium">Defender XDR</a>
+                    <a href="rules-catalog.html" class="nav-link font-medium">Rules</a>
+                    <a href="dlp-migration.html" class="nav-link font-medium">DLP</a>
+                    <a href="playbooks.html" class="nav-link font-medium text-red-400">Playbooks</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                    <a href="../index.html" class="hover:text-blue-400">Home</a>
+                    <span>/</span>
+                    <span class="text-gray-400">Playbook Migration</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Playbook Migration</h1>
+                <p class="text-xl text-gray-400 max-w-3xl mb-6">
+                    RSA Security Analytics playbooks migrated to Azure Logic Apps with full automation workflows, 
+                    including account remediation, threat response, and SOAR integrations.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="badge badge-blue">15 Playbooks Migrated</span>
+                    <span class="badge badge-green">62% Automation Coverage</span>
+                    <span class="badge badge-purple">400+ Connectors Available</span>
+                </div>
+            </div>
+
+            <!-- Playbook 1: Auto-Disable Compromised Account -->
+            <div class="card p-8 mb-8" id="disable-account">
+                <div class="flex items-start justify-between mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white mb-2">Playbook 1: Auto-Disable Compromised Account</h2>
+                        <p class="text-gray-400">Automatically disables user accounts upon compromise detection, revokes sessions, and creates tickets.</p>
+                    </div>
+                    <span class="badge badge-red">Critical Response</span>
+                </div>
+
+                <!-- Workflow Diagram -->
+                <div class="bg-[#1a1a2e] rounded-xl p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-white mb-4">Workflow Diagram</h3>
+                    <div class="mermaid">
+                        flowchart LR
+                            A[Sentinel Incident] --> B[Parse Entities]
+                            B --> C[Get User from Entra ID]
+                            C --> D{Is VIP User?}
+                            D -->|No| E[Disable Account]
+                            D -->|Yes| F[Escalate to Security Lead]
+                            E --> G[Revoke Sessions]
+                            G --> H[Notify Manager]
+                            H --> I[Create ServiceNow Ticket]
+                            I --> J{High Severity?}
+                            J -->|Yes| K[Isolate Device - MDE]
+                            J -->|No| L[Update Incident]
+                            K --> L
+                            F --> L
+                            
+                            style A fill:#3b82f6,stroke:#2563eb
+                            style E fill:#ef4444,stroke:#dc2626
+                            style K fill:#f59e0b,stroke:#d97706
+                            style L fill:#10b981,stroke:#059669
+                    </div>
+                </div>
+
+                <!-- Required Connectors -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-white mb-3">Required Connectors</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="badge badge-blue">Microsoft Sentinel</span>
+                        <span class="badge badge-cyan">Microsoft Entra ID</span>
+                        <span class="badge badge-purple">Office 365</span>
+                        <span class="badge badge-orange">ServiceNow</span>
+                        <span class="badge badge-green">Defender for Endpoint</span>
+                    </div>
+                </div>
+
+                <!-- Code Tabs -->
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'pb1-rsa')">RSA Playbook (YAML)</button>
+                        <button class="tab-btn" onclick="showTab(this, 'pb1-logic')">Logic App (JSON)</button>
+                    </div>
+                    
+                    <div id="pb1-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-yaml"><span class="comment"># RSA Playbook: Disable_Compromised_Account</span>
+<span class="keyword">name:</span> Disable_Compromised_Account
+<span class="keyword">trigger:</span>
+  <span class="keyword">alert_type:</span> <span class="string">"Account_Compromise"</span>
+  <span class="keyword">severity:</span> [<span class="string">"critical"</span>, <span class="string">"high"</span>]
+
+<span class="keyword">actions:</span>
+  - <span class="keyword">name:</span> lookup_user
+    <span class="keyword">type:</span> active_directory_lookup
+    <span class="keyword">parameters:</span>
+      <span class="keyword">username:</span> <span class="string">"${alert.user_name}"</span>
+      
+  - <span class="keyword">name:</span> check_vip
+    <span class="keyword">type:</span> condition
+    <span class="keyword">condition:</span> <span class="string">"${lookup_user.department} NOT IN ['Executive', 'C-Suite']"</span>
+    
+  - <span class="keyword">name:</span> disable_account
+    <span class="keyword">type:</span> active_directory_action
+    <span class="keyword">action:</span> disable_user
+    <span class="keyword">parameters:</span>
+      <span class="keyword">username:</span> <span class="string">"${alert.user_name}"</span>
+    <span class="keyword">when:</span> <span class="string">"${check_vip} == true"</span>
+    
+  - <span class="keyword">name:</span> notify_manager
+    <span class="keyword">type:</span> email
+    <span class="keyword">parameters:</span>
+      <span class="keyword">to:</span> <span class="string">"${lookup_user.manager_email}"</span>
+      <span class="keyword">subject:</span> <span class="string">"Account Disabled: ${alert.user_name}"</span>
+      <span class="keyword">body:</span> <span class="string">"Account disabled due to security incident"</span>
+      
+  - <span class="keyword">name:</span> create_ticket
+    <span class="keyword">type:</span> servicenow_create
+    <span class="keyword">parameters:</span>
+      <span class="keyword">category:</span> <span class="string">"Security Incident"</span>
+      <span class="keyword">priority:</span> <span class="string">"P1"</span>
+      <span class="keyword">description:</span> <span class="string">"${alert.description}"</span>
+      
+  - <span class="keyword">name:</span> isolate_endpoint
+    <span class="keyword">type:</span> edr_action
+    <span class="keyword">action:</span> isolate
+    <span class="keyword">parameters:</span>
+      <span class="keyword">hostname:</span> <span class="string">"${alert.source_host}"</span>
+    <span class="keyword">when:</span> <span class="string">"${alert.severity} == 'critical'"</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="pb1-logic" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-json">{
+  <span class="string">"definition"</span>: {
+    <span class="string">"$schema"</span>: <span class="string">"https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#"</span>,
+    <span class="string">"triggers"</span>: {
+      <span class="string">"Microsoft_Sentinel_incident"</span>: {
+        <span class="string">"type"</span>: <span class="string">"ApiConnectionWebhook"</span>,
+        <span class="string">"inputs"</span>: {
+          <span class="string">"host"</span>: {
+            <span class="string">"connection"</span>: { <span class="string">"name"</span>: <span class="string">"@parameters('$connections')['azuresentinel']['connectionId']"</span> }
+          },
+          <span class="string">"body"</span>: { <span class="string">"callback_url"</span>: <span class="string">"@{listCallbackUrl()}"</span> },
+          <span class="string">"path"</span>: <span class="string">"/incident-creation"</span>
+        }
+      }
+    },
+    <span class="string">"actions"</span>: {
+      <span class="string">"Parse_Incident_Entities"</span>: {
+        <span class="string">"type"</span>: <span class="string">"ParseJson"</span>,
+        <span class="string">"inputs"</span>: {
+          <span class="string">"content"</span>: <span class="string">"@triggerBody()?['object']?['properties']?['relatedEntities']"</span>
+        }
+      },
+      <span class="string">"Get_User_from_Entra_ID"</span>: {
+        <span class="string">"type"</span>: <span class="string">"ApiConnection"</span>,
+        <span class="string">"inputs"</span>: {
+          <span class="string">"host"</span>: {
+            <span class="string">"connection"</span>: { <span class="string">"name"</span>: <span class="string">"@parameters('$connections')['azuread']['connectionId']"</span> }
+          },
+          <span class="string">"method"</span>: <span class="string">"get"</span>,
+          <span class="string">"path"</span>: <span class="string">"/v1.0/users/@{body('Get_Account_Entity')[0]?['properties']?['accountName']}"</span>
+        }
+      },
+      <span class="string">"Check_If_VIP_User"</span>: {
+        <span class="string">"type"</span>: <span class="string">"Condition"</span>,
+        <span class="string">"expression"</span>: {
+          <span class="string">"and"</span>: [
+            { <span class="string">"not"</span>: { <span class="string">"contains"</span>: [<span class="string">"@body('Get_User_Details')?['department']"</span>, <span class="string">"Executive"</span>] } }
+          ]
+        },
+        <span class="string">"actions"</span>: {
+          <span class="string">"Disable_User_Account"</span>: {
+            <span class="string">"type"</span>: <span class="string">"ApiConnection"</span>,
+            <span class="string">"inputs"</span>: {
+              <span class="string">"method"</span>: <span class="string">"patch"</span>,
+              <span class="string">"path"</span>: <span class="string">"/v1.0/users/@{body('Get_User_Details')?['id']}"</span>,
+              <span class="string">"body"</span>: { <span class="string">"accountEnabled"</span>: <span class="keyword">false</span> }
+            }
+          },
+          <span class="string">"Revoke_User_Sessions"</span>: {
+            <span class="string">"type"</span>: <span class="string">"ApiConnection"</span>,
+            <span class="string">"inputs"</span>: {
+              <span class="string">"method"</span>: <span class="string">"post"</span>,
+              <span class="string">"path"</span>: <span class="string">"/v1.0/users/@{body('Get_User_Details')?['id']}/revokeSignInSessions"</span>
+            }
+          }
+        }
+      },
+      <span class="string">"Send_Manager_Notification"</span>: {
+        <span class="string">"type"</span>: <span class="string">"ApiConnection"</span>,
+        <span class="string">"inputs"</span>: {
+          <span class="string">"host"</span>: { <span class="string">"connection"</span>: { <span class="string">"name"</span>: <span class="string">"@parameters('$connections')['office365']['connectionId']"</span> } },
+          <span class="string">"method"</span>: <span class="string">"post"</span>,
+          <span class="string">"path"</span>: <span class="string">"/v2/Mail"</span>,
+          <span class="string">"body"</span>: {
+            <span class="string">"To"</span>: <span class="string">"@body('Get_Manager_Details')?['mail']"</span>,
+            <span class="string">"Subject"</span>: <span class="string">"Security Alert: Account Disabled"</span>,
+            <span class="string">"Body"</span>: <span class="string">"User account has been automatically disabled due to security incident."</span>
+          }
+        }
+      },
+      <span class="string">"Create_ServiceNow_Incident"</span>: {
+        <span class="string">"type"</span>: <span class="string">"ApiConnection"</span>,
+        <span class="string">"inputs"</span>: {
+          <span class="string">"host"</span>: { <span class="string">"connection"</span>: { <span class="string">"name"</span>: <span class="string">"@parameters('$connections')['service-now']['connectionId']"</span> } },
+          <span class="string">"method"</span>: <span class="string">"post"</span>,
+          <span class="string">"path"</span>: <span class="string">"/api/now/table/incident"</span>,
+          <span class="string">"body"</span>: {
+            <span class="string">"short_description"</span>: <span class="string">"Security Incident: @{triggerBody()?['object']?['properties']?['title']}"</span>,
+            <span class="string">"urgency"</span>: <span class="string">"1"</span>,
+            <span class="string">"impact"</span>: <span class="string">"1"</span>,
+            <span class="string">"category"</span>: <span class="string">"Security"</span>
+          }
+        }
+      },
+      <span class="string">"Isolate_Device_If_Critical"</span>: {
+        <span class="string">"type"</span>: <span class="string">"Condition"</span>,
+        <span class="string">"expression"</span>: { <span class="string">"equals"</span>: [<span class="string">"@triggerBody()?['object']?['properties']?['severity']"</span>, <span class="string">"High"</span>] },
+        <span class="string">"actions"</span>: {
+          <span class="string">"Isolate_Device_MDE"</span>: {
+            <span class="string">"type"</span>: <span class="string">"ApiConnection"</span>,
+            <span class="string">"inputs"</span>: {
+              <span class="string">"host"</span>: { <span class="string">"connection"</span>: { <span class="string">"name"</span>: <span class="string">"@parameters('$connections')['wdatp']['connectionId']"</span> } },
+              <span class="string">"method"</span>: <span class="string">"post"</span>,
+              <span class="string">"path"</span>: <span class="string">"/api/machines/@{body('Get_Device_Entity')?['azureID']}/isolate"</span>,
+              <span class="string">"body"</span>: { <span class="string">"Comment"</span>: <span class="string">"Isolated by automated playbook"</span>, <span class="string">"IsolationType"</span>: <span class="string">"Selective"</span> }
+            }
+          }
+        }
+      }
+    }
+  }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Steps -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 rounded-lg bg-[#1a1a2e]">
+                        <h4 class="text-white font-semibold mb-3">RSA Actions</h4>
+                        <ol class="text-gray-400 text-sm space-y-2 list-decimal list-inside">
+                            <li>Lookup user in Active Directory</li>
+                            <li>Check if VIP user</li>
+                            <li>Disable account (if not VIP)</li>
+                            <li>Send email notification to manager</li>
+                            <li>Create ServiceNow ticket</li>
+                            <li>Isolate endpoint (if critical)</li>
+                        </ol>
+                    </div>
+                    <div class="p-4 rounded-lg bg-[#1a1a2e]">
+                        <h4 class="text-white font-semibold mb-3">Logic App Actions</h4>
+                        <ol class="text-gray-400 text-sm space-y-2 list-decimal list-inside">
+                            <li>Parse incident entities from Sentinel</li>
+                            <li>Query user details from Entra ID</li>
+                            <li>Check department for VIP status</li>
+                            <li>Disable account + revoke sessions</li>
+                            <li>Get manager and send notification</li>
+                            <li>Create ServiceNow incident</li>
+                            <li>Isolate device via MDE API</li>
+                            <li>Update Sentinel incident with comments</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Playbook 2: Salesforce Data Exfiltration Response -->
+            <div class="card p-8 mb-8" id="sf-exfil">
+                <div class="flex items-start justify-between mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white mb-2">Playbook 2: Salesforce Data Exfiltration Response</h2>
+                        <p class="text-gray-400">Responds to mass data exports from Salesforce by freezing the user account and alerting the security team.</p>
+                    </div>
+                    <span class="badge badge-orange">High Response</span>
+                </div>
+
+                <!-- Workflow Diagram -->
+                <div class="bg-[#1a1a2e] rounded-xl p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-white mb-4">Workflow Diagram</h3>
+                    <div class="mermaid">
+                        flowchart LR
+                            A[Sentinel Incident] --> B[Get SF OAuth Token]
+                            B --> C[Freeze SF User]
+                            C --> D[Revoke SF Sessions]
+                            D --> E[Query Export Details]
+                            E --> F[Post Teams Alert]
+                            F --> G[Update Incident Status]
+                            
+                            style A fill:#3b82f6,stroke:#2563eb
+                            style C fill:#ef4444,stroke:#dc2626
+                            style F fill:#8b5cf6,stroke:#7c3aed
+                            style G fill:#10b981,stroke:#059669
+                    </div>
+                </div>
+
+                <!-- Required Connectors -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-white mb-3">Required Connectors</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="badge badge-blue">Microsoft Sentinel</span>
+                        <span class="badge badge-cyan">Salesforce REST API (HTTP)</span>
+                        <span class="badge badge-purple">Microsoft Teams</span>
+                    </div>
+                </div>
+
+                <!-- Code Tabs -->
+                <div class="mb-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="tab-btn active" onclick="showTab(this, 'pb2-rsa')">RSA Playbook (YAML)</button>
+                        <button class="tab-btn" onclick="showTab(this, 'pb2-logic')">Logic App (JSON)</button>
+                    </div>
+                    
+                    <div id="pb2-rsa" class="tab-content">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-yaml"><span class="comment"># RSA Playbook: SF_Data_Exfil_Response</span>
+<span class="keyword">name:</span> SF_Data_Exfil_Response
+<span class="keyword">trigger:</span>
+  <span class="keyword">alert_type:</span> <span class="string">"Salesforce_Mass_Export"</span>
+  <span class="keyword">severity:</span> [<span class="string">"critical"</span>]
+
+<span class="keyword">actions:</span>
+  - <span class="keyword">name:</span> freeze_sf_user
+    <span class="keyword">type:</span> salesforce_api
+    <span class="keyword">action:</span> freeze_user
+    <span class="keyword">parameters:</span>
+      <span class="keyword">user_id:</span> <span class="string">"${alert.sf_user_id}"</span>
+      
+  - <span class="keyword">name:</span> revoke_sf_sessions
+    <span class="keyword">type:</span> salesforce_api
+    <span class="keyword">action:</span> revoke_sessions
+    <span class="keyword">parameters:</span>
+      <span class="keyword">user_id:</span> <span class="string">"${alert.sf_user_id}"</span>
+      
+  - <span class="keyword">name:</span> get_export_details
+    <span class="keyword">type:</span> salesforce_api
+    <span class="keyword">action:</span> query
+    <span class="keyword">parameters:</span>
+      <span class="keyword">query:</span> <span class="string">"SELECT Id, ExportType, RecordCount FROM DataExport WHERE UserId = '${alert.sf_user_id}'"</span>
+      
+  - <span class="keyword">name:</span> notify_security
+    <span class="keyword">type:</span> teams_message
+    <span class="keyword">parameters:</span>
+      <span class="keyword">channel:</span> <span class="string">"security-alerts"</span>
+      <span class="keyword">message:</span> <span class="string">"🚨 Salesforce Mass Export Alert\nUser: ${alert.sf_user_name}\nRecords: ${alert.records_exported}"</span></pre>
+                        </div>
+                    </div>
+                    
+                    <div id="pb2-logic" class="tab-content hidden">
+                        <div class="relative">
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                            <pre class="code-json">{
+  <span class="string">"definition"</span>: {
+    <span class="string">"$schema"</span>: <span class="string">"https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#"</span>,
+    <span class="string">"triggers"</span>: {
+      <span class="string">"Microsoft_Sentinel_incident"</span>: {
+        <span class="string">"type"</span>: <span class="string">"ApiConnectionWebhook"</span>,
+        <span class="string">"conditions"</span>: [
+          { <span class="string">"expression"</span>: <span class="string">"@contains(triggerBody()?['object']?['properties']?['title'], 'Salesforce')"</span> }
+        ]
+      }
+    },
+    <span class="string">"actions"</span>: {
+      <span class="string">"Get_Salesforce_Token"</span>: {
+        <span class="string">"type"</span>: <span class="string">"Http"</span>,
+        <span class="string">"inputs"</span>: {
+          <span class="string">"method"</span>: <span class="string">"POST"</span>,
+          <span class="string">"uri"</span>: <span class="string">"https://login.salesforce.com/services/oauth2/token"</span>,
+          <span class="string">"headers"</span>: { <span class="string">"Content-Type"</span>: <span class="string">"application/x-www-form-urlencoded"</span> },
+          <span class="string">"body"</span>: <span class="string">"grant_type=client_credentials&client_id=@{parameters('SalesforceClientId')}&client_secret=@{parameters('SalesforceClientSecret')}"</span>
+        }
+      },
+      <span class="string">"Freeze_Salesforce_User"</span>: {
+        <span class="string">"type"</span>: <span class="string">"Http"</span>,
+        <span class="string">"inputs"</span>: {
+          <span class="string">"method"</span>: <span class="string">"PATCH"</span>,
+          <span class="string">"uri"</span>: <span class="string">"https://@{parameters('SalesforceInstance')}.salesforce.com/services/data/v58.0/sobjects/UserLogin/@{body('Parse_SF_User')?['SalesforceUserId']}"</span>,
+          <span class="string">"headers"</span>: {
+            <span class="string">"Authorization"</span>: <span class="string">"Bearer @{body('Get_Salesforce_Token')?['access_token']}"</span>,
+            <span class="string">"Content-Type"</span>: <span class="string">"application/json"</span>
+          },
+          <span class="string">"body"</span>: { <span class="string">"IsFrozen"</span>: <span class="keyword">true</span> }
+        }
+      },
+      <span class="string">"Query_Export_Details"</span>: {
+        <span class="string">"type"</span>: <span class="string">"Http"</span>,
+        <span class="string">"inputs"</span>: {
+          <span class="string">"method"</span>: <span class="string">"GET"</span>,
+          <span class="string">"uri"</span>: <span class="string">"https://@{parameters('SalesforceInstance')}.salesforce.com/services/data/v58.0/query?q=SELECT+Id,EventType,RowsProcessed+FROM+EventLogFile+WHERE+LogUserId='@{body('Parse_SF_User')?['SalesforceUserId']}'"</span>,
+          <span class="string">"headers"</span>: { <span class="string">"Authorization"</span>: <span class="string">"Bearer @{body('Get_Salesforce_Token')?['access_token']}"</span> }
+        }
+      },
+      <span class="string">"Post_Teams_Alert"</span>: {
+        <span class="string">"type"</span>: <span class="string">"ApiConnection"</span>,
+        <span class="string">"inputs"</span>: {
+          <span class="string">"host"</span>: { <span class="string">"connection"</span>: { <span class="string">"name"</span>: <span class="string">"@parameters('$connections')['teams']['connectionId']"</span> } },
+          <span class="string">"method"</span>: <span class="string">"post"</span>,
+          <span class="string">"path"</span>: <span class="string">"/v3/beta/teams/@{parameters('TeamsTeamId')}/channels/@{parameters('TeamsChannelId')}/messages"</span>,
+          <span class="string">"body"</span>: {
+            <span class="string">"body"</span>: {
+              <span class="string">"contentType"</span>: <span class="string">"html"</span>,
+              <span class="string">"content"</span>: <span class="string">"&lt;h2&gt;🚨 Salesforce Mass Export Alert&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;User:&lt;/strong&gt; @{body('Parse_SF_User')?['UserName']}&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Action Taken:&lt;/strong&gt; User frozen, sessions revoked&lt;/p&gt;"</span>
+            }
+          }
+        }
+      },
+      <span class="string">"Update_Incident_Status"</span>: {
+        <span class="string">"type"</span>: <span class="string">"ApiConnection"</span>,
+        <span class="string">"inputs"</span>: {
+          <span class="string">"host"</span>: { <span class="string">"connection"</span>: { <span class="string">"name"</span>: <span class="string">"@parameters('$connections')['azuresentinel']['connectionId']"</span> } },
+          <span class="string">"method"</span>: <span class="string">"put"</span>,
+          <span class="string">"path"</span>: <span class="string">"/Incidents"</span>,
+          <span class="string">"body"</span>: {
+            <span class="string">"incidentArmId"</span>: <span class="string">"@triggerBody()?['object']?['id']"</span>,
+            <span class="string">"status"</span>: <span class="string">"Active"</span>,
+            <span class="string">"classification"</span>: <span class="string">"TruePositive"</span>
+          }
+        }
+      }
+    }
+  }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Playbook Summary -->
+            <div class="card p-8">
+                <h2 class="text-2xl font-bold text-white mb-6">All Migrated Playbooks</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-[#2a2a3e]">
+                                <th class="text-left py-3 px-4 text-gray-400 font-medium">Playbook Name</th>
+                                <th class="text-left py-3 px-4 text-gray-400 font-medium">Trigger</th>
+                                <th class="text-left py-3 px-4 text-gray-400 font-medium">Key Actions</th>
+                                <th class="text-center py-3 px-4 text-gray-400 font-medium">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-[#2a2a3e]/50">
+                                <td class="py-4 px-4 text-white">Auto-Disable Compromised Account</td>
+                                <td class="py-4 px-4 text-gray-400">Account Compromise</td>
+                                <td class="py-4 px-4 text-gray-400">Disable, Revoke, Notify, Isolate</td>
+                                <td class="py-4 px-4 text-center"><span class="badge badge-green">Active</span></td>
+                            </tr>
+                            <tr class="border-b border-[#2a2a3e]/50">
+                                <td class="py-4 px-4 text-white">Salesforce Exfiltration Response</td>
+                                <td class="py-4 px-4 text-gray-400">SF Mass Export</td>
+                                <td class="py-4 px-4 text-gray-400">Freeze, Revoke, Alert</td>
+                                <td class="py-4 px-4 text-center"><span class="badge badge-green">Active</span></td>
+                            </tr>
+                            <tr class="border-b border-[#2a2a3e]/50">
+                                <td class="py-4 px-4 text-white">Malware Containment</td>
+                                <td class="py-4 px-4 text-gray-400">Malware Detection</td>
+                                <td class="py-4 px-4 text-gray-400">Isolate, Scan, Block Hash</td>
+                                <td class="py-4 px-4 text-center"><span class="badge badge-green">Active</span></td>
+                            </tr>
+                            <tr class="border-b border-[#2a2a3e]/50">
+                                <td class="py-4 px-4 text-white">Phishing Response</td>
+                                <td class="py-4 px-4 text-gray-400">Phishing Alert</td>
+                                <td class="py-4 px-4 text-gray-400">Block Sender, Purge, Notify</td>
+                                <td class="py-4 px-4 text-center"><span class="badge badge-green">Active</span></td>
+                            </tr>
+                            <tr class="border-b border-[#2a2a3e]/50">
+                                <td class="py-4 px-4 text-white">Threat Intel Enrichment</td>
+                                <td class="py-4 px-4 text-gray-400">New Incident</td>
+                                <td class="py-4 px-4 text-gray-400">Enrich IOCs, Update Tags</td>
+                                <td class="py-4 px-4 text-center"><span class="badge badge-green">Active</span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-4 text-white">VIP User Alert Escalation</td>
+                                <td class="py-4 px-4 text-gray-400">VIP Account Alert</td>
+                                <td class="py-4 px-4 text-gray-400">Escalate, Page On-Call</td>
+                                <td class="py-4 px-4 text-center"><span class="badge badge-green">Active</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#3b82f6',
+                primaryTextColor: '#f8fafc',
+                lineColor: '#4b5563',
+                secondaryColor: '#1a1a2e'
+            }
+        });
+
+        function showTab(btn, tabId) {
+            const parent = btn.closest('.card');
+            parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            parent.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            btn.classList.add('active');
+            document.getElementById(tabId).classList.remove('hidden');
+        }
+
+        function copyCode(btn) {
+            const pre = btn.nextElementSibling;
+            navigator.clipboard.writeText(pre.textContent).then(() => {
+                btn.innerHTML = '<svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+                setTimeout(() => {
+                    btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

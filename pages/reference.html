@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reference Guide - RSA to Sentinel Migration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0a0f; --bg-secondary: #12121a; --bg-tertiary: #1a1a2e; --accent-blue: #3b82f6; --text-primary: #f8fafc; --text-secondary: #94a3b8; --border-color: #2a2a3e; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); margin: 0; min-height: 100vh; }
+        code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+        .hero-bg { background: radial-gradient(ellipse at 20% 30%, rgba(16, 185, 129, 0.08) 0%, transparent 50%), var(--bg-primary); }
+        .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; }
+        .nav-link { color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+        .nav-link:hover { color: var(--text-primary); }
+        .badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+        .badge-green { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .badge-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .badge-purple { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .badge-cyan { background: rgba(6, 182, 212, 0.2); color: #22d3ee; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 12px 16px; color: var(--text-secondary); font-weight: 500; border-bottom: 1px solid var(--border-color); }
+        td { padding: 12px 16px; border-bottom: 1px solid rgba(42, 42, 62, 0.5); }
+        tr:hover { background: rgba(59, 130, 246, 0.05); }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        .tab-btn { padding: 10px 20px; border-radius: 8px; font-weight: 500; transition: all 0.2s; cursor: pointer; border: 1px solid transparent; }
+        .tab-btn.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
+        .tab-btn:not(.active) { background: var(--bg-tertiary); color: var(--text-secondary); border-color: var(--border-color); }
+        .tab-btn:not(.active):hover { border-color: var(--accent-blue); color: white; }
+    </style>
+</head>
+<body class="hero-bg">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-[#2a2a3e]">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <div><h1 class="text-lg font-bold text-white">RSA → Sentinel</h1></div>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="../index.html" class="nav-link font-medium">Home</a>
+                    <a href="overview.html" class="nav-link font-medium">Overview</a>
+                    <a href="defender-stack.html" class="nav-link font-medium">Defender XDR</a>
+                    <a href="rules-catalog.html" class="nav-link font-medium">Rules</a>
+                    <a href="dlp-migration.html" class="nav-link font-medium">DLP</a>
+                    <a href="playbooks.html" class="nav-link font-medium">Playbooks</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                    <a href="../index.html" class="hover:text-blue-400">Home</a>
+                    <span>/</span>
+                    <span class="text-gray-400">Reference Guide</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Reference Guide</h1>
+                <p class="text-xl text-gray-400 max-w-3xl mb-6">
+                    Complete mapping tables, data connector reference, and field translations for the RSA NetWitness to Microsoft Sentinel migration.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="badge badge-green">50+ Field Mappings</span>
+                    <span class="badge badge-blue">12 Data Connectors</span>
+                    <span class="badge badge-purple">Complete Reference</span>
+                </div>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="flex flex-wrap gap-3 mb-8">
+                <button class="tab-btn active" onclick="showSection('fields')">Field Mappings</button>
+                <button class="tab-btn" onclick="showSection('tables')">Table Mappings</button>
+                <button class="tab-btn" onclick="showSection('connectors')">Data Connectors</button>
+                <button class="tab-btn" onclick="showSection('operators')">Operators</button>
+            </div>
+
+            <!-- Field Mappings -->
+            <div id="fields" class="section-content">
+                <div class="card p-8 mb-8">
+                    <h2 class="text-2xl font-bold text-white mb-6">RSA to Sentinel Field Mappings</h2>
+                    <p class="text-gray-400 mb-6">Common field name translations from RSA NetWitness meta keys to Microsoft Sentinel column names.</p>
+                    
+                    <div class="overflow-x-auto">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>RSA NetWitness Field</th>
+                                    <th>Sentinel Column</th>
+                                    <th>Data Type</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-300">
+                                <tr>
+                                    <td class="mono text-red-400">source_ip</td>
+                                    <td class="mono text-green-400">SourceIP</td>
+                                    <td>string</td>
+                                    <td>Also: SrcIP, ClientIP, IPAddress</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">destination_ip</td>
+                                    <td class="mono text-green-400">DestinationIP</td>
+                                    <td>string</td>
+                                    <td>Also: DstIP, RemoteIP</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">source_port</td>
+                                    <td class="mono text-green-400">SourcePort</td>
+                                    <td>int</td>
+                                    <td>Also: SrcPort</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">destination_port</td>
+                                    <td class="mono text-green-400">DestinationPort</td>
+                                    <td>int</td>
+                                    <td>Also: DstPort, RemotePort</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">user_name</td>
+                                    <td class="mono text-green-400">UserPrincipalName</td>
+                                    <td>string</td>
+                                    <td>Also: Account, TargetUserName</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">user_dst</td>
+                                    <td class="mono text-green-400">TargetUserName</td>
+                                    <td>string</td>
+                                    <td>Target of operation</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">user_src</td>
+                                    <td class="mono text-green-400">SubjectUserName</td>
+                                    <td>string</td>
+                                    <td>Initiator of operation</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">hostname</td>
+                                    <td class="mono text-green-400">Computer</td>
+                                    <td>string</td>
+                                    <td>Also: DeviceName, HostName</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">event_category</td>
+                                    <td class="mono text-green-400">DeviceEventClassId</td>
+                                    <td>string</td>
+                                    <td>Event classification</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">event_type</td>
+                                    <td class="mono text-green-400">Activity</td>
+                                    <td>string</td>
+                                    <td>Also: ActionType</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">process_name</td>
+                                    <td class="mono text-green-400">FileName</td>
+                                    <td>string</td>
+                                    <td>Process executable name</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">command_line</td>
+                                    <td class="mono text-green-400">ProcessCommandLine</td>
+                                    <td>string</td>
+                                    <td>Full command line</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">parent_process</td>
+                                    <td class="mono text-green-400">InitiatingProcessFileName</td>
+                                    <td>string</td>
+                                    <td>Parent process name</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">bytes_in</td>
+                                    <td class="mono text-green-400">ReceivedBytes</td>
+                                    <td>long</td>
+                                    <td>Incoming bytes</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">bytes_out</td>
+                                    <td class="mono text-green-400">SentBytes</td>
+                                    <td>long</td>
+                                    <td>Outgoing bytes</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">dns_query</td>
+                                    <td class="mono text-green-400">Name</td>
+                                    <td>string</td>
+                                    <td>In DnsEvents table</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">http_url</td>
+                                    <td class="mono text-green-400">RequestURL</td>
+                                    <td>string</td>
+                                    <td>Full URL path</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">http_method</td>
+                                    <td class="mono text-green-400">RequestMethod</td>
+                                    <td>string</td>
+                                    <td>GET, POST, etc.</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">file_hash</td>
+                                    <td class="mono text-green-400">SHA256</td>
+                                    <td>string</td>
+                                    <td>Also: MD5, SHA1</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">file_path</td>
+                                    <td class="mono text-green-400">FolderPath</td>
+                                    <td>string</td>
+                                    <td>Directory path</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Mappings -->
+            <div id="tables" class="section-content hidden">
+                <div class="card p-8 mb-8">
+                    <h2 class="text-2xl font-bold text-white mb-6">RSA to Sentinel Table Mappings</h2>
+                    <p class="text-gray-400 mb-6">Log source categories and their corresponding Sentinel tables.</p>
+                    
+                    <div class="overflow-x-auto">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>RSA Log Source</th>
+                                    <th>Sentinel Table</th>
+                                    <th>Connector</th>
+                                    <th>Key Fields</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-300">
+                                <tr>
+                                    <td class="mono text-red-400">authentication</td>
+                                    <td class="mono text-green-400">SigninLogs</td>
+                                    <td>Microsoft Entra ID</td>
+                                    <td>UserPrincipalName, ResultType, IPAddress</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">windows_security</td>
+                                    <td class="mono text-green-400">SecurityEvent</td>
+                                    <td>Windows Security Events via AMA</td>
+                                    <td>EventID, Account, Computer</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">endpoint</td>
+                                    <td class="mono text-green-400">DeviceProcessEvents</td>
+                                    <td>Microsoft Defender for Endpoint</td>
+                                    <td>DeviceName, FileName, ProcessCommandLine</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">network</td>
+                                    <td class="mono text-green-400">CommonSecurityLog</td>
+                                    <td>CEF via AMA</td>
+                                    <td>SourceIP, DestinationIP, Activity</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">firewall</td>
+                                    <td class="mono text-green-400">CommonSecurityLog</td>
+                                    <td>CEF via AMA</td>
+                                    <td>DeviceVendor, DeviceAction</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">dns</td>
+                                    <td class="mono text-green-400">DnsEvents</td>
+                                    <td>DNS connector</td>
+                                    <td>Name, QueryType, ClientIP</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">azure</td>
+                                    <td class="mono text-green-400">AzureActivity</td>
+                                    <td>Azure Activity</td>
+                                    <td>Caller, OperationNameValue, ResourceGroup</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">office365</td>
+                                    <td class="mono text-green-400">OfficeActivity</td>
+                                    <td>Office 365</td>
+                                    <td>UserId, Operation, ClientIP</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">salesforce</td>
+                                    <td class="mono text-green-400">Salesforce_CL</td>
+                                    <td>Custom (HTTP)</td>
+                                    <td>Use SalesforceParser function</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">threat_intel</td>
+                                    <td class="mono text-green-400">ThreatIntelligenceIndicator</td>
+                                    <td>Threat Intelligence</td>
+                                    <td>NetworkIP, ThreatType, ConfidenceScore</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">file_access</td>
+                                    <td class="mono text-green-400">DeviceFileEvents</td>
+                                    <td>Microsoft Defender for Endpoint</td>
+                                    <td>FileName, FolderPath, ActionType</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">network_traffic</td>
+                                    <td class="mono text-green-400">DeviceNetworkEvents</td>
+                                    <td>Microsoft Defender for Endpoint</td>
+                                    <td>RemoteIP, RemotePort, SentBytes</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Connectors -->
+            <div id="connectors" class="section-content hidden">
+                <div class="card p-8 mb-8">
+                    <h2 class="text-2xl font-bold text-white mb-6">Data Connectors Reference</h2>
+                    <p class="text-gray-400 mb-6">All data connectors configured for this migration with their status and rule coverage.</p>
+                    
+                    <div class="overflow-x-auto">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Connector</th>
+                                    <th>Status</th>
+                                    <th>Tables</th>
+                                    <th>Rules Using</th>
+                                    <th>Daily Volume</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-300">
+                                <tr>
+                                    <td>Microsoft Entra ID</td>
+                                    <td><span class="badge badge-green">Active</span></td>
+                                    <td class="mono text-sm">SigninLogs, AuditLogs, AADNonInteractiveUserSignInLogs</td>
+                                    <td>45 rules</td>
+                                    <td>~2.5M events</td>
+                                </tr>
+                                <tr>
+                                    <td>Microsoft Defender for Endpoint</td>
+                                    <td><span class="badge badge-green">Active</span></td>
+                                    <td class="mono text-sm">Device*Events (Process, File, Network, Registry)</td>
+                                    <td>78 rules</td>
+                                    <td>~15M events</td>
+                                </tr>
+                                <tr>
+                                    <td>Windows Security Events via AMA</td>
+                                    <td><span class="badge badge-green">Active</span></td>
+                                    <td class="mono text-sm">SecurityEvent</td>
+                                    <td>52 rules</td>
+                                    <td>~8M events</td>
+                                </tr>
+                                <tr>
+                                    <td>CEF via AMA</td>
+                                    <td><span class="badge badge-green">Active</span></td>
+                                    <td class="mono text-sm">CommonSecurityLog</td>
+                                    <td>38 rules</td>
+                                    <td>~12M events</td>
+                                </tr>
+                                <tr>
+                                    <td>Azure Activity</td>
+                                    <td><span class="badge badge-green">Active</span></td>
+                                    <td class="mono text-sm">AzureActivity</td>
+                                    <td>18 rules</td>
+                                    <td>~500K events</td>
+                                </tr>
+                                <tr>
+                                    <td>Office 365</td>
+                                    <td><span class="badge badge-green">Active</span></td>
+                                    <td class="mono text-sm">OfficeActivity</td>
+                                    <td>22 rules</td>
+                                    <td>~3M events</td>
+                                </tr>
+                                <tr>
+                                    <td>Salesforce Shield (Custom)</td>
+                                    <td><span class="badge badge-green">Active</span></td>
+                                    <td class="mono text-sm">Salesforce_CL</td>
+                                    <td>28 rules</td>
+                                    <td>~1.2M events</td>
+                                </tr>
+                                <tr>
+                                    <td>Threat Intelligence Platforms</td>
+                                    <td><span class="badge badge-green">Active</span></td>
+                                    <td class="mono text-sm">ThreatIntelligenceIndicator</td>
+                                    <td>15 rules</td>
+                                    <td>~50K indicators</td>
+                                </tr>
+                                <tr>
+                                    <td>Microsoft Defender for Cloud</td>
+                                    <td><span class="badge badge-green">Active</span></td>
+                                    <td class="mono text-sm">SecurityAlert</td>
+                                    <td>12 rules</td>
+                                    <td>~10K alerts</td>
+                                </tr>
+                                <tr>
+                                    <td>DNS</td>
+                                    <td><span class="badge badge-green">Active</span></td>
+                                    <td class="mono text-sm">DnsEvents</td>
+                                    <td>8 rules</td>
+                                    <td>~20M events</td>
+                                </tr>
+                                <tr>
+                                    <td>AWS CloudTrail</td>
+                                    <td><span class="badge badge-cyan">Planned</span></td>
+                                    <td class="mono text-sm">AWSCloudTrail</td>
+                                    <td>-</td>
+                                    <td>Phase 2</td>
+                                </tr>
+                                <tr>
+                                    <td>GCP Audit Logs</td>
+                                    <td><span class="badge badge-cyan">Planned</span></td>
+                                    <td class="mono text-sm">GCPAuditLogs</td>
+                                    <td>-</td>
+                                    <td>Phase 2</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operators -->
+            <div id="operators" class="section-content hidden">
+                <div class="card p-8 mb-8">
+                    <h2 class="text-2xl font-bold text-white mb-6">RSA to KQL Operator Mappings</h2>
+                    <p class="text-gray-400 mb-6">Query language operator translations for rule conversion.</p>
+                    
+                    <div class="overflow-x-auto">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>RSA Operator</th>
+                                    <th>KQL Equivalent</th>
+                                    <th>Example Usage</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-300">
+                                <tr>
+                                    <td class="mono text-red-400">SELECT</td>
+                                    <td class="mono text-green-400">(table name)</td>
+                                    <td class="mono text-sm">SecurityEvent | where ...</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">WHERE</td>
+                                    <td class="mono text-green-400">| where</td>
+                                    <td class="mono text-sm">| where EventID == 4625</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">AND</td>
+                                    <td class="mono text-green-400">and</td>
+                                    <td class="mono text-sm">| where A == "x" and B == "y"</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">OR</td>
+                                    <td class="mono text-green-400">or</td>
+                                    <td class="mono text-sm">| where A == "x" or A == "y"</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">IN</td>
+                                    <td class="mono text-green-400">in</td>
+                                    <td class="mono text-sm">| where EventID in (4624, 4625)</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">NOT IN</td>
+                                    <td class="mono text-green-400">!in</td>
+                                    <td class="mono text-sm">| where Account !in ("SYSTEM")</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">LIKE '%x%'</td>
+                                    <td class="mono text-green-400">contains</td>
+                                    <td class="mono text-sm">| where Name contains "admin"</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">LIKE 'x%'</td>
+                                    <td class="mono text-green-400">startswith</td>
+                                    <td class="mono text-sm">| where Name startswith "srv"</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">LIKE '%x'</td>
+                                    <td class="mono text-green-400">endswith</td>
+                                    <td class="mono text-sm">| where Name endswith ".exe"</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">MATCHES regex</td>
+                                    <td class="mono text-green-400">matches regex</td>
+                                    <td class="mono text-sm">| where Name matches regex @"\\d{3}"</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">GROUP BY</td>
+                                    <td class="mono text-green-400">| summarize ... by</td>
+                                    <td class="mono text-sm">| summarize count() by Account</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">HAVING COUNT(*) > n</td>
+                                    <td class="mono text-green-400">| where (after summarize)</td>
+                                    <td class="mono text-sm">| summarize c=count() | where c > 5</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">ORDER BY</td>
+                                    <td class="mono text-green-400">| order by</td>
+                                    <td class="mono text-sm">| order by TimeGenerated desc</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">LIMIT n</td>
+                                    <td class="mono text-green-400">| take n</td>
+                                    <td class="mono text-sm">| take 100</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">WINDOW SLIDING n MINUTES</td>
+                                    <td class="mono text-green-400">ago(nm)</td>
+                                    <td class="mono text-sm">| where TimeGenerated > ago(5m)</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">WINDOW SLIDING n HOURS</td>
+                                    <td class="mono text-green-400">ago(nh)</td>
+                                    <td class="mono text-sm">| where TimeGenerated > ago(1h)</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">COUNT(DISTINCT x)</td>
+                                    <td class="mono text-green-400">dcount(x)</td>
+                                    <td class="mono text-sm">| summarize dcount(SourceIP)</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono text-red-400">STDEV(x)</td>
+                                    <td class="mono text-green-400">stdev(x)</td>
+                                    <td class="mono text-sm">| summarize stdev(ResponseTime)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <a href="tools.html" class="card p-6 hover:border-blue-500/50 transition-colors">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-white font-semibold">RSA to KQL Translator</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm">Interactive tool for converting RSA queries to KQL</p>
+                </a>
+                
+                <a href="parsers.html" class="card p-6 hover:border-purple-500/50 transition-colors">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-white font-semibold">Custom Parsers</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm">KQL functions for log normalization</p>
+                </a>
+                
+                <a href="rules-catalog.html" class="card p-6 hover:border-green-500/50 transition-colors">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-white font-semibold">Rules Catalog</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm">Complete list of migrated detection rules</p>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.section-content').forEach(s => s.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(sectionId).classList.remove('hidden');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

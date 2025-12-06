@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture - RSA to Sentinel Migration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a2e;
+            --accent-blue: #3b82f6;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: #2a2a3e;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            margin: 0;
+            min-height: 100vh;
+        }
+        code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+        .hero-bg {
+            background: radial-gradient(ellipse at 20% 30%, rgba(139, 92, 246, 0.1) 0%, transparent 50%), var(--bg-primary);
+        }
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+        }
+        .nav-link {
+            position: relative;
+            color: var(--text-secondary);
+            transition: color 0.2s ease;
+            text-decoration: none;
+        }
+        .nav-link:hover { color: var(--text-primary); }
+        .mermaid { background: transparent !important; }
+        .mermaid svg { max-width: 100%; height: auto; }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .badge-green { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .badge-purple { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .badge-orange { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+    </style>
+</head>
+<body class="hero-bg">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-[#2a2a3e]">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <div><h1 class="text-lg font-bold text-white">RSA → Sentinel</h1></div>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="../index.html" class="nav-link font-medium">Home</a>
+                    <a href="overview.html" class="nav-link font-medium">Overview</a>
+                    <a href="defender-stack.html" class="nav-link font-medium">Defender XDR</a>
+                    <a href="rules-catalog.html" class="nav-link font-medium">Rules</a>
+                    <a href="dlp-migration.html" class="nav-link font-medium">DLP</a>
+                    <a href="playbooks.html" class="nav-link font-medium">Playbooks</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <!-- Page Header -->
+            <div class="mb-12">
+                <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                    <a href="../index.html" class="hover:text-blue-400">Home</a>
+                    <span>/</span>
+                    <span class="text-gray-400">Architecture</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Architecture</h1>
+                <p class="text-xl text-gray-400 max-w-3xl">
+                    Before and after architecture diagrams showing the transformation from RSA NetWitness to Microsoft Sentinel.
+                </p>
+            </div>
+
+            <!-- Before Architecture -->
+            <div class="card p-8 mb-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="badge badge-orange">BEFORE</span>
+                    <h2 class="text-2xl font-bold text-white">RSA NetWitness Architecture</h2>
+                </div>
+                <div class="bg-[#1a1a2e] rounded-xl p-6 mb-6">
+                    <div class="mermaid">
+                        flowchart TB
+                            subgraph Sources["Data Sources"]
+                                FW[Firewalls/IDS/IPS]
+                                AD[Active Directory]
+                                EP[Endpoints]
+                                CL[Cloud Apps]
+                                SF[Salesforce]
+                            end
+                            
+                            subgraph Collection["RSA Collection Layer"]
+                                LC[Log Collectors]
+                                PK[Packet Decoders]
+                                VLC[Virtual Log Collectors]
+                            end
+                            
+                            subgraph Processing["RSA Processing"]
+                                CON[Concentrators]
+                                ARCH[Archiver]
+                                WH[Data Warehouse]
+                            end
+                            
+                            subgraph Analytics["RSA Analytics"]
+                                ESA[Event Stream Analysis]
+                                SA[Security Analytics]
+                                IA[Investigate/Analyze]
+                            end
+                            
+                            subgraph Response["Response"]
+                                AL[Alerts]
+                                RP[Reports]
+                                RS[RSA Respond]
+                            end
+                            
+                            Sources --> Collection
+                            Collection --> Processing
+                            Processing --> Analytics
+                            Analytics --> Response
+                            
+                            style Sources fill:#1e3a5f,stroke:#3b82f6
+                            style Collection fill:#1e3a5f,stroke:#3b82f6
+                            style Processing fill:#2d1f5e,stroke:#8b5cf6
+                            style Analytics fill:#1e3a5f,stroke:#3b82f6
+                            style Response fill:#1f3d1f,stroke:#10b981
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="p-4 rounded-lg bg-[#1a1a2e]">
+                        <h4 class="text-white font-semibold mb-2">Log Collectors</h4>
+                        <p class="text-gray-400 text-sm">Physical/virtual appliances collecting logs via syslog, SNMP, Windows Events</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-[#1a1a2e]">
+                        <h4 class="text-white font-semibold mb-2">ESA (Event Stream Analysis)</h4>
+                        <p class="text-gray-400 text-sm">Proprietary Lua-based rule engine for real-time correlation</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-[#1a1a2e]">
+                        <h4 class="text-white font-semibold mb-2">Respond</h4>
+                        <p class="text-gray-400 text-sm">Incident management with manual playbook execution</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- After Architecture -->
+            <div class="card p-8 mb-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="badge badge-green">AFTER</span>
+                    <h2 class="text-2xl font-bold text-white">Microsoft Sentinel Architecture</h2>
+                </div>
+                <div class="bg-[#1a1a2e] rounded-xl p-6 mb-6">
+                    <div class="mermaid">
+                        flowchart TB
+                            subgraph Sources["Data Sources"]
+                                FW[Firewalls/IDS/IPS]
+                                AD[Azure AD / Entra ID]
+                                MDE[Microsoft Defender for Endpoint]
+                                M365[Microsoft 365]
+                                SF[Salesforce Shield]
+                                AZ[Azure Resources]
+                            end
+                            
+                            subgraph Ingestion["Data Ingestion"]
+                                DC[Data Connectors]
+                                CEF[CEF/Syslog]
+                                API[REST APIs]
+                                LA[Log Analytics Agent]
+                            end
+                            
+                            subgraph Workspace["Log Analytics Workspace"]
+                                TB[Tables & Schemas]
+                                PS[Custom Parsers]
+                                WL[Watchlists]
+                                TI[Threat Intelligence]
+                            end
+                            
+                            subgraph Analytics["Sentinel Analytics"]
+                                AR[Analytics Rules - KQL]
+                                FU[Fusion ML]
+                                HQ[Hunting Queries]
+                                NB[Notebooks]
+                            end
+                            
+                            subgraph XDR["Microsoft Defender XDR"]
+                                MDE2[Defender for Endpoint]
+                                MDI[Defender for Identity]
+                                MDC[Defender for Cloud Apps]
+                                MDO[Defender for Office 365]
+                            end
+                            
+                            subgraph Response["Automated Response"]
+                                INC[Incidents]
+                                PB[Logic Apps Playbooks]
+                                SOAR[SOAR Automation]
+                            end
+                            
+                            Sources --> Ingestion
+                            Ingestion --> Workspace
+                            Workspace --> Analytics
+                            Analytics --> Response
+                            XDR --> Workspace
+                            XDR --> Response
+                            
+                            style Sources fill:#1e3a5f,stroke:#3b82f6
+                            style Ingestion fill:#1e3a5f,stroke:#3b82f6
+                            style Workspace fill:#2d1f5e,stroke:#8b5cf6
+                            style Analytics fill:#1e4d3d,stroke:#10b981
+                            style XDR fill:#3d1f3d,stroke:#ec4899
+                            style Response fill:#1f3d1f,stroke:#10b981
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="p-4 rounded-lg bg-[#1a1a2e]">
+                        <h4 class="text-white font-semibold mb-2">Data Connectors</h4>
+                        <p class="text-gray-400 text-sm">Native integrations for 100+ sources including custom APIs</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-[#1a1a2e]">
+                        <h4 class="text-white font-semibold mb-2">KQL Analytics Rules</h4>
+                        <p class="text-gray-400 text-sm">Kusto Query Language for scheduled and near-real-time detection</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-[#1a1a2e]">
+                        <h4 class="text-white font-semibold mb-2">Fusion ML</h4>
+                        <p class="text-gray-400 text-sm">Machine learning for multi-stage attack detection</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-[#1a1a2e]">
+                        <h4 class="text-white font-semibold mb-2">Logic Apps</h4>
+                        <p class="text-gray-400 text-sm">Serverless automation with 400+ connectors</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Flow Architecture -->
+            <div class="card p-8 mb-8">
+                <h2 class="text-2xl font-bold text-white mb-6">Data Flow Architecture</h2>
+                <div class="bg-[#1a1a2e] rounded-xl p-6 mb-6">
+                    <div class="mermaid">
+                        flowchart LR
+                            subgraph Input["Data Input"]
+                                S1[Windows Events]
+                                S2[Azure Activity]
+                                S3[Salesforce Logs]
+                                S4[Firewall/CEF]
+                                S5[Cloud Apps]
+                            end
+                            
+                            subgraph Process["Processing"]
+                                P1[Custom Parsers]
+                                P2[Normalization]
+                                P3[Enrichment]
+                            end
+                            
+                            subgraph Detect["Detection"]
+                                D1[Scheduled Rules]
+                                D2[NRT Rules]
+                                D3[Fusion ML]
+                                D4[Hunting Queries]
+                            end
+                            
+                            subgraph Respond["Response"]
+                                R1[Incident Creation]
+                                R2[Auto-Triage]
+                                R3[Playbook Trigger]
+                                R4[Notification]
+                            end
+                            
+                            Input --> Process --> Detect --> Respond
+                            
+                            style Input fill:#1e3a5f,stroke:#3b82f6
+                            style Process fill:#2d1f5e,stroke:#8b5cf6
+                            style Detect fill:#1e4d3d,stroke:#10b981
+                            style Respond fill:#3d2d1f,stroke:#f59e0b
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Components Table -->
+            <div class="card p-8 mb-8">
+                <h2 class="text-2xl font-bold text-white mb-6">Component Mapping</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-[#2a2a3e]">
+                                <th class="text-left py-3 px-4 text-gray-400 font-medium">RSA Component</th>
+                                <th class="text-left py-3 px-4 text-gray-400 font-medium">Sentinel Equivalent</th>
+                                <th class="text-left py-3 px-4 text-gray-400 font-medium">Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-[#2a2a3e]/50">
+                                <td class="py-4 px-4 text-white">Log Collectors</td>
+                                <td class="py-4 px-4 text-cyan-400">Data Connectors + Log Analytics Agent</td>
+                                <td class="py-4 px-4 text-gray-400">Native integrations reduce agent overhead</td>
+                            </tr>
+                            <tr class="border-b border-[#2a2a3e]/50">
+                                <td class="py-4 px-4 text-white">ESA Rules (Lua)</td>
+                                <td class="py-4 px-4 text-cyan-400">Analytics Rules (KQL)</td>
+                                <td class="py-4 px-4 text-gray-400">More readable, better documentation</td>
+                            </tr>
+                            <tr class="border-b border-[#2a2a3e]/50">
+                                <td class="py-4 px-4 text-white">Concentrators</td>
+                                <td class="py-4 px-4 text-cyan-400">Log Analytics Workspace</td>
+                                <td class="py-4 px-4 text-gray-400">Serverless, auto-scaling</td>
+                            </tr>
+                            <tr class="border-b border-[#2a2a3e]/50">
+                                <td class="py-4 px-4 text-white">Archiver</td>
+                                <td class="py-4 px-4 text-cyan-400">Azure Data Explorer / Archive Tier</td>
+                                <td class="py-4 px-4 text-gray-400">Cost-effective long-term storage</td>
+                            </tr>
+                            <tr class="border-b border-[#2a2a3e]/50">
+                                <td class="py-4 px-4 text-white">RSA Respond</td>
+                                <td class="py-4 px-4 text-cyan-400">Logic Apps Playbooks</td>
+                                <td class="py-4 px-4 text-gray-400">400+ connectors, visual designer</td>
+                            </tr>
+                            <tr class="border-b border-[#2a2a3e]/50">
+                                <td class="py-4 px-4 text-white">Meta Correlation</td>
+                                <td class="py-4 px-4 text-cyan-400">Fusion ML + Incident Grouping</td>
+                                <td class="py-4 px-4 text-gray-400">ML-based multi-stage detection</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-4 text-white">Custom Parsers</td>
+                                <td class="py-4 px-4 text-cyan-400">KQL Functions + ASIM</td>
+                                <td class="py-4 px-4 text-gray-400">Standardized normalization</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Azure Stack -->
+            <div class="card p-8 mb-8">
+                <h2 class="text-2xl font-bold text-white mb-6">Azure Security Stack Integration</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="p-5 rounded-xl bg-gradient-to-br from-blue-500/10 to-blue-600/5 border border-blue-500/20">
+                        <div class="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center mb-3">
+                            <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-white font-semibold mb-1">Microsoft Sentinel</h4>
+                        <p class="text-gray-400 text-sm">Cloud-native SIEM + SOAR</p>
+                    </div>
+                    <div class="p-5 rounded-xl bg-gradient-to-br from-purple-500/10 to-purple-600/5 border border-purple-500/20">
+                        <div class="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center mb-3">
+                            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-white font-semibold mb-1">Defender for Endpoint</h4>
+                        <p class="text-gray-400 text-sm">EDR + XDR capabilities</p>
+                    </div>
+                    <div class="p-5 rounded-xl bg-gradient-to-br from-cyan-500/10 to-cyan-600/5 border border-cyan-500/20">
+                        <div class="w-12 h-12 rounded-lg bg-cyan-500/20 flex items-center justify-center mb-3">
+                            <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-white font-semibold mb-1">Defender for Identity</h4>
+                        <p class="text-gray-400 text-sm">Identity threat protection</p>
+                    </div>
+                    <div class="p-5 rounded-xl bg-gradient-to-br from-green-500/10 to-green-600/5 border border-green-500/20">
+                        <div class="w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center mb-3">
+                            <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-white font-semibold mb-1">Defender for Cloud</h4>
+                        <p class="text-gray-400 text-sm">CSPM + CWP</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex items-center justify-between">
+                <a href="overview.html" class="text-gray-400 hover:text-white flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Previous: Overview
+                </a>
+                <a href="rules-catalog.html" class="text-blue-400 hover:text-blue-300 flex items-center gap-2">
+                    Next: Detection Rules
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#3b82f6',
+                primaryTextColor: '#f8fafc',
+                primaryBorderColor: '#2a2a3e',
+                lineColor: '#4b5563',
+                secondaryColor: '#1a1a2e',
+                tertiaryColor: '#12121a',
+                background: '#0a0a0f',
+                mainBkg: '#12121a',
+                textColor: '#f8fafc',
+                fontSize: '14px'
+            },
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+    </script>
+</body>
+</html>

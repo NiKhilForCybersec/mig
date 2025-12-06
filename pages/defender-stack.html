@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft Defender XDR Stack - RSA to Sentinel Migration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0a0f; --bg-secondary: #12121a; --bg-tertiary: #1a1a2e; --accent-blue: #3b82f6; --text-primary: #f8fafc; --text-secondary: #94a3b8; --border-color: #2a2a3e; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); margin: 0; min-height: 100vh; }
+        code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+        .hero-bg { background: radial-gradient(ellipse at 30% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%), var(--bg-primary); }
+        .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; }
+        .nav-link { color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+        .nav-link:hover { color: var(--text-primary); }
+        .badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+        .badge-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .badge-green { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .badge-purple { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .badge-cyan { background: rgba(6, 182, 212, 0.2); color: #22d3ee; }
+        .badge-orange { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        .defender-card { transition: all 0.3s ease; }
+        .defender-card:hover { transform: translateY(-4px); border-color: rgba(59, 130, 246, 0.5); }
+        pre { background: #0d0d14; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; overflow-x: auto; font-size: 13px; line-height: 1.6; }
+        .code-kql { border-left: 3px solid #10b981; }
+        .copy-btn { position: absolute; top: 8px; right: 8px; padding: 6px; border-radius: 6px; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-secondary); cursor: pointer; }
+        .copy-btn:hover { color: white; border-color: var(--accent-blue); }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        .keyword { color: #ff7b72; }
+        .string { color: #a5d6ff; }
+        .comment { color: #8b949e; font-style: italic; }
+        .function { color: #d2a8ff; }
+        .number { color: #79c0ff; }
+    </style>
+</head>
+<body class="hero-bg">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-[#2a2a3e]">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <div><h1 class="text-lg font-bold text-white">RSA → Sentinel</h1></div>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="../index.html" class="nav-link font-medium">Home</a>
+                    <a href="overview.html" class="nav-link font-medium">Overview</a>
+                    <a href="defender-stack.html" class="nav-link font-medium text-blue-400">Defender XDR</a>
+                    <a href="rules-catalog.html" class="nav-link font-medium">Rules</a>
+                    <a href="dlp-migration.html" class="nav-link font-medium">DLP</a>
+                    <a href="playbooks.html" class="nav-link font-medium">Playbooks</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                    <a href="../index.html" class="hover:text-blue-400">Home</a>
+                    <span>/</span>
+                    <span class="text-gray-400">Microsoft Defender XDR Stack</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Microsoft Defender XDR Stack</h1>
+                <p class="text-xl text-gray-400 max-w-3xl mb-6">
+                    Unified Extended Detection and Response (XDR) platform integrating endpoint, identity, cloud, and email security with Microsoft Sentinel SIEM.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="badge badge-blue">6 Defender Products</span>
+                    <span class="badge badge-green">Unified Incidents</span>
+                    <span class="badge badge-purple">Cross-Product Hunting</span>
+                </div>
+            </div>
+
+            <!-- XDR Architecture Overview -->
+            <div class="card p-8 mb-8">
+                <h2 class="text-2xl font-bold text-white mb-6">Unified XDR Architecture</h2>
+                <pre class="text-sm text-gray-300 leading-relaxed">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                           MICROSOFT 365 DEFENDER PORTAL                              │
+│                         (Unified XDR Experience)                                     │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│   ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐           │
+│   │   DEFENDER   │  │   DEFENDER   │  │   DEFENDER   │  │   DEFENDER   │           │
+│   │     FOR      │  │     FOR      │  │     FOR      │  │  FOR CLOUD   │           │
+│   │   ENDPOINT   │  │   IDENTITY   │  │  OFFICE 365  │  │    APPS      │           │
+│   │    (MDE)     │  │    (MDI)     │  │    (MDO)     │  │   (MCAS)     │           │
+│   └──────┬───────┘  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘           │
+│          │                 │                 │                 │                    │
+│          ▼                 ▼                 ▼                 ▼                    │
+│   ┌──────────────────────────────────────────────────────────────────────┐         │
+│   │                    UNIFIED INCIDENT CORRELATION                       │         │
+│   │              (Automatic Attack Chain Reconstruction)                  │         │
+│   └──────────────────────────────────────────────────────────────────────┘         │
+│                                      │                                              │
+│                                      ▼                                              │
+│   ┌──────────────────────────────────────────────────────────────────────┐         │
+│   │                      MICROSOFT SENTINEL                               │         │
+│   │          (SIEM + SOAR + Advanced Analytics + Hunting)                │         │
+│   └──────────────────────────────────────────────────────────────────────┘         │
+│                                      │                                              │
+│          ┌───────────────────────────┼───────────────────────────┐                 │
+│          ▼                           ▼                           ▼                 │
+│   ┌──────────────┐           ┌──────────────┐           ┌──────────────┐          │
+│   │   DEFENDER   │           │    ENTRA     │           │   PURVIEW    │          │
+│   │  FOR CLOUD   │           │      ID      │           │     DLP      │          │
+│   │   (MDC)      │           │  PROTECTION  │           │              │          │
+│   └──────────────┘           └──────────────┘           └──────────────┘          │
+│                                                                                     │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                </pre>
+            </div>
+
+            <!-- Defender Products Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <!-- MDE -->
+                <div class="card defender-card p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-semibold">Defender for Endpoint</h3>
+                            <span class="badge badge-green text-xs">185K Endpoints</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">Enterprise endpoint protection platform with EDR, threat hunting, and automated investigation.</p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span class="text-gray-500">Tables:</span><span class="text-cyan-400 mono">Device*Events</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Rules:</span><span class="text-white">78 analytics</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Daily Events:</span><span class="text-white">~15M</span></div>
+                    </div>
+                </div>
+
+                <!-- MDI -->
+                <div class="card defender-card p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-semibold">Defender for Identity</h3>
+                            <span class="badge badge-green text-xs">Active</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">Cloud-based security solution for Active Directory identity threat detection.</p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span class="text-gray-500">Tables:</span><span class="text-cyan-400 mono">IdentityLogon*</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Detections:</span><span class="text-white">DCSync, PtH, PtT</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">DCs Monitored:</span><span class="text-white">24</span></div>
+                    </div>
+                </div>
+
+                <!-- MDO -->
+                <div class="card defender-card p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-semibold">Defender for Office 365</h3>
+                            <span class="badge badge-green text-xs">Plan 2</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">Email and collaboration security with Safe Links, Safe Attachments, and anti-phishing.</p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span class="text-gray-500">Tables:</span><span class="text-cyan-400 mono">EmailEvents</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Mailboxes:</span><span class="text-white">15,000</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Phishing Blocked:</span><span class="text-white">~2K/day</span></div>
+                    </div>
+                </div>
+
+                <!-- MCAS -->
+                <div class="card defender-card p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-semibold">Defender for Cloud Apps</h3>
+                            <span class="badge badge-green text-xs">CASB</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">Cloud Access Security Broker for SaaS app visibility, protection, and governance.</p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span class="text-gray-500">Tables:</span><span class="text-cyan-400 mono">CloudAppEvents</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Apps Connected:</span><span class="text-white">Salesforce, Box</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Policies:</span><span class="text-white">45 active</span></div>
+                    </div>
+                </div>
+
+                <!-- MDC -->
+                <div class="card defender-card p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-semibold">Defender for Cloud</h3>
+                            <span class="badge badge-green text-xs">CSPM + CWPP</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">Cloud security posture management and workload protection for Azure, AWS, GCP.</p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span class="text-gray-500">Tables:</span><span class="text-cyan-400 mono">SecurityAlert</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Subscriptions:</span><span class="text-white">12 Azure</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Secure Score:</span><span class="text-white">78%</span></div>
+                    </div>
+                </div>
+
+                <!-- Entra ID Protection -->
+                <div class="card defender-card p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-pink-500/20 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-semibold">Entra ID Protection</h3>
+                            <span class="badge badge-green text-xs">P2 License</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">Identity risk detection with automated remediation and Conditional Access integration.</p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span class="text-gray-500">Tables:</span><span class="text-cyan-400 mono">AADRiskyUsers</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Risk Policies:</span><span class="text-white">User + Sign-in</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Users Protected:</span><span class="text-white">15,000</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cross-Product KQL Query -->
+            <div class="card p-8 mb-8">
+                <h2 class="text-2xl font-bold text-white mb-4">Cross-Product Threat Hunting</h2>
+                <p class="text-gray-400 mb-6">Advanced hunting query correlating signals across MDE, MDI, MDO, and Sentinel.</p>
+                
+                <div class="relative">
+                    <button class="copy-btn" onclick="copyCode(this)">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    </button>
+                    <pre class="code-kql"><span class="comment">// Cross-Product Attack Investigation</span>
+<span class="comment">// Correlate email → endpoint → identity signals</span>
+
+<span class="keyword">let</span> suspiciousUser = <span class="string">"user@company.com"</span>;
+<span class="keyword">let</span> timeWindow = <span class="number">24h</span>;
+
+<span class="comment">// Stage 1: Check for phishing emails received</span>
+<span class="keyword">let</span> phishingEmails = EmailEvents
+    | <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(timeWindow)
+    | <span class="keyword">where</span> RecipientEmailAddress == suspiciousUser
+    | <span class="keyword">where</span> ThreatTypes <span class="keyword">has</span> <span class="string">"Phish"</span> <span class="keyword">or</span> DeliveryAction == <span class="string">"Delivered"</span>
+    | <span class="keyword">project</span> EmailTime = TimeGenerated, Subject, SenderFromAddress, NetworkMessageId;
+
+<span class="comment">// Stage 2: Check for suspicious file downloads</span>
+<span class="keyword">let</span> fileDownloads = DeviceFileEvents
+    | <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(timeWindow)
+    | <span class="keyword">where</span> InitiatingProcessAccountUpn == suspiciousUser
+    | <span class="keyword">where</span> ActionType == <span class="string">"FileCreated"</span>
+    | <span class="keyword">where</span> FileName <span class="keyword">endswith</span> <span class="string">".exe"</span> <span class="keyword">or</span> FileName <span class="keyword">endswith</span> <span class="string">".dll"</span>
+    | <span class="keyword">project</span> FileTime = TimeGenerated, FileName, FolderPath, SHA256;
+
+<span class="comment">// Stage 3: Check for process execution</span>
+<span class="keyword">let</span> processExec = DeviceProcessEvents
+    | <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(timeWindow)
+    | <span class="keyword">where</span> InitiatingProcessAccountUpn == suspiciousUser
+    | <span class="keyword">where</span> FileName <span class="keyword">in~</span> (<span class="string">"powershell.exe"</span>, <span class="string">"cmd.exe"</span>, <span class="string">"wscript.exe"</span>)
+    | <span class="keyword">project</span> ProcTime = TimeGenerated, FileName, ProcessCommandLine;
+
+<span class="comment">// Stage 4: Check identity anomalies</span>
+<span class="keyword">let</span> identityRisk = SigninLogs
+    | <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(timeWindow)
+    | <span class="keyword">where</span> UserPrincipalName == suspiciousUser
+    | <span class="keyword">where</span> RiskLevelDuringSignIn <span class="keyword">in</span> (<span class="string">"medium"</span>, <span class="string">"high"</span>)
+    | <span class="keyword">project</span> SigninTime = TimeGenerated, IPAddress, RiskLevelDuringSignIn, Location;
+
+<span class="comment">// Combine all signals into timeline</span>
+phishingEmails
+| <span class="keyword">join kind</span>=fullouter (fileDownloads) <span class="keyword">on</span> $left.EmailTime == $right.FileTime
+| <span class="keyword">join kind</span>=fullouter (processExec) <span class="keyword">on</span> $left.EmailTime == $right.ProcTime
+| <span class="keyword">join kind</span>=fullouter (identityRisk) <span class="keyword">on</span> $left.EmailTime == $right.SigninTime
+| <span class="keyword">project</span>
+    InvestigatedUser = suspiciousUser,
+    PhishingEmail = Subject,
+    Sender = SenderFromAddress,
+    SuspiciousFile = FileName,
+    ProcessExecuted = FileName1,
+    CommandLine = ProcessCommandLine,
+    RiskySignIn = RiskLevelDuringSignIn,
+    SignInIP = IPAddress</pre>
+                </div>
+            </div>
+
+            <!-- Integration Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="card p-6 text-center">
+                    <div class="text-3xl font-bold text-blue-400 mb-2">6</div>
+                    <p class="text-gray-400 text-sm">Defender Products</p>
+                </div>
+                <div class="card p-6 text-center">
+                    <div class="text-3xl font-bold text-green-400 mb-2">12</div>
+                    <p class="text-gray-400 text-sm">Data Connectors</p>
+                </div>
+                <div class="card p-6 text-center">
+                    <div class="text-3xl font-bold text-purple-400 mb-2">305</div>
+                    <p class="text-gray-400 text-sm">Analytics Rules</p>
+                </div>
+                <div class="card p-6 text-center">
+                    <div class="text-3xl font-bold text-cyan-400 mb-2">~50M</div>
+                    <p class="text-gray-400 text-sm">Daily Events</p>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <a href="casb-salesforce.html" class="card p-6 hover:border-cyan-500/50 transition-colors">
+                    <h3 class="text-white font-semibold mb-2">Salesforce CASB Integration →</h3>
+                    <p class="text-gray-400 text-sm">Defender for Cloud Apps protecting Salesforce CRM data</p>
+                </a>
+                <a href="dlp-migration.html" class="card p-6 hover:border-purple-500/50 transition-colors">
+                    <h3 class="text-white font-semibold mb-2">DLP Migration →</h3>
+                    <p class="text-gray-400 text-sm">Symantec DLP to Microsoft Purview migration</p>
+                </a>
+                <a href="rules-catalog.html" class="card p-6 hover:border-blue-500/50 transition-colors">
+                    <h3 class="text-white font-semibold mb-2">Detection Rules →</h3>
+                    <p class="text-gray-400 text-sm">Complete catalog of migrated analytics rules</p>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function copyCode(btn) {
+            const pre = btn.nextElementSibling;
+            navigator.clipboard.writeText(pre.textContent).then(() => {
+                btn.innerHTML = '<svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+                setTimeout(() => {
+                    btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

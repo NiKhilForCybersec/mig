@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salesforce CASB Integration - Defender for Cloud Apps</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0a0f; --bg-secondary: #12121a; --bg-tertiary: #1a1a2e; --accent-blue: #3b82f6; --text-primary: #f8fafc; --text-secondary: #94a3b8; --border-color: #2a2a3e; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); margin: 0; min-height: 100vh; }
+        code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+        .hero-bg { background: radial-gradient(ellipse at 30% 20%, rgba(6, 182, 212, 0.12) 0%, transparent 50%), var(--bg-primary); }
+        .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; }
+        .nav-link { color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+        .nav-link:hover { color: var(--text-primary); }
+        .badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+        .badge-cyan { background: rgba(6, 182, 212, 0.2); color: #22d3ee; }
+        .badge-green { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .badge-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .badge-purple { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .badge-orange { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        pre { background: #0d0d14; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; overflow-x: auto; font-size: 13px; line-height: 1.6; }
+        .code-kql { border-left: 3px solid #10b981; }
+        .copy-btn { position: absolute; top: 8px; right: 8px; padding: 6px; border-radius: 6px; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-secondary); cursor: pointer; }
+        .copy-btn:hover { color: white; border-color: var(--accent-blue); }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        .keyword { color: #ff7b72; }
+        .string { color: #a5d6ff; }
+        .comment { color: #8b949e; font-style: italic; }
+        .function { color: #d2a8ff; }
+        .number { color: #79c0ff; }
+        .feature-card { transition: all 0.3s ease; }
+        .feature-card:hover { transform: translateY(-2px); border-color: rgba(6, 182, 212, 0.5); }
+    </style>
+</head>
+<body class="hero-bg">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-[#2a2a3e]">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <div><h1 class="text-lg font-bold text-white">RSA → Sentinel</h1></div>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="../index.html" class="nav-link font-medium">Home</a>
+                    <a href="overview.html" class="nav-link font-medium">Overview</a>
+                    <a href="defender-stack.html" class="nav-link font-medium">Defender XDR</a>
+                    <a href="rules-catalog.html" class="nav-link font-medium">Rules</a>
+                    <a href="dlp-migration.html" class="nav-link font-medium">DLP</a>
+                    <a href="playbooks.html" class="nav-link font-medium">Playbooks</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                    <a href="../index.html" class="hover:text-blue-400">Home</a>
+                    <span>/</span>
+                    <a href="defender-stack.html" class="hover:text-blue-400">Defender XDR</a>
+                    <span>/</span>
+                    <span class="text-gray-400">Salesforce CASB</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Salesforce CASB Integration</h1>
+                <p class="text-xl text-gray-400 max-w-3xl mb-6">
+                    Microsoft Defender for Cloud Apps (MCAS) integration with Salesforce for comprehensive CRM security, session controls, and DLP enforcement.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="badge badge-cyan">API Connector</span>
+                    <span class="badge badge-green">Session Controls</span>
+                    <span class="badge badge-purple">DLP Policies</span>
+                    <span class="badge badge-orange">App Governance</span>
+                </div>
+            </div>
+
+            <!-- Integration Architecture -->
+            <div class="card p-8 mb-8">
+                <h2 class="text-2xl font-bold text-white mb-6">Salesforce CASB Architecture</h2>
+                <pre class="text-sm text-gray-300 leading-relaxed">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                        SALESFORCE CASB PROTECTION ARCHITECTURE                       │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│     USERS                          DEFENDER FOR CLOUD APPS                           │
+│     ─────                          ───────────────────────                           │
+│                                                                                      │
+│   ┌─────────┐                    ┌─────────────────────────────┐                    │
+│   │ Browser │───────────────────►│    Conditional Access       │                    │
+│   │  User   │                    │    App Control (Proxy)      │                    │
+│   └─────────┘                    └──────────────┬──────────────┘                    │
+│                                                 │                                    │
+│                                                 ▼                                    │
+│                                  ┌─────────────────────────────┐                    │
+│                                  │    Session Policies          │                    │
+│                                  │    • Block downloads         │                    │
+│                                  │    • Prevent copy/paste      │                    │
+│                                  │    • Apply watermarks        │                    │
+│                                  │    • Monitor activities      │                    │
+│                                  └──────────────┬──────────────┘                    │
+│                                                 │                                    │
+│                                                 ▼                                    │
+│   ┌─────────────────────────────────────────────────────────────────────┐          │
+│   │                         SALESFORCE CRM                               │          │
+│   │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐  │          │
+│   │  │ Accounts│  │ Contacts│  │  Leads  │  │ Opptys  │  │ Reports │  │          │
+│   │  └─────────┘  └─────────┘  └─────────┘  └─────────┘  └─────────┘  │          │
+│   └────────────────────────────────┬────────────────────────────────────┘          │
+│                                    │                                                 │
+│                                    │ API Connector                                   │
+│                                    ▼                                                 │
+│   ┌─────────────────────────────────────────────────────────────────────┐          │
+│   │                    DEFENDER FOR CLOUD APPS                           │          │
+│   │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐               │          │
+│   │  │   Activity   │  │     DLP      │  │    Threat    │               │          │
+│   │  │    Logs      │  │   Policies   │  │  Detection   │               │          │
+│   │  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘               │          │
+│   └─────────┼─────────────────┼─────────────────┼───────────────────────┘          │
+│             │                 │                 │                                    │
+│             ▼                 ▼                 ▼                                    │
+│   ┌─────────────────────────────────────────────────────────────────────┐          │
+│   │                     MICROSOFT SENTINEL                               │          │
+│   │              CloudAppEvents + SecurityAlert Tables                   │          │
+│   └─────────────────────────────────────────────────────────────────────┘          │
+│                                                                                      │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                </pre>
+            </div>
+
+            <!-- CASB Features -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="card feature-card p-6">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-white font-semibold mb-2">App Discovery</h3>
+                    <p class="text-gray-400 text-sm">Shadow IT discovery for connected apps and OAuth permissions granted to Salesforce.</p>
+                </div>
+
+                <div class="card feature-card p-6">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-white font-semibold mb-2">Session Control</h3>
+                    <p class="text-gray-400 text-sm">Real-time monitoring and control of Salesforce sessions via reverse proxy.</p>
+                </div>
+
+                <div class="card feature-card p-6">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-white font-semibold mb-2">DLP Enforcement</h3>
+                    <p class="text-gray-400 text-sm">Detect and prevent sensitive data exposure in Salesforce records and files.</p>
+                </div>
+
+                <div class="card feature-card p-6">
+                    <div class="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-white font-semibold mb-2">Threat Detection</h3>
+                    <p class="text-gray-400 text-sm">Anomaly detection for impossible travel, mass downloads, and suspicious activities.</p>
+                </div>
+            </div>
+
+            <!-- CASB Policies -->
+            <div class="card p-8 mb-8">
+                <h2 class="text-2xl font-bold text-white mb-6">Salesforce CASB Policies</h2>
+                
+                <div class="space-y-4">
+                    <!-- Policy 1: Mass Download Prevention -->
+                    <div class="p-4 rounded-xl bg-[#1a1a2e] border-l-4 border-red-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-white font-semibold">Mass Download Prevention</h4>
+                            <span class="badge badge-green">Active</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-3">Block report exports exceeding 10,000 records from unmanaged devices.</p>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                            <div><span class="text-gray-500">Type:</span> <span class="text-cyan-400">Session Policy</span></div>
+                            <div><span class="text-gray-500">Action:</span> <span class="text-red-400">Block + Alert</span></div>
+                            <div><span class="text-gray-500">Scope:</span> <span class="text-white">All Users</span></div>
+                            <div><span class="text-gray-500">Severity:</span> <span class="text-orange-400">High</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Policy 2: Sensitive Data DLP -->
+                    <div class="p-4 rounded-xl bg-[#1a1a2e] border-l-4 border-purple-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-white font-semibold">PII/PCI Data Protection</h4>
+                            <span class="badge badge-green">Active</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-3">Detect and quarantine files containing credit card numbers or SSN in Salesforce attachments.</p>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                            <div><span class="text-gray-500">Type:</span> <span class="text-purple-400">File Policy</span></div>
+                            <div><span class="text-gray-500">Action:</span> <span class="text-orange-400">Quarantine</span></div>
+                            <div><span class="text-gray-500">SITs:</span> <span class="text-white">CC, SSN, SIN</span></div>
+                            <div><span class="text-gray-500">Severity:</span> <span class="text-red-400">Critical</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Policy 3: Impossible Travel -->
+                    <div class="p-4 rounded-xl bg-[#1a1a2e] border-l-4 border-blue-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-white font-semibold">Impossible Travel Detection</h4>
+                            <span class="badge badge-green">Active</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-3">Detect logins from geographically impossible locations within short time windows.</p>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                            <div><span class="text-gray-500">Type:</span> <span class="text-blue-400">Anomaly Policy</span></div>
+                            <div><span class="text-gray-500">Action:</span> <span class="text-orange-400">Alert + Require MFA</span></div>
+                            <div><span class="text-gray-500">Scope:</span> <span class="text-white">All Users</span></div>
+                            <div><span class="text-gray-500">Severity:</span> <span class="text-orange-400">High</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Policy 4: OAuth App Control -->
+                    <div class="p-4 rounded-xl bg-[#1a1a2e] border-l-4 border-cyan-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-white font-semibold">Risky OAuth App Control</h4>
+                            <span class="badge badge-green">Active</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-3">Block third-party apps with excessive permissions from connecting to Salesforce.</p>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                            <div><span class="text-gray-500">Type:</span> <span class="text-cyan-400">App Governance</span></div>
+                            <div><span class="text-gray-500">Action:</span> <span class="text-red-400">Revoke + Block</span></div>
+                            <div><span class="text-gray-500">Permissions:</span> <span class="text-white">High-risk</span></div>
+                            <div><span class="text-gray-500">Severity:</span> <span class="text-orange-400">High</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sentinel Integration KQL -->
+            <div class="card p-8 mb-8">
+                <h2 class="text-2xl font-bold text-white mb-4">Sentinel Integration Query</h2>
+                <p class="text-gray-400 mb-6">Hunt for Salesforce security events from Defender for Cloud Apps in Microsoft Sentinel.</p>
+                
+                <div class="relative">
+                    <button class="copy-btn" onclick="copyCode(this)">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    </button>
+                    <pre class="code-kql"><span class="comment">// Salesforce CASB Events from Defender for Cloud Apps</span>
+<span class="comment">// Data source: CloudAppEvents table</span>
+
+CloudAppEvents
+| <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(<span class="number">24h</span>)
+| <span class="keyword">where</span> Application == <span class="string">"Salesforce"</span>
+| <span class="keyword">extend</span> 
+    EventCategory = <span class="function">case</span>(
+        ActionType <span class="keyword">has</span> <span class="string">"Download"</span>, <span class="string">"Data Exfiltration"</span>,
+        ActionType <span class="keyword">has</span> <span class="string">"Login"</span>, <span class="string">"Authentication"</span>,
+        ActionType <span class="keyword">has</span> <span class="string">"Permission"</span>, <span class="string">"Privilege Change"</span>,
+        ActionType <span class="keyword">has</span> <span class="string">"Delete"</span>, <span class="string">"Data Destruction"</span>,
+        <span class="string">"Other"</span>
+    ),
+    RiskLevel = <span class="function">case</span>(
+        IsAnomaly == <span class="keyword">true</span>, <span class="string">"High"</span>,
+        ActionType <span class="keyword">has_any</span> (<span class="string">"MassDownload"</span>, <span class="string">"ImpossibleTravel"</span>), <span class="string">"Critical"</span>,
+        <span class="string">"Medium"</span>
+    )
+| <span class="keyword">project</span>
+    TimeGenerated,
+    AccountDisplayName,
+    ActionType,
+    EventCategory,
+    RiskLevel,
+    IPAddress,
+    CountryCode,
+    City,
+    IsAnomaly,
+    ActivityObjects
+| <span class="keyword">order by</span> TimeGenerated <span class="keyword">desc</span></pre>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="card p-6 text-center">
+                    <div class="text-3xl font-bold text-cyan-400 mb-2">45</div>
+                    <p class="text-gray-400 text-sm">CASB Policies</p>
+                </div>
+                <div class="card p-6 text-center">
+                    <div class="text-3xl font-bold text-green-400 mb-2">~1.2M</div>
+                    <p class="text-gray-400 text-sm">Daily SF Events</p>
+                </div>
+                <div class="card p-6 text-center">
+                    <div class="text-3xl font-bold text-purple-400 mb-2">28</div>
+                    <p class="text-gray-400 text-sm">Sentinel Rules</p>
+                </div>
+                <div class="card p-6 text-center">
+                    <div class="text-3xl font-bold text-orange-400 mb-2">15</div>
+                    <p class="text-gray-400 text-sm">OAuth Apps Blocked</p>
+                </div>
+            </div>
+
+            <!-- Related Links -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <a href="rules-salesforce.html" class="card p-6 hover:border-cyan-500/50 transition-colors">
+                    <h3 class="text-white font-semibold mb-2">Salesforce Detection Rules →</h3>
+                    <p class="text-gray-400 text-sm">KQL analytics rules for Salesforce Shield events</p>
+                </a>
+                <a href="playbooks.html" class="card p-6 hover:border-purple-500/50 transition-colors">
+                    <h3 class="text-white font-semibold mb-2">Salesforce Playbooks →</h3>
+                    <p class="text-gray-400 text-sm">Automated response for Salesforce incidents</p>
+                </a>
+                <a href="dlp-migration.html" class="card p-6 hover:border-blue-500/50 transition-colors">
+                    <h3 class="text-white font-semibold mb-2">← DLP Migration</h3>
+                    <p class="text-gray-400 text-sm">Symantec to Purview DLP migration</p>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function copyCode(btn) {
+            const pre = btn.nextElementSibling;
+            navigator.clipboard.writeText(pre.textContent).then(() => {
+                btn.innerHTML = '<svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+                setTimeout(() => {
+                    btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

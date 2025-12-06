@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Tools - RSA to Sentinel Migration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0a0f; --bg-secondary: #12121a; --bg-tertiary: #1a1a2e; --accent-blue: #3b82f6; --text-primary: #f8fafc; --text-secondary: #94a3b8; --border-color: #2a2a3e; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); margin: 0; min-height: 100vh; }
+        code, pre, .mono, textarea { font-family: 'JetBrains Mono', monospace; }
+        .hero-bg { background: radial-gradient(ellipse at 20% 30%, rgba(99, 102, 241, 0.1) 0%, transparent 50%), var(--bg-primary); }
+        .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; }
+        .nav-link { position: relative; color: var(--text-secondary); transition: color 0.2s ease; text-decoration: none; }
+        .nav-link:hover { color: var(--text-primary); }
+        .badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+        .badge-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .badge-green { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .badge-purple { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .badge-orange { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        textarea { background: #0d0d14; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; color: var(--text-primary); font-size: 13px; line-height: 1.6; resize: vertical; }
+        textarea:focus { outline: none; border-color: var(--accent-blue); }
+        pre { background: #0d0d14; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; overflow-x: auto; font-size: 13px; line-height: 1.6; }
+        .code-kql { border-left: 3px solid #10b981; }
+        .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); color: white; padding: 12px 24px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; transition: all 0.3s; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4); }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        .keyword { color: #ff7b72; }
+        .string { color: #a5d6ff; }
+        .comment { color: #8b949e; }
+        .function { color: #d2a8ff; }
+        .number { color: #79c0ff; }
+    </style>
+</head>
+<body class="hero-bg">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-[#2a2a3e]">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <div><h1 class="text-lg font-bold text-white">RSA → Sentinel</h1></div>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="../index.html" class="nav-link font-medium">Home</a>
+                    <a href="overview.html" class="nav-link font-medium">Overview</a>
+                    <a href="defender-stack.html" class="nav-link font-medium">Defender XDR</a>
+                    <a href="rules-catalog.html" class="nav-link font-medium">Rules</a>
+                    <a href="dlp-migration.html" class="nav-link font-medium">DLP</a>
+                    <a href="playbooks.html" class="nav-link font-medium">Playbooks</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                    <a href="../index.html" class="hover:text-blue-400">Home</a>
+                    <span>/</span>
+                    <span class="text-gray-400">Interactive Tools</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Interactive Tools</h1>
+                <p class="text-xl text-gray-400 max-w-3xl">
+                    Tools to assist with RSA NetWitness to Microsoft Sentinel migration, including a live rule translator and reference tables.
+                </p>
+            </div>
+
+            <!-- RSA to KQL Translator -->
+            <div class="card p-8 mb-8" id="translator">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">RSA to KQL Translator</h2>
+                        <p class="text-gray-400">Convert RSA NetWitness ESA rules to Microsoft Sentinel KQL</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">RSA NetWitness ESA Rule</label>
+                        <textarea id="rsaInput" rows="15" placeholder="Paste your RSA ESA rule here...
+
+Example:
+@RSA_Rule &quot;Brute_Force_Detection&quot;
+SELECT * FROM Event
+WHERE 
+    event_category = 'authentication' AND
+    event_outcome = 'failure'
+GROUP BY source_ip
+HAVING COUNT(*) >= 10
+WINDOW SLIDING 5 MINUTES
+ALERT severity = 'high'"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">Microsoft Sentinel KQL</label>
+                        <pre id="kqlOutput" class="code-kql h-[370px] overflow-auto"><span class="comment">// Translated KQL will appear here...</span>
+
+<span class="comment">// Click "Translate" to convert your RSA rule</span></pre>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <button onclick="translateRule()" class="btn-primary flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                        Translate to KQL
+                    </button>
+                    <button onclick="copyKQL()" class="px-6 py-3 rounded-lg bg-[#1a1a2e] border border-[#2a2a3e] text-gray-300 font-medium hover:border-blue-500 transition-all flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                        </svg>
+                        Copy KQL
+                    </button>
+                    <button onclick="loadExample()" class="px-6 py-3 rounded-lg bg-[#1a1a2e] border border-[#2a2a3e] text-gray-300 font-medium hover:border-blue-500 transition-all">
+                        Load Example
+                    </button>
+                </div>
+            </div>
+
+            <!-- Translation Reference -->
+            <div class="card p-8 mb-8">
+                <h2 class="text-2xl font-bold text-white mb-6">Translation Reference</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Keywords -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-blue-400 mb-4">Keywords</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="border-b border-[#2a2a3e]">
+                                        <th class="text-left py-2 px-3 text-gray-400">RSA ESA</th>
+                                        <th class="text-left py-2 px-3 text-gray-400">Sentinel KQL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">SELECT</td>
+                                        <td class="py-2 px-3 text-green-400 mono">(Query starts with table)</td>
+                                    </tr>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">FROM Event</td>
+                                        <td class="py-2 px-3 text-green-400 mono">where TimeGenerated</td>
+                                    </tr>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">WHERE</td>
+                                        <td class="py-2 px-3 text-green-400 mono">| where</td>
+                                    </tr>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">GROUP BY</td>
+                                        <td class="py-2 px-3 text-green-400 mono">| summarize ... by</td>
+                                    </tr>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">HAVING</td>
+                                        <td class="py-2 px-3 text-green-400 mono">| where (after summarize)</td>
+                                    </tr>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">WINDOW SLIDING</td>
+                                        <td class="py-2 px-3 text-green-400 mono">ago(Xm/h/d)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 px-3 text-orange-400 mono">ALERT</td>
+                                        <td class="py-2 px-3 text-green-400 mono">| extend Severity =</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Fields -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-purple-400 mb-4">Field Mappings</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="border-b border-[#2a2a3e]">
+                                        <th class="text-left py-2 px-3 text-gray-400">RSA Field</th>
+                                        <th class="text-left py-2 px-3 text-gray-400">Sentinel Field</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">source_ip</td>
+                                        <td class="py-2 px-3 text-green-400 mono">SourceIP / IPAddress</td>
+                                    </tr>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">destination_ip</td>
+                                        <td class="py-2 px-3 text-green-400 mono">DestinationIP</td>
+                                    </tr>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">user_name</td>
+                                        <td class="py-2 px-3 text-green-400 mono">UserPrincipalName</td>
+                                    </tr>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">event_category</td>
+                                        <td class="py-2 px-3 text-green-400 mono">DeviceEventClassId</td>
+                                    </tr>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">event_outcome</td>
+                                        <td class="py-2 px-3 text-green-400 mono">ResultType</td>
+                                    </tr>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">process_name</td>
+                                        <td class="py-2 px-3 text-green-400 mono">FileName</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 px-3 text-orange-400 mono">command_line</td>
+                                        <td class="py-2 px-3 text-green-400 mono">ProcessCommandLine</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Tables -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-cyan-400 mb-4">Table Mappings</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="border-b border-[#2a2a3e]">
+                                        <th class="text-left py-2 px-3 text-gray-400">RSA Source</th>
+                                        <th class="text-left py-2 px-3 text-gray-400">Sentinel Table</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">Event</td>
+                                        <td class="py-2 px-3 text-green-400 mono">CommonSecurityLog</td>
+                                    </tr>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">authentication</td>
+                                        <td class="py-2 px-3 text-green-400 mono">SigninLogs</td>
+                                    </tr>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">network</td>
+                                        <td class="py-2 px-3 text-green-400 mono">CommonSecurityLog</td>
+                                    </tr>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">endpoint</td>
+                                        <td class="py-2 px-3 text-green-400 mono">DeviceProcessEvents</td>
+                                    </tr>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">dns</td>
+                                        <td class="py-2 px-3 text-green-400 mono">DnsEvents</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 px-3 text-orange-400 mono">azure</td>
+                                        <td class="py-2 px-3 text-green-400 mono">AzureActivity</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Operators -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-green-400 mb-4">Operators</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="border-b border-[#2a2a3e]">
+                                        <th class="text-left py-2 px-3 text-gray-400">RSA</th>
+                                        <th class="text-left py-2 px-3 text-gray-400">KQL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">MATCHES</td>
+                                        <td class="py-2 px-3 text-green-400 mono">matches regex</td>
+                                    </tr>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">LIKE</td>
+                                        <td class="py-2 px-3 text-green-400 mono">contains</td>
+                                    </tr>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">NOT IN</td>
+                                        <td class="py-2 px-3 text-green-400 mono">!in</td>
+                                    </tr>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">IN</td>
+                                        <td class="py-2 px-3 text-green-400 mono">in</td>
+                                    </tr>
+                                    <tr class="border-b border-[#2a2a3e]/50">
+                                        <td class="py-2 px-3 text-orange-400 mono">AND</td>
+                                        <td class="py-2 px-3 text-green-400 mono">and</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 px-3 text-orange-400 mono">OR</td>
+                                        <td class="py-2 px-3 text-green-400 mono">or</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <a href="parsers.html" class="p-5 rounded-xl bg-[#12121a] border border-[#2a2a3e] hover:border-yellow-500 transition-all">
+                    <h4 class="text-white font-semibold mb-1">Custom Parsers</h4>
+                    <p class="text-gray-400 text-sm">KQL functions for log normalization</p>
+                </a>
+                <a href="rules-catalog.html" class="p-5 rounded-xl bg-[#12121a] border border-[#2a2a3e] hover:border-cyan-500 transition-all">
+                    <h4 class="text-white font-semibold mb-1">Rule Catalog</h4>
+                    <p class="text-gray-400 text-sm">Browse all 302 translated rules</p>
+                </a>
+                <a href="metrics.html" class="p-5 rounded-xl bg-[#12121a] border border-[#2a2a3e] hover:border-pink-500 transition-all">
+                    <h4 class="text-white font-semibold mb-1">Migration Metrics</h4>
+                    <p class="text-gray-400 text-sm">KPIs and coverage analysis</p>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const fieldMappings = {
+            'source_ip': 'SourceIP',
+            'destination_ip': 'DestinationIP',
+            'user_name': 'UserPrincipalName',
+            'event_category': 'DeviceEventClassId',
+            'event_outcome': 'ResultType',
+            'bytes_out': 'SentBytes',
+            'process_name': 'FileName',
+            'command_line': 'ProcessCommandLine',
+            'destination_user': 'TargetUserName',
+            'logon_type': 'LogonType'
+        };
+
+        const tableMappings = {
+            'authentication': 'SigninLogs',
+            'network': 'CommonSecurityLog',
+            'endpoint': 'DeviceProcessEvents',
+            'dns': 'DnsEvents',
+            'vpn': 'SigninLogs',
+            'azure': 'AzureActivity'
+        };
+
+        function translateRule() {
+            const input = document.getElementById('rsaInput').value;
+            const output = document.getElementById('kqlOutput');
+            
+            if (!input.trim()) {
+                output.innerHTML = '<span class="comment">// Please enter an RSA rule to translate</span>';
+                return;
+            }
+
+            let kql = [];
+            
+            // Extract rule name
+            const ruleNameMatch = input.match(/@RSA_Rule\s+"([^"]+)"/);
+            const ruleName = ruleNameMatch ? ruleNameMatch[1] : 'Translated_Rule';
+            
+            kql.push(`<span class="comment">// Rule: ${ruleName}</span>`);
+            kql.push(`<span class="comment">// Translated from RSA NetWitness ESA</span>`);
+            kql.push('');
+
+            // Detect table based on event_category
+            let table = 'CommonSecurityLog';
+            const categoryMatch = input.match(/event_category\s*=\s*'([^']+)'/);
+            if (categoryMatch && tableMappings[categoryMatch[1]]) {
+                table = tableMappings[categoryMatch[1]];
+            }
+
+            // Extract time window
+            let timeWindow = '1h';
+            const windowMatch = input.match(/WINDOW\s+SLIDING\s+(\d+)\s+(MINUTES?|HOURS?|DAYS?)/i);
+            if (windowMatch) {
+                const value = windowMatch[1];
+                const unit = windowMatch[2].toLowerCase();
+                if (unit.startsWith('minute')) timeWindow = value + 'm';
+                else if (unit.startsWith('hour')) timeWindow = value + 'h';
+                else if (unit.startsWith('day')) timeWindow = value + 'd';
+            }
+
+            kql.push(`<span class="keyword">let</span> timeWindow = <span class="number">${timeWindow}</span>;`);
+            kql.push('');
+            kql.push(`${table}`);
+            kql.push(`| <span class="keyword">where</span> TimeGenerated > <span class="function">ago</span>(timeWindow)`);
+
+            // Process WHERE conditions
+            const whereMatch = input.match(/WHERE\s+([\s\S]*?)(?=GROUP BY|HAVING|WINDOW|ALERT|$)/i);
+            if (whereMatch) {
+                let conditions = whereMatch[1].trim();
+                
+                // Replace field names
+                for (const [rsaField, kqlField] of Object.entries(fieldMappings)) {
+                    const regex = new RegExp(rsaField, 'gi');
+                    conditions = conditions.replace(regex, kqlField);
+                }
+                
+                // Clean up operators
+                conditions = conditions.replace(/\bAND\b/gi, 'and');
+                conditions = conditions.replace(/\bOR\b/gi, 'or');
+                conditions = conditions.replace(/\bIN\b/gi, 'in');
+                conditions = conditions.replace(/\bNOT IN\b/gi, '!in');
+                conditions = conditions.replace(/\bMATCHES\b/gi, 'matches regex');
+                
+                // Split into lines
+                const conditionLines = conditions.split(/\s+AND\s+/i);
+                conditionLines.forEach((cond, i) => {
+                    cond = cond.trim().replace(/^AND\s+/i, '');
+                    if (cond) {
+                        kql.push(`| <span class="keyword">where</span> ${cond}`);
+                    }
+                });
+            }
+
+            // Process GROUP BY
+            const groupMatch = input.match(/GROUP BY\s+([^\n]+)/i);
+            if (groupMatch) {
+                let groupFields = groupMatch[1].trim();
+                for (const [rsaField, kqlField] of Object.entries(fieldMappings)) {
+                    const regex = new RegExp(rsaField, 'gi');
+                    groupFields = groupFields.replace(regex, kqlField);
+                }
+                
+                // Extract HAVING threshold
+                const havingMatch = input.match(/HAVING\s+COUNT\(\*\)\s*>=?\s*(\d+)/i);
+                const threshold = havingMatch ? havingMatch[1] : '10';
+                
+                kql.push(`| <span class="function">summarize</span>`);
+                kql.push(`    EventCount = <span class="function">count</span>(),`);
+                kql.push(`    FirstEvent = <span class="function">min</span>(TimeGenerated),`);
+                kql.push(`    LastEvent = <span class="function">max</span>(TimeGenerated)`);
+                kql.push(`    <span class="keyword">by</span> ${groupFields}`);
+                kql.push(`| <span class="keyword">where</span> EventCount >= <span class="number">${threshold}</span>`);
+            }
+
+            // Add severity
+            const severityMatch = input.match(/severity\s*=\s*'([^']+)'/i);
+            const severity = severityMatch ? severityMatch[1].charAt(0).toUpperCase() + severityMatch[1].slice(1) : 'Medium';
+            
+            kql.push(`| <span class="keyword">extend</span> Severity = <span class="string">"${severity}"</span>`);
+            
+            // Add MITRE technique if present
+            const mitreMatch = input.match(/technique\s*=\s*'([^']+)'/i);
+            if (mitreMatch) {
+                kql.push(`| <span class="keyword">extend</span> MITRETechnique = <span class="string">"${mitreMatch[1]}"</span>`);
+            }
+
+            output.innerHTML = kql.join('\n');
+        }
+
+        function copyKQL() {
+            const output = document.getElementById('kqlOutput');
+            const text = output.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('KQL copied to clipboard!');
+            });
+        }
+
+        function loadExample() {
+            document.getElementById('rsaInput').value = `@RSA_Rule "Brute_Force_Detection"
+SELECT * FROM Event
+WHERE 
+    event_category = 'authentication' AND
+    event_outcome = 'failure' AND
+    device_type IN ('windows', 'linux', 'activedirectory')
+GROUP BY source_ip, destination_user
+HAVING COUNT(*) >= 10
+WINDOW SLIDING 5 MINUTES
+ALERT severity = 'high', 
+      module = 'authentication',
+      technique = 'T1110'`;
+            translateRule();
+        }
+    </script>
+</body>
+</html>

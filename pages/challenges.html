@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migration Challenges - RSA to Sentinel Migration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0a0f; --bg-secondary: #12121a; --bg-tertiary: #1a1a2e; --accent-blue: #3b82f6; --text-primary: #f8fafc; --text-secondary: #94a3b8; --border-color: #2a2a3e; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); margin: 0; min-height: 100vh; }
+        code, .mono { font-family: 'JetBrains Mono', monospace; }
+        .hero-bg { background: radial-gradient(ellipse at 20% 30%, rgba(239, 68, 68, 0.08) 0%, transparent 50%), var(--bg-primary); }
+        .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; }
+        .nav-link { color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+        .nav-link:hover { color: var(--text-primary); }
+        .badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+        .badge-red { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+        .badge-green { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .badge-orange { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        .issue-box { background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 20px; }
+        .solution-box { background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 20px; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+    </style>
+</head>
+<body class="hero-bg">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-[#2a2a3e]">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <div><h1 class="text-lg font-bold text-white">RSA → Sentinel</h1></div>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="../index.html" class="nav-link font-medium">Home</a>
+                    <a href="overview.html" class="nav-link font-medium">Overview</a>
+                    <a href="defender-stack.html" class="nav-link font-medium">Defender XDR</a>
+                    <a href="rules-catalog.html" class="nav-link font-medium">Rules</a>
+                    <a href="dlp-migration.html" class="nav-link font-medium">DLP</a>
+                    <a href="playbooks.html" class="nav-link font-medium">Playbooks</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                    <a href="../index.html" class="hover:text-blue-400">Home</a>
+                    <span>/</span>
+                    <span class="text-gray-400">Migration Challenges</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Migration Challenges</h1>
+                <p class="text-xl text-gray-400 max-w-3xl">
+                    Key challenges encountered during the RSA NetWitness to Microsoft Sentinel migration and the solutions implemented to overcome them.
+                </p>
+            </div>
+
+            <!-- Challenge 1 -->
+            <div class="card p-8 mb-8">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center flex-shrink-0">
+                        <span class="text-2xl font-bold text-red-400">1</span>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white mb-2">Lua to KQL Translation Complexity</h2>
+                        <p class="text-gray-400">RSA ESA rules written in Lua have fundamentally different paradigms than KQL queries.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="issue-box">
+                        <div class="flex items-center gap-2 mb-3">
+                            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                            <h3 class="text-lg font-semibold text-red-400">Challenge</h3>
+                        </div>
+                        <ul class="space-y-2 text-gray-300">
+                            <li class="flex items-start gap-2">
+                                <span class="text-red-400 mt-1">•</span>
+                                <span>Lua's imperative programming model vs KQL's declarative approach</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-red-400 mt-1">•</span>
+                                <span>Complex state management in RSA rules with no direct KQL equivalent</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-red-400 mt-1">•</span>
+                                <span>Custom Lua functions that required complete reimplementation</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-red-400 mt-1">•</span>
+                                <span>302 rules requiring manual review and translation</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="solution-box">
+                        <div class="flex items-center gap-2 mb-3">
+                            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <h3 class="text-lg font-semibold text-green-400">Solution</h3>
+                        </div>
+                        <ul class="space-y-2 text-gray-300">
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-400 mt-1">✓</span>
+                                <span>Created translation reference guide with keyword/operator mappings</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-400 mt-1">✓</span>
+                                <span>Built automated translator tool for common patterns</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-400 mt-1">✓</span>
+                                <span>Used KQL functions to replicate stateful logic where needed</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-400 mt-1">✓</span>
+                                <span>Implemented tiered approach: batch automated, manual review for complex</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 rounded-lg bg-[#1a1a2e]">
+                    <div class="flex items-center gap-2">
+                        <span class="badge badge-green">Resolved</span>
+                        <span class="text-gray-400 text-sm">All 302 rules successfully translated with 3 new rules added</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 2 -->
+            <div class="card p-8 mb-8">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center flex-shrink-0">
+                        <span class="text-2xl font-bold text-red-400">2</span>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white mb-2">Salesforce Custom Connector Development</h2>
+                        <p class="text-gray-400">No native Sentinel connector for Salesforce Shield Event Monitoring.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="issue-box">
+                        <div class="flex items-center gap-2 mb-3">
+                            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                            <h3 class="text-lg font-semibold text-red-400">Challenge</h3>
+                        </div>
+                        <ul class="space-y-2 text-gray-300">
+                            <li class="flex items-start gap-2">
+                                <span class="text-red-400 mt-1">•</span>
+                                <span>Salesforce Shield uses proprietary Event Monitoring format</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-red-400 mt-1">•</span>
+                                <span>24 existing RSA rules dependent on Salesforce data</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-red-400 mt-1">•</span>
+                                <span>Complex OAuth 2.0 authentication flow required</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-red-400 mt-1">•</span>
+                                <span>High data volume (50+ event types, 1M+ events/day)</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="solution-box">
+                        <div class="flex items-center gap-2 mb-3">
+                            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <h3 class="text-lg font-semibold text-green-400">Solution</h3>
+                        </div>
+                        <ul class="space-y-2 text-gray-300">
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-400 mt-1">✓</span>
+                                <span>Built custom Azure Function connector using Salesforce REST API</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-400 mt-1">✓</span>
+                                <span>Created SalesforceParser KQL function for field normalization</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-400 mt-1">✓</span>
+                                <span>Implemented incremental data collection with checkpoints</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-400 mt-1">✓</span>
+                                <span>Added 4 new Salesforce-specific detection rules</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 rounded-lg bg-[#1a1a2e]">
+                    <div class="flex items-center gap-2">
+                        <span class="badge badge-green">Resolved</span>
+                        <span class="text-gray-400 text-sm">Custom connector ingesting 1.2M events/day with 99.9% reliability</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 3 -->
+            <div class="card p-8 mb-8">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center flex-shrink-0">
+                        <span class="text-2xl font-bold text-red-400">3</span>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white mb-2">Multi-Stage Attack Correlation</h2>
+                        <p class="text-gray-400">RSA's correlation engine had deep state management that KQL cannot directly replicate.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="issue-box">
+                        <div class="flex items-center gap-2 mb-3">
+                            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                            <h3 class="text-lg font-semibold text-red-400">Challenge</h3>
+                        </div>
+                        <ul class="space-y-2 text-gray-300">
+                            <li class="flex items-start gap-2">
+                                <span class="text-red-400 mt-1">•</span>
+                                <span>RSA correlation rules tracked entity state across time windows</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-red-400 mt-1">•</span>
+                                <span>5-stage attack chains requiring temporal sequencing</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-red-400 mt-1">•</span>
+                                <span>Entity pivoting across IP, user, and host dimensions</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-red-400 mt-1">•</span>
+                                <span>Alert fatigue from non-correlated detections</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="solution-box">
+                        <div class="flex items-center gap-2 mb-3">
+                            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <h3 class="text-lg font-semibold text-green-400">Solution</h3>
+                        </div>
+                        <ul class="space-y-2 text-gray-300">
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-400 mt-1">✓</span>
+                                <span>Leveraged Sentinel Fusion ML for automatic attack correlation</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-400 mt-1">✓</span>
+                                <span>Built custom correlation rules using entity behavior analytics</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-400 mt-1">✓</span>
+                                <span>Implemented Watchlists for dynamic entity state tracking</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-400 mt-1">✓</span>
+                                <span>Used incident grouping to reduce alert volume by 40%</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 rounded-lg bg-[#1a1a2e]">
+                    <div class="flex items-center gap-2">
+                        <span class="badge badge-green">Resolved</span>
+                        <span class="text-gray-400 text-sm">88% correlation coverage achieved vs 65% in RSA</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 4 -->
+            <div class="card p-8 mb-8">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center flex-shrink-0">
+                        <span class="text-2xl font-bold text-red-400">4</span>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white mb-2">Parallel Operation During Transition</h2>
+                        <p class="text-gray-400">Running dual SIEM platforms with synchronized detection for 90-day validation period.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="issue-box">
+                        <div class="flex items-center gap-2 mb-3">
+                            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                            <h3 class="text-lg font-semibold text-red-400">Challenge</h3>
+                        </div>
+                        <ul class="space-y-2 text-gray-300">
+                            <li class="flex items-start gap-2">
+                                <span class="text-red-400 mt-1">•</span>
+                                <span>Duplicate alerts from both platforms creating confusion</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-red-400 mt-1">•</span>
+                                <span>SOC analysts required to monitor two interfaces</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-red-400 mt-1">•</span>
+                                <span>Log ingestion costs doubled during parallel period</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-red-400 mt-1">•</span>
+                                <span>Needed metrics comparison for validation</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="solution-box">
+                        <div class="flex items-center gap-2 mb-3">
+                            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <h3 class="text-lg font-semibold text-green-400">Solution</h3>
+                        </div>
+                        <ul class="space-y-2 text-gray-300">
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-400 mt-1">✓</span>
+                                <span>Set RSA to "alert-only" mode, Sentinel as primary response</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-400 mt-1">✓</span>
+                                <span>Built unified dashboard showing both platforms' metrics</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-400 mt-1">✓</span>
+                                <span>Negotiated temporary license extension for parallel run</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-400 mt-1">✓</span>
+                                <span>Created automated comparison reports for validation</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 rounded-lg bg-[#1a1a2e]">
+                    <div class="flex items-center gap-2">
+                        <span class="badge badge-green">Resolved</span>
+                        <span class="text-gray-400 text-sm">90-day parallel run completed, RSA decommissioned on schedule</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 5 -->
+            <div class="card p-8">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center flex-shrink-0">
+                        <span class="text-2xl font-bold text-red-400">5</span>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white mb-2">SOC Team Training and Adoption</h2>
+                        <p class="text-gray-400">Transitioning 24 SOC analysts from RSA/Lua expertise to Microsoft/KQL stack.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="issue-box">
+                        <div class="flex items-center gap-2 mb-3">
+                            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                            <h3 class="text-lg font-semibold text-red-400">Challenge</h3>
+                        </div>
+                        <ul class="space-y-2 text-gray-300">
+                            <li class="flex items-start gap-2">
+                                <span class="text-red-400 mt-1">•</span>
+                                <span>Team had 5+ years of RSA NetWitness expertise</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-red-400 mt-1">•</span>
+                                <span>KQL query language completely new to most analysts</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-red-400 mt-1">•</span>
+                                <span>Different investigation workflows in Sentinel</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-red-400 mt-1">•</span>
+                                <span>Resistance to change from senior team members</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="solution-box">
+                        <div class="flex items-center gap-2 mb-3">
+                            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <h3 class="text-lg font-semibold text-green-400">Solution</h3>
+                        </div>
+                        <ul class="space-y-2 text-gray-300">
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-400 mt-1">✓</span>
+                                <span>Developed comprehensive KQL training program (40 hours)</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-400 mt-1">✓</span>
+                                <span>Created side-by-side RSA/KQL query reference cards</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-400 mt-1">✓</span>
+                                <span>Built saved queries and hunting bookmarks for common tasks</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-green-400 mt-1">✓</span>
+                                <span>Paired junior and senior analysts for knowledge transfer</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 rounded-lg bg-[#1a1a2e]">
+                    <div class="flex items-center gap-2">
+                        <span class="badge badge-green">Resolved</span>
+                        <span class="text-gray-400 text-sm">100% team certified on Sentinel, productivity restored within 30 days</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lessons Learned -->
+            <div class="mt-12">
+                <h2 class="text-2xl font-bold text-white mb-6">Key Lessons Learned</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="p-5 rounded-xl bg-[#12121a] border border-[#2a2a3e]">
+                        <div class="text-3xl mb-3">📋</div>
+                        <h4 class="text-white font-semibold mb-2">Plan for Parallel Operations</h4>
+                        <p class="text-gray-400 text-sm">Budget 90+ days for dual-platform operation to ensure detection parity.</p>
+                    </div>
+                    <div class="p-5 rounded-xl bg-[#12121a] border border-[#2a2a3e]">
+                        <div class="text-3xl mb-3">🔧</div>
+                        <h4 class="text-white font-semibold mb-2">Build Translation Tools Early</h4>
+                        <p class="text-gray-400 text-sm">Automated translators save significant time for repetitive rule patterns.</p>
+                    </div>
+                    <div class="p-5 rounded-xl bg-[#12121a] border border-[#2a2a3e]">
+                        <div class="text-3xl mb-3">👥</div>
+                        <h4 class="text-white font-semibold mb-2">Invest in Training</h4>
+                        <p class="text-gray-400 text-sm">Team adoption is critical - allocate 40+ hours per analyst for training.</p>
+                    </div>
+                    <div class="p-5 rounded-xl bg-[#12121a] border border-[#2a2a3e]">
+                        <div class="text-3xl mb-3">📊</div>
+                        <h4 class="text-white font-semibold mb-2">Define Metrics First</h4>
+                        <p class="text-gray-400 text-sm">Establish KPIs before migration to enable objective comparison.</p>
+                    </div>
+                    <div class="p-5 rounded-xl bg-[#12121a] border border-[#2a2a3e]">
+                        <div class="text-3xl mb-3">🔌</div>
+                        <h4 class="text-white font-semibold mb-2">Custom Connectors Take Time</h4>
+                        <p class="text-gray-400 text-sm">Plan 4-6 weeks for custom connector development and testing.</p>
+                    </div>
+                    <div class="p-5 rounded-xl bg-[#12121a] border border-[#2a2a3e]">
+                        <div class="text-3xl mb-3">🤖</div>
+                        <h4 class="text-white font-semibold mb-2">Leverage Native Capabilities</h4>
+                        <p class="text-gray-400 text-sm">Fusion ML and UEBA can replace complex custom correlation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
