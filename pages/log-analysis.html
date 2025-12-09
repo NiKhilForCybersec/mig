@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Analysis & Query Languages | Security Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Inter', system-ui, sans-serif; }
+        .card { background: linear-gradient(145deg, #12121a, #1a1a2e); border: 1px solid #2a2a3e; }
+        .mnemonic { background: linear-gradient(135deg, #1a1a2e 0%, #2a2a3e 100%); border: 1px solid #f59e0b; }
+        .interview-qa { background: linear-gradient(135deg, #1a1a2e 0%, #1e1e3e 100%); border: 1px solid #8b5cf6; }
+        pre { background: #0d0d14 !important; border-radius: 8px; padding: 16px; overflow-x: auto; font-size: 13px; }
+        code { font-family: 'Fira Code', 'Monaco', monospace; }
+        .kql { border-left: 3px solid #3b82f6; }
+        .spl { border-left: 3px solid #22c55e; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <main class="lg:ml-64 pt-14 lg:pt-0">
+        <div class="max-w-5xl mx-auto px-6 py-12">
+            <!-- Hero -->
+            <section id="overview" class="mb-16">
+                <div class="flex items-center gap-2 text-blue-400 mb-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                    <span class="text-sm font-medium">Log Analysis</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Log Analysis & Query Languages</h1>
+                <p class="text-xl text-gray-400 mb-8">KQL for Microsoft Sentinel, SPL for Splunk - Essential query skills for security operations.</p>
+
+                <div class="flex flex-wrap gap-3 mb-8">
+                    <span class="px-4 py-2 rounded-full bg-blue-500/20 text-blue-400 text-sm font-medium border border-blue-500/30">KQL</span>
+                    <span class="px-4 py-2 rounded-full bg-green-500/20 text-green-400 text-sm font-medium border border-green-500/30">Splunk SPL</span>
+                    <span class="px-4 py-2 rounded-full bg-purple-500/20 text-purple-400 text-sm font-medium border border-purple-500/30">SIEM</span>
+                    <span class="px-4 py-2 rounded-full bg-orange-500/20 text-orange-400 text-sm font-medium border border-orange-500/30">Threat Hunting</span>
+                </div>
+            </section>
+
+            <!-- Master Mnemonic -->
+            <section class="mb-16">
+                <div class="mnemonic rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold text-yellow-400 mb-4">🧠 Query Structure Memory Aid</h2>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-blue-400 font-bold mb-2">KQL Flow: "TWPS"</p>
+                            <p class="text-gray-400 text-sm"><strong>T</strong>able | <strong>W</strong>here | <strong>P</strong>roject | <strong>S</strong>ummarize</p>
+                            <pre class="mt-2 kql"><code class="text-blue-300">SecurityEvent
+| where EventID == 4625
+| project TimeGenerated, Account
+| summarize count() by Account</code></pre>
+                        </div>
+                        <div>
+                            <p class="text-green-400 font-bold mb-2">SPL Flow: "ISST"</p>
+                            <p class="text-gray-400 text-sm"><strong>I</strong>ndex | <strong>S</strong>earch | <strong>S</strong>tats | <strong>T</strong>able</p>
+                            <pre class="mt-2 spl"><code class="text-green-300">index=windows EventCode=4625
+| stats count by Account
+| table Account, count</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- KQL Essentials -->
+            <section id="kql" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></span>
+                    KQL Essentials (Microsoft Sentinel)
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-6">
+                    <h3 class="text-lg font-bold text-blue-400 mb-4">📋 Core Operators</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="text-white font-medium mb-2">Filtering</h4>
+                            <pre class="kql"><code class="text-blue-300">// where - filter rows
+| where TimeGenerated > ago(24h)
+| where EventID == 4625
+| where Account contains "admin"
+| where Account !contains "system"
+| where isnotempty(Account)</code></pre>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-medium mb-2">Selecting Columns</h4>
+                            <pre class="kql"><code class="text-blue-300">// project - select columns
+| project TimeGenerated, Account, Computer
+
+// project-away - remove columns
+| project-away TenantId, Type
+
+// extend - add calculated column
+| extend HourOfDay = datetime_part("hour", TimeGenerated)</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card rounded-2xl p-6 mb-6">
+                    <h3 class="text-lg font-bold text-blue-400 mb-4">📊 Aggregation</h3>
+                    <pre class="kql"><code class="text-blue-300">// summarize - aggregate data
+| summarize count() by Account                    // count per account
+| summarize FailedLogins = count() by bin(TimeGenerated, 1h)  // count per hour
+| summarize dcount(Computer) by Account           // distinct count
+| summarize FirstSeen = min(TimeGenerated), LastSeen = max(TimeGenerated) by Account
+| summarize TotalEvents = count(), UniqueUsers = dcount(Account)</code></pre>
+                </div>
+
+                <div class="card rounded-2xl p-6 mb-6">
+                    <h3 class="text-lg font-bold text-blue-400 mb-4">🔗 Joins & Unions</h3>
+                    <pre class="kql"><code class="text-blue-300">// join - combine tables
+SigninLogs
+| join kind=inner (
+    IdentityInfo | project AccountUPN, Department
+) on $left.UserPrincipalName == $right.AccountUPN
+
+// union - combine results
+SecurityEvent
+| union SigninLogs
+| where TimeGenerated > ago(1h)</code></pre>
+                </div>
+
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-blue-400 mb-4">⏰ Time Functions</h3>
+                    <pre class="kql"><code class="text-blue-300">// Time filtering
+| where TimeGenerated > ago(24h)      // last 24 hours
+| where TimeGenerated > ago(7d)       // last 7 days
+| where TimeGenerated between (datetime(2024-01-01) .. datetime(2024-01-31))
+
+// Time bucketing
+| summarize count() by bin(TimeGenerated, 1h)   // per hour
+| summarize count() by bin(TimeGenerated, 1d)   // per day
+
+// Time extraction
+| extend Hour = datetime_part("hour", TimeGenerated)
+| extend DayOfWeek = dayofweek(TimeGenerated)</code></pre>
+                </div>
+            </section>
+
+            <!-- Splunk SPL -->
+            <section id="spl" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></span>
+                    Splunk SPL Essentials
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-6">
+                    <h3 class="text-lg font-bold text-green-400 mb-4">📋 Core Commands</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="text-white font-medium mb-2">Search & Filter</h4>
+                            <pre class="spl"><code class="text-green-300">// Basic search
+index=windows sourcetype=WinEventLog
+EventCode=4625
+Account="*admin*"
+NOT Account="SYSTEM"
+
+// With time
+index=windows earliest=-24h latest=now
+index=windows earliest="01/01/2024:00:00:00"</code></pre>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-medium mb-2">Field Extraction</h4>
+                            <pre class="spl"><code class="text-green-300">// table - show specific fields
+| table _time, Account, Computer
+
+// fields - keep/remove fields
+| fields Account, Computer
+| fields - _raw, _time
+
+// rename
+| rename Account as UserAccount</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card rounded-2xl p-6 mb-6">
+                    <h3 class="text-lg font-bold text-green-400 mb-4">📊 Statistics</h3>
+                    <pre class="spl"><code class="text-green-300">// stats - aggregate
+| stats count by Account                         // count per account
+| stats count as FailedLogins by Account         // with alias
+| stats dc(Computer) as UniqueComputers by Account  // distinct count
+| stats first(_time) as FirstSeen, last(_time) as LastSeen by Account
+| stats count, dc(Account), values(Computer) by src_ip
+
+// timechart - time-based aggregation
+| timechart span=1h count by Account</code></pre>
+                </div>
+
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-green-400 mb-4">🔄 Transformations</h3>
+                    <pre class="spl"><code class="text-green-300">// eval - create/modify fields
+| eval status = if(EventCode=4625, "Failed", "Success")
+| eval HourOfDay = strftime(_time, "%H")
+
+// rex - regex extraction
+| rex field=Message "User: (?<username>\w+)"
+
+// sort & top
+| sort - count            // descending
+| top 10 Account          // top 10 accounts
+| rare Account            // least common</code></pre>
+                </div>
+            </section>
+
+            <!-- Comparison -->
+            <section id="compare" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg></span>
+                    KQL vs SPL Quick Reference
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead><tr class="border-b border-gray-700">
+                                <th class="text-left py-3 px-2 text-gray-400">Operation</th>
+                                <th class="text-left py-3 px-2 text-blue-400">KQL (Sentinel)</th>
+                                <th class="text-left py-3 px-2 text-green-400">SPL (Splunk)</th>
+                            </tr></thead>
+                            <tbody class="text-gray-300 font-mono text-xs">
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-2">Filter rows</td>
+                                    <td class="py-2 px-2 text-blue-300">| where EventID == 4625</td>
+                                    <td class="py-2 px-2 text-green-300">EventCode=4625</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-2">Select columns</td>
+                                    <td class="py-2 px-2 text-blue-300">| project Account, Computer</td>
+                                    <td class="py-2 px-2 text-green-300">| table Account, Computer</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-2">Count</td>
+                                    <td class="py-2 px-2 text-blue-300">| summarize count() by Account</td>
+                                    <td class="py-2 px-2 text-green-300">| stats count by Account</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-2">Distinct count</td>
+                                    <td class="py-2 px-2 text-blue-300">| summarize dcount(Computer)</td>
+                                    <td class="py-2 px-2 text-green-300">| stats dc(Computer)</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-2">Time filter</td>
+                                    <td class="py-2 px-2 text-blue-300">| where TimeGenerated > ago(24h)</td>
+                                    <td class="py-2 px-2 text-green-300">earliest=-24h</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-2">Contains</td>
+                                    <td class="py-2 px-2 text-blue-300">| where Account contains "admin"</td>
+                                    <td class="py-2 px-2 text-green-300">Account="*admin*"</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-2">Sort</td>
+                                    <td class="py-2 px-2 text-blue-300">| sort by count desc</td>
+                                    <td class="py-2 px-2 text-green-300">| sort - count</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-2">Top N</td>
+                                    <td class="py-2 px-2 text-blue-300">| top 10 by count</td>
+                                    <td class="py-2 px-2 text-green-300">| top 10 Account</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Security Use Cases -->
+            <section id="usecases" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg></span>
+                    Security Use Cases
+                </h2>
+
+                <div class="space-y-6">
+                    <div class="card rounded-2xl p-6">
+                        <h3 class="text-orange-400 font-bold mb-4">🔐 Failed Login Attempts (Brute Force Detection)</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-blue-400 text-sm mb-2">KQL</p>
+                                <pre class="kql"><code class="text-blue-300">SecurityEvent
+| where EventID == 4625
+| where TimeGenerated > ago(1h)
+| summarize FailedAttempts = count() by Account, Computer
+| where FailedAttempts > 10
+| sort by FailedAttempts desc</code></pre>
+                            </div>
+                            <div>
+                                <p class="text-green-400 text-sm mb-2">SPL</p>
+                                <pre class="spl"><code class="text-green-300">index=windows EventCode=4625 earliest=-1h
+| stats count as FailedAttempts by Account, Computer
+| where FailedAttempts > 10
+| sort - FailedAttempts</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card rounded-2xl p-6">
+                        <h3 class="text-orange-400 font-bold mb-4">🌐 Suspicious Outbound Connections</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-blue-400 text-sm mb-2">KQL</p>
+                                <pre class="kql"><code class="text-blue-300">CommonSecurityLog
+| where DeviceAction == "Allow"
+| where DestinationPort in (4444, 5555, 6666)
+| summarize ConnectionCount = count() 
+    by SourceIP, DestinationIP, DestinationPort
+| where ConnectionCount > 5</code></pre>
+                            </div>
+                            <div>
+                                <p class="text-green-400 text-sm mb-2">SPL</p>
+                                <pre class="spl"><code class="text-green-300">index=firewall action=allow 
+    (dest_port=4444 OR dest_port=5555 OR dest_port=6666)
+| stats count as ConnectionCount 
+    by src_ip, dest_ip, dest_port
+| where ConnectionCount > 5</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card rounded-2xl p-6">
+                        <h3 class="text-orange-400 font-bold mb-4">⚡ PowerShell Execution (T1059.001)</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-blue-400 text-sm mb-2">KQL</p>
+                                <pre class="kql"><code class="text-blue-300">SecurityEvent
+| where EventID == 4688
+| where NewProcessName endswith "powershell.exe"
+| where CommandLine contains_any 
+    ("encodedcommand", "-e ", "bypass", "hidden")
+| project TimeGenerated, Computer, Account, CommandLine</code></pre>
+                            </div>
+                            <div>
+                                <p class="text-green-400 text-sm mb-2">SPL</p>
+                                <pre class="spl"><code class="text-green-300">index=windows EventCode=4688 
+    New_Process_Name="*powershell.exe"
+    (CommandLine="*encodedcommand*" OR 
+     CommandLine="*-e *" OR 
+     CommandLine="*bypass*" OR CommandLine="*hidden*")
+| table _time, Computer, Account, CommandLine</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interview Q&A -->
+            <section id="interview" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-pink-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>
+                    Interview Q&A
+                </h2>
+
+                <div class="space-y-6">
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: Write a query to detect brute force attacks.</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm mb-2">"I'd look for multiple failed logins from same source in short time window. In KQL:"</p>
+                            <pre class="kql"><code class="text-blue-300">SecurityEvent
+| where EventID == 4625  // Failed login
+| where TimeGenerated > ago(15m)
+| summarize FailedAttempts = count(), 
+    Accounts = make_set(Account) by IpAddress
+| where FailedAttempts > 10
+| project IpAddress, FailedAttempts, Accounts</code></pre>
+                            <p class="text-gray-400 text-sm mt-2">"This finds IPs with >10 failed logins in 15 minutes across any accounts - classic brute force pattern."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: How do you optimize slow SIEM queries?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"Key optimizations: 1) <strong>Filter early</strong> - put where clauses before summarize. 2) <strong>Use time filters</strong> - don't search all data. 3) <strong>Specific tables</strong> - avoid wildcards in table names. 4) <strong>Project early</strong> - drop unneeded columns. 5) <strong>Indexed fields first</strong> - in Splunk, put indexed fields before pipe. 6) <strong>Avoid regex when possible</strong> - contains is faster than matches. 7) <strong>Pre-aggregate</strong> - use summary indexes for common queries."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: What's the difference between KQL and SPL?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"Both are query languages for log analysis but with different syntax. <strong>KQL</strong> (Microsoft) uses pipe-based flow: Table | where | summarize. <strong>SPL</strong> (Splunk) starts with index search then pipes. Key differences: KQL uses 'where', SPL uses inline search terms. KQL uses 'project', SPL uses 'table'. KQL 'summarize' = SPL 'stats'. KQL 'dcount' = SPL 'dc'. The logic is similar - once you know one, learning the other is mainly syntax translation."</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Reference -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-8">📋 Quick Reference Card</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-blue-400 font-bold mb-3">KQL Cheat Sheet</h3>
+                        <div class="text-sm space-y-1 font-mono">
+                            <p class="text-gray-400">where, project, extend, summarize</p>
+                            <p class="text-gray-400">count(), dcount(), sum(), avg()</p>
+                            <p class="text-gray-400">ago(1h), ago(7d), between()</p>
+                            <p class="text-gray-400">contains, startswith, endswith</p>
+                            <p class="text-gray-400">join kind=inner/left/right</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-green-400 font-bold mb-3">SPL Cheat Sheet</h3>
+                        <div class="text-sm space-y-1 font-mono">
+                            <p class="text-gray-400">index=, sourcetype=, earliest=</p>
+                            <p class="text-gray-400">stats count, dc, values, list</p>
+                            <p class="text-gray-400">table, fields, rename, eval</p>
+                            <p class="text-gray-400">*wildcard*, rex, regex</p>
+                            <p class="text-gray-400">timechart, transaction, join</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+<script src="../js/sidebar.js"></script>
+</body>
+</html>

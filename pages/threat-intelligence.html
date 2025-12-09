@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threat Intelligence | Security Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Inter', system-ui, sans-serif; }
+        .card { background: linear-gradient(145deg, #12121a, #1a1a2e); border: 1px solid #2a2a3e; }
+        .nav-item:hover { background: rgba(147, 51, 234, 0.1); }
+        .nav-item.active { background: rgba(147, 51, 234, 0.2); border-left: 2px solid #9333ea; }
+        .mnemonic { background: linear-gradient(135deg, #1a1a2e 0%, #2a2a3e 100%); border: 1px solid #f59e0b; }
+        .interview-qa { background: linear-gradient(135deg, #1a1a2e 0%, #1e1e3e 100%); border: 1px solid #8b5cf6; }
+        pre { background: #0d0d14 !important; border-radius: 8px; padding: 16px; overflow-x: auto; }
+        code { font-family: 'Fira Code', monospace; font-size: 13px; }
+        .sidebar { scrollbar-width: thin; scrollbar-color: #9333ea #1a1a2e; }
+        .tactic-card { transition: all 0.3s ease; }
+        .tactic-card:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(147, 51, 234, 0.2); }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Mobile Header -->
+    <div class="lg:hidden fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f] border-b border-[#2a2a3e] px-4 py-3">
+        <div class="flex items-center justify-between">
+            <h1 class="text-lg font-bold text-white">Threat Intelligence</h1>
+            <button onclick="toggleSidebar()" class="p-2 rounded-lg bg-[#1a1a2e]">
+                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <!-- Main Content -->
+    <main class="lg:ml-64 pt-14 lg:pt-0">
+        <div class="max-w-5xl mx-auto px-6 py-12">
+            <!-- Hero Section -->
+            <section id="overview" class="mb-16">
+                <div class="flex items-center gap-2 text-purple-400 mb-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                    </svg>
+                    <span class="text-sm font-medium">Threat Intelligence</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Threat Intelligence Engineering</h1>
+                <p class="text-xl text-gray-400 mb-8">MITRE ATT&CK, IOC Management, Threat Hunting, Adversary Tracking - Know your enemy to defend effectively.</p>
+
+                <!-- Experience Badges -->
+                <div class="flex flex-wrap gap-3 mb-8">
+                    <span class="px-4 py-2 rounded-full bg-red-500/20 text-red-400 text-sm font-medium border border-red-500/30">
+                        MITRE ATT&CK Framework
+                    </span>
+                    <span class="px-4 py-2 rounded-full bg-orange-500/20 text-orange-400 text-sm font-medium border border-orange-500/30">
+                        IOC Management
+                    </span>
+                    <span class="px-4 py-2 rounded-full bg-purple-500/20 text-purple-400 text-sm font-medium border border-purple-500/30">
+                        Threat Hunting
+                    </span>
+                    <span class="px-4 py-2 rounded-full bg-cyan-500/20 text-cyan-400 text-sm font-medium border border-cyan-500/30">
+                        TI Integration
+                    </span>
+                </div>
+
+                <!-- Key Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="card rounded-xl p-4 text-center">
+                        <p class="text-2xl font-bold text-purple-400">14</p>
+                        <p class="text-sm text-gray-400">ATT&CK Tactics</p>
+                    </div>
+                    <div class="card rounded-xl p-4 text-center">
+                        <p class="text-2xl font-bold text-red-400">200+</p>
+                        <p class="text-sm text-gray-400">Techniques Known</p>
+                    </div>
+                    <div class="card rounded-xl p-4 text-center">
+                        <p class="text-2xl font-bold text-orange-400">100+</p>
+                        <p class="text-sm text-gray-400">Detection Rules Built</p>
+                    </div>
+                    <div class="card rounded-xl p-4 text-center">
+                        <p class="text-2xl font-bold text-cyan-400">5+</p>
+                        <p class="text-sm text-gray-400">TI Sources Integrated</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Master Mnemonic -->
+            <section class="mb-16">
+                <div class="mnemonic rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold text-yellow-400 mb-4">🧠 Master Mnemonic: "THREAT INTEL"</h2>
+                    <p class="text-gray-400 mb-6">Remember the key TI concepts:</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">T</span>actics - Why (adversary goal)</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">H</span>unt - Proactively search</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">R</span>econnaissance - Initial recon</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">E</span>nrich - Add context to IOCs</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">A</span>dversaries - Know your enemy</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">T</span>echniques - How they attack</p>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">I</span>ndicators - IOCs (IPs, hashes)</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">N</span>avigator - ATT&CK mapping tool</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">T</span>TPs - Tactics, Techniques, Procedures</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">E</span>xecution - How malware runs</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">L</span>ateral movement - Spread internally</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TI Fundamentals -->
+            <section id="fundamentals" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                        </svg>
+                    </span>
+                    Threat Intelligence Fundamentals
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">🎯 What is Threat Intelligence?</h3>
+                    <p class="text-gray-400 mb-4">Threat Intelligence (TI) is evidence-based knowledge about existing or emerging threats that helps you make informed security decisions. It transforms raw data into actionable intelligence.</p>
+                    
+                    <div class="bg-[#0d0d14] rounded-xl p-6 mb-6">
+                        <pre class="text-sm text-center">
+Data → Information → Intelligence → Decision
+ │          │            │            │
+ └── Raw ───┴── Context ─┴── Analysis ┴── Action
+     logs      enriched     assessed    taken
+                        </pre>
+                    </div>
+                </div>
+
+                <!-- TI Types -->
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">📊 Types of Threat Intelligence</h3>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-blue-400 font-medium mb-2">Strategic TI</h4>
+                            <p class="text-gray-400 text-sm mb-3">High-level trends for executives</p>
+                            <ul class="text-gray-500 text-xs space-y-1">
+                                <li>• Who are the threat actors?</li>
+                                <li>• What are their motivations?</li>
+                                <li>• Industry threat landscape</li>
+                                <li>• Long-term risk trends</li>
+                            </ul>
+                            <p class="text-blue-400 text-xs mt-2">Audience: CISO, Board</p>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-orange-400 font-medium mb-2">Tactical TI</h4>
+                            <p class="text-gray-400 text-sm mb-3">TTPs for security teams</p>
+                            <ul class="text-gray-500 text-xs space-y-1">
+                                <li>• Attack techniques (ATT&CK)</li>
+                                <li>• Malware behavior patterns</li>
+                                <li>• Detection opportunities</li>
+                                <li>• Adversary tradecraft</li>
+                            </ul>
+                            <p class="text-orange-400 text-xs mt-2">Audience: SOC, Detection Eng</p>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-green-400 font-medium mb-2">Operational TI</h4>
+                            <p class="text-gray-400 text-sm mb-3">Specific IOCs for immediate action</p>
+                            <ul class="text-gray-500 text-xs space-y-1">
+                                <li>• IP addresses</li>
+                                <li>• Domain names</li>
+                                <li>• File hashes</li>
+                                <li>• Specific malware samples</li>
+                            </ul>
+                            <p class="text-green-400 text-xs mt-2">Audience: SOC Analysts, IR</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Intelligence Cycle -->
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">🔄 Intelligence Cycle</h3>
+                    <div class="bg-[#0d0d14] rounded-xl p-6">
+                        <pre class="text-sm text-center">
+         ┌─────────────────────────────────────────┐
+         │                                         │
+         ▼                                         │
+    ┌──────────┐     ┌──────────┐     ┌──────────┐│
+    │DIRECTION │────►│COLLECTION│────►│PROCESSING││
+    │(Planning)│     │(Gathering│     │(Organize)││
+    └──────────┘     │  data)   │     └────┬─────┘│
+         ▲           └──────────┘          │      │
+         │                                 ▼      │
+    ┌──────────┐     ┌──────────┐     ┌──────────┐│
+    │FEEDBACK  │◄────│DISSEM-   │◄────│ANALYSIS  ││
+    │(Improve) │     │INATION   │     │(Assess)  ││
+    └──────────┘     └──────────┘     └──────────┘│
+         │                                         │
+         └─────────────────────────────────────────┘
+                        </pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MITRE ATT&CK -->
+            <section id="mitre" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </span>
+                    MITRE ATT&CK Framework
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">🎯 What is MITRE ATT&CK?</h3>
+                    <p class="text-gray-400 mb-4">ATT&CK (Adversarial Tactics, Techniques, and Common Knowledge) is a globally-accessible knowledge base of adversary tactics and techniques based on real-world observations. It's the common language for describing attacks.</p>
+                    
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
+                        <p class="text-yellow-400 text-sm"><strong>Key Structure:</strong> Tactics (WHY - the goal) → Techniques (HOW - the method) → Sub-techniques (specific implementation) → Procedures (real-world examples)</p>
+                    </div>
+                </div>
+
+                <!-- 14 Tactics -->
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">📋 The 14 Tactics (Enterprise)</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+                        <div class="tactic-card bg-[#1a1a2e] rounded-lg p-3 text-center">
+                            <p class="text-red-400 font-bold text-xs">TA0043</p>
+                            <p class="text-white text-xs font-medium">Recon</p>
+                        </div>
+                        <div class="tactic-card bg-[#1a1a2e] rounded-lg p-3 text-center">
+                            <p class="text-red-400 font-bold text-xs">TA0042</p>
+                            <p class="text-white text-xs font-medium">Resource Dev</p>
+                        </div>
+                        <div class="tactic-card bg-[#1a1a2e] rounded-lg p-3 text-center">
+                            <p class="text-orange-400 font-bold text-xs">TA0001</p>
+                            <p class="text-white text-xs font-medium">Initial Access</p>
+                        </div>
+                        <div class="tactic-card bg-[#1a1a2e] rounded-lg p-3 text-center">
+                            <p class="text-yellow-400 font-bold text-xs">TA0002</p>
+                            <p class="text-white text-xs font-medium">Execution</p>
+                        </div>
+                        <div class="tactic-card bg-[#1a1a2e] rounded-lg p-3 text-center">
+                            <p class="text-green-400 font-bold text-xs">TA0003</p>
+                            <p class="text-white text-xs font-medium">Persistence</p>
+                        </div>
+                        <div class="tactic-card bg-[#1a1a2e] rounded-lg p-3 text-center">
+                            <p class="text-cyan-400 font-bold text-xs">TA0004</p>
+                            <p class="text-white text-xs font-medium">Priv Escalation</p>
+                        </div>
+                        <div class="tactic-card bg-[#1a1a2e] rounded-lg p-3 text-center">
+                            <p class="text-blue-400 font-bold text-xs">TA0005</p>
+                            <p class="text-white text-xs font-medium">Defense Evasion</p>
+                        </div>
+                        <div class="tactic-card bg-[#1a1a2e] rounded-lg p-3 text-center">
+                            <p class="text-purple-400 font-bold text-xs">TA0006</p>
+                            <p class="text-white text-xs font-medium">Cred Access</p>
+                        </div>
+                        <div class="tactic-card bg-[#1a1a2e] rounded-lg p-3 text-center">
+                            <p class="text-pink-400 font-bold text-xs">TA0007</p>
+                            <p class="text-white text-xs font-medium">Discovery</p>
+                        </div>
+                        <div class="tactic-card bg-[#1a1a2e] rounded-lg p-3 text-center">
+                            <p class="text-indigo-400 font-bold text-xs">TA0008</p>
+                            <p class="text-white text-xs font-medium">Lateral Move</p>
+                        </div>
+                        <div class="tactic-card bg-[#1a1a2e] rounded-lg p-3 text-center">
+                            <p class="text-teal-400 font-bold text-xs">TA0009</p>
+                            <p class="text-white text-xs font-medium">Collection</p>
+                        </div>
+                        <div class="tactic-card bg-[#1a1a2e] rounded-lg p-3 text-center">
+                            <p class="text-amber-400 font-bold text-xs">TA0011</p>
+                            <p class="text-white text-xs font-medium">C2</p>
+                        </div>
+                        <div class="tactic-card bg-[#1a1a2e] rounded-lg p-3 text-center">
+                            <p class="text-rose-400 font-bold text-xs">TA0010</p>
+                            <p class="text-white text-xs font-medium">Exfiltration</p>
+                        </div>
+                        <div class="tactic-card bg-[#1a1a2e] rounded-lg p-3 text-center">
+                            <p class="text-red-500 font-bold text-xs">TA0040</p>
+                            <p class="text-white text-xs font-medium">Impact</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Techniques -->
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">🔥 Most Common Techniques to Know</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-orange-400 font-medium mb-2">Initial Access</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• T1566 - Phishing (attachments, links)</li>
+                                <li>• T1190 - Exploit Public-Facing Application</li>
+                                <li>• T1078 - Valid Accounts (stolen creds)</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-yellow-400 font-medium mb-2">Execution</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• T1059 - Command & Scripting Interpreter</li>
+                                <li>• T1204 - User Execution (click malware)</li>
+                                <li>• T1047 - Windows Management Instrumentation</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-green-400 font-medium mb-2">Persistence</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• T1547 - Boot/Logon Autostart (Run keys)</li>
+                                <li>• T1053 - Scheduled Task/Job</li>
+                                <li>• T1136 - Create Account</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-cyan-400 font-medium mb-2">Defense Evasion</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• T1027 - Obfuscated Files/Information</li>
+                                <li>• T1070 - Indicator Removal</li>
+                                <li>• T1055 - Process Injection</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-purple-400 font-medium mb-2">Credential Access</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• T1003 - OS Credential Dumping (Mimikatz)</li>
+                                <li>• T1110 - Brute Force</li>
+                                <li>• T1558 - Steal/Forge Kerberos Tickets</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-indigo-400 font-medium mb-2">Lateral Movement</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• T1021 - Remote Services (RDP, SMB, WinRM)</li>
+                                <li>• T1570 - Lateral Tool Transfer</li>
+                                <li>• T1550 - Use Alternate Auth Material</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- IOCs & Artifacts -->
+            <section id="iocs" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                        </svg>
+                    </span>
+                    Indicators of Compromise (IOCs)
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">🔍 IOC Types & Examples</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-orange-400 font-medium mb-3">Network IOCs</h4>
+                            <div class="space-y-2">
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white text-sm font-medium">IP Addresses</p>
+                                    <p class="text-gray-500 text-xs font-mono">192.168.1.100, 10.0.0.5</p>
+                                    <p class="text-gray-400 text-xs mt-1">C2 servers, malware infrastructure</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white text-sm font-medium">Domains</p>
+                                    <p class="text-gray-500 text-xs font-mono">malware[.]evil[.]com</p>
+                                    <p class="text-gray-400 text-xs mt-1">Phishing, C2, malware download</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white text-sm font-medium">URLs</p>
+                                    <p class="text-gray-500 text-xs font-mono">hxxp://evil[.]com/payload.exe</p>
+                                    <p class="text-gray-400 text-xs mt-1">Specific malicious resources</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-blue-400 font-medium mb-3">Host IOCs</h4>
+                            <div class="space-y-2">
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white text-sm font-medium">File Hashes (MD5, SHA256)</p>
+                                    <p class="text-gray-500 text-xs font-mono truncate">a1b2c3d4e5f6...</p>
+                                    <p class="text-gray-400 text-xs mt-1">Unique file identifier</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white text-sm font-medium">File Names/Paths</p>
+                                    <p class="text-gray-500 text-xs font-mono">C:\Windows\Temp\evil.exe</p>
+                                    <p class="text-gray-400 text-xs mt-1">Common malware locations</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white text-sm font-medium">Registry Keys</p>
+                                    <p class="text-gray-500 text-xs font-mono">HKLM\...\Run\Malware</p>
+                                    <p class="text-gray-400 text-xs mt-1">Persistence mechanisms</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pyramid of Pain -->
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">🔺 Pyramid of Pain</h3>
+                    <p class="text-gray-400 mb-4">Not all IOCs are equal. The higher up the pyramid, the harder it is for attackers to change:</p>
+                    <div class="bg-[#0d0d14] rounded-xl p-6">
+                        <pre class="text-sm text-center">
+                           /\
+                          /  \
+                         /TTPs \       ← HARDEST to change (behavior)
+                        /────────\
+                       /  Tools   \    ← Difficult (custom malware)
+                      /────────────\
+                     /  Network/   \   ← Moderate (infrastructure)
+                    /   Host Artifacts\
+                   /──────────────────\
+                  /   Domain Names     \  ← Easy to change
+                 /──────────────────────\
+                /     IP Addresses       \ ← Trivial to change
+               /──────────────────────────\
+              /        Hash Values         \ ← EASIEST (just recompile)
+             /──────────────────────────────\
+                        </pre>
+                    </div>
+                    <div class="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4 mt-4">
+                        <p class="text-purple-400 text-sm"><strong>Key Insight:</strong> Focus detection on TTPs (behaviors) rather than just IOCs. Hashes change constantly, but adversary techniques change slowly.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TI Platforms -->
+            <section id="platforms" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                        </svg>
+                    </span>
+                    TI Platforms & Feeds
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-blue-400 font-medium mb-2">🔍 VirusTotal</h4>
+                            <p class="text-gray-400 text-sm mb-2">Free multi-AV scanning, hash/URL reputation</p>
+                            <ul class="text-gray-500 text-xs space-y-1">
+                                <li>• 70+ AV engines</li>
+                                <li>• File behavior analysis</li>
+                                <li>• Community comments</li>
+                                <li>• API integration</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-green-400 font-medium mb-2">🛡️ AlienVault OTX</h4>
+                            <p class="text-gray-400 text-sm mb-2">Free community threat intel</p>
+                            <ul class="text-gray-500 text-xs space-y-1">
+                                <li>• Community pulses</li>
+                                <li>• IOC feeds</li>
+                                <li>• SIEM integration</li>
+                                <li>• Threat reports</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-purple-400 font-medium mb-2">🔗 MISP</h4>
+                            <p class="text-gray-400 text-sm mb-2">Open source TI sharing platform</p>
+                            <ul class="text-gray-500 text-xs space-y-1">
+                                <li>• Event-based sharing</li>
+                                <li>• STIX/TAXII support</li>
+                                <li>• Correlation engine</li>
+                                <li>• Community feeds</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-orange-400 font-medium mb-2">📊 Abuse.ch</h4>
+                            <p class="text-gray-400 text-sm mb-2">Free malware/botnet tracking</p>
+                            <ul class="text-gray-500 text-xs space-y-1">
+                                <li>• URLhaus (malicious URLs)</li>
+                                <li>• MalwareBazaar (samples)</li>
+                                <li>• Feodo Tracker (C2)</li>
+                                <li>• SSL Blacklist</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-cyan-400 font-medium mb-2">☁️ Microsoft TI</h4>
+                            <p class="text-gray-400 text-sm mb-2">Built into Defender/Sentinel</p>
+                            <ul class="text-gray-500 text-xs space-y-1">
+                                <li>• 65 trillion signals/day</li>
+                                <li>• Actor profiles</li>
+                                <li>• Auto-correlation</li>
+                                <li>• Sentinel connector</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-red-400 font-medium mb-2">🏛️ CISA</h4>
+                            <p class="text-gray-400 text-sm mb-2">US government TI sharing</p>
+                            <ul class="text-gray-500 text-xs space-y-1">
+                                <li>• Alerts & advisories</li>
+                                <li>• Known Exploited Vulns</li>
+                                <li>• AIS (free sharing)</li>
+                                <li>• Industry sectors</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Threat Hunting -->
+            <section id="hunting" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </span>
+                    Threat Hunting
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">🎯 What is Threat Hunting?</h3>
+                    <p class="text-gray-400 mb-4">Proactively searching for threats that evade existing detection. Unlike reactive alerting, hunting assumes the adversary is already in your environment.</p>
+                    
+                    <div class="grid md:grid-cols-3 gap-4 mt-6">
+                        <div class="bg-[#1a1a2e] rounded-lg p-4 text-center">
+                            <div class="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center mx-auto mb-2">
+                                <span class="text-orange-400 text-xl">1</span>
+                            </div>
+                            <h4 class="text-orange-400 font-medium">Hypothesis-Driven</h4>
+                            <p class="text-gray-500 text-xs mt-2">"If APT28 targeted us, they would use X technique"</p>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4 text-center">
+                            <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-2">
+                                <span class="text-blue-400 text-xl">2</span>
+                            </div>
+                            <h4 class="text-blue-400 font-medium">IOC-Based</h4>
+                            <p class="text-gray-500 text-xs mt-2">"Let me search for these known malicious indicators"</p>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4 text-center">
+                            <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-2">
+                                <span class="text-purple-400 text-xl">3</span>
+                            </div>
+                            <h4 class="text-purple-400 font-medium">Anomaly-Based</h4>
+                            <p class="text-gray-500 text-xs mt-2">"What's unusual or statistically rare in our data?"</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hunt Process -->
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">📋 Threat Hunt Process</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center flex-shrink-0">
+                                <span class="text-cyan-400 font-bold text-sm">1</span>
+                            </div>
+                            <div>
+                                <p class="text-white font-medium">Form Hypothesis</p>
+                                <p class="text-gray-400 text-sm">Based on TI, ATT&CK, or anomalies. "Adversaries may be using PowerShell for lateral movement."</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center flex-shrink-0">
+                                <span class="text-cyan-400 font-bold text-sm">2</span>
+                            </div>
+                            <div>
+                                <p class="text-white font-medium">Collect Data</p>
+                                <p class="text-gray-400 text-sm">Identify relevant data sources. Query SIEM, EDR, network logs.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center flex-shrink-0">
+                                <span class="text-cyan-400 font-bold text-sm">3</span>
+                            </div>
+                            <div>
+                                <p class="text-white font-medium">Analyze</p>
+                                <p class="text-gray-400 text-sm">Look for patterns, anomalies, known-bad indicators. Pivot and drill down.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center flex-shrink-0">
+                                <span class="text-cyan-400 font-bold text-sm">4</span>
+                            </div>
+                            <div>
+                                <p class="text-white font-medium">Document Findings</p>
+                                <p class="text-gray-400 text-sm">Record what you found - threats, gaps, or nothing (still valuable).</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center flex-shrink-0">
+                                <span class="text-cyan-400 font-bold text-sm">5</span>
+                            </div>
+                            <div>
+                                <p class="text-white font-medium">Create Detection</p>
+                                <p class="text-gray-400 text-sm">Turn successful hunts into automated detection rules for future alerts.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- KQL Queries -->
+            <section id="kql" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-teal-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                        </svg>
+                    </span>
+                    KQL Threat Hunting Queries
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <div class="space-y-6">
+                        <div class="bg-[#0d0d14] rounded-xl p-4">
+                            <h4 class="text-cyan-400 font-medium mb-2">Hunt: PowerShell Encoded Commands (T1059.001)</h4>
+                            <pre class="text-sm overflow-x-auto"><code class="text-green-400">DeviceProcessEvents
+| where Timestamp > ago(7d)
+| where FileName =~ "powershell.exe"
+| where ProcessCommandLine has_any ("-enc", "-encodedcommand", "-e ", "FromBase64")
+| project Timestamp, DeviceName, AccountName, ProcessCommandLine
+| order by Timestamp desc</code></pre>
+                        </div>
+
+                        <div class="bg-[#0d0d14] rounded-xl p-4">
+                            <h4 class="text-cyan-400 font-medium mb-2">Hunt: LSASS Memory Access (T1003.001 - Mimikatz)</h4>
+                            <pre class="text-sm overflow-x-auto"><code class="text-green-400">DeviceProcessEvents
+| where Timestamp > ago(7d)
+| where FileName !in~ ("lsass.exe", "csrss.exe", "svchost.exe")
+| where ProcessCommandLine has_any ("lsass", "sekurlsa", "logonpasswords")
+   or InitiatingProcessFileName =~ "rundll32.exe" and FileName =~ "lsass.exe"
+| project Timestamp, DeviceName, FileName, ProcessCommandLine, AccountName</code></pre>
+                        </div>
+
+                        <div class="bg-[#0d0d14] rounded-xl p-4">
+                            <h4 class="text-cyan-400 font-medium mb-2">Hunt: Suspicious Scheduled Tasks (T1053.005)</h4>
+                            <pre class="text-sm overflow-x-auto"><code class="text-green-400">DeviceProcessEvents
+| where Timestamp > ago(7d)
+| where FileName =~ "schtasks.exe"
+| where ProcessCommandLine has "/create"
+| where ProcessCommandLine has_any ("powershell", "cmd", "wscript", "cscript", "mshta", "rundll32")
+| project Timestamp, DeviceName, AccountName, ProcessCommandLine</code></pre>
+                        </div>
+
+                        <div class="bg-[#0d0d14] rounded-xl p-4">
+                            <h4 class="text-cyan-400 font-medium mb-2">Hunt: Remote Service Creation (T1021.002 - PSExec-like)</h4>
+                            <pre class="text-sm overflow-x-auto"><code class="text-green-400">DeviceProcessEvents
+| where Timestamp > ago(7d)
+| where InitiatingProcessFileName =~ "services.exe"
+| where FileName in~ ("cmd.exe", "powershell.exe")
+| project Timestamp, DeviceName, AccountName, FileName, ProcessCommandLine</code></pre>
+                        </div>
+
+                        <div class="bg-[#0d0d14] rounded-xl p-4">
+                            <h4 class="text-cyan-400 font-medium mb-2">Hunt: IOC Search (Multiple Indicators)</h4>
+                            <pre class="text-sm overflow-x-auto"><code class="text-green-400">let malicious_ips = dynamic(["1.2.3.4", "5.6.7.8"]);
+let malicious_domains = dynamic(["evil.com", "malware.net"]);
+let malicious_hashes = dynamic(["abc123...", "def456..."]);
+union DeviceNetworkEvents, DeviceFileEvents
+| where Timestamp > ago(30d)
+| where RemoteIP in (malicious_ips)
+   or RemoteUrl has_any (malicious_domains)
+   or SHA256 in (malicious_hashes)
+| project Timestamp, DeviceName, ActionType, RemoteIP, RemoteUrl, SHA256</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interview Q&A -->
+            <section id="interview" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </span>
+                    Interview Questions & Answers
+                </h2>
+
+                <div class="space-y-6">
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: Explain MITRE ATT&CK and how you use it.</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"MITRE ATT&CK is a knowledge base of adversary tactics, techniques, and procedures based on real-world observations. It organizes attacker behavior into 14 tactics (the 'why' - like Initial Access, Execution, Persistence) and hundreds of techniques (the 'how').</p>
+                            <p class="text-gray-300 text-sm mt-2">I use ATT&CK in several ways:</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>Detection Engineering:</strong> When writing detection rules, I map them to ATT&CK techniques. This helps identify coverage gaps - if we have no detections for T1003 (Credential Dumping), we know we need to add some.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>Threat Hunting:</strong> I use ATT&CK to form hypotheses. 'If APT29 targeted us, they commonly use T1566 (Phishing) and T1059 (PowerShell) - let me hunt for those behaviors.'</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>Incident Response:</strong> During investigations, I map observed behaviors to ATT&CK to understand the attack lifecycle and predict what the adversary might do next."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: What's the difference between IOCs and TTPs? Which is more valuable?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"IOCs (Indicators of Compromise) are specific artifacts like IP addresses, domains, and file hashes. TTPs (Tactics, Techniques, and Procedures) describe adversary behavior - how they operate.</p>
+                            <p class="text-gray-300 text-sm mt-2">TTPs are more valuable because they're harder for attackers to change. The Pyramid of Pain illustrates this - hashes are at the bottom (trivial to change by recompiling), while TTPs are at the top (require significant effort to change behavior).</p>
+                            <p class="text-gray-300 text-sm mt-2">For example, if I detect malware by its hash, the attacker just recompiles and gets a new hash. But if I detect the behavior - like 'PowerShell downloading and executing code from the internet' - that's harder to avoid because it's how the attack works.</p>
+                            <p class="text-gray-300 text-sm mt-2">That said, IOCs still have value for immediate blocking and historical analysis. The best approach combines both - IOCs for quick wins, TTPs for durable detection."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: How would you conduct a threat hunt?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"I follow a structured hypothesis-driven approach:</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>1. Form Hypothesis:</strong> Based on threat intelligence or ATT&CK. For example, 'Ransomware groups often disable Windows Defender before deploying - let me look for that behavior (T1562.001).'</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>2. Identify Data Sources:</strong> What logs do I need? For this hunt, I'd need EDR process logs, specifically looking for commands that modify Defender settings.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>3. Build Query:</strong> Create a KQL/SPL query to find the behavior - processes executing 'Set-MpPreference -DisableRealtimeMonitoring' or similar.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>4. Analyze Results:</strong> Review findings, eliminate false positives (IT admins during patching), investigate suspicious activity.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>5. Document & Detect:</strong> Even if I find nothing, I document the hunt. If I find a real technique, I turn the query into an automated detection rule."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: How do you integrate threat intelligence into your security operations?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"I integrate TI at multiple levels:</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>Automated IOC Ingestion:</strong> Feed TI platforms (like Microsoft Defender TI or MISP) directly into SIEM. Automatic correlation against network and endpoint logs generates alerts when IOCs are seen.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>Alert Enrichment:</strong> During triage, I automatically enrich IOCs with TI context - is this IP known malicious? What's the VirusTotal score? This speeds up analysis.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>Detection Rule Development:</strong> When new threat reports come out (like a new ransomware variant), I extract TTPs and create detection rules before IOCs are even published.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>Proactive Hunting:</strong> Use TI on threat actors targeting our industry to form hunt hypotheses. If a report says APT group X is targeting manufacturing with specific techniques, I hunt for those in our environment."</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Memory Aids -->
+            <section id="mnemonics" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-rose-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                    </span>
+                    Memory Aids
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 ATT&CK Tactics Order: "RIPE PEDAL CoCaCoEx I"</h3>
+                        <div class="space-y-1 text-sm">
+                            <p class="text-yellow-300"><strong>R</strong>econnaissance</p>
+                            <p class="text-yellow-300"><strong>I</strong>nitial Access</p>
+                            <p class="text-yellow-300"><strong>P</strong>ersistence</p>
+                            <p class="text-yellow-300"><strong>E</strong>xecution</p>
+                            <p class="text-yellow-300"><strong>P</strong>rivilege Escalation</p>
+                            <p class="text-yellow-300"><strong>E</strong>vasion (Defense)</p>
+                            <p class="text-yellow-300"><strong>D</strong>iscovery</p>
+                            <p class="text-yellow-300"><strong>A</strong>ccess (Credential)</p>
+                            <p class="text-yellow-300"><strong>L</strong>ateral Movement</p>
+                            <p class="text-yellow-300"><strong>Co</strong>llection, <strong>C2</strong>, E<strong>x</strong>fil, <strong>I</strong>mpact</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Pyramid of Pain (Bottom to Top)</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-green-400">Hash Values - Trivial to change</p>
+                            <p class="text-green-400">IP Addresses - Easy to change</p>
+                            <p class="text-yellow-400">Domain Names - Simple to change</p>
+                            <p class="text-orange-400">Network/Host Artifacts - Annoying</p>
+                            <p class="text-red-400">Tools - Challenging</p>
+                            <p class="text-purple-400">TTPs - TOUGH (most valuable!)</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 "HCAD" - Hunt Process</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-yellow-300"><strong>H</strong>ypothesis - Form theory</p>
+                            <p class="text-yellow-300"><strong>C</strong>ollect - Gather data</p>
+                            <p class="text-yellow-300"><strong>A</strong>nalyze - Find patterns</p>
+                            <p class="text-yellow-300"><strong>D</strong>etect - Create rules</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 IOC Types: "HIDE" (Host) + "NUD" (Network)</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-blue-400"><strong>H</strong>ashes - File identifiers</p>
+                            <p class="text-blue-400"><strong>I</strong>nstallation paths - File locations</p>
+                            <p class="text-blue-400"><strong>D</strong>ata/Registry - Persistence</p>
+                            <p class="text-blue-400"><strong>E</strong>xecutable names - File names</p>
+                            <p class="text-orange-400"><strong>N</strong>etwork IPs - C2 servers</p>
+                            <p class="text-orange-400"><strong>U</strong>RLs - Malicious links</p>
+                            <p class="text-orange-400"><strong>D</strong>omains - Infrastructure</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
+        }
+    </script>
+<script src="../js/sidebar.js"></script>
+</body>
+</html>

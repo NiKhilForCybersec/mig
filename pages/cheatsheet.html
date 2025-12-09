@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Cheat Sheet | Security Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Inter', system-ui, sans-serif; }
+        .card { background: linear-gradient(145deg, #12121a, #1a1a2e); border: 1px solid #2a2a3e; }
+        .mnemonic { background: linear-gradient(135deg, #1a1a2e 0%, #2a2a3e 100%); border: 1px solid #f59e0b; }
+        .quick-ref { background: linear-gradient(135deg, #0d0d14 0%, #1a1a2e 100%); border: 1px solid #3b82f6; }
+        @media print { body { background: white; color: black; } .card, .mnemonic, .quick-ref { background: #f5f5f5; border: 1px solid #ccc; } }
+    </style>
+</head>
+<body class="min-h-screen">
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        <!-- Hero -->
+        <section class="mb-12 text-center">
+            <h1 class="text-4xl font-bold text-white mb-4">🧠 Master Cheat Sheet</h1>
+            <p class="text-xl text-gray-400 mb-4">All mnemonics & quick references in one place</p>
+            <a href="../index.html" class="text-blue-400 hover:underline">← Back to Portfolio</a>
+        </section>
+
+        <!-- Table of Contents -->
+        <section class="mb-12">
+            <div class="card rounded-2xl p-6">
+                <h2 class="text-xl font-bold text-white mb-4">📑 Quick Jump</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+                    <a href="#frameworks" class="text-blue-400 hover:underline">Frameworks</a>
+                    <a href="#incident" class="text-blue-400 hover:underline">Incident Response</a>
+                    <a href="#network" class="text-blue-400 hover:underline">Network Security</a>
+                    <a href="#cloud" class="text-blue-400 hover:underline">Cloud Security</a>
+                    <a href="#identity" class="text-blue-400 hover:underline">IAM & Zero Trust</a>
+                    <a href="#data" class="text-blue-400 hover:underline">Data Security</a>
+                    <a href="#appsec" class="text-blue-400 hover:underline">Application Security</a>
+                    <a href="#threats" class="text-blue-400 hover:underline">Threats & Intel</a>
+                    <a href="#soc" class="text-blue-400 hover:underline">SOC Operations</a>
+                    <a href="#pentest" class="text-blue-400 hover:underline">Pen Testing</a>
+                    <a href="#awareness" class="text-blue-400 hover:underline">Security Awareness</a>
+                    <a href="#ports" class="text-blue-400 hover:underline">Common Ports</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- FRAMEWORKS -->
+        <section id="frameworks" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-400 mb-6">📋 Compliance Frameworks</h2>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">NIST CSF: "I-P-D-R-R"</h3>
+                    <p class="text-sm text-gray-300"><strong>I</strong>dentify → <strong>P</strong>rotect → <strong>D</strong>etect → <strong>R</strong>espond → <strong>R</strong>ecover</p>
+                    <p class="text-xs text-gray-500 mt-1">"I Promptly Detect, Respond, Recover"</p>
+                </div>
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">SOC 2 Trust Criteria: "SPACP"</h3>
+                    <p class="text-sm text-gray-300"><strong>S</strong>ecurity (required) • <strong>P</strong>rivacy • <strong>A</strong>vailability • <strong>C</strong>onfidentiality • <strong>P</strong>rocessing</p>
+                </div>
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">CIS First 6: "IDSACE"</h3>
+                    <p class="text-sm text-gray-300">1-2: <strong>I</strong>nventory • 3: <strong>D</strong>ata • 4: <strong>S</strong>ecure Config • 5: <strong>A</strong>ccount • 6: a<strong>C</strong>cess</p>
+                </div>
+                <div class="quick-ref rounded-xl p-4">
+                    <h3 class="text-blue-400 font-bold mb-2">Which Framework When?</h3>
+                    <p class="text-xs text-gray-300">US Gov → <span class="text-orange-400">NIST</span> | International cert → <span class="text-green-400">ISO 27001</span> | SaaS → <span class="text-cyan-400">SOC 2</span> | Cards → <span class="text-red-400">PCI</span></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- INCIDENT RESPONSE -->
+        <section id="incident" class="mb-12">
+            <h2 class="text-2xl font-bold text-red-400 mb-6">🚨 Incident Response</h2>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">NIST IR: "PICERL"</h3>
+                    <p class="text-sm text-gray-300"><strong>P</strong>reparation → <strong>I</strong>dentification → <strong>C</strong>ontainment → <strong>E</strong>radication → <strong>R</strong>ecovery → <strong>L</strong>essons</p>
+                    <p class="text-xs text-gray-500 mt-1">"Please Identify Containment, Eradicate, Recover, Learn"</p>
+                </div>
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">SANS IR: "PICERL" (same!)</h3>
+                    <p class="text-sm text-gray-300">Same phases! SANS adds detail within each phase.</p>
+                </div>
+                <div class="quick-ref rounded-xl p-4">
+                    <h3 class="text-blue-400 font-bold mb-2">Containment Types</h3>
+                    <p class="text-xs text-gray-300"><span class="text-orange-400">Short-term:</span> Isolate, block IP, disable account | <span class="text-green-400">Long-term:</span> Patch, rebuild, segment</p>
+                </div>
+                <div class="quick-ref rounded-xl p-4">
+                    <h3 class="text-blue-400 font-bold mb-2">Evidence Order (Volatility)</h3>
+                    <p class="text-xs text-gray-300">1. Memory → 2. Network state → 3. Processes → 4. Disk → 5. Logs → 6. Physical</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- NETWORK SECURITY -->
+        <section id="network" class="mb-12">
+            <h2 class="text-2xl font-bold text-green-400 mb-6">🌐 Network Security</h2>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">OSI Model: "PDNTSPA"</h3>
+                    <p class="text-sm text-gray-300"><strong>P</strong>hysical → <strong>D</strong>ata Link → <strong>N</strong>etwork → <strong>T</strong>ransport → <strong>S</strong>ession → <strong>P</strong>resentation → <strong>A</strong>pplication</p>
+                    <p class="text-xs text-gray-500 mt-1">"Please Do Not Throw Sausage Pizza Away"</p>
+                </div>
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">NGFW Capabilities: "AUC"</h3>
+                    <p class="text-sm text-gray-300"><strong>A</strong>pp-ID (identify apps) • <strong>U</strong>ser-ID (map users) • <strong>C</strong>ontent-ID (threat prevention)</p>
+                </div>
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">Detection Methods: "SAH"</h3>
+                    <p class="text-sm text-gray-300"><strong>S</strong>ignature (pattern match) • <strong>A</strong>nomaly (baseline deviation) • <strong>H</strong>euristic (behavioral)</p>
+                </div>
+                <div class="quick-ref rounded-xl p-4">
+                    <h3 class="text-blue-400 font-bold mb-2">IDS vs IPS</h3>
+                    <p class="text-xs text-gray-300"><span class="text-yellow-400">IDS:</span> Passive, alerts, out-of-band | <span class="text-green-400">IPS:</span> Active, blocks, inline</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CLOUD SECURITY -->
+        <section id="cloud" class="mb-12">
+            <h2 class="text-2xl font-bold text-cyan-400 mb-6">☁️ Cloud Security</h2>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">Cloud: "CLOUDS"</h3>
+                    <p class="text-sm text-gray-300"><strong>C</strong>onfiguration • <strong>L</strong>ogging • <strong>O</strong>bservability • <strong>U</strong>ser access • <strong>D</strong>ata protection • <strong>S</strong>egmentation</p>
+                </div>
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">CSPM vs CWPP</h3>
+                    <p class="text-sm text-gray-300"><span class="text-blue-400">CSPM</span> = Configuration (outside workload) | <span class="text-green-400">CWPP</span> = Protection (inside workload)</p>
+                </div>
+                <div class="quick-ref rounded-xl p-4">
+                    <h3 class="text-blue-400 font-bold mb-2">Shared Responsibility</h3>
+                    <p class="text-xs text-gray-300">Always YOUR job: <span class="text-red-400">DATA</span> + <span class="text-red-400">ACCESS</span> + <span class="text-red-400">IDENTITY</span> (regardless of model)</p>
+                </div>
+                <div class="quick-ref rounded-xl p-4">
+                    <h3 class="text-blue-400 font-bold mb-2">Top Misconfigs: "SNIE"</h3>
+                    <p class="text-xs text-gray-300"><strong>S</strong>torage (public buckets) • <strong>N</strong>etwork (open SGs) • <strong>I</strong>AM (overprivileged) • <strong>E</strong>ncryption (none)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- IDENTITY & ZERO TRUST -->
+        <section id="identity" class="mb-12">
+            <h2 class="text-2xl font-bold text-purple-400 mb-6">🔐 IAM & Zero Trust</h2>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">Zero Trust: "VLA"</h3>
+                    <p class="text-sm text-gray-300"><strong>V</strong>erify explicitly • <strong>L</strong>east privilege • <strong>A</strong>ssume breach</p>
+                    <p class="text-xs text-gray-500 mt-1">"Never Trust, Always Verify"</p>
+                </div>
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">ZT Six Pillars: "ID DANI"</h3>
+                    <p class="text-sm text-gray-300"><strong>I</strong>dentity • <strong>D</strong>evices • <strong>D</strong>ata • <strong>A</strong>pplications • <strong>N</strong>etwork • <strong>I</strong>nfrastructure</p>
+                </div>
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">IAM: "IAMB"</h3>
+                    <p class="text-sm text-gray-300"><strong>I</strong>dentification (who) • <strong>A</strong>uthentication (prove it) • <strong>A</strong>uthorization (what can do) • <strong>A</strong>ccounting (log it)</p>
+                </div>
+                <div class="quick-ref rounded-xl p-4">
+                    <h3 class="text-blue-400 font-bold mb-2">MFA Factors: "SHK"</h3>
+                    <p class="text-xs text-gray-300"><strong>S</strong>omething you Know (password) • <strong>H</strong>ave (token) • a<strong>R</strong>e (biometric)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- DATA SECURITY -->
+        <section id="data" class="mb-12">
+            <h2 class="text-2xl font-bold text-orange-400 mb-6">🔒 Data Security</h2>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">Data Security: "CLEKD"</h3>
+                    <p class="text-sm text-gray-300"><strong>C</strong>lassify • <strong>L</strong>abel • <strong>E</strong>ncrypt • <strong>K</strong>ey management • <strong>D</strong>LP</p>
+                </div>
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">Encryption: "SAA"</h3>
+                    <p class="text-sm text-gray-300"><strong>S</strong>ymmetric (one key, fast) • <strong>A</strong>symmetric (key pair, slow) • <strong>A</strong>ES-256 (standard)</p>
+                </div>
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">Data States: "RIT"</h3>
+                    <p class="text-sm text-gray-300"><strong>R</strong>est (storage - BitLocker) • <strong>I</strong>n Transit (network - TLS) • in <strong>U</strong>se (memory - enclaves)</p>
+                </div>
+                <div class="quick-ref rounded-xl p-4">
+                    <h3 class="text-blue-400 font-bold mb-2">DLP Rollout Order</h3>
+                    <p class="text-xs text-gray-300">1. <span class="text-blue-400">Audit</span> (learn) → 2. <span class="text-yellow-400">Warn</span> (educate) → 3. <span class="text-red-400">Block</span> (enforce)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- APPLICATION SECURITY -->
+        <section id="appsec" class="mb-12">
+            <h2 class="text-2xl font-bold text-red-400 mb-6">💻 Application Security</h2>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">OWASP Top 3 (Critical)</h3>
+                    <p class="text-sm text-gray-300"><span class="text-red-400">A01</span> Broken Access • <span class="text-red-400">A02</span> Crypto Fail • <span class="text-orange-400">A03</span> Injection</p>
+                </div>
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">XSS Types: "RSD"</h3>
+                    <p class="text-sm text-gray-300"><strong>R</strong>eflected (URL, instant) • <strong>S</strong>tored (DB, persistent) • <strong>D</strong>OM (client JS)</p>
+                </div>
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">Injection Prevention: "PVE"</h3>
+                    <p class="text-sm text-gray-300"><strong>P</strong>arameterized queries • <strong>V</strong>alidate input • <strong>E</strong>ncode output</p>
+                </div>
+                <div class="quick-ref rounded-xl p-4">
+                    <h3 class="text-blue-400 font-bold mb-2">SAST vs DAST</h3>
+                    <p class="text-xs text-gray-300"><span class="text-blue-400">SAST</span> = Code (blueprint) | <span class="text-green-400">DAST</span> = Running app (shake building)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- THREATS & INTEL -->
+        <section id="threats" class="mb-12">
+            <h2 class="text-2xl font-bold text-pink-400 mb-6">🎯 Threats & Intelligence</h2>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">MITRE ATT&CK Tactics</h3>
+                    <p class="text-sm text-gray-300">Recon → Resource Dev → Initial Access → Execution → Persistence → Priv Esc → Defense Evasion → Cred Access → Discovery → Lateral → Collection → C2 → Exfil → Impact</p>
+                </div>
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">Kill Chain: "RWDEIICA"</h3>
+                    <p class="text-sm text-gray-300"><strong>R</strong>econ • <strong>W</strong>eaponize • <strong>D</strong>eliver • <strong>E</strong>xploit • <strong>I</strong>nstall • <strong>C</strong>2 • <strong>A</strong>ctions</p>
+                </div>
+                <div class="quick-ref rounded-xl p-4">
+                    <h3 class="text-blue-400 font-bold mb-2">Intel Types</h3>
+                    <p class="text-xs text-gray-300"><span class="text-red-400">Strategic:</span> Board level | <span class="text-yellow-400">Operational:</span> Hunt teams | <span class="text-green-400">Tactical:</span> SOC (IOCs)</p>
+                </div>
+                <div class="quick-ref rounded-xl p-4">
+                    <h3 class="text-blue-400 font-bold mb-2">IOC Types</h3>
+                    <p class="text-xs text-gray-300">Hashes • IPs • Domains • URLs • Email addresses • File names • Registry keys</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SOC OPERATIONS -->
+        <section id="soc" class="mb-12">
+            <h2 class="text-2xl font-bold text-indigo-400 mb-6">🖥️ SOC Operations</h2>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">SOC Tiers</h3>
+                    <p class="text-sm text-gray-300"><span class="text-blue-400">L1:</span> Triage, initial analysis | <span class="text-yellow-400">L2:</span> Deep investigation | <span class="text-red-400">L3:</span> Hunt, malware, IR</p>
+                </div>
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">Alert Triage: "CAVE"</h3>
+                    <p class="text-sm text-gray-300"><strong>C</strong>ontext • <strong>A</strong>sset criticality • <strong>V</strong>alidate IOCs • <strong>E</strong>scalate or close</p>
+                </div>
+                <div class="quick-ref rounded-xl p-4">
+                    <h3 class="text-blue-400 font-bold mb-2">Key Metrics</h3>
+                    <p class="text-xs text-gray-300">MTTD (Detect) • MTTR (Respond) • MTTC (Contain) • False Positive Rate</p>
+                </div>
+                <div class="quick-ref rounded-xl p-4">
+                    <h3 class="text-blue-400 font-bold mb-2">Log Sources Priority</h3>
+                    <p class="text-xs text-gray-300">1. Auth/Identity → 2. EDR/Endpoint → 3. Firewall/Network → 4. Email → 5. Cloud</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PEN TESTING -->
+        <section id="pentest" class="mb-12">
+            <h2 class="text-2xl font-bold text-red-400 mb-6">🔓 Penetration Testing</h2>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">Pen Test Phases: "REEVE"</h3>
+                    <p class="text-sm text-gray-300"><strong>R</strong>econ → <strong>E</strong>numerate → <strong>E</strong>xploit → <strong>V</strong>alidate/Maintain → <strong>E</strong>xfil/Report</p>
+                </div>
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">Box Types: "BWG"</h3>
+                    <p class="text-sm text-gray-300"><strong>B</strong>lack (zero knowledge) • <strong>W</strong>hite (full access) • <strong>G</strong>ray (partial)</p>
+                </div>
+                <div class="quick-ref rounded-xl p-4">
+                    <h3 class="text-blue-400 font-bold mb-2">CVSS Severity</h3>
+                    <p class="text-xs text-gray-300"><span class="text-green-400">Low:</span> 0-3.9 | <span class="text-yellow-400">Med:</span> 4-6.9 | <span class="text-orange-400">High:</span> 7-8.9 | <span class="text-red-400">Crit:</span> 9-10</p>
+                </div>
+                <div class="quick-ref rounded-xl p-4">
+                    <h3 class="text-blue-400 font-bold mb-2">Remediation: "TATVD"</h3>
+                    <p class="text-xs text-gray-300"><strong>T</strong>riage → <strong>A</strong>ssign → <strong>T</strong>rack → <strong>V</strong>erify → <strong>D</strong>ocument</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECURITY AWARENESS -->
+        <section id="awareness" class="mb-12">
+            <h2 class="text-2xl font-bold text-yellow-400 mb-6">👥 Security Awareness</h2>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">Phishing Red Flags: "SUSMAIL"</h3>
+                    <p class="text-sm text-gray-300"><strong>S</strong>ender suspicious • <strong>U</strong>rgency • <strong>S</strong>pelling errors • <strong>M</strong>ismatched links • <strong>A</strong>ttachments • <strong>I</strong>nfo requested • <strong>L</strong>ooks too good</p>
+                </div>
+                <div class="mnemonic rounded-xl p-4">
+                    <h3 class="text-yellow-400 font-bold mb-2">SE Principles: "RUSSIA"</h3>
+                    <p class="text-sm text-gray-300"><strong>R</strong>eciprocity • <strong>U</strong>rgency • <strong>S</strong>ocial proof • <strong>S</strong>carcity • <strong>I</strong>ntimidation • <strong>A</strong>uthority</p>
+                </div>
+                <div class="quick-ref rounded-xl p-4">
+                    <h3 class="text-blue-400 font-bold mb-2">User Guidance</h3>
+                    <p class="text-xl text-center"><span class="text-red-400">STOP</span> → <span class="text-yellow-400">THINK</span> → <span class="text-green-400">CONNECT</span></p>
+                </div>
+                <div class="quick-ref rounded-xl p-4">
+                    <h3 class="text-blue-400 font-bold mb-2">Program Metrics</h3>
+                    <p class="text-xs text-gray-300">Click Rate: <span class="text-green-400">&lt;5%</span> | Report Rate: <span class="text-green-400">&gt;70%</span> | Training: <span class="text-green-400">&gt;95%</span></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMMON PORTS -->
+        <section id="ports" class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-400 mb-6">🔌 Common Ports</h2>
+            <div class="card rounded-2xl p-6">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                    <div class="bg-[#0d0d14] rounded p-2"><span class="text-green-400 font-mono">20-21</span> FTP</div>
+                    <div class="bg-[#0d0d14] rounded p-2"><span class="text-green-400 font-mono">22</span> SSH</div>
+                    <div class="bg-[#0d0d14] rounded p-2"><span class="text-green-400 font-mono">23</span> Telnet</div>
+                    <div class="bg-[#0d0d14] rounded p-2"><span class="text-green-400 font-mono">25</span> SMTP</div>
+                    <div class="bg-[#0d0d14] rounded p-2"><span class="text-green-400 font-mono">53</span> DNS</div>
+                    <div class="bg-[#0d0d14] rounded p-2"><span class="text-green-400 font-mono">80</span> HTTP</div>
+                    <div class="bg-[#0d0d14] rounded p-2"><span class="text-green-400 font-mono">110</span> POP3</div>
+                    <div class="bg-[#0d0d14] rounded p-2"><span class="text-green-400 font-mono">143</span> IMAP</div>
+                    <div class="bg-[#0d0d14] rounded p-2"><span class="text-green-400 font-mono">443</span> HTTPS</div>
+                    <div class="bg-[#0d0d14] rounded p-2"><span class="text-green-400 font-mono">445</span> SMB</div>
+                    <div class="bg-[#0d0d14] rounded p-2"><span class="text-green-400 font-mono">389</span> LDAP</div>
+                    <div class="bg-[#0d0d14] rounded p-2"><span class="text-green-400 font-mono">636</span> LDAPS</div>
+                    <div class="bg-[#0d0d14] rounded p-2"><span class="text-green-400 font-mono">1433</span> MSSQL</div>
+                    <div class="bg-[#0d0d14] rounded p-2"><span class="text-green-400 font-mono">3306</span> MySQL</div>
+                    <div class="bg-[#0d0d14] rounded p-2"><span class="text-green-400 font-mono">3389</span> RDP</div>
+                    <div class="bg-[#0d0d14] rounded p-2"><span class="text-green-400 font-mono">5432</span> PostgreSQL</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MICROSOFT SECURITY STACK -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-400 mb-6">Ⓜ️ Microsoft Security Stack</h2>
+            <div class="card rounded-2xl p-6">
+                <div class="grid md:grid-cols-2 gap-4 text-sm">
+                    <div class="bg-[#0d0d14] rounded p-3">
+                        <p class="text-blue-400 font-bold">Identity</p>
+                        <p class="text-gray-400">Entra ID, Conditional Access, PIM, Identity Protection</p>
+                    </div>
+                    <div class="bg-[#0d0d14] rounded p-3">
+                        <p class="text-green-400 font-bold">Endpoint</p>
+                        <p class="text-gray-400">Defender for Endpoint (MDE), Intune, Autopilot</p>
+                    </div>
+                    <div class="bg-[#0d0d14] rounded p-3">
+                        <p class="text-purple-400 font-bold">Data</p>
+                        <p class="text-gray-400">Purview (DLP, Labels), Insider Risk, eDiscovery</p>
+                    </div>
+                    <div class="bg-[#0d0d14] rounded p-3">
+                        <p class="text-orange-400 font-bold">Cloud</p>
+                        <p class="text-gray-400">Defender for Cloud (CSPM/CWPP), Sentinel (SIEM)</p>
+                    </div>
+                    <div class="bg-[#0d0d14] rounded p-3">
+                        <p class="text-cyan-400 font-bold">Email</p>
+                        <p class="text-gray-400">Defender for Office 365 (MDO), Safe Links, Safe Attachments</p>
+                    </div>
+                    <div class="bg-[#0d0d14] rounded p-3">
+                        <p class="text-red-400 font-bold">XDR</p>
+                        <p class="text-gray-400">Microsoft Defender XDR (unified portal), SOAR</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-gray-500 text-sm py-8">
+            <p>Security Engineer Portfolio | <a href="../index.html" class="text-blue-400 hover:underline">Back to Home</a></p>
+            <p class="mt-2">Print this page for a physical cheat sheet!</p>
+        </footer>
+    </main>
+</body>
+</html>

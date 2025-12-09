@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identity & Access Management (IAM) | Security Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Inter', system-ui, sans-serif; }
+        .card { background: linear-gradient(145deg, #12121a, #1a1a2e); border: 1px solid #2a2a3e; }
+        .glow { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+        .nav-item:hover { background: rgba(59, 130, 246, 0.1); }
+        .nav-item.active { background: rgba(59, 130, 246, 0.2); border-left: 2px solid #3b82f6; }
+        .mnemonic { background: linear-gradient(135deg, #1a1a2e 0%, #2a2a3e 100%); border: 1px solid #f59e0b; }
+        .interview-qa { background: linear-gradient(135deg, #1a1a2e 0%, #1e1e3e 100%); border: 1px solid #8b5cf6; }
+        .comparison-table th { background: #1a1a2e; }
+        .comparison-table td { border-color: #2a2a3e; }
+        pre { background: #0d0d14 !important; border-radius: 8px; padding: 16px; overflow-x: auto; }
+        code { font-family: 'Fira Code', monospace; font-size: 13px; }
+        .sidebar { scrollbar-width: thin; scrollbar-color: #3b82f6 #1a1a2e; }
+        .sidebar::-webkit-scrollbar { width: 6px; }
+        .sidebar::-webkit-scrollbar-track { background: #1a1a2e; }
+        .sidebar::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 3px; }
+        .pillar-card { transition: all 0.3s ease; }
+        .pillar-card:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2); }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Mobile Header -->
+    <div class="lg:hidden fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f] border-b border-[#2a2a3e] px-4 py-3">
+        <div class="flex items-center justify-between">
+            <h1 class="text-lg font-bold text-white">IAM Security</h1>
+            <button onclick="toggleSidebar()" class="p-2 rounded-lg bg-[#1a1a2e]">
+                <svg id="menuIcon" class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+                <svg id="closeIcon" class="w-6 h-6 text-gray-400 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Sidebar Overlay -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <!-- Main Content -->
+    <main class="lg:ml-64 pt-14 lg:pt-0">
+        <div class="max-w-5xl mx-auto px-6 py-12">
+            <!-- Hero Section -->
+            <section id="overview" class="mb-16">
+                <div class="flex items-center gap-2 text-blue-400 mb-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                    <span class="text-sm font-medium">Identity & Access Management</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">IAM Security Engineering</h1>
+                <p class="text-xl text-gray-400 mb-8">Microsoft Entra ID, Conditional Access, PIM, MFA, SSO, RBAC - Complete enterprise identity security implementation.</p>
+
+                <!-- Experience Badges -->
+                <div class="flex flex-wrap gap-3 mb-8">
+                    <span class="px-4 py-2 rounded-full bg-blue-500/20 text-blue-400 text-sm font-medium border border-blue-500/30">
+                        Microsoft Entra ID
+                    </span>
+                    <span class="px-4 py-2 rounded-full bg-purple-500/20 text-purple-400 text-sm font-medium border border-purple-500/30">
+                        Conditional Access
+                    </span>
+                    <span class="px-4 py-2 rounded-full bg-orange-500/20 text-orange-400 text-sm font-medium border border-orange-500/30">
+                        Privileged Identity Management
+                    </span>
+                    <span class="px-4 py-2 rounded-full bg-green-500/20 text-green-400 text-sm font-medium border border-green-500/30">
+                        MFA & Passwordless
+                    </span>
+                    <span class="px-4 py-2 rounded-full bg-cyan-500/20 text-cyan-400 text-sm font-medium border border-cyan-500/30">
+                        SSO & SAML/OIDC
+                    </span>
+                </div>
+
+                <!-- Key Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="card rounded-xl p-4 text-center">
+                        <p class="text-2xl font-bold text-blue-400">15K+</p>
+                        <p class="text-sm text-gray-400">Identities Managed</p>
+                    </div>
+                    <div class="card rounded-xl p-4 text-center">
+                        <p class="text-2xl font-bold text-green-400">100%</p>
+                        <p class="text-sm text-gray-400">MFA Enforcement</p>
+                    </div>
+                    <div class="card rounded-xl p-4 text-center">
+                        <p class="text-2xl font-bold text-purple-400">50+</p>
+                        <p class="text-sm text-gray-400">CA Policies</p>
+                    </div>
+                    <div class="card rounded-xl p-4 text-center">
+                        <p class="text-2xl font-bold text-orange-400">JIT</p>
+                        <p class="text-sm text-gray-400">Admin Access via PIM</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Master Mnemonic -->
+            <section class="mb-16">
+                <div class="mnemonic rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold text-yellow-400 mb-4">🧠 Master Mnemonic: "CLAMP SAFE"</h2>
+                    <p class="text-gray-400 mb-6">Remember all IAM components with this framework:</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="space-y-3">
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">C</span>onditional Access - Context-aware access control</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">L</span>east Privilege - Minimum necessary permissions</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">A</span>uthentication - MFA, passwordless, methods</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">M</span>anaged Identities - Service accounts for apps</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">P</span>rivileged Identity Management - JIT admin access</p>
+                        </div>
+                        <div class="space-y-3">
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">S</span>SO - Single Sign-On, federation</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">A</span>ccess Reviews - Periodic permission validation</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">F</span>ederation - SAML, OAuth, OIDC protocols</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">E</span>ntitlement Management - Access packages</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- IAM Fundamentals -->
+            <section id="fundamentals" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                        </svg>
+                    </span>
+                    IAM Fundamentals
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">🎯 What is IAM?</h3>
+                    <p class="text-gray-400 mb-4">Identity and Access Management (IAM) is the security discipline that ensures the <span class="text-blue-400">right individuals</span> have <span class="text-green-400">appropriate access</span> to <span class="text-purple-400">technology resources</span> at the <span class="text-orange-400">right time</span> and for the <span class="text-cyan-400">right reasons</span>.</p>
+                    
+                    <div class="bg-[#1a1a2e] rounded-lg p-4 mt-4">
+                        <h4 class="text-white font-medium mb-2">The Four A's of IAM</h4>
+                        <div class="grid md:grid-cols-4 gap-4 mt-3">
+                            <div class="text-center">
+                                <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-2">
+                                    <span class="text-blue-400 font-bold">A</span>
+                                </div>
+                                <p class="text-blue-400 font-medium">Authentication</p>
+                                <p class="text-gray-500 text-xs">Who are you?</p>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-2">
+                                    <span class="text-green-400 font-bold">A</span>
+                                </div>
+                                <p class="text-green-400 font-medium">Authorization</p>
+                                <p class="text-gray-500 text-xs">What can you do?</p>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-2">
+                                    <span class="text-purple-400 font-bold">A</span>
+                                </div>
+                                <p class="text-purple-400 font-medium">Administration</p>
+                                <p class="text-gray-500 text-xs">Manage identities</p>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center mx-auto mb-2">
+                                    <span class="text-orange-400 font-bold">A</span>
+                                </div>
+                                <p class="text-orange-400 font-medium">Audit</p>
+                                <p class="text-gray-500 text-xs">Track & report</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Identity Types -->
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">👤 Identity Types in Enterprise</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-blue-400 font-medium mb-3">Human Identities</h4>
+                            <div class="space-y-3">
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white font-medium text-sm">Employees</p>
+                                    <p class="text-gray-500 text-xs">Internal users with corporate accounts</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white font-medium text-sm">Contractors</p>
+                                    <p class="text-gray-500 text-xs">External users with limited access, time-bound</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white font-medium text-sm">Partners (B2B)</p>
+                                    <p class="text-gray-500 text-xs">Guest accounts via Azure AD B2B</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white font-medium text-sm">Customers (B2C)</p>
+                                    <p class="text-gray-500 text-xs">External identity for customer-facing apps</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-green-400 font-medium mb-3">Non-Human Identities</h4>
+                            <div class="space-y-3">
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white font-medium text-sm">Service Accounts</p>
+                                    <p class="text-gray-500 text-xs">Traditional accounts for services/apps</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white font-medium text-sm">Managed Identities</p>
+                                    <p class="text-gray-500 text-xs">Azure-managed, no credential management</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white font-medium text-sm">Service Principals</p>
+                                    <p class="text-gray-500 text-xs">App registrations for OAuth/API access</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white font-medium text-sm">Workload Identities</p>
+                                    <p class="text-gray-500 text-xs">Kubernetes, GitHub Actions, etc.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IAM Architecture -->
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">🏗️ Enterprise IAM Architecture</h3>
+                    <div class="bg-[#0d0d14] rounded-xl p-6">
+                        <pre class="text-sm text-center">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           IDENTITY PROVIDERS                                 │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐             │
+│  │   On-Premises   │  │  Microsoft      │  │   External      │             │
+│  │   Active Dir    │◄─┤  Entra ID       │◄─┤   IdPs (B2B)    │             │
+│  │   (AD DS)       │  │  (Cloud IdP)    │  │   Google/Okta   │             │
+│  └────────┬────────┘  └────────┬────────┘  └─────────────────┘             │
+│           │                    │                                            │
+│           │    AD Connect      │                                            │
+│           └────────────────────┘                                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         POLICY ENGINE                                        │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │                    CONDITIONAL ACCESS                                │   │
+│  │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐   │   │
+│  │  │  User   │  │ Device  │  │Location │  │  App    │  │  Risk   │   │   │
+│  │  │ Context │  │ State   │  │ Context │  │ Context │  │ Level   │   │   │
+│  │  └────┬────┘  └────┬────┘  └────┬────┘  └────┬────┘  └────┬────┘   │   │
+│  │       └───────────┬┴───────────┴────────────┴─────────────┘        │   │
+│  │                   ▼                                                 │   │
+│  │            ┌─────────────┐                                         │   │
+│  │            │  Decision   │──► Allow / Block / MFA / Compliant      │   │
+│  │            └─────────────┘                                         │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         PROTECTED RESOURCES                                  │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐      │
+│  │Microsoft │  │  Azure   │  │   SaaS   │  │ On-Prem  │  │   APIs   │      │
+│  │   365    │  │Resources │  │   Apps   │  │   Apps   │  │          │      │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘  └──────────┘      │
+└─────────────────────────────────────────────────────────────────────────────┘
+                        </pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Microsoft Entra ID -->
+            <section id="entra-id" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/>
+                        </svg>
+                    </span>
+                    Microsoft Entra ID (Azure AD)
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">☁️ What is Microsoft Entra ID?</h3>
+                    <p class="text-gray-400 mb-4">Microsoft Entra ID (formerly Azure Active Directory) is Microsoft's cloud-based identity and access management service. It's the backbone of Microsoft 365 and Azure, providing authentication and authorization for millions of organizations.</p>
+                    
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 mb-4">
+                        <p class="text-yellow-400 text-sm"><strong>⚠️ Key Distinction:</strong> Entra ID is NOT just "AD in the cloud." It's a completely different service using modern protocols (OAuth, OIDC) vs. traditional AD (Kerberos, LDAP).</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6 mt-6">
+                        <div>
+                            <h4 class="text-cyan-400 font-medium mb-3">Entra ID Features</h4>
+                            <ul class="space-y-2 text-sm text-gray-400">
+                                <li>• Cloud-native identity provider</li>
+                                <li>• OAuth 2.0, OIDC, SAML 2.0 protocols</li>
+                                <li>• Conditional Access policies</li>
+                                <li>• Identity Protection (risk-based)</li>
+                                <li>• Privileged Identity Management</li>
+                                <li>• B2B/B2C identity scenarios</li>
+                                <li>• Application management (SSO)</li>
+                                <li>• Self-service password reset</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-orange-400 font-medium mb-3">On-Premises AD Features</h4>
+                            <ul class="space-y-2 text-sm text-gray-400">
+                                <li>• Kerberos authentication</li>
+                                <li>• LDAP directory services</li>
+                                <li>• Group Policy (GPO)</li>
+                                <li>• NTLM authentication (legacy)</li>
+                                <li>• Domain controllers</li>
+                                <li>• Organizational Units (OUs)</li>
+                                <li>• Certificate Services (PKI)</li>
+                                <li>• DNS integration</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Entra ID Editions -->
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">📊 Entra ID License Editions</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm comparison-table">
+                            <thead>
+                                <tr class="text-left">
+                                    <th class="p-4 rounded-tl-lg">Feature</th>
+                                    <th class="p-4">Free</th>
+                                    <th class="p-4">P1</th>
+                                    <th class="p-4 rounded-tr-lg">P2</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium">User/Group Management</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium">SSO (Unlimited Apps)</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-yellow-400">10 apps</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium">MFA</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-yellow-400">Security Defaults</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-green-400">✓ Full</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-green-400">✓ Full</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium">Conditional Access</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-red-400">✗</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium">Identity Protection</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-red-400">✗</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-red-400">✗</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium">PIM</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-red-400">✗</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-red-400">✗</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium">Access Reviews</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-red-400">✗</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-red-400">✗</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium rounded-bl-lg">Included In</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">M365 Basic</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">M365 E3</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] rounded-br-lg">M365 E5</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Hybrid Identity -->
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">🔗 Hybrid Identity with Entra Connect</h3>
+                    <p class="text-gray-400 mb-4">Most enterprises run hybrid environments, synchronizing on-premises AD with Entra ID using <span class="text-cyan-400">Entra Connect</span> (formerly Azure AD Connect).</p>
+
+                    <div class="bg-[#0d0d14] rounded-xl p-6 mb-4">
+                        <pre class="text-sm text-center">
+┌─────────────────┐         ┌─────────────────┐         ┌─────────────────┐
+│   On-Premises   │         │  Entra Connect  │         │   Entra ID      │
+│   Active Dir    │────────►│    Server       │────────►│   (Cloud)       │
+│                 │         │                 │         │                 │
+│  Users/Groups   │  Sync   │  Password Hash  │  Sync   │  Users/Groups   │
+│  Computers      │ ◄────── │  Pass-Through   │ ◄────── │  Devices        │
+│  Attributes     │         │  Federation     │         │  Attributes     │
+└─────────────────┘         └─────────────────┘         └─────────────────┘
+                        </pre>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-blue-400 font-medium mb-2">Password Hash Sync (PHS)</h4>
+                            <p class="text-gray-500 text-xs">Hash of password synced to cloud. Most common, simplest. Users authenticate to Entra ID directly.</p>
+                            <p class="text-green-400 text-xs mt-2">✓ Recommended for most orgs</p>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-purple-400 font-medium mb-2">Pass-Through Auth (PTA)</h4>
+                            <p class="text-gray-500 text-xs">Password validated against on-prem AD in real-time. No passwords stored in cloud.</p>
+                            <p class="text-yellow-400 text-xs mt-2">⚠️ Requires always-on agents</p>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-orange-400 font-medium mb-2">Federation (AD FS)</h4>
+                            <p class="text-gray-500 text-xs">Authentication happens entirely on-premises via AD FS. Most complex.</p>
+                            <p class="text-red-400 text-xs mt-2">⚠️ Legacy, being phased out</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Authentication & MFA -->
+            <section id="authentication" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                    </span>
+                    Authentication & Multi-Factor Authentication
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">🔐 Authentication Factors</h3>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="pillar-card bg-[#1a1a2e] rounded-xl p-5">
+                            <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-4">
+                                <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                </svg>
+                            </div>
+                            <h4 class="text-blue-400 font-bold mb-2">Something You Know</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Password</li>
+                                <li>• PIN</li>
+                                <li>• Security questions</li>
+                            </ul>
+                            <p class="text-gray-500 text-xs mt-2">Weakest factor - can be guessed, phished, leaked</p>
+                        </div>
+                        <div class="pillar-card bg-[#1a1a2e] rounded-xl p-5">
+                            <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
+                                <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <h4 class="text-green-400 font-bold mb-2">Something You Have</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Authenticator app</li>
+                                <li>• Hardware token (FIDO2)</li>
+                                <li>• SMS/Phone (weak)</li>
+                                <li>• Smart card</li>
+                            </ul>
+                            <p class="text-gray-500 text-xs mt-2">Strong factor - possession required</p>
+                        </div>
+                        <div class="pillar-card bg-[#1a1a2e] rounded-xl p-5">
+                            <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mb-4">
+                                <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"/>
+                                </svg>
+                            </div>
+                            <h4 class="text-purple-400 font-bold mb-2">Something You Are</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Fingerprint</li>
+                                <li>• Face recognition</li>
+                                <li>• Iris scan</li>
+                                <li>• Voice recognition</li>
+                            </ul>
+                            <p class="text-gray-500 text-xs mt-2">Strongest factor - inherent to user</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MFA Methods -->
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">📱 MFA Methods in Microsoft Entra ID</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm comparison-table">
+                            <thead>
+                                <tr class="text-left">
+                                    <th class="p-4 rounded-tl-lg">Method</th>
+                                    <th class="p-4">Security Level</th>
+                                    <th class="p-4">User Experience</th>
+                                    <th class="p-4">Phishing Resistant</th>
+                                    <th class="p-4 rounded-tr-lg">Recommendation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium">FIDO2 Security Key</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-green-400">★★★★★</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-yellow-400">★★★☆☆</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-green-400">✓ Yes</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-green-400">Best for admins</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium">Windows Hello</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-green-400">★★★★★</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-green-400">★★★★★</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-green-400">✓ Yes</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-green-400">Best overall</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium">Authenticator (Push)</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-blue-400">★★★★☆</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-green-400">★★★★★</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-yellow-400">Partial*</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-blue-400">Great for users</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium">Authenticator (TOTP)</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-blue-400">★★★★☆</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-yellow-400">★★★☆☆</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-red-400">✗ No</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-yellow-400">Good backup</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium">SMS</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-orange-400">★★☆☆☆</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-green-400">★★★★☆</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-red-400">✗ No</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-red-400">Avoid if possible</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium rounded-bl-lg">Voice Call</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-orange-400">★★☆☆☆</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-yellow-400">★★★☆☆</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-red-400">✗ No</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] text-red-400 rounded-br-lg">Last resort</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-gray-500 text-xs mt-4">*Number matching and additional context in push notifications improves resistance to MFA fatigue attacks</p>
+                </div>
+
+                <!-- Passwordless -->
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">🔑 Passwordless Authentication</h3>
+                    <p class="text-gray-400 mb-4">The future of authentication eliminates passwords entirely, using stronger factors:</p>
+                    
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-cyan-400 font-medium mb-2">Windows Hello for Business</h4>
+                            <p class="text-gray-500 text-xs mb-2">Biometric (face/fingerprint) or PIN tied to device TPM</p>
+                            <ul class="text-gray-400 text-xs space-y-1">
+                                <li>• Asymmetric key pair</li>
+                                <li>• Private key never leaves device</li>
+                                <li>• Phishing resistant</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-purple-400 font-medium mb-2">FIDO2 Security Keys</h4>
+                            <p class="text-gray-500 text-xs mb-2">Physical hardware tokens (YubiKey, Feitian)</p>
+                            <ul class="text-gray-400 text-xs space-y-1">
+                                <li>• WebAuthn standard</li>
+                                <li>• USB/NFC/Bluetooth</li>
+                                <li>• Best for privileged users</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-green-400 font-medium mb-2">Authenticator Passwordless</h4>
+                            <p class="text-gray-500 text-xs mb-2">Phone becomes the credential</p>
+                            <ul class="text-gray-400 text-xs space-y-1">
+                                <li>• Phone sign-in enabled</li>
+                                <li>• Number matching required</li>
+                                <li>• Convenient for most users</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-green-500/10 border border-green-500/30 rounded-lg p-4 mt-4">
+                        <p class="text-green-400 text-sm"><strong>Enterprise Recommendation:</strong> Deploy Windows Hello for Business as primary, FIDO2 keys for admins, Authenticator app as backup. Block SMS/Voice for privileged accounts.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Conditional Access -->
+            <section id="conditional-access" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </span>
+                    Conditional Access - The Zero Trust Policy Engine
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">🎯 What is Conditional Access?</h3>
+                    <p class="text-gray-400 mb-4">Conditional Access is Microsoft's Zero Trust policy engine. It evaluates signals (user, device, location, app, risk) and makes access decisions in real-time. Think of it as: <span class="text-orange-400">"IF this, THEN require that"</span></p>
+
+                    <div class="bg-[#0d0d14] rounded-xl p-6">
+                        <pre class="text-sm text-center">
+                    ┌───────────────────────────────────────────────────────┐
+                    │                 CONDITIONAL ACCESS                     │
+                    │                                                        │
+                    │   ┌─────────────────────────────────────────────┐     │
+                    │   │                   SIGNALS                    │     │
+                    │   │  ┌───────┐ ┌───────┐ ┌────────┐ ┌────────┐ │     │
+                    │   │  │ User/ │ │Device │ │Location│ │  App   │ │     │
+                    │   │  │ Group │ │ State │ │        │ │        │ │     │
+                    │   │  └───┬───┘ └───┬───┘ └───┬────┘ └───┬────┘ │     │
+                    │   │      │         │         │          │       │     │
+                    │   │      └─────────┴────┬────┴──────────┘       │     │
+                    │   └────────────────────┬┴───────────────────────┘     │
+                    │                        │                               │
+                    │                        ▼                               │
+                    │   ┌─────────────────────────────────────────────┐     │
+                    │   │              VERIFY EVERY TIME               │     │
+                    │   │         ┌──────────────────────┐            │     │
+                    │   │         │   + Real-time Risk   │            │     │
+                    │   │         │   + Session Context  │            │     │
+                    │   │         └──────────────────────┘            │     │
+                    │   └─────────────────────┬───────────────────────┘     │
+                    │                         │                              │
+                    │                         ▼                              │
+                    │   ┌─────────────────────────────────────────────┐     │
+                    │   │                  DECISION                    │     │
+                    │   │  ┌─────────┐ ┌─────────┐ ┌─────────────────┐│     │
+                    │   │  │ Allow   │ │  Block  │ │ Require Control ││     │
+                    │   │  │         │ │         │ │ MFA/Compliant   ││     │
+                    │   │  └─────────┘ └─────────┘ └─────────────────┘│     │
+                    │   └─────────────────────────────────────────────┘     │
+                    └───────────────────────────────────────────────────────┘
+                        </pre>
+                    </div>
+                </div>
+
+                <!-- CA Policy Components -->
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">🧩 Conditional Access Policy Components</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-blue-400 font-medium mb-3">Assignments (WHO + WHAT)</h4>
+                            <div class="space-y-3">
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white font-medium text-sm">Users & Groups</p>
+                                    <p class="text-gray-500 text-xs">Include/exclude specific users, groups, roles, or all users</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white font-medium text-sm">Target Resources</p>
+                                    <p class="text-gray-500 text-xs">Cloud apps, user actions, authentication context</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white font-medium text-sm">Conditions</p>
+                                    <p class="text-gray-500 text-xs">Device platform, location, client app, device state, risk</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-green-400 font-medium mb-3">Access Controls (THEN)</h4>
+                            <div class="space-y-3">
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white font-medium text-sm">Grant Controls</p>
+                                    <p class="text-gray-500 text-xs">Block, Require MFA, Require compliant device, Require Hybrid Azure AD join, Require approved app, Require app protection policy</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white font-medium text-sm">Session Controls</p>
+                                    <p class="text-gray-500 text-xs">App-enforced restrictions, Conditional Access App Control (MCAS), Sign-in frequency, Persistent browser session</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Essential CA Policies -->
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">🛡️ Essential Conditional Access Policies (Baseline)</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="px-2 py-0.5 rounded text-xs bg-red-500/20 text-red-400">CRITICAL</span>
+                                <h4 class="text-red-400 font-medium">CA001: Require MFA for Admins</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-2">All admin roles must always use MFA, no exceptions.</p>
+                            <div class="bg-[#0d0d14] rounded-lg p-3 text-xs">
+                                <p class="text-cyan-400">Users: Directory roles (Global Admin, Security Admin, Exchange Admin...)</p>
+                                <p class="text-cyan-400">Apps: All cloud apps</p>
+                                <p class="text-green-400">Grant: Require MFA</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="px-2 py-0.5 rounded text-xs bg-red-500/20 text-red-400">CRITICAL</span>
+                                <h4 class="text-red-400 font-medium">CA002: Block Legacy Authentication</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-2">Block IMAP, POP3, SMTP - they don't support MFA.</p>
+                            <div class="bg-[#0d0d14] rounded-lg p-3 text-xs">
+                                <p class="text-cyan-400">Users: All users</p>
+                                <p class="text-cyan-400">Conditions: Client apps = Exchange ActiveSync, Other clients</p>
+                                <p class="text-red-400">Grant: Block access</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-orange-500/10 border border-orange-500/30 rounded-lg p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="px-2 py-0.5 rounded text-xs bg-orange-500/20 text-orange-400">HIGH</span>
+                                <h4 class="text-orange-400 font-medium">CA003: Require MFA for All Users</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-2">All users require MFA for all cloud apps.</p>
+                            <div class="bg-[#0d0d14] rounded-lg p-3 text-xs">
+                                <p class="text-cyan-400">Users: All users (exclude break-glass)</p>
+                                <p class="text-cyan-400">Apps: All cloud apps</p>
+                                <p class="text-green-400">Grant: Require MFA</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-orange-500/10 border border-orange-500/30 rounded-lg p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="px-2 py-0.5 rounded text-xs bg-orange-500/20 text-orange-400">HIGH</span>
+                                <h4 class="text-orange-400 font-medium">CA004: Require Compliant Device for Office 365</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-2">Corporate data only accessible from managed devices.</p>
+                            <div class="bg-[#0d0d14] rounded-lg p-3 text-xs">
+                                <p class="text-cyan-400">Users: All users</p>
+                                <p class="text-cyan-400">Apps: Office 365</p>
+                                <p class="text-green-400">Grant: Require device to be marked as compliant OR Require Hybrid Azure AD joined device</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="px-2 py-0.5 rounded text-xs bg-yellow-500/20 text-yellow-400">MEDIUM</span>
+                                <h4 class="text-yellow-400 font-medium">CA005: Block Access from High-Risk Countries</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-2">Block sign-ins from countries where you don't operate.</p>
+                            <div class="bg-[#0d0d14] rounded-lg p-3 text-xs">
+                                <p class="text-cyan-400">Users: All users</p>
+                                <p class="text-cyan-400">Conditions: Locations = Selected (high-risk countries)</p>
+                                <p class="text-red-400">Grant: Block access</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="px-2 py-0.5 rounded text-xs bg-purple-500/20 text-purple-400">P2 REQUIRED</span>
+                                <h4 class="text-purple-400 font-medium">CA006: Block High-Risk Sign-ins</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-2">Automatically block when Identity Protection detects high risk.</p>
+                            <div class="bg-[#0d0d14] rounded-lg p-3 text-xs">
+                                <p class="text-cyan-400">Users: All users</p>
+                                <p class="text-cyan-400">Conditions: Sign-in risk = High</p>
+                                <p class="text-red-400">Grant: Block access</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Named Locations -->
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">📍 Named Locations</h3>
+                    <p class="text-gray-400 mb-4">Define trusted or blocked locations for use in CA policies:</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-green-400 font-medium mb-2">Trusted Locations</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Corporate office IP ranges</li>
+                                <li>• VPN exit points</li>
+                                <li>• Data center IPs</li>
+                                <li>• Mark as "trusted" to skip MFA</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-red-400 font-medium mb-2">Blocked Countries</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Countries where you don't operate</li>
+                                <li>• High cybercrime regions</li>
+                                <li>• Sanctioned countries</li>
+                                <li>• Use with CA policy to block</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 mt-4">
+                        <p class="text-blue-400 text-sm"><strong>💡 Best Practice:</strong> Always have "All trusted locations" as an exclude option in MFA policies so users on corporate network don't get prompted constantly. But NEVER skip MFA for admin roles, even from trusted locations.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PIM Section -->
+            <section id="pim" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </span>
+                    Privileged Identity Management (PIM)
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">⚡ What is PIM?</h3>
+                    <p class="text-gray-400 mb-4">Privileged Identity Management provides <span class="text-red-400">just-in-time (JIT)</span> and <span class="text-orange-400">just-enough-access (JEA)</span> to privileged roles. Instead of having permanent admin rights, users activate roles when needed for a limited time.</p>
+
+                    <div class="bg-[#0d0d14] rounded-xl p-6 mb-4">
+                        <pre class="text-sm text-center">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        PIM WORKFLOW                                          │
+│                                                                              │
+│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌────────────┐│
+│  │   User is    │    │    User      │    │  Approval +  │    │   Role     ││
+│  │   ELIGIBLE   │───►│   REQUESTS   │───►│     MFA      │───►│   ACTIVE   ││
+│  │  for role    │    │  activation  │    │   required   │    │  (1-8 hrs) ││
+│  └──────────────┘    └──────────────┘    └──────────────┘    └──────────────┘
+│                                                                     │        │
+│                                                                     ▼        │
+│                                                              ┌────────────┐  │
+│                                                              │   Auto     │  │
+│                                                              │  DEACTIVATE│  │
+│                                                              └────────────┘  │
+└─────────────────────────────────────────────────────────────────────────────┘
+                        </pre>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-orange-400 font-medium mb-3">Eligible vs Active</h4>
+                            <div class="space-y-3">
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-orange-400 font-medium text-sm">Eligible Assignment</p>
+                                    <p class="text-gray-500 text-xs">User CAN activate the role when needed. No permissions until activated. This is the recommended approach.</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-green-400 font-medium text-sm">Active Assignment</p>
+                                    <p class="text-gray-500 text-xs">User HAS the role permanently. Use only for break-glass accounts or when absolutely required.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-cyan-400 font-medium mb-3">PIM Settings Per Role</h4>
+                            <div class="space-y-3">
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white font-medium text-sm">Activation Requirements</p>
+                                    <p class="text-gray-500 text-xs">Max duration (e.g., 8 hours), require MFA, require justification, require ticket, require approval</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white font-medium text-sm">Assignment Requirements</p>
+                                    <p class="text-gray-500 text-xs">Allow permanent eligible, allow permanent active, expire eligible after X days</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PIM Best Practices -->
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">✅ PIM Implementation Best Practices</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
+                            <h4 class="text-green-400 font-medium mb-2">DO</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>✓ Make all admin roles eligible, not active</li>
+                                <li>✓ Require MFA for activation</li>
+                                <li>✓ Require justification for all activations</li>
+                                <li>✓ Set max activation to 8 hours or less</li>
+                                <li>✓ Require approval for Global Admin</li>
+                                <li>✓ Configure alerts for activations</li>
+                                <li>✓ Run access reviews quarterly</li>
+                            </ul>
+                        </div>
+                        <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+                            <h4 class="text-red-400 font-medium mb-2">DON'T</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>✗ Assign permanent Global Admin</li>
+                                <li>✗ Allow activation without MFA</li>
+                                <li>✗ Set activation duration to 24 hours</li>
+                                <li>✗ Skip access reviews</li>
+                                <li>✗ Have more than 5 Global Admins</li>
+                                <li>✗ Use admin accounts for daily work</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 mt-4">
+                        <p class="text-yellow-400 text-sm"><strong>⚠️ Break-Glass Accounts:</strong> Always have 2 emergency access accounts with permanent Global Admin (cloud-only, not synced, complex passwords stored in safe, excluded from CA policies, monitored for any use). These are your "break glass in case of emergency" accounts.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SSO & Federation -->
+            <section id="sso" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                        </svg>
+                    </span>
+                    Single Sign-On (SSO) & Federation
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">🔗 SSO Protocols Explained</h3>
+                    
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="pillar-card bg-[#1a1a2e] rounded-xl p-5">
+                            <h4 class="text-blue-400 font-bold mb-3">SAML 2.0</h4>
+                            <p class="text-gray-400 text-sm mb-3">Security Assertion Markup Language - XML-based protocol for enterprise SSO.</p>
+                            <div class="space-y-2 text-xs">
+                                <p class="text-gray-500"><strong>Identity Provider (IdP):</strong> Entra ID</p>
+                                <p class="text-gray-500"><strong>Service Provider (SP):</strong> SaaS app</p>
+                                <p class="text-gray-500"><strong>Assertion:</strong> XML token with user claims</p>
+                            </div>
+                            <p class="text-blue-400 text-xs mt-3">Best for: Enterprise SaaS apps</p>
+                        </div>
+                        <div class="pillar-card bg-[#1a1a2e] rounded-xl p-5">
+                            <h4 class="text-green-400 font-bold mb-3">OAuth 2.0</h4>
+                            <p class="text-gray-400 text-sm mb-3">Authorization framework - delegates access without sharing credentials.</p>
+                            <div class="space-y-2 text-xs">
+                                <p class="text-gray-500"><strong>Authorization Server:</strong> Entra ID</p>
+                                <p class="text-gray-500"><strong>Resource Server:</strong> API</p>
+                                <p class="text-gray-500"><strong>Token:</strong> Access token (JWT)</p>
+                            </div>
+                            <p class="text-green-400 text-xs mt-3">Best for: API authorization</p>
+                        </div>
+                        <div class="pillar-card bg-[#1a1a2e] rounded-xl p-5">
+                            <h4 class="text-purple-400 font-bold mb-3">OpenID Connect (OIDC)</h4>
+                            <p class="text-gray-400 text-sm mb-3">Identity layer on top of OAuth 2.0 - adds authentication.</p>
+                            <div class="space-y-2 text-xs">
+                                <p class="text-gray-500"><strong>Builds on:</strong> OAuth 2.0</p>
+                                <p class="text-gray-500"><strong>Adds:</strong> ID Token with user info</p>
+                                <p class="text-gray-500"><strong>Token:</strong> ID token + Access token</p>
+                            </div>
+                            <p class="text-purple-400 text-xs mt-3">Best for: Modern web/mobile apps</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SAML Flow -->
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">📊 SAML Authentication Flow</h3>
+                    <div class="bg-[#0d0d14] rounded-xl p-6">
+                        <pre class="text-sm">
+┌─────────┐                    ┌─────────────┐                    ┌────────────┐
+│  User   │                    │   Entra ID  │                    │  SaaS App  │
+│ Browser │                    │    (IdP)    │                    │    (SP)    │
+└────┬────┘                    └──────┬──────┘                    └─────┬──────┘
+     │                                │                                  │
+     │  1. User accesses app          │                                  │
+     │───────────────────────────────────────────────────────────────────►
+     │                                │                                  │
+     │                                │     2. App generates SAML Request│
+     │  3. Redirect to IdP with SAML Request                             │
+     │◄──────────────────────────────────────────────────────────────────
+     │                                │                                  │
+     │  4. User authenticates (MFA)   │                                  │
+     │───────────────────────────────►│                                  │
+     │                                │                                  │
+     │  5. IdP returns SAML Response  │                                  │
+     │◄───────────────────────────────│                                  │
+     │                                │                                  │
+     │  6. Browser POSTs SAML Response to App                            │
+     │───────────────────────────────────────────────────────────────────►
+     │                                │                                  │
+     │  7. App validates, grants access                                  │
+     │◄──────────────────────────────────────────────────────────────────
+     │                                │                                  │
+                        </pre>
+                    </div>
+                </div>
+
+                <!-- Enterprise App Types -->
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">🏢 Enterprise Application Types in Entra ID</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="px-2 py-0.5 rounded text-xs bg-blue-500/20 text-blue-400">Gallery App</span>
+                                <h4 class="text-white font-medium">Pre-integrated Gallery Applications</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm">3000+ pre-configured apps (Salesforce, ServiceNow, Zoom). Just search, add, and configure. Tutorials provided.</p>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="px-2 py-0.5 rounded text-xs bg-purple-500/20 text-purple-400">Non-Gallery</span>
+                                <h4 class="text-white font-medium">Custom SAML/OIDC Applications</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm">Apps not in gallery - manually configure SAML/OIDC settings. Need metadata from the app vendor.</p>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="px-2 py-0.5 rounded text-xs bg-green-500/20 text-green-400">On-Prem</span>
+                                <h4 class="text-white font-medium">On-Premises Apps via App Proxy</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm">Publish internal web apps externally without VPN. Uses connectors on-premises. Supports Kerberos/header-based auth.</p>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="px-2 py-0.5 rounded text-xs bg-orange-500/20 text-orange-400">Linked</span>
+                                <h4 class="text-white font-medium">Linked SSO (Password Vaulting)</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm">For apps that don't support federation. Stores and auto-fills credentials. Last resort option.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RBAC Section -->
+            <section id="rbac" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-pink-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </span>
+                    Role-Based Access Control (RBAC)
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">🎭 RBAC Fundamentals</h3>
+                    <p class="text-gray-400 mb-4">RBAC grants access based on roles rather than individual permissions. A role is a collection of permissions that can be assigned to users, groups, or service principals at a specific scope.</p>
+
+                    <div class="bg-[#0d0d14] rounded-xl p-6 mb-4">
+                        <pre class="text-sm text-center">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          AZURE RBAC COMPONENTS                               │
+│                                                                              │
+│   WHO                    +    WHAT              +    WHERE                   │
+│   (Security Principal)        (Role)                 (Scope)                 │
+│                                                                              │
+│   ┌─────────────┐           ┌─────────────┐       ┌─────────────────────┐   │
+│   │    User     │           │   Owner     │       │  Management Group   │   │
+│   │    Group    │     +     │ Contributor │   +   │    Subscription     │   │
+│   │Service Princ│           │   Reader    │       │   Resource Group    │   │
+│   │Managed Ident│           │  Custom...  │       │      Resource       │   │
+│   └─────────────┘           └─────────────┘       └─────────────────────┘   │
+│                                                                              │
+│                          = ROLE ASSIGNMENT                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+                        </pre>
+                    </div>
+                </div>
+
+                <!-- Key Azure Roles -->
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">🔑 Key Azure RBAC Roles</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm comparison-table">
+                            <thead>
+                                <tr class="text-left">
+                                    <th class="p-4 rounded-tl-lg">Role</th>
+                                    <th class="p-4">Permissions</th>
+                                    <th class="p-4 rounded-tr-lg">Use Case</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium text-red-400">Owner</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">Full access + can assign roles</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">Subscription admins only</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium text-orange-400">Contributor</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">Create/manage resources, no role assignment</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">DevOps, developers</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium text-blue-400">Reader</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">View resources only</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">Auditors, read-only access</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium text-green-400">User Access Admin</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">Manage user access only</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">IAM administrators</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium text-purple-400">Security Admin</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">Manage security policies, Defender</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">Security team</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium text-cyan-400 rounded-bl-lg">Security Reader</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">View security settings</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] rounded-br-lg">SOC analysts</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Entra ID vs Azure Roles -->
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">⚠️ Entra ID Roles vs Azure Roles</h3>
+                    
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 mb-4">
+                        <p class="text-yellow-400 text-sm"><strong>Common Interview Question!</strong> These are TWO DIFFERENT RBAC systems that are often confused.</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-blue-400 font-medium mb-3">Entra ID Roles (Directory Roles)</h4>
+                            <p class="text-gray-400 text-sm mb-2">Manage <span class="text-blue-400">Entra ID resources</span>:</p>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Global Administrator</li>
+                                <li>• User Administrator</li>
+                                <li>• Security Administrator</li>
+                                <li>• Exchange Administrator</li>
+                                <li>• Teams Administrator</li>
+                            </ul>
+                            <p class="text-gray-500 text-xs mt-2">Scope: Tenant-wide (all of Entra ID)</p>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-green-400 font-medium mb-3">Azure RBAC Roles</h4>
+                            <p class="text-gray-400 text-sm mb-2">Manage <span class="text-green-400">Azure resources</span>:</p>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Owner</li>
+                                <li>• Contributor</li>
+                                <li>• Reader</li>
+                                <li>• Virtual Machine Contributor</li>
+                                <li>• Storage Blob Data Owner</li>
+                            </ul>
+                            <p class="text-gray-500 text-xs mt-2">Scope: Management Group/Sub/RG/Resource</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Identity Protection -->
+            <section id="identity-protection" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                    </span>
+                    Identity Protection (Entra ID P2)
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">🛡️ Risk-Based Identity Protection</h3>
+                    <p class="text-gray-400 mb-4">Identity Protection uses Microsoft's threat intelligence to detect suspicious activities and calculate risk scores for sign-ins and users.</p>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-orange-400 font-medium mb-3">Sign-in Risk Detections</h4>
+                            <div class="space-y-2">
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white text-sm font-medium">Anonymous IP address</p>
+                                    <p class="text-gray-500 text-xs">Sign-in from Tor, VPN anonymizers</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white text-sm font-medium">Atypical travel</p>
+                                    <p class="text-gray-500 text-xs">Impossible travel between locations</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white text-sm font-medium">Malware-linked IP</p>
+                                    <p class="text-gray-500 text-xs">IP communicating with bot servers</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white text-sm font-medium">Unfamiliar sign-in properties</p>
+                                    <p class="text-gray-500 text-xs">New device, browser, location</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white text-sm font-medium">Password spray</p>
+                                    <p class="text-gray-500 text-xs">Multiple accounts, same password</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-red-400 font-medium mb-3">User Risk Detections</h4>
+                            <div class="space-y-2">
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white text-sm font-medium">Leaked credentials</p>
+                                    <p class="text-gray-500 text-xs">Found in dark web dumps</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white text-sm font-medium">Azure AD threat intelligence</p>
+                                    <p class="text-gray-500 text-xs">Microsoft's internal threat intel</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white text-sm font-medium">Anomalous user activity</p>
+                                    <p class="text-gray-500 text-xs">Unusual patterns for this user</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-white text-sm font-medium">Possible attempt to access PRT</p>
+                                    <p class="text-gray-500 text-xs">Token theft attempt detected</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Risk Policies -->
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">⚙️ Risk-Based Conditional Access Policies</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-orange-500/10 border border-orange-500/30 rounded-lg p-4">
+                            <h4 class="text-orange-400 font-medium mb-2">Sign-in Risk Policy</h4>
+                            <p class="text-gray-400 text-sm mb-2">When: Sign-in risk is Medium or High</p>
+                            <p class="text-gray-400 text-sm mb-2">Then: Require MFA (self-remediation)</p>
+                            <div class="bg-[#0d0d14] rounded-lg p-3 text-xs">
+                                <p class="text-cyan-400">For High risk: Some orgs block entirely</p>
+                            </div>
+                        </div>
+                        <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+                            <h4 class="text-red-400 font-medium mb-2">User Risk Policy</h4>
+                            <p class="text-gray-400 text-sm mb-2">When: User risk is Medium or High</p>
+                            <p class="text-gray-400 text-sm mb-2">Then: Require password change (self-remediation)</p>
+                            <div class="bg-[#0d0d14] rounded-lg p-3 text-xs">
+                                <p class="text-cyan-400">For High risk: Block until admin reviews</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 mt-4">
+                        <p class="text-blue-400 text-sm"><strong>💡 Self-Remediation:</strong> With proper policies, users can fix their own risk - MFA for sign-in risk, password reset for user risk. This reduces helpdesk load significantly.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- KQL Queries -->
+            <section id="kql" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-teal-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                        </svg>
+                    </span>
+                    KQL Hunting Queries for IAM
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <div class="space-y-6">
+                        <div class="bg-[#0d0d14] rounded-xl p-4">
+                            <h4 class="text-cyan-400 font-medium mb-2">Failed Sign-ins by Location (Brute Force Detection)</h4>
+                            <pre class="text-sm overflow-x-auto"><code class="text-green-400">SigninLogs
+| where TimeGenerated > ago(24h)
+| where ResultType != 0  // Failed sign-ins
+| summarize 
+    FailedAttempts = count(),
+    DistinctUsers = dcount(UserPrincipalName),
+    Users = make_set(UserPrincipalName, 5)
+    by Location, IPAddress
+| where FailedAttempts > 50
+| order by FailedAttempts desc</code></pre>
+                        </div>
+
+                        <div class="bg-[#0d0d14] rounded-xl p-4">
+                            <h4 class="text-cyan-400 font-medium mb-2">New Global Admin Assignments</h4>
+                            <pre class="text-sm overflow-x-auto"><code class="text-green-400">AuditLogs
+| where TimeGenerated > ago(7d)
+| where OperationName == "Add member to role"
+| extend RoleName = tostring(TargetResources[0].displayName)
+| where RoleName == "Global Administrator"
+| extend AddedUser = tostring(TargetResources[0].userPrincipalName)
+| extend AddedBy = tostring(InitiatedBy.user.userPrincipalName)
+| project TimeGenerated, AddedUser, AddedBy, RoleName</code></pre>
+                        </div>
+
+                        <div class="bg-[#0d0d14] rounded-xl p-4">
+                            <h4 class="text-cyan-400 font-medium mb-2">Risky Sign-ins Summary</h4>
+                            <pre class="text-sm overflow-x-auto"><code class="text-green-400">SigninLogs
+| where TimeGenerated > ago(7d)
+| where RiskLevelDuringSignIn in ("medium", "high")
+| summarize 
+    Count = count(),
+    RiskDetails = make_set(RiskEventTypes_V2, 5)
+    by UserPrincipalName, RiskLevelDuringSignIn
+| order by Count desc</code></pre>
+                        </div>
+
+                        <div class="bg-[#0d0d14] rounded-xl p-4">
+                            <h4 class="text-cyan-400 font-medium mb-2">Conditional Access Policy Changes</h4>
+                            <pre class="text-sm overflow-x-auto"><code class="text-green-400">AuditLogs
+| where TimeGenerated > ago(30d)
+| where OperationName has "conditional access"
+| extend PolicyName = tostring(TargetResources[0].displayName)
+| extend ModifiedBy = tostring(InitiatedBy.user.userPrincipalName)
+| project TimeGenerated, OperationName, PolicyName, ModifiedBy
+| order by TimeGenerated desc</code></pre>
+                        </div>
+
+                        <div class="bg-[#0d0d14] rounded-xl p-4">
+                            <h4 class="text-cyan-400 font-medium mb-2">Legacy Authentication Attempts</h4>
+                            <pre class="text-sm overflow-x-auto"><code class="text-green-400">SigninLogs
+| where TimeGenerated > ago(7d)
+| where ClientAppUsed in ("Exchange ActiveSync", "IMAP4", "POP3", "SMTP", "Other clients")
+| summarize 
+    Attempts = count(),
+    SuccessCount = countif(ResultType == 0),
+    FailCount = countif(ResultType != 0)
+    by UserPrincipalName, ClientAppUsed
+| order by Attempts desc</code></pre>
+                        </div>
+
+                        <div class="bg-[#0d0d14] rounded-xl p-4">
+                            <h4 class="text-cyan-400 font-medium mb-2">PIM Role Activations</h4>
+                            <pre class="text-sm overflow-x-auto"><code class="text-green-400">AuditLogs
+| where TimeGenerated > ago(7d)
+| where OperationName == "Add member to role in PIM completed (permanent)"
+   or OperationName == "Add member to role in PIM completed (timebound)"
+| extend RoleName = tostring(TargetResources[0].displayName)
+| extend ActivatedBy = tostring(InitiatedBy.user.userPrincipalName)
+| extend Justification = tostring(AdditionalDetails[0].value)
+| project TimeGenerated, ActivatedBy, RoleName, Justification
+| order by TimeGenerated desc</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interview Q&A -->
+            <section id="interview" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </span>
+                    Interview Questions & Answers
+                </h2>
+
+                <div class="space-y-6">
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: What is Conditional Access and how would you implement it for a new organization?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"Conditional Access is Microsoft's Zero Trust policy engine that makes access decisions based on signals like user identity, device state, location, and risk level. For a new organization, I'd implement it in phases:</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>Phase 1 (Week 1):</strong> Start with report-only mode to understand impact. Deploy baseline policies: block legacy auth, require MFA for admins.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>Phase 2 (Week 2-3):</strong> Require MFA for all users, define named locations (trusted IPs), block high-risk countries.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>Phase 3 (Week 4+):</strong> Require compliant devices for O365, implement risk-based policies (requires P2), session controls for sensitive apps.</p>
+                            <p class="text-gray-300 text-sm mt-2">Always maintain break-glass accounts excluded from policies, and use the What-If tool to test before enabling."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: Explain the difference between Entra ID roles and Azure RBAC roles.</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"These are two separate RBAC systems that manage different resources:</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>Entra ID Roles (Directory Roles):</strong> Manage the identity platform itself - users, groups, applications, policies. Examples: Global Administrator, User Administrator, Security Administrator. Scope is tenant-wide.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>Azure RBAC Roles:</strong> Manage Azure resources - VMs, storage, networking. Examples: Owner, Contributor, Reader. Scope can be Management Group, Subscription, Resource Group, or individual Resource.</p>
+                            <p class="text-gray-300 text-sm mt-2">A common confusion: Global Administrator doesn't automatically have access to Azure resources. You need to explicitly 'elevate' access in Azure AD properties, or assign Azure roles separately."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: How would you secure privileged admin accounts?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"I'd implement a layered approach following least privilege:</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>1. Privileged Identity Management:</strong> Make all admin roles eligible, not permanent. Require MFA and justification for activation. Set max activation to 8 hours. Require approval for Global Admin.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>2. Dedicated Admin Accounts:</strong> Separate accounts for admin work (admin_john@) vs daily work. Cloud-only, not synced from on-prem. No email/Teams on admin accounts.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>3. Strong Authentication:</strong> FIDO2 security keys or Windows Hello for admin accounts. Block SMS/Voice authentication methods.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>4. Conditional Access:</strong> Require compliant/managed devices for admin portal access. Consider blocking from all but specific IPs.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>5. Monitoring:</strong> Alert on any admin role activation, changes to CA policies, or sign-ins from unusual locations."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: A user reports they're getting MFA prompts constantly. How do you troubleshoot?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"I'd investigate in this order:</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>1. Check Sign-in Logs:</strong> Look at recent sign-ins for this user. Are they showing as risky? What CA policies are being applied? What's the sign-in frequency?</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>2. Review CA Policies:</strong> Check if they're hitting policies with 'every time' session controls. Verify trusted locations are configured and user's IP is included.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>3. Device Status:</strong> Is their device registered/compliant? If not, they may be hitting device-based policies repeatedly. Check Intune compliance.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>4. Token Issues:</strong> Clear browser cache/cookies, sign out of all Microsoft accounts, re-authenticate. PRT issues can cause repeated prompts.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>5. Application Issue:</strong> Some apps don't handle tokens properly. Check which app is triggering the prompts."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: What authentication methods would you recommend for an enterprise and why?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"I'd recommend a tiered approach based on risk:</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>For All Users:</strong> Microsoft Authenticator with number matching as primary. It's phishing-resistant (with number matching), convenient, and works offline. TOTP as backup.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>For Privileged Users:</strong> FIDO2 security keys (YubiKey) or Windows Hello for Business. These are phishing-resistant - the credential is bound to the specific site.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>Avoid:</strong> SMS and voice calls - vulnerable to SIM swapping and SS7 attacks. Only use as last resort for users who can't use other methods.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>Long-term Goal:</strong> Passwordless authentication for everyone using Windows Hello or Authenticator phone sign-in. Eliminates the password attack surface entirely."</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Memory Aids -->
+            <section id="mnemonics" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-rose-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                    </span>
+                    Memory Aids & Quick Reference
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 "CA POLICE" - Conditional Access Components</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-yellow-300"><strong>C</strong>onditions (device, location, risk)</p>
+                            <p class="text-yellow-300"><strong>A</strong>pplications (target apps)</p>
+                            <p class="text-yellow-300"><strong>P</strong>eople (users & groups)</p>
+                            <p class="text-yellow-300"><strong>O</strong>ptions (grant/session controls)</p>
+                            <p class="text-yellow-300"><strong>L</strong>ocations (named locations)</p>
+                            <p class="text-yellow-300"><strong>I</strong>dentity risk (sign-in/user risk)</p>
+                            <p class="text-yellow-300"><strong>C</strong>ompliance (device state)</p>
+                            <p class="text-yellow-300"><strong>E</strong>xclusions (break-glass accounts)</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 "SAFE MFA" - MFA Best Practices</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-yellow-300"><strong>S</strong>ecurity keys for admins (FIDO2)</p>
+                            <p class="text-yellow-300"><strong>A</strong>uthenticator app for users</p>
+                            <p class="text-yellow-300"><strong>F</strong>orce number matching</p>
+                            <p class="text-yellow-300"><strong>E</strong>liminate SMS/Voice</p>
+                            <p class="text-yellow-300"><strong>M</strong>anage methods per user group</p>
+                            <p class="text-yellow-300"><strong>F</strong>IDO2 = phishing resistant</p>
+                            <p class="text-yellow-300"><strong>A</strong>lways require for admins</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 "PIM JETA" - PIM Settings</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-yellow-300"><strong>J</strong>ust-in-time activation</p>
+                            <p class="text-yellow-300"><strong>E</strong>ligible over Active</p>
+                            <p class="text-yellow-300"><strong>T</strong>ime-bound (max 8 hours)</p>
+                            <p class="text-yellow-300"><strong>A</strong>pproval + MFA + Justification</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Protocol Comparison</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-blue-400"><strong>SAML</strong> = Enterprise SSO (XML, assertions)</p>
+                            <p class="text-green-400"><strong>OAuth</strong> = Authorization (access tokens)</p>
+                            <p class="text-purple-400"><strong>OIDC</strong> = OAuth + Authentication (ID tokens)</p>
+                            <p class="text-gray-400 text-xs mt-2">OIDC is most modern, SAML still common in enterprise</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Reference Card -->
+                <div class="card rounded-2xl p-6 mt-8">
+                    <h3 class="text-lg font-bold text-white mb-4">📋 Essential CA Policies Checklist</h3>
+                    <div class="grid md:grid-cols-2 gap-4 text-sm">
+                        <div class="space-y-2">
+                            <p class="text-red-400">☐ CA001: MFA for all admin roles</p>
+                            <p class="text-red-400">☐ CA002: Block legacy authentication</p>
+                            <p class="text-orange-400">☐ CA003: MFA for all users</p>
+                            <p class="text-orange-400">☐ CA004: Compliant device for O365</p>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-yellow-400">☐ CA005: Block high-risk countries</p>
+                            <p class="text-purple-400">☐ CA006: Block high sign-in risk</p>
+                            <p class="text-purple-400">☐ CA007: Require password change for user risk</p>
+                            <p class="text-gray-400">☐ Break-glass accounts excluded</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const menuIcon = document.getElementById('menuIcon');
+            const closeIcon = document.getElementById('closeIcon');
+            
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+            menuIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+        }
+    </script>
+<script src="../js/sidebar.js"></script>
+</body>
+</html>

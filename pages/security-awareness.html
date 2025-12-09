@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Awareness | Security Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Inter', system-ui, sans-serif; }
+        .card { background: linear-gradient(145deg, #12121a, #1a1a2e); border: 1px solid #2a2a3e; }
+        .mnemonic { background: linear-gradient(135deg, #1a1a2e 0%, #2a2a3e 100%); border: 1px solid #f59e0b; }
+        .interview-qa { background: linear-gradient(135deg, #1a1a2e 0%, #1e1e3e 100%); border: 1px solid #8b5cf6; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <main class="lg:ml-64 pt-14 lg:pt-0">
+        <div class="max-w-5xl mx-auto px-6 py-12">
+            <!-- Hero -->
+            <section id="overview" class="mb-16">
+                <div class="flex items-center gap-2 text-yellow-400 mb-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <span class="text-sm font-medium">Security Awareness</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Security Awareness</h1>
+                <p class="text-xl text-gray-400 mb-8">Phishing simulations, training programs, social engineering defense - The human firewall.</p>
+
+                <div class="flex flex-wrap gap-3 mb-8">
+                    <span class="px-4 py-2 rounded-full bg-red-500/20 text-red-400 text-sm font-medium border border-red-500/30">Phishing</span>
+                    <span class="px-4 py-2 rounded-full bg-orange-500/20 text-orange-400 text-sm font-medium border border-orange-500/30">Social Engineering</span>
+                    <span class="px-4 py-2 rounded-full bg-green-500/20 text-green-400 text-sm font-medium border border-green-500/30">Training</span>
+                    <span class="px-4 py-2 rounded-full bg-blue-500/20 text-blue-400 text-sm font-medium border border-blue-500/30">Metrics</span>
+                </div>
+
+                <div class="card rounded-2xl p-6">
+                    <p class="text-2xl text-center text-yellow-400 font-bold mb-2">"Humans are the weakest link"</p>
+                    <p class="text-gray-400 text-center">90%+ of breaches involve human error. Technical controls aren't enough.</p>
+                </div>
+            </section>
+
+            <!-- Master Mnemonic -->
+            <section class="mb-16">
+                <div class="mnemonic rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold text-yellow-400 mb-4">🧠 Master Mnemonic: "STOP - THINK - CONNECT"</h2>
+                    <p class="text-gray-400 mb-4">National Cyber Security Alliance guideline for users:</p>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="text-center">
+                            <p class="text-3xl text-red-400 font-bold">STOP</p>
+                            <p class="text-gray-400 text-sm">Pause before acting on requests</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-3xl text-yellow-400 font-bold">THINK</p>
+                            <p class="text-gray-400 text-sm">Is this legitimate? Check indicators</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-3xl text-green-400 font-bold">CONNECT</p>
+                            <p class="text-gray-400 text-sm">Verify through official channels</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Phishing -->
+            <section id="phishing" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></span>
+                    Phishing Types & Red Flags
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">📧 Phishing Types</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+                            <h4 class="text-red-400 font-bold mb-2">Email Phishing</h4>
+                            <p class="text-gray-400 text-sm">Mass emails impersonating trusted entities. Most common attack vector.</p>
+                        </div>
+                        <div class="bg-orange-500/10 border border-orange-500/30 rounded-lg p-4">
+                            <h4 class="text-orange-400 font-bold mb-2">Spear Phishing</h4>
+                            <p class="text-gray-400 text-sm">Targeted at specific individuals with personalized content.</p>
+                        </div>
+                        <div class="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4">
+                            <h4 class="text-purple-400 font-bold mb-2">Whaling</h4>
+                            <p class="text-gray-400 text-sm">Targets executives/high-value individuals. BEC attacks.</p>
+                        </div>
+                        <div class="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+                            <h4 class="text-blue-400 font-bold mb-2">Smishing/Vishing</h4>
+                            <p class="text-gray-400 text-sm">SMS phishing and voice call phishing.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card rounded-2xl p-6">
+                    <div class="mnemonic rounded-xl p-4 mb-4">
+                        <h3 class="text-yellow-400 font-bold mb-2">🧠 Phishing Red Flags: "SUSMAIL"</h3>
+                        <div class="grid md:grid-cols-2 gap-2 text-sm">
+                            <p><span class="text-red-400 font-bold">S</span>ender address suspicious</p>
+                            <p><span class="text-red-400 font-bold">U</span>rgency/threats used</p>
+                            <p><span class="text-red-400 font-bold">S</span>pelling/grammar errors</p>
+                            <p><span class="text-red-400 font-bold">M</span>ismatched links (hover to check)</p>
+                            <p><span class="text-red-400 font-bold">A</span>ttachments unexpected</p>
+                            <p><span class="text-red-400 font-bold">I</span>nformation requested (credentials)</p>
+                            <p><span class="text-red-400 font-bold">L</span>ooks too good/bad to be true</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-lg font-bold text-white mb-4">🎯 Phishing Simulation Program</h3>
+                    <div class="space-y-3">
+                        <div class="flex gap-3 items-center">
+                            <span class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 text-sm font-bold">1</span>
+                            <p class="text-gray-400 text-sm"><strong>Baseline</strong> - Initial test to measure current click rates</p>
+                        </div>
+                        <div class="flex gap-3 items-center">
+                            <span class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 text-sm font-bold">2</span>
+                            <p class="text-gray-400 text-sm"><strong>Train</strong> - Education for those who clicked</p>
+                        </div>
+                        <div class="flex gap-3 items-center">
+                            <span class="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center text-yellow-400 text-sm font-bold">3</span>
+                            <p class="text-gray-400 text-sm"><strong>Test</strong> - Regular simulations (monthly/quarterly)</p>
+                        </div>
+                        <div class="flex gap-3 items-center">
+                            <span class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 text-sm font-bold">4</span>
+                            <p class="text-gray-400 text-sm"><strong>Measure</strong> - Track improvement over time</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Social Engineering -->
+            <section id="social" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></span>
+                    Social Engineering Tactics
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <div class="mnemonic rounded-xl p-4 mb-6">
+                        <h3 class="text-yellow-400 font-bold mb-2">🧠 SE Principles: "RUSSIA"</h3>
+                        <div class="grid md:grid-cols-2 gap-2 text-sm">
+                            <p><span class="text-orange-400 font-bold">R</span>eciprocity - Give to get</p>
+                            <p><span class="text-orange-400 font-bold">U</span>rgency - Act now!</p>
+                            <p><span class="text-orange-400 font-bold">S</span>ocial proof - Others did it</p>
+                            <p><span class="text-orange-400 font-bold">S</span>carcity - Limited time/offer</p>
+                            <p><span class="text-orange-400 font-bold">I</span>ntimidation - Authority/fear</p>
+                            <p><span class="text-orange-400 font-bold">A</span>uthority - I'm from IT/CEO</p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-[#0d0d14] rounded-lg p-4">
+                            <h4 class="text-red-400 font-medium mb-2">Pretexting</h4>
+                            <p class="text-gray-400 text-sm">Creating false scenario to obtain info. "I'm from IT, need your password to fix your account."</p>
+                        </div>
+                        <div class="bg-[#0d0d14] rounded-lg p-4">
+                            <h4 class="text-orange-400 font-medium mb-2">Baiting</h4>
+                            <p class="text-gray-400 text-sm">Leaving infected USB drives. "Free music" downloads with malware.</p>
+                        </div>
+                        <div class="bg-[#0d0d14] rounded-lg p-4">
+                            <h4 class="text-yellow-400 font-medium mb-2">Tailgating/Piggybacking</h4>
+                            <p class="text-gray-400 text-sm">Following authorized person through secure door without badging in.</p>
+                        </div>
+                        <div class="bg-[#0d0d14] rounded-lg p-4">
+                            <h4 class="text-green-400 font-medium mb-2">Quid Pro Quo</h4>
+                            <p class="text-gray-400 text-sm">Offering something in exchange. "Free tech support" that installs malware.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Training Programs -->
+            <section id="training" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg></span>
+                    Training Program Components
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-green-400 font-medium mb-3">Training Topics</h4>
+                            <ul class="text-gray-400 text-sm space-y-2">
+                                <li>✓ Phishing recognition</li>
+                                <li>✓ Password best practices</li>
+                                <li>✓ Safe browsing habits</li>
+                                <li>✓ Social media risks</li>
+                                <li>✓ Physical security</li>
+                                <li>✓ Incident reporting</li>
+                                <li>✓ Data classification</li>
+                                <li>✓ Remote work security</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-blue-400 font-medium mb-3">Delivery Methods</h4>
+                            <ul class="text-gray-400 text-sm space-y-2">
+                                <li>📹 Video modules (KnowBe4, Proofpoint)</li>
+                                <li>🎮 Interactive games/quizzes</li>
+                                <li>📧 Phishing simulations</li>
+                                <li>👥 Live workshops</li>
+                                <li>📰 Security newsletters</li>
+                                <li>🏆 Gamification/rewards</li>
+                                <li>📱 Micro-learning (short bursts)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Metrics -->
+            <section id="metrics" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5"/></svg></span>
+                    Awareness Metrics
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-center">
+                            <p class="text-3xl font-bold text-red-400">Click Rate</p>
+                            <p class="text-gray-400 text-sm">% who clicked phishing link</p>
+                            <p class="text-gray-500 text-xs mt-2">Goal: &lt;5%</p>
+                        </div>
+                        <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 text-center">
+                            <p class="text-3xl font-bold text-yellow-400">Report Rate</p>
+                            <p class="text-gray-400 text-sm">% who reported phishing</p>
+                            <p class="text-gray-500 text-xs mt-2">Goal: &gt;70%</p>
+                        </div>
+                        <div class="bg-green-500/10 border border-green-500/30 rounded-lg p-4 text-center">
+                            <p class="text-3xl font-bold text-green-400">Completion</p>
+                            <p class="text-gray-400 text-sm">Training completion rate</p>
+                            <p class="text-gray-500 text-xs mt-2">Goal: &gt;95%</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                        <p class="text-blue-400 text-sm"><strong>💡 Pro tip:</strong> Track susceptibility by department to target training. Repeat offenders need extra attention.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interview Q&A -->
+            <section id="interview" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>
+                    Interview Q&A
+                </h2>
+
+                <div class="space-y-6">
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: How would you design a security awareness program?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"Start with a <strong>baseline phishing test</strong> to measure current state. Then implement <strong>role-based training</strong> - executives need BEC awareness, finance needs wire fraud training, developers need secure coding. Use <strong>multiple delivery methods</strong> - video modules, simulations, newsletters. Run <strong>regular simulations</strong> (monthly) with increasing difficulty. <strong>Measure and report</strong> metrics to leadership - click rates, report rates, training completion. Create <strong>positive culture</strong> - reward reporters, don't punish clickers (train instead)."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: What are the signs of a phishing email?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"Use the <strong>SUSMAIL</strong> checklist: <strong>S</strong>ender address looks off (slightly misspelled domains), <strong>U</strong>rgency or threats ('act now or lose access'), <strong>S</strong>pelling/grammar errors, <strong>M</strong>ismatched links (hover shows different URL), <strong>A</strong>ttachments unexpected (especially .exe, .zip), <strong>I</strong>nformation requests (credentials, payment), <strong>L</strong>ooks too good (you won!) or too scary (legal action). When in doubt, verify through a separate channel - call the person directly using a known number."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: How do you handle an employee who repeatedly falls for phishing simulations?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"Progressive approach: First failure gets <strong>immediate training</strong> with explanation. Second failure gets <strong>one-on-one coaching</strong>. Third failure involves <strong>manager notification</strong> and required additional training. Throughout, keep it educational not punitive - we want people to report, not hide mistakes. Also investigate <strong>why</strong> they're susceptible - is it time pressure, lack of technical knowledge, or the simulation was too sophisticated? Consider reducing their access to sensitive data if the risk is too high."</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Memory Aids -->
+            <section id="mnemonics" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></span>
+                    Memory Aids
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Phishing Red Flags: "SUSMAIL"</h3>
+                        <div class="space-y-1 text-sm">
+                            <p class="text-red-400"><strong>S</strong>ender suspicious</p>
+                            <p class="text-red-400"><strong>U</strong>rgency/threats</p>
+                            <p class="text-red-400"><strong>S</strong>pelling errors</p>
+                            <p class="text-orange-400"><strong>M</strong>ismatched links</p>
+                            <p class="text-orange-400"><strong>A</strong>ttachments unexpected</p>
+                            <p class="text-yellow-400"><strong>I</strong>nfo requested</p>
+                            <p class="text-yellow-400"><strong>L</strong>ooks too good/bad</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 SE Principles: "RUSSIA"</h3>
+                        <div class="space-y-1 text-sm">
+                            <p><strong>R</strong>eciprocity</p>
+                            <p><strong>U</strong>rgency</p>
+                            <p><strong>S</strong>ocial proof</p>
+                            <p><strong>S</strong>carcity</p>
+                            <p><strong>I</strong>ntimidation</p>
+                            <p><strong>A</strong>uthority</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 User Guidance</h3>
+                        <div class="space-y-2 text-sm text-center">
+                            <p class="text-red-400 text-xl font-bold">STOP</p>
+                            <p class="text-yellow-400 text-xl font-bold">THINK</p>
+                            <p class="text-green-400 text-xl font-bold">CONNECT</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Program Cycle: "BTTM"</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-blue-400"><strong>B</strong>aseline test</p>
+                            <p class="text-green-400"><strong>T</strong>rain users</p>
+                            <p class="text-yellow-400"><strong>T</strong>est regularly</p>
+                            <p class="text-purple-400"><strong>M</strong>easure & report</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+<script src="../js/sidebar.js"></script>
+</body>
+</html>

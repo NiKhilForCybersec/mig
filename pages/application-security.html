@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Security | Security Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Inter', system-ui, sans-serif; }
+        .card { background: linear-gradient(145deg, #12121a, #1a1a2e); border: 1px solid #2a2a3e; }
+        .nav-item:hover { background: rgba(59, 130, 246, 0.1); }
+        .nav-item.active { background: rgba(59, 130, 246, 0.2); border-left: 2px solid #3b82f6; }
+        .mnemonic { background: linear-gradient(135deg, #1a1a2e 0%, #2a2a3e 100%); border: 1px solid #f59e0b; }
+        .interview-qa { background: linear-gradient(135deg, #1a1a2e 0%, #1e1e3e 100%); border: 1px solid #8b5cf6; }
+        pre { background: #0d0d14 !important; border-radius: 8px; padding: 16px; overflow-x: auto; }
+        .owasp-card { transition: all 0.3s ease; }
+        .owasp-card:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    </style>
+</head>
+<body class="min-h-screen">
+    <main class="lg:ml-64 pt-14 lg:pt-0">
+        <div class="max-w-5xl mx-auto px-6 py-12">
+            <!-- Hero -->
+            <section id="overview" class="mb-16">
+                <div class="flex items-center gap-2 text-orange-400 mb-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                    <span class="text-sm font-medium">Application Security</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Application Security</h1>
+                <p class="text-xl text-gray-400 mb-8">OWASP Top 10, SAST/DAST, Secure SDLC, DevSecOps - Building secure applications.</p>
+
+                <div class="flex flex-wrap gap-3 mb-8">
+                    <span class="px-4 py-2 rounded-full bg-red-500/20 text-red-400 text-sm font-medium border border-red-500/30">OWASP Top 10</span>
+                    <span class="px-4 py-2 rounded-full bg-blue-500/20 text-blue-400 text-sm font-medium border border-blue-500/30">SAST</span>
+                    <span class="px-4 py-2 rounded-full bg-green-500/20 text-green-400 text-sm font-medium border border-green-500/30">DAST</span>
+                    <span class="px-4 py-2 rounded-full bg-purple-500/20 text-purple-400 text-sm font-medium border border-purple-500/30">DevSecOps</span>
+                </div>
+            </section>
+
+            <!-- Master Mnemonic -->
+            <section class="mb-16">
+                <div class="mnemonic rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold text-yellow-400 mb-4">🧠 Master Mnemonic: "OWASP TOP 10 = BIC MISS SSSS"</h2>
+                    <p class="text-gray-400 mb-4">Remember OWASP Top 10 (2021) in order:</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <p class="text-lg"><span class="text-red-400 font-bold">B</span>roken Access Control (A01)</p>
+                            <p class="text-lg"><span class="text-red-400 font-bold">I</span>njection (A03 - was #1!)</p>
+                            <p class="text-lg"><span class="text-red-400 font-bold">C</span>ryptographic Failures (A02)</p>
+                            <p class="text-lg"><span class="text-orange-400 font-bold">M</span>isconfiguration (A05)</p>
+                            <p class="text-lg"><span class="text-orange-400 font-bold">I</span>nsecure Design (A04)</p>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">S</span>oftware & Data Integrity (A08)</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">S</span>ecurity Logging Failures (A09)</p>
+                            <p class="text-lg"><span class="text-green-400 font-bold">S</span>SRF (A10)</p>
+                            <p class="text-lg"><span class="text-green-400 font-bold">S</span>oftware Components (A06)</p>
+                            <p class="text-lg"><span class="text-blue-400 font-bold">+</span> Auth Failures (A07)</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- OWASP Top 10 -->
+            <section id="owasp" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></span>
+                    OWASP Top 10 (2021)
+                </h2>
+
+                <div class="space-y-4">
+                    <!-- A01 -->
+                    <div class="owasp-card card rounded-xl p-5">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400 font-bold">A01</div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-red-400 mb-2">Broken Access Control</h3>
+                                <p class="text-gray-400 text-sm mb-3">Users can act outside their intended permissions. Access controls fail to restrict what authenticated users can do.</p>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="bg-[#0d0d14] rounded-lg p-3">
+                                        <p class="text-red-400 text-xs font-medium mb-1">❌ Examples</p>
+                                        <ul class="text-gray-400 text-xs space-y-1">
+                                            <li>• IDOR: /user/123 → /user/456</li>
+                                            <li>• Privilege escalation</li>
+                                            <li>• Missing function-level access</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-[#0d0d14] rounded-lg p-3">
+                                        <p class="text-green-400 text-xs font-medium mb-1">✓ Prevention</p>
+                                        <ul class="text-gray-400 text-xs space-y-1">
+                                            <li>• Deny by default</li>
+                                            <li>• Server-side validation</li>
+                                            <li>• Rate limiting, log failures</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- A02 -->
+                    <div class="owasp-card card rounded-xl p-5">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400 font-bold">A02</div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-red-400 mb-2">Cryptographic Failures</h3>
+                                <p class="text-gray-400 text-sm mb-3">Failures related to cryptography leading to sensitive data exposure. Previously called "Sensitive Data Exposure".</p>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="bg-[#0d0d14] rounded-lg p-3">
+                                        <p class="text-red-400 text-xs font-medium mb-1">❌ Examples</p>
+                                        <ul class="text-gray-400 text-xs space-y-1">
+                                            <li>• HTTP instead of HTTPS</li>
+                                            <li>• Weak algorithms (MD5, SHA1)</li>
+                                            <li>• Hardcoded keys/passwords</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-[#0d0d14] rounded-lg p-3">
+                                        <p class="text-green-400 text-xs font-medium mb-1">✓ Prevention</p>
+                                        <ul class="text-gray-400 text-xs space-y-1">
+                                            <li>• TLS 1.2+ everywhere</li>
+                                            <li>• AES-256, bcrypt/Argon2</li>
+                                            <li>• Key management (HSM)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- A03 -->
+                    <div class="owasp-card card rounded-xl p-5">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400 font-bold">A03</div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-orange-400 mb-2">Injection</h3>
+                                <p class="text-gray-400 text-sm mb-3">User-supplied data sent to interpreter as part of command/query. Was #1 for years - still critical!</p>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="bg-[#0d0d14] rounded-lg p-3">
+                                        <p class="text-red-400 text-xs font-medium mb-1">❌ Types</p>
+                                        <ul class="text-gray-400 text-xs space-y-1">
+                                            <li>• <strong>SQLi</strong>: ' OR 1=1--</li>
+                                            <li>• <strong>XSS</strong>: &lt;script&gt;alert(1)&lt;/script&gt;</li>
+                                            <li>• <strong>Command</strong>: ; rm -rf /</li>
+                                            <li>• <strong>LDAP</strong>, <strong>XPath</strong>, etc.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-[#0d0d14] rounded-lg p-3">
+                                        <p class="text-green-400 text-xs font-medium mb-1">✓ Prevention</p>
+                                        <ul class="text-gray-400 text-xs space-y-1">
+                                            <li>• Parameterized queries</li>
+                                            <li>• Input validation (whitelist)</li>
+                                            <li>• Output encoding</li>
+                                            <li>• WAF as defense-in-depth</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- A04-A07 Condensed -->
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="owasp-card card rounded-xl p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center text-orange-400 font-bold text-xs">A04</span>
+                                <h3 class="text-orange-400 font-bold">Insecure Design</h3>
+                            </div>
+                            <p class="text-gray-400 text-xs mb-2">Missing or ineffective security controls. Fix: Threat modeling, secure design patterns.</p>
+                        </div>
+                        <div class="owasp-card card rounded-xl p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center text-yellow-400 font-bold text-xs">A05</span>
+                                <h3 class="text-yellow-400 font-bold">Security Misconfiguration</h3>
+                            </div>
+                            <p class="text-gray-400 text-xs mb-2">Default configs, unnecessary features, verbose errors. Fix: Hardening, automation.</p>
+                        </div>
+                        <div class="owasp-card card rounded-xl p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center text-yellow-400 font-bold text-xs">A06</span>
+                                <h3 class="text-yellow-400 font-bold">Vulnerable Components</h3>
+                            </div>
+                            <p class="text-gray-400 text-xs mb-2">Outdated libraries with known CVEs. Fix: SCA scanning, patch management, SBOM.</p>
+                        </div>
+                        <div class="owasp-card card rounded-xl p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400 font-bold text-xs">A07</span>
+                                <h3 class="text-green-400 font-bold">Auth Failures</h3>
+                            </div>
+                            <p class="text-gray-400 text-xs mb-2">Weak passwords, session issues, no MFA. Fix: MFA, secure session management.</p>
+                        </div>
+                    </div>
+
+                    <!-- A08-A10 Condensed -->
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="owasp-card card rounded-xl p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-xs">A08</span>
+                                <h3 class="text-blue-400 font-bold text-sm">Software Integrity</h3>
+                            </div>
+                            <p class="text-gray-400 text-xs">Insecure CI/CD, no code signing. Fix: Verify integrity, secure pipelines.</p>
+                        </div>
+                        <div class="owasp-card card rounded-xl p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-xs">A09</span>
+                                <h3 class="text-blue-400 font-bold text-sm">Logging Failures</h3>
+                            </div>
+                            <p class="text-gray-400 text-xs">No logging, no monitoring, no alerting. Fix: Log security events, SIEM, alerting.</p>
+                        </div>
+                        <div class="owasp-card card rounded-xl p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold text-xs">A10</span>
+                                <h3 class="text-purple-400 font-bold text-sm">SSRF</h3>
+                            </div>
+                            <p class="text-gray-400 text-xs">Server makes requests to attacker URLs. Fix: Whitelist URLs, segment networks.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SAST vs DAST -->
+            <section id="sast-dast" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg></span>
+                    SAST vs DAST vs IAST vs SCA
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead><tr class="border-b border-gray-700">
+                                <th class="text-left py-3 px-4 text-gray-400">Type</th>
+                                <th class="text-left py-3 px-4 text-gray-400">What</th>
+                                <th class="text-left py-3 px-4 text-gray-400">When</th>
+                                <th class="text-left py-3 px-4 text-gray-400">Pros</th>
+                                <th class="text-left py-3 px-4 text-gray-400">Cons</th>
+                            </tr></thead>
+                            <tbody class="text-gray-300">
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-3 px-4 text-blue-400 font-bold">SAST</td>
+                                    <td class="py-3 px-4">Static - scans source code</td>
+                                    <td class="py-3 px-4">Development (early)</td>
+                                    <td class="py-3 px-4 text-green-400">Early detection, line numbers</td>
+                                    <td class="py-3 px-4 text-red-400">High false positives</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-3 px-4 text-green-400 font-bold">DAST</td>
+                                    <td class="py-3 px-4">Dynamic - tests running app</td>
+                                    <td class="py-3 px-4">Testing/Staging</td>
+                                    <td class="py-3 px-4 text-green-400">Real vulns, low FPs</td>
+                                    <td class="py-3 px-4 text-red-400">Late detection, no line #</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-3 px-4 text-purple-400 font-bold">IAST</td>
+                                    <td class="py-3 px-4">Combo - agent inside app</td>
+                                    <td class="py-3 px-4">Testing</td>
+                                    <td class="py-3 px-4 text-green-400">Best of both worlds</td>
+                                    <td class="py-3 px-4 text-red-400">Performance impact</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-orange-400 font-bold">SCA</td>
+                                    <td class="py-3 px-4">Scans dependencies/libraries</td>
+                                    <td class="py-3 px-4">Build time</td>
+                                    <td class="py-3 px-4 text-green-400">Finds CVEs in libs</td>
+                                    <td class="py-3 px-4 text-red-400">Only 3rd party code</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="mnemonic rounded-2xl p-6">
+                    <h3 class="text-yellow-400 font-bold mb-3">🧠 Easy Memory: "SAST sees CODE, DAST sees APP"</h3>
+                    <div class="grid md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <p class="text-blue-400 font-medium">SAST = "Look at the Blueprint"</p>
+                            <p class="text-gray-400">Like reviewing building plans before construction</p>
+                        </div>
+                        <div>
+                            <p class="text-green-400 font-medium">DAST = "Shake the Building"</p>
+                            <p class="text-gray-400">Like stress-testing the finished building</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DevSecOps -->
+            <section id="devsecops" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></span>
+                    DevSecOps Pipeline
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">🔄 Shift Left Security</h3>
+                    <div class="bg-[#0d0d14] rounded-xl p-6 mb-4">
+                        <pre class="text-sm text-center whitespace-pre-wrap">
+┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐
+│   CODE   │───►│  BUILD   │───►│   TEST   │───►│  DEPLOY  │───►│ OPERATE  │───►│ MONITOR  │
+└──────────┘    └──────────┘    └──────────┘    └──────────┘    └──────────┘    └──────────┘
+     │               │               │               │               │               │
+   SAST           SCA/SBOM        DAST/IAST     Secrets scan      Config         SIEM/SOAR
+   Secrets        Container       Pen test      IaC security      audit          Vuln scan
+   Lint           Image scan      Fuzzing       Signing           Patch          Incident
+                        </pre>
+                    </div>
+                    <p class="text-yellow-400 text-sm text-center">💡 "Shift Left" = Find bugs early when they're cheap to fix!</p>
+                </div>
+            </section>
+
+            <!-- API Security -->
+            <section id="api" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></span>
+                    API Security
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">🔌 OWASP API Top 10</h3>
+                    <div class="grid md:grid-cols-2 gap-3">
+                        <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
+                            <p class="text-red-400 font-medium text-sm">API1 - Broken Object Level Auth</p>
+                            <p class="text-gray-500 text-xs">IDOR for APIs: /api/user/123 → /api/user/456</p>
+                        </div>
+                        <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
+                            <p class="text-red-400 font-medium text-sm">API2 - Broken Authentication</p>
+                            <p class="text-gray-500 text-xs">Weak tokens, no rate limits on auth</p>
+                        </div>
+                        <div class="bg-orange-500/10 border border-orange-500/30 rounded-lg p-3">
+                            <p class="text-orange-400 font-medium text-sm">API3 - Excessive Data Exposure</p>
+                            <p class="text-gray-500 text-xs">API returns too much data, relies on client filtering</p>
+                        </div>
+                        <div class="bg-orange-500/10 border border-orange-500/30 rounded-lg p-3">
+                            <p class="text-orange-400 font-medium text-sm">API4 - Lack of Resources & Rate Limiting</p>
+                            <p class="text-gray-500 text-xs">No throttling → DoS, brute force possible</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interview Q&A -->
+            <section id="interview" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-pink-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>
+                    Interview Q&A
+                </h2>
+
+                <div class="space-y-6">
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: What is SQL injection and how do you prevent it?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"SQL injection is when user input is included directly in SQL queries, allowing attackers to manipulate the query. Example: <code>' OR 1=1--</code> bypasses login. Prevention: <strong>Parameterized queries</strong> (prepared statements) - never concatenate user input into SQL. Also: input validation (whitelist), least privilege DB accounts, WAF as defense-in-depth."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: Explain the difference between SAST and DAST.</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"<strong>SAST</strong> (Static) analyzes source code without running the app - like reviewing blueprints. Finds issues early, gives line numbers, but has false positives. <strong>DAST</strong> (Dynamic) tests the running application - like stress-testing a building. Finds real vulnerabilities attackers would see, but late in cycle and no code location. Best practice: use both - SAST in dev, DAST in staging."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: What is XSS and the types?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"XSS (Cross-Site Scripting) injects malicious scripts into web pages viewed by others. Three types: <strong>Reflected</strong> - payload in URL, executed immediately (phishing links). <strong>Stored</strong> - payload saved in DB, executed when page loads (comments, profiles). <strong>DOM-based</strong> - client-side JavaScript processes untrusted data. Prevention: Output encoding, Content Security Policy (CSP), input validation."</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Memory Aids -->
+            <section id="mnemonics" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></span>
+                    Memory Aids
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 OWASP Top 3 (Critical)</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-red-400"><strong>A01</strong> - Broken Access = "Who can do what?"</p>
+                            <p class="text-red-400"><strong>A02</strong> - Crypto Fail = "Is data protected?"</p>
+                            <p class="text-orange-400"><strong>A03</strong> - Injection = "Is input trusted?"</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 XSS Types: "RSD"</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-blue-400"><strong>R</strong>eflected - In URL, instant</p>
+                            <p class="text-green-400"><strong>S</strong>tored - In database, persistent</p>
+                            <p class="text-purple-400"><strong>D</strong>OM - Client-side JS</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Injection Prevention: "PVE"</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-blue-400"><strong>P</strong>arameterized queries</p>
+                            <p class="text-green-400"><strong>V</strong>alidate input (whitelist)</p>
+                            <p class="text-purple-400"><strong>E</strong>ncode output</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Security Testing Order</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-blue-400">1. <strong>SAST</strong> - Code (early)</p>
+                            <p class="text-orange-400">2. <strong>SCA</strong> - Libraries (build)</p>
+                            <p class="text-green-400">3. <strong>DAST</strong> - Running app (test)</p>
+                            <p class="text-purple-400">4. <strong>Pen Test</strong> - Manual (release)</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+<script src="../js/sidebar.js"></script>
+</body>
+</html>

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MITRE ATT&CK | Security Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Inter', system-ui, sans-serif; }
+        .card { background: linear-gradient(145deg, #12121a, #1a1a2e); border: 1px solid #2a2a3e; }
+        .mnemonic { background: linear-gradient(135deg, #1a1a2e 0%, #2a2a3e 100%); border: 1px solid #f59e0b; }
+        .interview-qa { background: linear-gradient(135deg, #1a1a2e 0%, #1e1e3e 100%); border: 1px solid #8b5cf6; }
+        .tactic-card { transition: all 0.3s ease; }
+        .tactic-card:hover { transform: translateY(-2px); }
+    </style>
+</head>
+<body class="min-h-screen">
+    <main class="lg:ml-64 pt-14 lg:pt-0">
+        <div class="max-w-5xl mx-auto px-6 py-12">
+            <!-- Hero -->
+            <section id="overview" class="mb-16">
+                <div class="flex items-center gap-2 text-red-400 mb-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>
+                    <span class="text-sm font-medium">MITRE ATT&CK Framework</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">MITRE ATT&CK Framework</h1>
+                <p class="text-xl text-gray-400 mb-8">Adversary tactics, techniques, and procedures - The universal language of cyber threats.</p>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">🎯 What is ATT&CK?</h3>
+                    <p class="text-gray-400 mb-4"><strong>A</strong>dversarial <strong>T</strong>actics, <strong>T</strong>echniques, and <strong>C</strong>ommon <strong>K</strong>nowledge</p>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-center">
+                            <p class="text-red-400 font-bold text-2xl">14</p>
+                            <p class="text-gray-400 text-sm">Tactics (WHY)</p>
+                        </div>
+                        <div class="bg-orange-500/10 border border-orange-500/30 rounded-lg p-3 text-center">
+                            <p class="text-orange-400 font-bold text-2xl">200+</p>
+                            <p class="text-gray-400 text-sm">Techniques (HOW)</p>
+                        </div>
+                        <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 text-center">
+                            <p class="text-yellow-400 font-bold text-2xl">400+</p>
+                            <p class="text-gray-400 text-sm">Sub-techniques</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Master Mnemonic -->
+            <section class="mb-16">
+                <div class="mnemonic rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold text-yellow-400 mb-4">🧠 Master Mnemonic: "RIPE COLD LIES CC"</h2>
+                    <p class="text-gray-400 mb-4">Remember all 14 ATT&CK Tactics in order (like an attack chain):</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <p class="text-lg"><span class="text-red-400 font-bold">R</span>econnaissance</p>
+                            <p class="text-lg"><span class="text-red-400 font-bold">I</span>nitial Access</p>
+                            <p class="text-lg"><span class="text-red-400 font-bold">P</span>ersistence</p>
+                            <p class="text-lg"><span class="text-orange-400 font-bold">E</span>xecution</p>
+                            <p class="text-lg"><span class="text-orange-400 font-bold">C</span>ollection</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">O</span>... (Privilege Esc<span class="text-yellow-400 font-bold">a</span>lation)</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">L</span>ateral Movement</p>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-lg"><span class="text-green-400 font-bold">D</span>efense Evasion</p>
+                            <p class="text-lg"><span class="text-green-400 font-bold">L</span>... (Credentia<span class="text-green-400 font-bold">l</span> Access)</p>
+                            <p class="text-lg"><span class="text-blue-400 font-bold">I</span>mpact</p>
+                            <p class="text-lg"><span class="text-blue-400 font-bold">E</span>xfiltration</p>
+                            <p class="text-lg"><span class="text-blue-400 font-bold">S</span>... (Di<span class="text-blue-400 font-bold">s</span>covery)</p>
+                            <p class="text-lg"><span class="text-purple-400 font-bold">C</span>ommand & Control</p>
+                            <p class="text-lg"><span class="text-purple-400 font-bold">C</span>... (Resour<span class="text-purple-400 font-bold">c</span>e Dev)</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 14 Tactics -->
+            <section id="tactics" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg></span>
+                    The 14 Tactics (Attack Chain)
+                </h2>
+
+                <div class="space-y-3">
+                    <!-- Pre-Attack -->
+                    <div class="text-xs text-gray-500 uppercase tracking-wider mb-2">PRE-ATTACK PHASE</div>
+                    <div class="grid md:grid-cols-2 gap-3">
+                        <div class="tactic-card bg-gray-500/10 border border-gray-500/30 rounded-lg p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-gray-400 font-bold">TA0043</span>
+                                <h4 class="text-gray-300 font-bold">Reconnaissance</h4>
+                            </div>
+                            <p class="text-gray-500 text-sm">Gather info about target. OSINT, scanning, social media.</p>
+                        </div>
+                        <div class="tactic-card bg-gray-500/10 border border-gray-500/30 rounded-lg p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-gray-400 font-bold">TA0042</span>
+                                <h4 class="text-gray-300 font-bold">Resource Development</h4>
+                            </div>
+                            <p class="text-gray-500 text-sm">Build attack infrastructure. Buy domains, create accounts.</p>
+                        </div>
+                    </div>
+
+                    <!-- Initial Compromise -->
+                    <div class="text-xs text-gray-500 uppercase tracking-wider mt-6 mb-2">INITIAL COMPROMISE</div>
+                    <div class="tactic-card bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-red-400 font-bold">TA0001</span>
+                            <h4 class="text-red-400 font-bold">Initial Access</h4>
+                        </div>
+                        <p class="text-gray-400 text-sm">Get into the network. <strong>Phishing (T1566)</strong>, exploit public apps, valid accounts, supply chain.</p>
+                    </div>
+
+                    <!-- Establish Foothold -->
+                    <div class="text-xs text-gray-500 uppercase tracking-wider mt-6 mb-2">ESTABLISH FOOTHOLD</div>
+                    <div class="grid md:grid-cols-2 gap-3">
+                        <div class="tactic-card bg-orange-500/10 border border-orange-500/30 rounded-lg p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-orange-400 font-bold">TA0002</span>
+                                <h4 class="text-orange-400 font-bold">Execution</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm">Run malicious code. <strong>PowerShell (T1059.001)</strong>, cmd, scripting.</p>
+                        </div>
+                        <div class="tactic-card bg-orange-500/10 border border-orange-500/30 rounded-lg p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-orange-400 font-bold">TA0003</span>
+                                <h4 class="text-orange-400 font-bold">Persistence</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm">Stay in the network. <strong>Scheduled tasks (T1053)</strong>, registry keys, services.</p>
+                        </div>
+                    </div>
+
+                    <!-- Escalate & Expand -->
+                    <div class="text-xs text-gray-500 uppercase tracking-wider mt-6 mb-2">ESCALATE & EXPAND</div>
+                    <div class="grid md:grid-cols-2 gap-3">
+                        <div class="tactic-card bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-yellow-400 font-bold">TA0004</span>
+                                <h4 class="text-yellow-400 font-bold">Privilege Escalation</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm">Get higher permissions. Exploits, misconfigs, token manipulation.</p>
+                        </div>
+                        <div class="tactic-card bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-yellow-400 font-bold">TA0005</span>
+                                <h4 class="text-yellow-400 font-bold">Defense Evasion</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm">Avoid detection. <strong>Disable AV (T1562)</strong>, obfuscation, living off land.</p>
+                        </div>
+                        <div class="tactic-card bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-yellow-400 font-bold">TA0006</span>
+                                <h4 class="text-yellow-400 font-bold">Credential Access</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm">Steal credentials. <strong>Mimikatz (T1003)</strong>, keylogging, brute force.</p>
+                        </div>
+                        <div class="tactic-card bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-yellow-400 font-bold">TA0007</span>
+                                <h4 class="text-yellow-400 font-bold">Discovery</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm">Learn the environment. Network scanning, account enumeration.</p>
+                        </div>
+                        <div class="tactic-card bg-green-500/10 border border-green-500/30 rounded-lg p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-green-400 font-bold">TA0008</span>
+                                <h4 class="text-green-400 font-bold">Lateral Movement</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm">Move through network. <strong>RDP (T1021.001)</strong>, SMB, PsExec, WMI.</p>
+                        </div>
+                    </div>
+
+                    <!-- Mission Execution -->
+                    <div class="text-xs text-gray-500 uppercase tracking-wider mt-6 mb-2">MISSION EXECUTION</div>
+                    <div class="grid md:grid-cols-2 gap-3">
+                        <div class="tactic-card bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-blue-400 font-bold">TA0009</span>
+                                <h4 class="text-blue-400 font-bold">Collection</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm">Gather target data. Screen capture, keylogging, clipboard.</p>
+                        </div>
+                        <div class="tactic-card bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-blue-400 font-bold">TA0011</span>
+                                <h4 class="text-blue-400 font-bold">Command & Control</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm">Maintain communication. <strong>HTTPS C2 (T1071)</strong>, DNS tunneling.</p>
+                        </div>
+                        <div class="tactic-card bg-purple-500/10 border border-purple-500/30 rounded-lg p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-purple-400 font-bold">TA0010</span>
+                                <h4 class="text-purple-400 font-bold">Exfiltration</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm">Steal data out. C2 channel, cloud storage, physical media.</p>
+                        </div>
+                        <div class="tactic-card bg-purple-500/10 border border-purple-500/30 rounded-lg p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-purple-400 font-bold">TA0040</span>
+                                <h4 class="text-purple-400 font-bold">Impact</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm">Disrupt/destroy. <strong>Ransomware (T1486)</strong>, wiper, defacement.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Key Techniques -->
+            <section id="techniques" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></span>
+                    Most Common Techniques (Must Know!)
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <div class="mnemonic rounded-xl p-4 mb-6">
+                        <h3 class="text-yellow-400 font-bold mb-2">🧠 Top Techniques: "PPCLRS"</h3>
+                        <p class="text-gray-400 text-sm"><strong>P</strong>hishing, <strong>P</strong>owerShell, <strong>C</strong>redential Dump, <strong>L</strong>ateral Move, <strong>R</strong>ansomware, <strong>S</strong>cheduled Tasks</p>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead><tr class="border-b border-gray-700">
+                                <th class="text-left py-3 px-2 text-gray-400">ID</th>
+                                <th class="text-left py-3 px-2 text-gray-400">Technique</th>
+                                <th class="text-left py-3 px-2 text-gray-400">Tactic</th>
+                                <th class="text-left py-3 px-2 text-gray-400">Detection</th>
+                            </tr></thead>
+                            <tbody class="text-gray-300">
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-2 text-red-400 font-mono">T1566</td>
+                                    <td class="py-2 px-2"><strong>Phishing</strong></td>
+                                    <td class="py-2 px-2">Initial Access</td>
+                                    <td class="py-2 px-2 text-gray-400">Email gateway, URL analysis</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-2 text-orange-400 font-mono">T1059.001</td>
+                                    <td class="py-2 px-2"><strong>PowerShell</strong></td>
+                                    <td class="py-2 px-2">Execution</td>
+                                    <td class="py-2 px-2 text-gray-400">Script block logging, AMSI</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-2 text-yellow-400 font-mono">T1003</td>
+                                    <td class="py-2 px-2"><strong>OS Credential Dumping</strong></td>
+                                    <td class="py-2 px-2">Credential Access</td>
+                                    <td class="py-2 px-2 text-gray-400">LSASS access, Sysmon Event 10</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-2 text-green-400 font-mono">T1021</td>
+                                    <td class="py-2 px-2"><strong>Remote Services</strong></td>
+                                    <td class="py-2 px-2">Lateral Movement</td>
+                                    <td class="py-2 px-2 text-gray-400">Network logons, authentication</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-2 text-blue-400 font-mono">T1053</td>
+                                    <td class="py-2 px-2"><strong>Scheduled Task/Job</strong></td>
+                                    <td class="py-2 px-2">Persistence</td>
+                                    <td class="py-2 px-2 text-gray-400">Task creation events, schtasks</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-2 text-purple-400 font-mono">T1486</td>
+                                    <td class="py-2 px-2"><strong>Data Encrypted for Impact</strong></td>
+                                    <td class="py-2 px-2">Impact</td>
+                                    <td class="py-2 px-2 text-gray-400">File modifications, entropy</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Detection Mapping -->
+            <section id="detection" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></span>
+                    Mapping Detections to ATT&CK
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">📊 Data Sources for Detection</h3>
+                    <div class="grid md:grid-cols-2 gap-4 mb-6">
+                        <div class="bg-[#0d0d14] rounded-lg p-4">
+                            <h4 class="text-green-400 font-medium mb-2">Endpoint</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Process creation (Sysmon 1)</li>
+                                <li>• Network connections (Sysmon 3)</li>
+                                <li>• File creation (Sysmon 11)</li>
+                                <li>• Registry changes (Sysmon 13)</li>
+                                <li>• PowerShell logs (4104)</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#0d0d14] rounded-lg p-4">
+                            <h4 class="text-blue-400 font-medium mb-2">Network</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• DNS queries</li>
+                                <li>• Web proxy logs</li>
+                                <li>• Firewall logs</li>
+                                <li>• IDS/IPS alerts</li>
+                                <li>• NetFlow</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
+                        <h4 class="text-green-400 font-medium mb-2">Example: Mapping a Detection Rule</h4>
+                        <p class="text-gray-400 text-sm mb-2">Rule: "Mimikatz execution detected"</p>
+                        <p class="text-gray-400 text-sm">→ <strong>Tactic:</strong> Credential Access (TA0006)</p>
+                        <p class="text-gray-400 text-sm">→ <strong>Technique:</strong> OS Credential Dumping (T1003)</p>
+                        <p class="text-gray-400 text-sm">→ <strong>Sub-technique:</strong> LSASS Memory (T1003.001)</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Practical Usage -->
+            <section id="usage" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></span>
+                    How Security Engineers Use ATT&CK
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-blue-400 font-medium mb-3">✓ Use Cases</h4>
+                            <ul class="text-gray-400 text-sm space-y-2">
+                                <li>📋 <strong>Gap Analysis</strong> - Map detections to framework</li>
+                                <li>🎯 <strong>Threat Hunting</strong> - Hunt for specific techniques</li>
+                                <li>📝 <strong>Detection Engineering</strong> - Build rules by technique</li>
+                                <li>📊 <strong>Reporting</strong> - Common language with stakeholders</li>
+                                <li>🔴 <strong>Red Team</strong> - Emulate adversary TTPs</li>
+                                <li>📚 <strong>Training</strong> - Understand attack patterns</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-purple-400 font-medium mb-3">🔗 Related Frameworks</h4>
+                            <ul class="text-gray-400 text-sm space-y-2">
+                                <li><strong>D3FEND</strong> - Defensive techniques (by MITRE)</li>
+                                <li><strong>Cyber Kill Chain</strong> - Lockheed Martin's 7 phases</li>
+                                <li><strong>Diamond Model</strong> - Intrusion analysis</li>
+                                <li><strong>NIST CSF</strong> - Maps to ATT&CK</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interview Q&A -->
+            <section id="interview" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>
+                    Interview Q&A
+                </h2>
+
+                <div class="space-y-6">
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: What is MITRE ATT&CK and how do you use it?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"MITRE ATT&CK is a knowledge base of adversary tactics, techniques, and procedures based on real-world observations. It has 14 tactics (the WHY - like Initial Access, Persistence) and 200+ techniques (the HOW - like Phishing, PowerShell). I use it for: <strong>Detection engineering</strong> - mapping our rules to techniques to find coverage gaps. <strong>Threat hunting</strong> - hunting for specific techniques in our environment. <strong>Incident response</strong> - understanding attacker behavior during investigations. It's the universal language of cyber threats."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: Walk me through an attack using ATT&CK terminology.</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"A ransomware attack: <strong>Initial Access</strong> via phishing email (T1566) with malicious attachment. <strong>Execution</strong> using PowerShell (T1059.001). <strong>Persistence</strong> through scheduled task (T1053). <strong>Defense Evasion</strong> by disabling Windows Defender (T1562). <strong>Credential Access</strong> using Mimikatz to dump LSASS (T1003.001). <strong>Lateral Movement</strong> via RDP (T1021.001) to other systems. <strong>Impact</strong> - data encryption for ransom (T1486). Each technique has specific detections - this mapping helps us ensure coverage."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: How do you identify gaps in your detection coverage?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"Map existing detection rules to ATT&CK techniques - this creates a coverage matrix. Use tools like ATT&CK Navigator to visualize gaps. Prioritize based on: 1) Techniques used by threat actors targeting your industry, 2) Techniques with high impact (credential access, lateral movement), 3) Techniques you have data sources for. For gaps, either build new detections or accept risk with compensating controls. Regular reviews as new techniques emerge."</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Memory Aids -->
+            <section id="mnemonics" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></span>
+                    Memory Aids
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Attack Flow (Simplified)</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-gray-400">1. <span class="text-red-400">Get In</span> (Initial Access)</p>
+                            <p class="text-gray-400">2. <span class="text-orange-400">Run Code</span> (Execution)</p>
+                            <p class="text-gray-400">3. <span class="text-yellow-400">Stay In</span> (Persistence)</p>
+                            <p class="text-gray-400">4. <span class="text-green-400">Get Privs</span> (Priv Esc)</p>
+                            <p class="text-gray-400">5. <span class="text-blue-400">Move Around</span> (Lateral)</p>
+                            <p class="text-gray-400">6. <span class="text-purple-400">Complete Mission</span> (Exfil/Impact)</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Top Techniques: "PPCLRS"</h3>
+                        <div class="space-y-2 text-sm">
+                            <p><span class="text-red-400 font-bold">P</span>hishing (T1566)</p>
+                            <p><span class="text-orange-400 font-bold">P</span>owerShell (T1059.001)</p>
+                            <p><span class="text-yellow-400 font-bold">C</span>redential Dump (T1003)</p>
+                            <p><span class="text-green-400 font-bold">L</span>ateral Move - RDP/SMB (T1021)</p>
+                            <p><span class="text-blue-400 font-bold">R</span>ansomware (T1486)</p>
+                            <p><span class="text-purple-400 font-bold">S</span>cheduled Tasks (T1053)</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Tactic vs Technique</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-red-400"><strong>Tactic</strong> = WHY (goal)</p>
+                            <p class="text-gray-400">"I need credentials"</p>
+                            <p class="text-blue-400"><strong>Technique</strong> = HOW (method)</p>
+                            <p class="text-gray-400">"Use Mimikatz on LSASS"</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 ID Format</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-gray-400"><strong>TA####</strong> = Tactic</p>
+                            <p class="text-gray-400"><strong>T####</strong> = Technique</p>
+                            <p class="text-gray-400"><strong>T####.###</strong> = Sub-technique</p>
+                            <p class="text-gray-500 text-xs mt-2">Example: T1059.001 = PowerShell (sub of Command Line)</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+<script src="../js/sidebar.js"></script>
+</body>
+</html>

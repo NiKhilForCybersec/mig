@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero Trust | Security Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Inter', system-ui, sans-serif; }
+        .card { background: linear-gradient(145deg, #12121a, #1a1a2e); border: 1px solid #2a2a3e; }
+        .nav-item:hover { background: rgba(59, 130, 246, 0.1); }
+        .nav-item.active { background: rgba(59, 130, 246, 0.2); border-left: 2px solid #3b82f6; }
+        .mnemonic { background: linear-gradient(135deg, #1a1a2e 0%, #2a2a3e 100%); border: 1px solid #f59e0b; }
+        .interview-qa { background: linear-gradient(135deg, #1a1a2e 0%, #1e1e3e 100%); border: 1px solid #8b5cf6; }
+        pre { background: #0d0d14 !important; border-radius: 8px; padding: 16px; overflow-x: auto; }
+        .sidebar { scrollbar-width: thin; scrollbar-color: #3b82f6 #1a1a2e; }
+        .pillar-card { transition: all 0.3s ease; }
+        .pillar-card:hover { transform: translateY(-2px); }
+    </style>
+</head>
+<body class="min-h-screen">
+    <main class="lg:ml-64 pt-14 lg:pt-0">
+        <div class="max-w-5xl mx-auto px-6 py-12">
+            <!-- Hero -->
+            <section id="overview" class="mb-16">
+                <div class="flex items-center gap-2 text-red-400 mb-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    <span class="text-sm font-medium">Zero Trust Architecture</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Zero Trust Security</h1>
+                <p class="text-xl text-gray-400 mb-8">"Never Trust, Always Verify" - The modern security model for cloud and hybrid environments.</p>
+
+                <div class="flex flex-wrap gap-3 mb-8">
+                    <span class="px-4 py-2 rounded-full bg-red-500/20 text-red-400 text-sm font-medium border border-red-500/30">Never Trust</span>
+                    <span class="px-4 py-2 rounded-full bg-orange-500/20 text-orange-400 text-sm font-medium border border-orange-500/30">Always Verify</span>
+                    <span class="px-4 py-2 rounded-full bg-yellow-500/20 text-yellow-400 text-sm font-medium border border-yellow-500/30">Least Privilege</span>
+                    <span class="px-4 py-2 rounded-full bg-blue-500/20 text-blue-400 text-sm font-medium border border-blue-500/30">Assume Breach</span>
+                </div>
+
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">🚫 Traditional vs Zero Trust</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+                            <h4 class="text-red-400 font-bold mb-2">Traditional (Castle & Moat)</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Trust inside network</li>
+                                <li>• Perimeter-based</li>
+                                <li>• VPN = full access</li>
+                                <li>• Implicit trust once inside</li>
+                            </ul>
+                            <p class="text-red-400 text-xs mt-2">❌ Fails when perimeter is breached</p>
+                        </div>
+                        <div class="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
+                            <h4 class="text-green-400 font-bold mb-2">Zero Trust</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Trust nothing by default</li>
+                                <li>• Identity-centric</li>
+                                <li>• Verify every request</li>
+                                <li>• Least privilege access</li>
+                            </ul>
+                            <p class="text-green-400 text-xs mt-2">✓ Limits blast radius if breached</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Master Mnemonic -->
+            <section class="mb-16">
+                <div class="mnemonic rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold text-yellow-400 mb-4">🧠 Master Mnemonic: "VALVE"</h2>
+                    <p class="text-gray-400 mb-4">Zero Trust Core Principles:</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">V</span>erify explicitly - Every request</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">A</span>ssume breach - Minimize impact</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">L</span>east privilege - JIT/JEA access</p>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">V</span>isibility - Log everything</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">E</span>nd-to-end encryption</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Core Principles -->
+            <section id="principles" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></span>
+                    Core Principles
+                </h2>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="card rounded-2xl p-6 text-center">
+                        <div class="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-red-400 mb-2">Verify Explicitly</h3>
+                        <p class="text-gray-400 text-sm">Authenticate and authorize every access request based on all available data points: identity, location, device, service, data classification, anomalies.</p>
+                    </div>
+
+                    <div class="card rounded-2xl p-6 text-center">
+                        <div class="w-16 h-16 rounded-full bg-orange-500/20 flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-orange-400 mb-2">Least Privilege</h3>
+                        <p class="text-gray-400 text-sm">Limit user access with Just-In-Time (JIT) and Just-Enough-Access (JEA). Risk-based adaptive policies. Data protection.</p>
+                    </div>
+
+                    <div class="card rounded-2xl p-6 text-center">
+                        <div class="w-16 h-16 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-yellow-400 mb-2">Assume Breach</h3>
+                        <p class="text-gray-400 text-sm">Minimize blast radius and segment access. Verify end-to-end encryption. Use analytics to detect threats and improve defenses.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Six Pillars -->
+            <section id="pillars" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg></span>
+                    Six Pillars of Zero Trust
+                </h2>
+
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="pillar-card card rounded-xl p-4">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                            </div>
+                            <h3 class="text-blue-400 font-bold">Identity</h3>
+                        </div>
+                        <ul class="text-gray-400 text-sm space-y-1">
+                            <li>• Strong authentication (MFA)</li>
+                            <li>• Conditional Access policies</li>
+                            <li>• Risk-based sign-in evaluation</li>
+                            <li>• Privileged Identity Management</li>
+                        </ul>
+                    </div>
+
+                    <div class="pillar-card card rounded-xl p-4">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            </div>
+                            <h3 class="text-green-400 font-bold">Devices</h3>
+                        </div>
+                        <ul class="text-gray-400 text-sm space-y-1">
+                            <li>• Device registration/enrollment</li>
+                            <li>• Compliance policies</li>
+                            <li>• Health attestation</li>
+                            <li>• EDR/XDR protection</li>
+                        </ul>
+                    </div>
+
+                    <div class="pillar-card card rounded-xl p-4">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/></svg>
+                            </div>
+                            <h3 class="text-purple-400 font-bold">Data</h3>
+                        </div>
+                        <ul class="text-gray-400 text-sm space-y-1">
+                            <li>• Classification & labeling</li>
+                            <li>• Encryption (rest & transit)</li>
+                            <li>• DLP policies</li>
+                            <li>• Access controls</li>
+                        </ul>
+                    </div>
+
+                    <div class="pillar-card card rounded-xl p-4">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>
+                            </div>
+                            <h3 class="text-orange-400 font-bold">Applications</h3>
+                        </div>
+                        <ul class="text-gray-400 text-sm space-y-1">
+                            <li>• SSO & modern auth</li>
+                            <li>• Shadow IT discovery</li>
+                            <li>• App permissions</li>
+                            <li>• Session controls</li>
+                        </ul>
+                    </div>
+
+                    <div class="pillar-card card rounded-xl p-4">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+                            </div>
+                            <h3 class="text-cyan-400 font-bold">Network</h3>
+                        </div>
+                        <ul class="text-gray-400 text-sm space-y-1">
+                            <li>• Microsegmentation</li>
+                            <li>• Encrypted traffic</li>
+                            <li>• Threat protection</li>
+                            <li>• ZTNA (replace VPN)</li>
+                        </ul>
+                    </div>
+
+                    <div class="pillar-card card rounded-xl p-4">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>
+                            </div>
+                            <h3 class="text-red-400 font-bold">Infrastructure</h3>
+                        </div>
+                        <ul class="text-gray-400 text-sm space-y-1">
+                            <li>• JIT VM access</li>
+                            <li>• Version control (IaC)</li>
+                            <li>• Telemetry & anomalies</li>
+                            <li>• Automated response</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Microsoft Zero Trust -->
+            <section id="microsoft" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></span>
+                    Microsoft Zero Trust Stack
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">🔷 Key Microsoft Technologies</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-blue-400 font-medium mb-2">Identity Pillar</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• <strong>Entra ID</strong> - Identity provider</li>
+                                <li>• <strong>Conditional Access</strong> - Policy engine</li>
+                                <li>• <strong>PIM</strong> - Just-in-time admin</li>
+                                <li>• <strong>Identity Protection</strong> - Risk-based</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-green-400 font-medium mb-2">Device Pillar</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• <strong>Intune</strong> - MDM/MAM</li>
+                                <li>• <strong>Defender for Endpoint</strong> - EDR</li>
+                                <li>• <strong>Compliance policies</strong></li>
+                                <li>• <strong>Autopilot</strong> - Zero-touch deploy</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-purple-400 font-medium mb-2">Data Pillar</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• <strong>Purview</strong> - DLP & classification</li>
+                                <li>• <strong>Sensitivity labels</strong></li>
+                                <li>• <strong>Encryption</strong> - BitLocker, AIP</li>
+                                <li>• <strong>Insider Risk</strong> - Behavioral</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-orange-400 font-medium mb-2">Network Pillar</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• <strong>Entra Private Access</strong> - ZTNA</li>
+                                <li>• <strong>Entra Internet Access</strong> - SWG</li>
+                                <li>• <strong>Azure Firewall</strong></li>
+                                <li>• <strong>NSG/ASG</strong> - Microsegmentation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Implementation -->
+            <section id="implementation" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg></span>
+                    Implementation Roadmap
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 font-bold">1</div>
+                            <div>
+                                <h4 class="text-green-400 font-bold mb-1">Start with Identity</h4>
+                                <p class="text-gray-400 text-sm">Deploy MFA for all users. Implement Conditional Access baseline policies. Enable Identity Protection for risk detection.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold">2</div>
+                            <div>
+                                <h4 class="text-blue-400 font-bold mb-1">Enroll Devices</h4>
+                                <p class="text-gray-400 text-sm">Register devices in Intune. Create compliance policies. Require compliant devices for access. Deploy EDR.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold">3</div>
+                            <div>
+                                <h4 class="text-purple-400 font-bold mb-1">Protect Data</h4>
+                                <p class="text-gray-400 text-sm">Classify sensitive data. Apply sensitivity labels. Implement DLP policies. Enable encryption.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 font-bold">4</div>
+                            <div>
+                                <h4 class="text-orange-400 font-bold mb-1">Secure Network</h4>
+                                <p class="text-gray-400 text-sm">Replace VPN with ZTNA. Implement microsegmentation. Monitor network traffic. Block lateral movement.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interview Q&A -->
+            <section id="interview" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>
+                    Interview Q&A
+                </h2>
+
+                <div class="space-y-6">
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: What is Zero Trust and why is it important?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"Zero Trust is a security model that eliminates implicit trust - instead of assuming everything inside the network is safe, we verify every access request regardless of where it comes from. The three principles: <strong>Verify explicitly</strong> (authenticate every request), <strong>Least privilege</strong> (JIT/JEA access), <strong>Assume breach</strong> (minimize blast radius). It's important because perimeter-based security fails with cloud, remote work, and sophisticated attackers."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: How would you implement Zero Trust in an organization?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"Start with identity - it's the new perimeter. First, MFA for everyone, no exceptions. Then Conditional Access policies - require compliant devices, block legacy auth, implement risk-based policies. Next, device enrollment with compliance checks. Then data protection with classification and DLP. Finally, network - replace VPN with ZTNA, implement microsegmentation. Key: it's a journey, not a destination. Start with quick wins (MFA) and iterate."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: What are the six pillars of Zero Trust?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"The six pillars: <strong>Identity</strong> (users, service accounts - MFA, CA, PIM), <strong>Devices</strong> (compliance, health attestation, EDR), <strong>Data</strong> (classification, encryption, DLP), <strong>Applications</strong> (SSO, shadow IT, permissions), <strong>Network</strong> (microsegmentation, encryption, ZTNA), <strong>Infrastructure</strong> (JIT access, telemetry, IaC). All pillars feed into a unified policy decision point that evaluates context for every access request."</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Memory Aids -->
+            <section id="mnemonics" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-pink-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></span>
+                    Memory Aids
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Three Principles: "VLA"</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-red-400"><strong>V</strong>erify explicitly - Every request</p>
+                            <p class="text-orange-400"><strong>L</strong>east privilege - JIT/JEA</p>
+                            <p class="text-yellow-400"><strong>A</strong>ssume breach - Minimize impact</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Six Pillars: "ID DANI"</h3>
+                        <div class="space-y-1 text-sm">
+                            <p class="text-blue-400"><strong>I</strong>dentity - MFA, CA, PIM</p>
+                            <p class="text-green-400"><strong>D</strong>evices - Compliance, EDR</p>
+                            <p class="text-purple-400"><strong>D</strong>ata - Classification, DLP</p>
+                            <p class="text-orange-400"><strong>A</strong>pplications - SSO, permissions</p>
+                            <p class="text-cyan-400"><strong>N</strong>etwork - Microseg, ZTNA</p>
+                            <p class="text-red-400"><strong>I</strong>nfrastructure - JIT, IaC</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Implementation Order</h3>
+                        <div class="space-y-1 text-sm">
+                            <p class="text-green-400">1. <strong>Identity</strong> - MFA first (quick win)</p>
+                            <p class="text-blue-400">2. <strong>Devices</strong> - Enrollment, compliance</p>
+                            <p class="text-purple-400">3. <strong>Data</strong> - Classification, DLP</p>
+                            <p class="text-orange-400">4. <strong>Network</strong> - ZTNA, microseg</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Key Phrase</h3>
+                        <p class="text-2xl text-center text-red-400 font-bold">"Never Trust,</p>
+                        <p class="text-2xl text-center text-green-400 font-bold">Always Verify"</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <script>function toggleSidebar(){document.getElementById('sidebar').classList.toggle('-translate-x-full');}</script>
+<script src="../js/sidebar.js"></script>
+</body>
+</html>

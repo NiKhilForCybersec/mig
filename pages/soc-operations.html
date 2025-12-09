@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOC Operations | Security Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Inter', system-ui, sans-serif; }
+        .card { background: linear-gradient(145deg, #12121a, #1a1a2e); border: 1px solid #2a2a3e; }
+        .nav-item:hover { background: rgba(59, 130, 246, 0.1); }
+        .nav-item.active { background: rgba(59, 130, 246, 0.2); border-left: 2px solid #3b82f6; }
+        .mnemonic { background: linear-gradient(135deg, #1a1a2e 0%, #2a2a3e 100%); border: 1px solid #f59e0b; }
+        .interview-qa { background: linear-gradient(135deg, #1a1a2e 0%, #1e1e3e 100%); border: 1px solid #8b5cf6; }
+        pre { background: #0d0d14 !important; border-radius: 8px; padding: 16px; overflow-x: auto; }
+        .sidebar { scrollbar-width: thin; scrollbar-color: #3b82f6 #1a1a2e; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <main class="lg:ml-64 pt-14 lg:pt-0">
+        <div class="max-w-5xl mx-auto px-6 py-12">
+            <!-- Hero -->
+            <section id="overview" class="mb-16">
+                <div class="flex items-center gap-2 text-blue-400 mb-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5"/></svg>
+                    <span class="text-sm font-medium">Security Operations Center</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">SOC Operations Engineering</h1>
+                <p class="text-xl text-gray-400 mb-8">SOC Structure, Alert Triage, Detection Engineering, Metrics - Complete security operations methodology.</p>
+
+                <div class="flex flex-wrap gap-3 mb-8">
+                    <span class="px-4 py-2 rounded-full bg-green-500/20 text-green-400 text-sm font-medium border border-green-500/30">L1→Security Engineer</span>
+                    <span class="px-4 py-2 rounded-full bg-blue-500/20 text-blue-400 text-sm font-medium border border-blue-500/30">Splunk</span>
+                    <span class="px-4 py-2 rounded-full bg-purple-500/20 text-purple-400 text-sm font-medium border border-purple-500/30">Microsoft Sentinel</span>
+                    <span class="px-4 py-2 rounded-full bg-orange-500/20 text-orange-400 text-sm font-medium border border-orange-500/30">Cortex XDR/XSOAR</span>
+                </div>
+
+                <!-- Career Progression -->
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">🚀 Career Progression</h3>
+                    <div class="flex items-center gap-4 overflow-x-auto pb-2">
+                        <div class="flex-shrink-0 text-center">
+                            <div class="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-2"><span class="text-green-400 font-bold">L1</span></div>
+                            <p class="text-green-400 font-medium text-sm">SOC Analyst</p>
+                            <p class="text-gray-500 text-xs">Cognizant - Splunk</p>
+                        </div>
+                        <svg class="w-8 h-8 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                        <div class="flex-shrink-0 text-center">
+                            <div class="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-2"><span class="text-blue-400 font-bold">L2</span></div>
+                            <p class="text-blue-400 font-medium text-sm">Security Engineer</p>
+                            <p class="text-gray-500 text-xs">Infosys - Trellix, XDR</p>
+                        </div>
+                        <svg class="w-8 h-8 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                        <div class="flex-shrink-0 text-center">
+                            <div class="w-16 h-16 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-2"><span class="text-purple-400 font-bold">L3</span></div>
+                            <p class="text-purple-400 font-medium text-sm">Security Engineer</p>
+                            <p class="text-gray-500 text-xs">Siemens - Microsoft</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="card rounded-xl p-4 text-center"><p class="text-2xl font-bold text-blue-400">5+</p><p class="text-sm text-gray-400">Years Experience</p></div>
+                    <div class="card rounded-xl p-4 text-center"><p class="text-2xl font-bold text-green-400">10K+</p><p class="text-sm text-gray-400">Alerts Triaged</p></div>
+                    <div class="card rounded-xl p-4 text-center"><p class="text-2xl font-bold text-purple-400">500+</p><p class="text-sm text-gray-400">Detection Rules</p></div>
+                    <div class="card rounded-xl p-4 text-center"><p class="text-2xl font-bold text-orange-400">50+</p><p class="text-sm text-gray-400">Playbooks</p></div>
+                </div>
+            </section>
+
+            <!-- Master Mnemonic -->
+            <section class="mb-16">
+                <div class="mnemonic rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold text-yellow-400 mb-4">🧠 Master Mnemonic: "DETECT"</h2>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">D</span>etection - Rules, alerts, monitoring</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">E</span>nrichment - Context, threat intel</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">T</span>riage - Validate, prioritize</p>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">E</span>scalation - Route correctly</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">C</span>ontainment - Response actions</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">T</span>rack - Metrics, improvement</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SOC Tiers -->
+            <section id="tiers" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></span>
+                    SOC Tiers - Roles & Responsibilities
+                </h2>
+
+                <div class="space-y-6">
+                    <div class="card rounded-2xl p-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center"><span class="text-green-400 font-bold text-lg">L1</span></div>
+                            <div><h3 class="text-xl font-bold text-green-400">Tier 1 - SOC Analyst</h3><p class="text-gray-400 text-sm">Alert Triage & Initial Response</p></div>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div><h4 class="text-white font-medium mb-2">Responsibilities</h4>
+                                <ul class="text-gray-400 text-sm space-y-1">
+                                    <li>• Monitor SIEM dashboards and alert queues</li>
+                                    <li>• Initial triage - true positive vs false positive</li>
+                                    <li>• Follow playbooks for common alerts</li>
+                                    <li>• Create and document tickets</li>
+                                    <li>• Escalate to L2 when needed</li>
+                                </ul>
+                            </div>
+                            <div><h4 class="text-white font-medium mb-2">Skills Required</h4>
+                                <ul class="text-gray-400 text-sm space-y-1">
+                                    <li>• Understanding of common attacks</li>
+                                    <li>• Basic networking (TCP/IP, DNS, HTTP)</li>
+                                    <li>• SIEM query basics</li>
+                                    <li>• Good documentation skills</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card rounded-2xl p-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center"><span class="text-blue-400 font-bold text-lg">L2</span></div>
+                            <div><h3 class="text-xl font-bold text-blue-400">Tier 2 - Security Engineer</h3><p class="text-gray-400 text-sm">Deep Analysis & Incident Handling</p></div>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div><h4 class="text-white font-medium mb-2">Responsibilities</h4>
+                                <ul class="text-gray-400 text-sm space-y-1">
+                                    <li>• Deep investigation of escalated alerts</li>
+                                    <li>• Incident handling and coordination</li>
+                                    <li>• Threat hunting (proactive)</li>
+                                    <li>• Develop and tune detection rules</li>
+                                    <li>• Create playbooks, mentor L1</li>
+                                </ul>
+                            </div>
+                            <div><h4 class="text-white font-medium mb-2">Skills Required</h4>
+                                <ul class="text-gray-400 text-sm space-y-1">
+                                    <li>• Advanced SIEM queries (KQL, SPL)</li>
+                                    <li>• Malware analysis basics</li>
+                                    <li>• Scripting (PowerShell, Python)</li>
+                                    <li>• MITRE ATT&CK framework</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card rounded-2xl p-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center"><span class="text-purple-400 font-bold text-lg">L3</span></div>
+                            <div><h3 class="text-xl font-bold text-purple-400">Tier 3 - Senior Engineer</h3><p class="text-gray-400 text-sm">Architecture & Strategy</p></div>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div><h4 class="text-white font-medium mb-2">Responsibilities</h4>
+                                <ul class="text-gray-400 text-sm space-y-1">
+                                    <li>• Detection engineering & optimization</li>
+                                    <li>• Tool administration & integration</li>
+                                    <li>• Automation development (SOAR)</li>
+                                    <li>• Major incident leadership</li>
+                                    <li>• Process improvement</li>
+                                </ul>
+                            </div>
+                            <div><h4 class="text-white font-medium mb-2">Skills Required</h4>
+                                <ul class="text-gray-400 text-sm space-y-1">
+                                    <li>• Expert SIEM administration</li>
+                                    <li>• Advanced scripting & automation</li>
+                                    <li>• Security architecture</li>
+                                    <li>• Leadership & communication</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Alert Triage -->
+            <section id="triage" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg></span>
+                    Alert Triage Process
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">📋 Triage Workflow</h3>
+                    <div class="space-y-4">
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold">1</span>
+                                <h4 class="text-blue-400 font-medium">Initial Assessment (30 seconds)</h4>
+                            </div>
+                            <ul class="text-gray-400 text-sm space-y-1 ml-11">
+                                <li>• What type of alert? What severity?</li>
+                                <li>• What system/user affected?</li>
+                                <li>• Known false positive pattern?</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 font-bold">2</span>
+                                <h4 class="text-green-400 font-medium">Enrichment (1-2 minutes)</h4>
+                            </div>
+                            <ul class="text-gray-400 text-sm space-y-1 ml-11">
+                                <li>• Check asset criticality</li>
+                                <li>• Look up IP/domain reputation</li>
+                                <li>• Check threat intel for IOCs</li>
+                                <li>• Review related alerts</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center text-yellow-400 font-bold">3</span>
+                                <h4 class="text-yellow-400 font-medium">Validation (2-5 minutes)</h4>
+                            </div>
+                            <ul class="text-gray-400 text-sm space-y-1 ml-11">
+                                <li>• Is activity expected/legitimate?</li>
+                                <li>• Check parent/child processes</li>
+                                <li>• Verify indicators match attack pattern</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold">4</span>
+                                <h4 class="text-purple-400 font-medium">Decision & Action</h4>
+                            </div>
+                            <div class="ml-11 grid md:grid-cols-3 gap-4 text-sm">
+                                <div class="bg-green-500/10 rounded p-2"><p class="text-green-400 font-medium">False Positive</p><p class="text-gray-400 text-xs">Document, close, consider tuning</p></div>
+                                <div class="bg-yellow-500/10 rounded p-2"><p class="text-yellow-400 font-medium">TP (Low)</p><p class="text-gray-400 text-xs">Action per playbook, close</p></div>
+                                <div class="bg-red-500/10 rounded p-2"><p class="text-red-400 font-medium">TP (High)</p><p class="text-gray-400 text-xs">Escalate, begin containment</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Metrics -->
+            <section id="metrics" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5"/></svg></span>
+                    SOC Metrics & KPIs
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div><h4 class="text-blue-400 font-medium mb-3">Detection Metrics</h4>
+                            <div class="space-y-3">
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <div class="flex justify-between"><span class="text-white font-medium text-sm">MTTD</span><span class="text-blue-400 text-sm">Mean Time to Detect</span></div>
+                                    <p class="text-gray-500 text-xs mt-1">Time from attack to detection. Target: &lt;1 hour</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <div class="flex justify-between"><span class="text-white font-medium text-sm">False Positive Rate</span><span class="text-blue-400 text-sm">FP / Total</span></div>
+                                    <p class="text-gray-500 text-xs mt-1">% of alerts that are FP. Target: &lt;30%</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div><h4 class="text-green-400 font-medium mb-3">Response Metrics</h4>
+                            <div class="space-y-3">
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <div class="flex justify-between"><span class="text-white font-medium text-sm">MTTR</span><span class="text-green-400 text-sm">Mean Time to Respond</span></div>
+                                    <p class="text-gray-500 text-xs mt-1">Detection to containment. Target: &lt;4h (P1)</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <div class="flex justify-between"><span class="text-white font-medium text-sm">SLA Compliance</span><span class="text-green-400 text-sm">% within SLA</span></div>
+                                    <p class="text-gray-500 text-xs mt-1">Target: &gt;95%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Detection Engineering -->
+            <section id="detection" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></span>
+                    Detection Engineering
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">✅ Detection Rule Best Practices</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div><h4 class="text-green-400 font-medium mb-3">DO</h4>
+                            <ul class="text-gray-400 text-sm space-y-2">
+                                <li>✓ Map to MITRE ATT&CK technique</li>
+                                <li>✓ Test against historical data first</li>
+                                <li>✓ Include investigation playbook link</li>
+                                <li>✓ Document known FP patterns</li>
+                                <li>✓ Review and tune regularly</li>
+                            </ul>
+                        </div>
+                        <div><h4 class="text-red-400 font-medium mb-3">DON'T</h4>
+                            <ul class="text-gray-400 text-sm space-y-2">
+                                <li>✗ Deploy without testing</li>
+                                <li>✗ Use overly broad patterns</li>
+                                <li>✗ Set everything as "Critical"</li>
+                                <li>✗ Ignore environment noise</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interview Q&A -->
+            <section id="interview" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>
+                    Interview Q&A
+                </h2>
+
+                <div class="space-y-6">
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: Walk me through your alert triage process.</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"I follow a structured approach: Initial Assessment (30 sec) - read alert, check severity, identify affected system. Enrichment (1-2 min) - check asset criticality, IP reputation, threat intel. Validation (2-5 min) - verify context, check parent processes. Then decide: FP closes with documentation, low TP follows playbook, high TP escalates to L2 with findings."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: How do you reduce false positives?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"Multiple approaches: 1) Tune rules - add exclusions for known good patterns. 2) Improve context - enrich with asset criticality. 3) Correlation - alert on patterns not single events. 4) UEBA - baseline normal behavior. At Infosys, I reduced FP from 70% to 30% over 6 months."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: Describe your career progression L1 to Engineer.</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"Started as L1 at Cognizant with Splunk - 50-100 alerts daily, learned pattern recognition, documented FP patterns, created quick reference guides. At Infosys (L2), managed Trellix and Cortex XDR for 300K endpoints - detection engineering, incident handling, XSOAR playbooks. Now at Siemens (L3) - leading DLP migration, architecting solutions, setting technical direction."</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Memory Aids -->
+            <section id="mnemonics" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-pink-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></span>
+                    Memory Aids
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 "TRIAGE" - Alert Analysis</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-yellow-300"><strong>T</strong>ype - What kind of alert?</p>
+                            <p class="text-yellow-300"><strong>R</strong>isk - Severity and impact?</p>
+                            <p class="text-yellow-300"><strong>I</strong>ndicators - IOCs present?</p>
+                            <p class="text-yellow-300"><strong>A</strong>sset - What system/user?</p>
+                            <p class="text-yellow-300"><strong>G</strong>ather context - Related events?</p>
+                            <p class="text-yellow-300"><strong>E</strong>scalate or close?</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 SOC Metrics: "DDR"</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-blue-400"><strong>D</strong>etection - MTTD, Coverage, FP Rate</p>
+                            <p class="text-green-400"><strong>D</strong>elivery - MTTA, MTTR, SLA %</p>
+                            <p class="text-purple-400"><strong>R</strong>esource - Volume, Utilization</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 SOC Tiers</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-green-400"><strong>L1</strong> - Alert triage, playbook execution</p>
+                            <p class="text-blue-400"><strong>L2</strong> - Deep investigation, detection rules</p>
+                            <p class="text-purple-400"><strong>L3</strong> - Architecture, automation, strategy</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 FP Sources: "ITSB"</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-yellow-300"><strong>I</strong>T Admin activity</p>
+                            <p class="text-yellow-300"><strong>T</strong>ools (security, deployment)</p>
+                            <p class="text-yellow-300"><strong>S</strong>cheduled tasks</p>
+                            <p class="text-yellow-300"><strong>B</strong>usiness-approved exceptions</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <script>function toggleSidebar(){document.getElementById('sidebar').classList.toggle('-translate-x-full');}</script>
+<script src="../js/sidebar.js"></script>
+</body>
+</html>

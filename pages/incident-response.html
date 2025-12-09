@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incident Response | Security Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Inter', system-ui, sans-serif; }
+        .card { background: linear-gradient(145deg, #12121a, #1a1a2e); border: 1px solid #2a2a3e; }
+        .mnemonic { background: linear-gradient(135deg, #1a1a2e 0%, #2a2a3e 100%); border: 1px solid #f59e0b; }
+        .interview-qa { background: linear-gradient(135deg, #1a1a2e 0%, #1e1e3e 100%); border: 1px solid #8b5cf6; }
+        pre { background: #0d0d14 !important; border-radius: 8px; padding: 16px; overflow-x: auto; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <main class="lg:ml-64 pt-14 lg:pt-0">
+        <div class="max-w-5xl mx-auto px-6 py-12">
+            <!-- Hero -->
+            <section id="overview" class="mb-16">
+                <div class="flex items-center gap-2 text-red-400 mb-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                    <span class="text-sm font-medium">Incident Response</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Incident Response</h1>
+                <p class="text-xl text-gray-400 mb-8">NIST/SANS frameworks, phases, playbooks, and forensics.</p>
+            </section>
+
+            <!-- Master Mnemonic -->
+            <section class="mb-16">
+                <div class="mnemonic rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold text-yellow-400 mb-4">🧠 Master Mnemonic: "PICERL"</h2>
+                    <p class="text-gray-400 mb-4">NIST/SANS Incident Response Phases:</p>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="space-y-2">
+                            <p class="text-lg"><span class="text-blue-400 font-bold">P</span>reparation - Get ready before incidents</p>
+                            <p class="text-lg"><span class="text-green-400 font-bold">I</span>dentification - Detect and confirm incidents</p>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">C</span>ontainment - Stop the spread</p>
+                            <p class="text-lg"><span class="text-orange-400 font-bold">E</span>radication - Remove the threat</p>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-lg"><span class="text-red-400 font-bold">R</span>ecovery - Restore operations</p>
+                            <p class="text-lg"><span class="text-purple-400 font-bold">L</span>essons Learned - Improve for next time</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 text-sm mt-4">"Please Identify Containment, Eradicate, Recover, Learn"</p>
+                </div>
+            </section>
+
+            <!-- IR Phases -->
+            <section id="phases" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></span>
+                    IR Phases Deep Dive
+                </h2>
+
+                <div class="space-y-4">
+                    <div class="card rounded-xl p-5">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold">1</div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-blue-400 mb-2">Preparation</h3>
+                                <p class="text-gray-400 text-sm mb-3">Done BEFORE incidents occur. The most important phase!</p>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="bg-[#0d0d14] rounded-lg p-3">
+                                        <p class="text-blue-400 text-xs font-medium mb-1">Key Activities</p>
+                                        <ul class="text-gray-400 text-xs space-y-1">
+                                            <li>• Build IR team & define roles</li>
+                                            <li>• Create/test playbooks</li>
+                                            <li>• Deploy detection tools (SIEM, EDR)</li>
+                                            <li>• Establish communication plans</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-[#0d0d14] rounded-lg p-3">
+                                        <p class="text-blue-400 text-xs font-medium mb-1">Deliverables</p>
+                                        <ul class="text-gray-400 text-xs space-y-1">
+                                            <li>• IR Plan document</li>
+                                            <li>• Contact lists (internal + external)</li>
+                                            <li>• Jump bag / forensic toolkit</li>
+                                            <li>• Tabletop exercise results</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card rounded-xl p-5">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center text-green-400 font-bold">2</div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-green-400 mb-2">Identification</h3>
+                                <p class="text-gray-400 text-sm mb-3">Detect, analyze, and confirm security incidents.</p>
+                                <div class="bg-[#0d0d14] rounded-lg p-3">
+                                    <p class="text-green-400 text-xs font-medium mb-1">Questions to Answer</p>
+                                    <p class="text-gray-400 text-xs">Who? What? When? Where? How? Why? (5W1H)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card rounded-xl p-5">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-yellow-500/20 flex items-center justify-center text-yellow-400 font-bold">3</div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-yellow-400 mb-2">Containment</h3>
+                                <p class="text-gray-400 text-sm mb-3">Limit damage and prevent spread. Two types:</p>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="bg-orange-500/10 border border-orange-500/30 rounded-lg p-3">
+                                        <p class="text-orange-400 text-xs font-medium mb-1">Short-Term (Immediate)</p>
+                                        <ul class="text-gray-400 text-xs space-y-1">
+                                            <li>• Isolate affected systems</li>
+                                            <li>• Block malicious IPs/domains</li>
+                                            <li>• Disable compromised accounts</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
+                                        <p class="text-green-400 text-xs font-medium mb-1">Long-Term (Sustained)</p>
+                                        <ul class="text-gray-400 text-xs space-y-1">
+                                            <li>• Patch vulnerabilities</li>
+                                            <li>• Rebuild systems from clean images</li>
+                                            <li>• Implement network segmentation</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card rounded-xl p-5">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400 font-bold">4</div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-orange-400 mb-2">Eradication</h3>
+                                <p class="text-gray-400 text-sm">Remove threat completely: malware, backdoors, compromised credentials, root cause.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card rounded-xl p-5">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400 font-bold">5</div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-red-400 mb-2">Recovery</h3>
+                                <p class="text-gray-400 text-sm">Restore systems to normal operations. Validate clean state. Monitor for reinfection.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card rounded-xl p-5">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold">6</div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-purple-400 mb-2">Lessons Learned</h3>
+                                <p class="text-gray-400 text-sm">Post-incident review. What happened? What worked? What failed? How to improve?</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Evidence Collection -->
+            <section id="evidence" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></span>
+                    Evidence Collection
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <div class="mnemonic rounded-xl p-4 mb-4">
+                        <h3 class="text-yellow-400 font-bold mb-2">🧠 Order of Volatility (Most → Least)</h3>
+                        <p class="text-gray-400 text-sm">Collect evidence in this order - most volatile first!</p>
+                        <ol class="text-gray-300 text-sm mt-2 space-y-1">
+                            <li>1. <strong>Memory (RAM)</strong> - Disappears on power off</li>
+                            <li>2. <strong>Network connections</strong> - Active sessions</li>
+                            <li>3. <strong>Running processes</strong> - Current state</li>
+                            <li>4. <strong>Disk</strong> - Persists but can be modified</li>
+                            <li>5. <strong>Logs</strong> - May rotate/overwrite</li>
+                            <li>6. <strong>Physical evidence</strong> - Most stable</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interview Q&A -->
+            <section id="interview" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>
+                    Interview Q&A
+                </h2>
+
+                <div class="space-y-6">
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: Walk me through how you would respond to a ransomware incident.</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"Following PICERL: First, <strong>Identification</strong> - confirm it's ransomware, determine variant, identify affected systems. <strong>Containment</strong> - immediately isolate infected machines from network, disable affected accounts, block C2 domains. <strong>Eradication</strong> - remove ransomware binaries, scan for persistence mechanisms. <strong>Recovery</strong> - restore from known-good backups (never pay ransom as first option), rebuild if needed. <strong>Lessons Learned</strong> - how did they get in? Improve defenses. Throughout: document everything, preserve evidence, communicate with stakeholders."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: What's the difference between short-term and long-term containment?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"<strong>Short-term</strong> is immediate triage - isolate the system, block the IP, disable the account. Goal is to stop the bleeding NOW. <strong>Long-term</strong> is sustainable remediation - patch the vulnerability, implement proper segmentation, rebuild with hardened images. Short-term is a band-aid; long-term is proper surgery. You need both - short-term buys you time for long-term."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: Why is the order of volatility important in forensics?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"Evidence disappears at different rates. RAM is gone instantly on power off - collect it first. Network connections and processes are next. Disk is more stable but can be modified. Logs can rotate. If you start with disk while RAM has critical evidence, you lose it. Always collect most volatile first. Mnemonic: 'Memory, Network, Processes, Disk, Logs, Physical' - most to least volatile."</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Memory Aids -->
+            <section id="mnemonics" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></span>
+                    Memory Aids
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 IR Phases: "PICERL"</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-blue-400"><strong>P</strong>reparation - Before incident</p>
+                            <p class="text-green-400"><strong>I</strong>dentification - Detect & confirm</p>
+                            <p class="text-yellow-400"><strong>C</strong>ontainment - Stop spread</p>
+                            <p class="text-orange-400"><strong>E</strong>radication - Remove threat</p>
+                            <p class="text-red-400"><strong>R</strong>ecovery - Restore operations</p>
+                            <p class="text-purple-400"><strong>L</strong>essons - Improve</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Containment Types</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-orange-400"><strong>Short-term:</strong> Isolate, block, disable (immediate)</p>
+                            <p class="text-green-400"><strong>Long-term:</strong> Patch, rebuild, segment (sustained)</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Evidence Volatility</h3>
+                        <div class="space-y-1 text-sm">
+                            <p>1. Memory (most volatile)</p>
+                            <p>2. Network connections</p>
+                            <p>3. Running processes</p>
+                            <p>4. Disk</p>
+                            <p>5. Logs</p>
+                            <p>6. Physical (least volatile)</p>
+                        </div>
+                    </div>
+
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 5W1H for Identification</h3>
+                        <div class="space-y-1 text-sm">
+                            <p><strong>W</strong>ho - Attacker? Affected users?</p>
+                            <p><strong>W</strong>hat - Type of attack?</p>
+                            <p><strong>W</strong>hen - Timeline?</p>
+                            <p><strong>W</strong>here - Systems affected?</p>
+                            <p><strong>W</strong>hy - Motive?</p>
+                            <p><strong>H</strong>ow - Attack vector?</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+<script src="../js/sidebar.js"></script>
+</body>
+</html>

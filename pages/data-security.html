@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Security | Security Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Inter', system-ui, sans-serif; }
+        .card { background: linear-gradient(145deg, #12121a, #1a1a2e); border: 1px solid #2a2a3e; }
+        .nav-item:hover { background: rgba(59, 130, 246, 0.1); }
+        .nav-item.active { background: rgba(59, 130, 246, 0.2); border-left: 2px solid #3b82f6; }
+        .mnemonic { background: linear-gradient(135deg, #1a1a2e 0%, #2a2a3e 100%); border: 1px solid #f59e0b; }
+        .interview-qa { background: linear-gradient(135deg, #1a1a2e 0%, #1e1e3e 100%); border: 1px solid #8b5cf6; }
+        pre { background: #0d0d14 !important; border-radius: 8px; padding: 16px; overflow-x: auto; }
+        .sidebar { scrollbar-width: thin; scrollbar-color: #3b82f6 #1a1a2e; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <main class="lg:ml-64 pt-14 lg:pt-0">
+        <div class="max-w-5xl mx-auto px-6 py-12">
+            <!-- Hero -->
+            <section id="overview" class="mb-16">
+                <div class="flex items-center gap-2 text-purple-400 mb-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/></svg>
+                    <span class="text-sm font-medium">Data Security</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Data Security Engineering</h1>
+                <p class="text-xl text-gray-400 mb-8">Classification, Encryption, DLP, PKI - Comprehensive data protection strategies.</p>
+
+                <div class="flex flex-wrap gap-3 mb-8">
+                    <span class="px-4 py-2 rounded-full bg-purple-500/20 text-purple-400 text-sm font-medium border border-purple-500/30">Microsoft Purview</span>
+                    <span class="px-4 py-2 rounded-full bg-blue-500/20 text-blue-400 text-sm font-medium border border-blue-500/30">Sensitivity Labels</span>
+                    <span class="px-4 py-2 rounded-full bg-green-500/20 text-green-400 text-sm font-medium border border-green-500/30">Encryption</span>
+                    <span class="px-4 py-2 rounded-full bg-orange-500/20 text-orange-400 text-sm font-medium border border-orange-500/30">DLP</span>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="card rounded-xl p-4 text-center"><p class="text-2xl font-bold text-purple-400">CIA</p><p class="text-sm text-gray-400">Triad</p></div>
+                    <div class="card rounded-xl p-4 text-center"><p class="text-2xl font-bold text-blue-400">AES-256</p><p class="text-sm text-gray-400">Encryption</p></div>
+                    <div class="card rounded-xl p-4 text-center"><p class="text-2xl font-bold text-green-400">TLS 1.3</p><p class="text-sm text-gray-400">In Transit</p></div>
+                    <div class="card rounded-xl p-4 text-center"><p class="text-2xl font-bold text-orange-400">DLP</p><p class="text-sm text-gray-400">Prevention</p></div>
+                </div>
+            </section>
+
+            <!-- Master Mnemonic -->
+            <section class="mb-16">
+                <div class="mnemonic rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold text-yellow-400 mb-4">🧠 Master Mnemonic: "CLEKD"</h2>
+                    <p class="text-gray-400 mb-4">Data Security Lifecycle:</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">C</span>lassify - Know your data</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">L</span>abel - Apply sensitivity</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">E</span>ncrypt - Protect at rest/transit</p>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">K</span>ey management - Secure keys</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">D</span>LP - Prevent exfiltration</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Classification -->
+            <section id="classification" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg></span>
+                    Data Classification
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">📊 Classification Levels</h3>
+                    <div class="grid md:grid-cols-4 gap-4">
+                        <div class="bg-green-500/10 border border-green-500/30 rounded-lg p-4 text-center">
+                            <p class="text-green-400 font-bold text-lg">Public</p>
+                            <p class="text-gray-400 text-sm mt-2">Marketing materials, published content</p>
+                            <p class="text-gray-500 text-xs mt-2">No restrictions</p>
+                        </div>
+                        <div class="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 text-center">
+                            <p class="text-blue-400 font-bold text-lg">Internal</p>
+                            <p class="text-gray-400 text-sm mt-2">Internal communications, policies</p>
+                            <p class="text-gray-500 text-xs mt-2">Employees only</p>
+                        </div>
+                        <div class="bg-orange-500/10 border border-orange-500/30 rounded-lg p-4 text-center">
+                            <p class="text-orange-400 font-bold text-lg">Confidential</p>
+                            <p class="text-gray-400 text-sm mt-2">Customer data, financials</p>
+                            <p class="text-gray-500 text-xs mt-2">Need-to-know</p>
+                        </div>
+                        <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-center">
+                            <p class="text-red-400 font-bold text-lg">Restricted</p>
+                            <p class="text-gray-400 text-sm mt-2">PII, PHI, PCI, trade secrets</p>
+                            <p class="text-gray-500 text-xs mt-2">Strict controls</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">🏷️ Sensitivity Labels (Microsoft Purview)</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-purple-400 font-medium mb-2">Label Capabilities</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Visual markings (header/footer/watermark)</li>
+                                <li>• Encryption (AIP protection)</li>
+                                <li>• Access restrictions (view/edit/print)</li>
+                                <li>• Auto-labeling based on content</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-blue-400 font-medium mb-2">Label Scope</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Files (Office, PDF)</li>
+                                <li>• Emails</li>
+                                <li>• Meetings (Teams)</li>
+                                <li>• Sites & Groups (containers)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Encryption -->
+            <section id="encryption" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg></span>
+                    Encryption
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">🔐 Encryption Types</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
+                            <h4 class="text-green-400 font-bold mb-2">Symmetric (AES)</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Same key encrypts/decrypts</li>
+                                <li>• Fast, efficient for bulk data</li>
+                                <li>• AES-256 is standard</li>
+                                <li>• Challenge: Key distribution</li>
+                            </ul>
+                            <p class="text-gray-500 text-xs mt-2">Use: Data at rest, bulk encryption</p>
+                        </div>
+                        <div class="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+                            <h4 class="text-blue-400 font-bold mb-2">Asymmetric (RSA/ECC)</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Public/Private key pair</li>
+                                <li>• Public encrypts, private decrypts</li>
+                                <li>• RSA-2048+, ECC more efficient</li>
+                                <li>• Slower than symmetric</li>
+                            </ul>
+                            <p class="text-gray-500 text-xs mt-2">Use: Key exchange, digital signatures</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">📍 Encryption States</h3>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-purple-400 font-medium mb-2">At Rest</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• BitLocker (Windows)</li>
+                                <li>• Azure Storage encryption</li>
+                                <li>• Database TDE</li>
+                                <li>• Full disk encryption</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-cyan-400 font-medium mb-2">In Transit</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• TLS 1.2/1.3</li>
+                                <li>• IPSec VPN</li>
+                                <li>• HTTPS everywhere</li>
+                                <li>• SFTP, SSH</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-orange-400 font-medium mb-2">In Use</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Confidential computing</li>
+                                <li>• Secure enclaves (SGX)</li>
+                                <li>• Homomorphic encryption</li>
+                                <li>• Memory encryption</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DLP -->
+            <section id="dlp" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></span>
+                    Data Loss Prevention
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">🛡️ DLP Components</h3>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-blue-400 font-medium mb-2">Network DLP</h4>
+                            <p class="text-gray-400 text-sm">Monitor data in motion at network perimeter. Email gateways, web proxies.</p>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-green-400 font-medium mb-2">Endpoint DLP</h4>
+                            <p class="text-gray-400 text-sm">Agent on devices monitors file operations, USB, clipboard, print, cloud upload.</p>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-purple-400 font-medium mb-2">Cloud DLP</h4>
+                            <p class="text-gray-400 text-sm">Protect data in SaaS apps. CASB integration. API-based scanning.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">⚙️ DLP Policy Actions</h3>
+                    <div class="grid md:grid-cols-4 gap-3">
+                        <div class="bg-green-500/10 border border-green-500/30 rounded p-3 text-center">
+                            <p class="text-green-400 font-medium">Audit</p>
+                            <p class="text-gray-500 text-xs">Log only, no block</p>
+                        </div>
+                        <div class="bg-yellow-500/10 border border-yellow-500/30 rounded p-3 text-center">
+                            <p class="text-yellow-400 font-medium">Warn</p>
+                            <p class="text-gray-500 text-xs">User can override</p>
+                        </div>
+                        <div class="bg-orange-500/10 border border-orange-500/30 rounded p-3 text-center">
+                            <p class="text-orange-400 font-medium">Justify</p>
+                            <p class="text-gray-500 text-xs">Override with reason</p>
+                        </div>
+                        <div class="bg-red-500/10 border border-red-500/30 rounded p-3 text-center">
+                            <p class="text-red-400 font-medium">Block</p>
+                            <p class="text-gray-500 text-xs">Hard stop</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
+                        <p class="text-purple-400 text-sm"><strong>💡 My Experience:</strong> Currently leading Purview Endpoint DLP migration from Symantec. Started with audit mode → warn → now enforcement with block actions. Key: stakeholder buy-in and tuning before blocking.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Microsoft Purview -->
+            <section id="purview" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></span>
+                    Microsoft Purview
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">🔷 Purview Solutions</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-blue-400 font-medium mb-2">Information Protection</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Sensitivity labels</li>
+                                <li>• Auto-labeling</li>
+                                <li>• Encryption (AIP)</li>
+                                <li>• Rights management</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-orange-400 font-medium mb-2">Data Loss Prevention</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Endpoint DLP</li>
+                                <li>• M365 DLP (Exchange, Teams, SPO)</li>
+                                <li>• Sensitive info types (SITs)</li>
+                                <li>• Policy tips & blocking</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-purple-400 font-medium mb-2">Insider Risk Management</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• User behavior analytics</li>
+                                <li>• Data theft indicators</li>
+                                <li>• Departing employee monitoring</li>
+                                <li>• Investigation workflows</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-green-400 font-medium mb-2">Data Lifecycle</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Retention policies</li>
+                                <li>• Retention labels</li>
+                                <li>• Records management</li>
+                                <li>• Disposition review</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PKI -->
+            <section id="pki" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg></span>
+                    PKI & Certificates
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">📜 PKI Components</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-3">
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <h4 class="text-red-400 font-medium">Certificate Authority (CA)</h4>
+                                <p class="text-gray-400 text-sm">Issues and signs certificates. Root CA (offline) → Issuing CA (online).</p>
+                            </div>
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <h4 class="text-orange-400 font-medium">Certificate</h4>
+                                <p class="text-gray-400 text-sm">Public key + identity + CA signature. X.509 standard.</p>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <h4 class="text-blue-400 font-medium">CRL/OCSP</h4>
+                                <p class="text-gray-400 text-sm">Certificate revocation checking. CRL = list, OCSP = real-time query.</p>
+                            </div>
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <h4 class="text-green-400 font-medium">Key Management</h4>
+                                <p class="text-gray-400 text-sm">HSM for key storage. Azure Key Vault. Key rotation policies.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interview Q&A -->
+            <section id="interview" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-pink-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>
+                    Interview Q&A
+                </h2>
+
+                <div class="space-y-6">
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: Explain symmetric vs asymmetric encryption.</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"<strong>Symmetric</strong> uses one key for both encryption and decryption - fast, good for bulk data (AES-256). Challenge is key distribution. <strong>Asymmetric</strong> uses a key pair - public key encrypts, private key decrypts (RSA, ECC). Slower but solves key distribution. In practice, we use hybrid: asymmetric to exchange a symmetric session key, then symmetric for the data."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: How would you implement a DLP program?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"Start with discovery - what sensitive data exists and where? Then classify and label. Define policies based on data classification. Deploy in phases: 1) <strong>Audit mode</strong> to understand data flows and tune rules. 2) <strong>Warn mode</strong> to educate users. 3) <strong>Block mode</strong> for enforcement. I'm currently leading this exact process for Purview Endpoint DLP - key is stakeholder communication and iterative tuning."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: What is the difference between data at rest and in transit encryption?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"<strong>At rest</strong> protects stored data - database encryption (TDE), disk encryption (BitLocker), file-level encryption. Protects against physical theft or unauthorized storage access. <strong>In transit</strong> protects data moving across networks - TLS 1.2/1.3 for web, IPSec for VPN, SFTP for files. Protects against eavesdropping and MITM attacks. Both are essential - encrypt everywhere."</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Memory Aids -->
+            <section id="mnemonics" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></span>
+                    Memory Aids
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 CIA Triad</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-blue-400"><strong>C</strong>onfidentiality - Only authorized access</p>
+                            <p class="text-green-400"><strong>I</strong>ntegrity - Data not tampered</p>
+                            <p class="text-purple-400"><strong>A</strong>vailability - Accessible when needed</p>
+                        </div>
+                    </div>
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Encryption: "SAA"</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-green-400"><strong>S</strong>ymmetric - One key, fast, bulk</p>
+                            <p class="text-blue-400"><strong>A</strong>symmetric - Key pair, slow, exchange</p>
+                            <p class="text-purple-400"><strong>A</strong>ES-256 - Standard symmetric</p>
+                        </div>
+                    </div>
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Data States: "RIT"</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-purple-400"><strong>R</strong>est - Storage (BitLocker, TDE)</p>
+                            <p class="text-cyan-400"><strong>I</strong>n Transit - Network (TLS)</p>
+                            <p class="text-orange-400"><strong>T</strong>(In Use) - Memory (enclaves)</p>
+                        </div>
+                    </div>
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 DLP Rollout</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-green-400">1. <strong>Audit</strong> - Learn data flows</p>
+                            <p class="text-yellow-400">2. <strong>Warn</strong> - Educate users</p>
+                            <p class="text-red-400">3. <strong>Block</strong> - Enforce</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <script>function toggleSidebar(){document.getElementById('sidebar').classList.toggle('-translate-x-full');}</script>
+<script src="../js/sidebar.js"></script>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Security | Security Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Inter', system-ui, sans-serif; }
+        .card { background: linear-gradient(145deg, #12121a, #1a1a2e); border: 1px solid #2a2a3e; }
+        .nav-item:hover { background: rgba(59, 130, 246, 0.1); }
+        .nav-item.active { background: rgba(59, 130, 246, 0.2); border-left: 2px solid #3b82f6; }
+        .mnemonic { background: linear-gradient(135deg, #1a1a2e 0%, #2a2a3e 100%); border: 1px solid #f59e0b; }
+        .interview-qa { background: linear-gradient(135deg, #1a1a2e 0%, #1e1e3e 100%); border: 1px solid #8b5cf6; }
+        pre { background: #0d0d14 !important; border-radius: 8px; padding: 16px; overflow-x: auto; }
+        .sidebar { scrollbar-width: thin; scrollbar-color: #3b82f6 #1a1a2e; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <main class="lg:ml-64 pt-14 lg:pt-0">
+        <div class="max-w-5xl mx-auto px-6 py-12">
+            <!-- Hero -->
+            <section id="overview" class="mb-16">
+                <div class="flex items-center gap-2 text-blue-400 mb-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+                    <span class="text-sm font-medium">Cloud Security</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Cloud Security Engineering</h1>
+                <p class="text-xl text-gray-400 mb-8">CSPM, CWPP, Defender for Cloud, Container Security - Complete cloud protection.</p>
+
+                <div class="flex flex-wrap gap-3 mb-8">
+                    <span class="px-4 py-2 rounded-full bg-blue-500/20 text-blue-400 text-sm font-medium border border-blue-500/30">Microsoft Defender for Cloud</span>
+                    <span class="px-4 py-2 rounded-full bg-orange-500/20 text-orange-400 text-sm font-medium border border-orange-500/30">Azure Security</span>
+                    <span class="px-4 py-2 rounded-full bg-green-500/20 text-green-400 text-sm font-medium border border-green-500/30">CSPM</span>
+                    <span class="px-4 py-2 rounded-full bg-purple-500/20 text-purple-400 text-sm font-medium border border-purple-500/30">CWPP</span>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="card rounded-xl p-4 text-center"><p class="text-2xl font-bold text-blue-400">IaaS</p><p class="text-sm text-gray-400">VMs, Storage</p></div>
+                    <div class="card rounded-xl p-4 text-center"><p class="text-2xl font-bold text-green-400">PaaS</p><p class="text-sm text-gray-400">App Services</p></div>
+                    <div class="card rounded-xl p-4 text-center"><p class="text-2xl font-bold text-purple-400">SaaS</p><p class="text-sm text-gray-400">M365, Apps</p></div>
+                    <div class="card rounded-xl p-4 text-center"><p class="text-2xl font-bold text-orange-400">Multi</p><p class="text-sm text-gray-400">Azure + AWS</p></div>
+                </div>
+            </section>
+
+            <!-- Master Mnemonic -->
+            <section class="mb-16">
+                <div class="mnemonic rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold text-yellow-400 mb-4">🧠 Master Mnemonic: "CLOUDS"</h2>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">C</span>onfiguration - CSPM, misconfigs</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">L</span>ogging - Activity, diagnostic</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">O</span>bservability - Monitor, alerts</p>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">U</span>ser access - IAM, least privilege</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">D</span>ata protection - Encryption, DLP</p>
+                            <p class="text-lg"><span class="text-yellow-400 font-bold">S</span>egmentation - Network, identity</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Shared Responsibility -->
+            <section id="shared" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></span>
+                    Shared Responsibility Model
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead><tr class="border-b border-gray-700">
+                                <th class="text-left py-3 px-4 text-gray-400">Responsibility</th>
+                                <th class="text-center py-3 px-4 text-blue-400">On-Prem</th>
+                                <th class="text-center py-3 px-4 text-orange-400">IaaS</th>
+                                <th class="text-center py-3 px-4 text-green-400">PaaS</th>
+                                <th class="text-center py-3 px-4 text-purple-400">SaaS</th>
+                            </tr></thead>
+                            <tbody class="text-gray-300">
+                                <tr class="border-b border-gray-800"><td class="py-2 px-4">Data & Access</td><td class="text-center">🔴 You</td><td class="text-center">🔴 You</td><td class="text-center">🔴 You</td><td class="text-center">🔴 You</td></tr>
+                                <tr class="border-b border-gray-800"><td class="py-2 px-4">Applications</td><td class="text-center">🔴 You</td><td class="text-center">🔴 You</td><td class="text-center">🟡 Shared</td><td class="text-center">🔵 Provider</td></tr>
+                                <tr class="border-b border-gray-800"><td class="py-2 px-4">OS & Runtime</td><td class="text-center">🔴 You</td><td class="text-center">🔴 You</td><td class="text-center">🔵 Provider</td><td class="text-center">🔵 Provider</td></tr>
+                                <tr class="border-b border-gray-800"><td class="py-2 px-4">Network</td><td class="text-center">🔴 You</td><td class="text-center">🟡 Shared</td><td class="text-center">🔵 Provider</td><td class="text-center">🔵 Provider</td></tr>
+                                <tr><td class="py-2 px-4">Physical</td><td class="text-center">🔴 You</td><td class="text-center">🔵 Provider</td><td class="text-center">🔵 Provider</td><td class="text-center">🔵 Provider</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-yellow-400 text-sm mt-4">💡 Key insight: <strong>You always own your data and access controls</strong> - regardless of model!</p>
+                </div>
+            </section>
+
+            <!-- CSPM -->
+            <section id="cspm" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></span>
+                    CSPM - Cloud Security Posture Management
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">📊 What CSPM Does</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-3">
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <h4 class="text-green-400 font-medium">Configuration Assessment</h4>
+                                <p class="text-gray-400 text-sm">Continuous checks against benchmarks (CIS, NIST). Find misconfigs before attackers.</p>
+                            </div>
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <h4 class="text-blue-400 font-medium">Compliance Monitoring</h4>
+                                <p class="text-gray-400 text-sm">Map to regulatory frameworks (SOC2, PCI, HIPAA). Automated evidence collection.</p>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <h4 class="text-orange-400 font-medium">Asset Discovery</h4>
+                                <p class="text-gray-400 text-sm">Find all cloud resources. Shadow IT detection. Track changes over time.</p>
+                            </div>
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <h4 class="text-purple-400 font-medium">Risk Prioritization</h4>
+                                <p class="text-gray-400 text-sm">Context-aware recommendations. Attack path analysis. Focus on what matters.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">⚠️ Top Cloud Misconfigurations</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
+                            <p class="text-red-400 font-medium">Storage Buckets</p>
+                            <p class="text-gray-400 text-sm">Public access, no encryption, no logging</p>
+                        </div>
+                        <div class="bg-orange-500/10 border border-orange-500/30 rounded-lg p-3">
+                            <p class="text-orange-400 font-medium">Network</p>
+                            <p class="text-gray-400 text-sm">Open security groups (0.0.0.0/0), no flow logs</p>
+                        </div>
+                        <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+                            <p class="text-yellow-400 font-medium">IAM</p>
+                            <p class="text-gray-400 text-sm">Overprivileged accounts, no MFA, stale keys</p>
+                        </div>
+                        <div class="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3">
+                            <p class="text-purple-400 font-medium">Encryption</p>
+                            <p class="text-gray-400 text-sm">Data at rest unencrypted, weak TLS versions</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CWPP -->
+            <section id="cwpp" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg></span>
+                    CWPP - Cloud Workload Protection Platform
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">🛡️ CWPP Capabilities</h3>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-orange-400 font-medium mb-2">Runtime Protection</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Anti-malware</li>
+                                <li>• Behavioral analysis</li>
+                                <li>• Memory protection</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-blue-400 font-medium mb-2">Vulnerability Mgmt</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• OS vulnerability scanning</li>
+                                <li>• Package/library scanning</li>
+                                <li>• Image scanning</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-green-400 font-medium mb-2">System Hardening</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• CIS benchmark checks</li>
+                                <li>• File integrity monitoring</li>
+                                <li>• Application control</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                        <p class="text-blue-400 text-sm"><strong>CSPM vs CWPP:</strong> CSPM = Configuration (outside workload). CWPP = Protection (inside workload).</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Defender for Cloud -->
+            <section id="defender" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></span>
+                    Microsoft Defender for Cloud
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">🔷 Defender for Cloud Plans</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-blue-400 font-medium mb-2">Free (Foundational CSPM)</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Secure Score</li>
+                                <li>• Basic recommendations</li>
+                                <li>• Azure Security Benchmark</li>
+                                <li>• Asset inventory</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-4">
+                            <h4 class="text-purple-400 font-medium mb-2">Defender CSPM (Paid)</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Attack path analysis</li>
+                                <li>• Cloud security explorer</li>
+                                <li>• Agentless scanning</li>
+                                <li>• Governance rules</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">📦 Workload Protection Plans</h3>
+                    <div class="grid md:grid-cols-3 gap-3 text-sm">
+                        <div class="bg-blue-500/10 border border-blue-500/30 rounded p-2"><p class="text-blue-400 font-medium">Servers</p><p class="text-gray-500 text-xs">EDR, vulnerability, FIM</p></div>
+                        <div class="bg-green-500/10 border border-green-500/30 rounded p-2"><p class="text-green-400 font-medium">Containers</p><p class="text-gray-500 text-xs">AKS, image scanning</p></div>
+                        <div class="bg-purple-500/10 border border-purple-500/30 rounded p-2"><p class="text-purple-400 font-medium">Databases</p><p class="text-gray-500 text-xs">SQL, Cosmos, PostgreSQL</p></div>
+                        <div class="bg-orange-500/10 border border-orange-500/30 rounded p-2"><p class="text-orange-400 font-medium">Storage</p><p class="text-gray-500 text-xs">Malware scanning</p></div>
+                        <div class="bg-cyan-500/10 border border-cyan-500/30 rounded p-2"><p class="text-cyan-400 font-medium">Key Vault</p><p class="text-gray-500 text-xs">Anomaly detection</p></div>
+                        <div class="bg-red-500/10 border border-red-500/30 rounded p-2"><p class="text-red-400 font-medium">APIs</p><p class="text-gray-500 text-xs">API security</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Container Security -->
+            <section id="containers" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></span>
+                    Container Security
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">🐳 Container Security Layers</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-3">
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <h4 class="text-blue-400 font-medium">Image Security</h4>
+                                <p class="text-gray-400 text-sm">Scan images in registry for vulnerabilities. Trusted base images. No secrets in images.</p>
+                            </div>
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <h4 class="text-green-400 font-medium">Registry Security</h4>
+                                <p class="text-gray-400 text-sm">Private registry (ACR). Image signing. Access controls.</p>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <h4 class="text-orange-400 font-medium">Runtime Security</h4>
+                                <p class="text-gray-400 text-sm">No root containers. Read-only filesystems. Resource limits. Network policies.</p>
+                            </div>
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <h4 class="text-purple-400 font-medium">Orchestration (K8s)</h4>
+                                <p class="text-gray-400 text-sm">RBAC. Pod security. Secrets management. Network policies.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interview Q&A -->
+            <section id="interview" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-pink-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>
+                    Interview Q&A
+                </h2>
+
+                <div class="space-y-6">
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: Explain the shared responsibility model.</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"The cloud provider and customer share security responsibilities. What changes by service model: In IaaS, you manage everything from OS up. In PaaS, provider handles OS/runtime. In SaaS, provider handles everything except data and access. Key point: <strong>You always own your data and identity controls</strong> regardless of model."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: What's the difference between CSPM and CWPP?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"CSPM (Posture) looks at configuration - are your cloud resources securely configured? Storage buckets public? MFA enabled? CWPP (Workload) protects what's running inside - anti-malware, vulnerability scanning, runtime protection. Think: CSPM = outside the box (config), CWPP = inside the box (workload)."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-purple-400 font-bold mb-3">Q: What are the top cloud security risks?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"Top risks: 1) <strong>Misconfiguration</strong> - public storage, open security groups. 2) <strong>Excessive permissions</strong> - overprivileged accounts, no MFA. 3) <strong>Lack of visibility</strong> - shadow IT, no logging. 4) <strong>Insecure APIs</strong> - exposed keys, no auth. 5) <strong>Data exposure</strong> - unencrypted data, poor access controls."</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Memory Aids -->
+            <section id="mnemonics" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center"><svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></span>
+                    Memory Aids
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Service Models</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-blue-400"><strong>IaaS</strong> - Infrastructure (VMs) - You manage most</p>
+                            <p class="text-green-400"><strong>PaaS</strong> - Platform (App Service) - Provider manages OS</p>
+                            <p class="text-purple-400"><strong>SaaS</strong> - Software (M365) - Provider manages all</p>
+                        </div>
+                    </div>
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 CSPM vs CWPP</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-green-400"><strong>CSPM</strong> = Configuration (outside workload)</p>
+                            <p class="text-orange-400"><strong>CWPP</strong> = Protection (inside workload)</p>
+                        </div>
+                    </div>
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Top Misconfigs: "SNIE"</h3>
+                        <div class="space-y-1 text-sm">
+                            <p class="text-red-400"><strong>S</strong>torage - Public buckets</p>
+                            <p class="text-orange-400"><strong>N</strong>etwork - Open security groups</p>
+                            <p class="text-yellow-400"><strong>I</strong>AM - No MFA, overprivileged</p>
+                            <p class="text-purple-400"><strong>E</strong>ncryption - Data unencrypted</p>
+                        </div>
+                    </div>
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Always Your Responsibility</h3>
+                        <p class="text-gray-400 text-sm">Regardless of cloud model:</p>
+                        <div class="space-y-1 text-sm mt-2">
+                            <p class="text-red-400">• Your DATA</p>
+                            <p class="text-orange-400">• Your ACCESS controls</p>
+                            <p class="text-yellow-400">• Your IDENTITY</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <script>function toggleSidebar(){document.getElementById('sidebar').classList.toggle('-translate-x-full');}</script>
+<script src="../js/sidebar.js"></script>
+</body>
+</html>

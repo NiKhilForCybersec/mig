@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Security Mastery - FireEye EX, Custom Platform, Microsoft Defender for Office 365</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0a0a0f 100%); }
+        .card { background: rgba(18, 18, 26, 0.95); border: 1px solid #2a2a3e; }
+        .glow-blue { box-shadow: 0 0 30px rgba(59, 130, 246, 0.3); }
+        .glow-orange { box-shadow: 0 0 30px rgba(249, 115, 22, 0.3); }
+        .glow-purple { box-shadow: 0 0 30px rgba(168, 85, 247, 0.3); }
+        pre { background: #0d0d14; border: 1px solid #2a2a3e; overflow-x: auto; }
+        code { font-family: 'Fira Code', 'Consolas', monospace; font-size: 0.85rem; }
+        .mnemonic { background: linear-gradient(135deg, #1e3a5f 0%, #2d1b4e 100%); border-left: 4px solid #f59e0b; }
+        .experience-badge { background: linear-gradient(135deg, #065f46 0%, #064e3b 100%); }
+        .interview-qa { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); }
+        .architecture-flow { background: linear-gradient(135deg, #0c1929 0%, #1a0a2e 100%); }
+        .comparison-table th { background: #1a1a2e; }
+        .comparison-table td { background: #12121a; }
+        .nav-active { color: #f97316; border-bottom: 2px solid #f97316; }
+        .metric-card { background: linear-gradient(135deg, #12121a 0%, #1a1a2e 100%); }
+        .timeline-item::before { content: ''; position: absolute; left: -8px; top: 8px; width: 16px; height: 16px; background: #3b82f6; border-radius: 50%; }
+        .attack-phase { border-left: 3px solid; }
+        .phase-delivery { border-color: #ef4444; }
+        .phase-exploitation { border-color: #f59e0b; }
+        .phase-installation { border-color: #8b5cf6; }
+        .phase-action { border-color: #ec4899; }
+    </style>
+</head>
+<body class="min-h-screen text-gray-100">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-[#0a0a0f]/95 backdrop-blur border-b border-[#2a2a3e]">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="../index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <span class="text-xl font-bold">Email Security</span>
+                </a>
+                <div class="hidden md:flex items-center gap-6 text-sm">
+                    <a href="../index.html" class="text-gray-400 hover:text-white transition-colors">Home</a>
+                    <a href="overview.html" class="text-gray-400 hover:text-white transition-colors">Overview</a>
+                    <a href="defender-stack.html" class="text-gray-400 hover:text-white transition-colors">Defender XDR</a>
+                    <a href="vuln-management.html" class="text-gray-400 hover:text-white transition-colors">Vuln Mgmt</a>
+                    <a href="dlp-migration.html" class="text-gray-400 hover:text-white transition-colors">DLP</a>
+                    <a href="playbooks.html" class="text-gray-400 hover:text-white transition-colors">Playbooks</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Toggle Button -->
+    <button id="sidebarToggle" onclick="toggleSidebar()" class="fixed top-20 left-4 z-50 w-10 h-10 rounded-lg bg-[#12121a] border border-[#2a2a3e] flex items-center justify-center text-gray-400 hover:text-white hover:border-blue-500 transition-all shadow-lg">
+        <svg id="menuIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        <svg id="closeIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+    </button>
+
+    <!-- Sidebar -->
+    <!-- Overlay -->
+    <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-30 hidden"></div>
+
+    <main class="pt-24 pb-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <!-- Hero Section -->
+            <section id="overview" class="mb-16">
+                <div class="text-center mb-12">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/10 text-orange-400 text-sm mb-4">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        Email Security Complete Mastery
+                    </div>
+                    <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                        <span class="bg-gradient-to-r from-orange-400 via-red-500 to-pink-500 bg-clip-text text-transparent">
+                            Email Security Engineering
+                        </span>
+                    </h1>
+                    <p class="text-gray-400 text-lg max-w-3xl mx-auto">
+                        Complete guide covering FireEye EX, custom investigation platforms, and Microsoft Defender for Office 365.
+                        From architecture to incident response - everything you need to master email security.
+                    </p>
+                </div>
+
+                <!-- Experience Summary -->
+                <div class="grid md:grid-cols-3 gap-6 mb-12">
+                    <div class="card rounded-2xl p-6 glow-orange">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-orange-600 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white">FireEye EX</h3>
+                                <p class="text-sm text-gray-400">Infosys • 300K Endpoints</p>
+                            </div>
+                        </div>
+                        <div class="experience-badge rounded-lg px-3 py-2 mb-3">
+                            <span class="text-green-400 text-sm font-medium">✓ Production Experience</span>
+                        </div>
+                        <p class="text-gray-400 text-sm">Advanced threat detection, sandboxing, and email security gateway management at enterprise scale.</p>
+                    </div>
+
+                    <div class="card rounded-2xl p-6 glow-purple">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white">Custom Platform</h3>
+                                <p class="text-sm text-gray-400">Self-Built Investigation Tool</p>
+                            </div>
+                        </div>
+                        <div class="experience-badge rounded-lg px-3 py-2 mb-3">
+                            <span class="text-green-400 text-sm font-medium">✓ Built From Scratch</span>
+                        </div>
+                        <p class="text-gray-400 text-sm">Developed custom email investigation platform for rapid phishing analysis and IOC extraction.</p>
+                    </div>
+
+                    <div class="card rounded-2xl p-6 glow-blue">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white">Defender for Office 365</h3>
+                                <p class="text-sm text-gray-400">Siemens • 15K Mailboxes</p>
+                            </div>
+                        </div>
+                        <div class="experience-badge rounded-lg px-3 py-2 mb-3">
+                            <span class="text-green-400 text-sm font-medium">✓ Current Platform</span>
+                        </div>
+                        <p class="text-gray-400 text-sm">Microsoft 365 E5 security with Safe Links, Safe Attachments, anti-phishing policies, and AIR.</p>
+                    </div>
+                </div>
+
+                <!-- Key Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="metric-card rounded-xl p-4 text-center border border-[#2a2a3e]">
+                        <p class="text-3xl font-bold text-orange-400">~2K</p>
+                        <p class="text-sm text-gray-400">Phishing Blocked/Day</p>
+                    </div>
+                    <div class="metric-card rounded-xl p-4 text-center border border-[#2a2a3e]">
+                        <p class="text-3xl font-bold text-purple-400">15K</p>
+                        <p class="text-sm text-gray-400">Protected Mailboxes</p>
+                    </div>
+                    <div class="metric-card rounded-xl p-4 text-center border border-[#2a2a3e]">
+                        <p class="text-3xl font-bold text-blue-400">99.9%</p>
+                        <p class="text-sm text-gray-400">Malware Catch Rate</p>
+                    </div>
+                    <div class="metric-card rounded-xl p-4 text-center border border-[#2a2a3e]">
+                        <p class="text-3xl font-bold text-green-400">&lt;5min</p>
+                        <p class="text-sm text-gray-400">Avg Investigation Time</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Memory Aid - Master Framework -->
+            <section class="mb-16">
+                <div class="mnemonic rounded-2xl p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-yellow-500/20 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-yellow-400 mb-2">🧠 Master Mnemonic: "SPAM FILTER"</h3>
+                            <p class="text-gray-300 mb-4">Remember the complete email security stack with this mnemonic:</p>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-black/30 rounded-lg p-3">
+                                    <p class="text-yellow-400 font-mono"><strong>S</strong>andbox - Detonate suspicious attachments</p>
+                                    <p class="text-yellow-400 font-mono"><strong>P</strong>hishing - Anti-phishing policies & impersonation</p>
+                                    <p class="text-yellow-400 font-mono"><strong>A</strong>ttachments - Safe Attachments scanning</p>
+                                    <p class="text-yellow-400 font-mono"><strong>M</strong>alware - Anti-malware engines</p>
+                                </div>
+                                <div class="bg-black/30 rounded-lg p-3">
+                                    <p class="text-yellow-400 font-mono"><strong>F</strong>iltering - Content & spam filtering</p>
+                                    <p class="text-yellow-400 font-mono"><strong>I</strong>nvestigation - Threat Explorer & AIR</p>
+                                    <p class="text-yellow-400 font-mono"><strong>L</strong>inks - Safe Links URL protection</p>
+                                    <p class="text-yellow-400 font-mono"><strong>T</strong>hreat Intel - Real-time threat feeds</p>
+                                    <p class="text-yellow-400 font-mono"><strong>E</strong>ncryption - TLS, S/MIME, OME</p>
+                                    <p class="text-yellow-400 font-mono"><strong>R</strong>eporting - DMARC, SPF, DKIM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Email Security Architecture -->
+            <section id="architecture" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                        </svg>
+                    </span>
+                    Email Security Architecture
+                </h2>
+
+                <div class="architecture-flow card rounded-2xl p-8 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-6">Email Flow Through Security Stack</h3>
+                    <div class="overflow-x-auto">
+                        <div class="flex items-center justify-between min-w-[900px] gap-2">
+                            <!-- Step 1 -->
+                            <div class="flex flex-col items-center">
+                                <div class="w-20 h-20 rounded-xl bg-red-500/20 border border-red-500/50 flex items-center justify-center mb-2">
+                                    <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-gray-400 text-center">Internet</p>
+                                <p class="text-xs text-red-400">Inbound Email</p>
+                            </div>
+                            <svg class="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            
+                            <!-- Step 2 -->
+                            <div class="flex flex-col items-center">
+                                <div class="w-20 h-20 rounded-xl bg-orange-500/20 border border-orange-500/50 flex items-center justify-center mb-2">
+                                    <svg class="w-8 h-8 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-gray-400 text-center">Email Gateway</p>
+                                <p class="text-xs text-orange-400">SPF/DKIM/DMARC</p>
+                            </div>
+                            <svg class="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            
+                            <!-- Step 3 -->
+                            <div class="flex flex-col items-center">
+                                <div class="w-20 h-20 rounded-xl bg-yellow-500/20 border border-yellow-500/50 flex items-center justify-center mb-2">
+                                    <svg class="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-gray-400 text-center">Anti-Spam</p>
+                                <p class="text-xs text-yellow-400">Content Filter</p>
+                            </div>
+                            <svg class="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            
+                            <!-- Step 4 -->
+                            <div class="flex flex-col items-center">
+                                <div class="w-20 h-20 rounded-xl bg-purple-500/20 border border-purple-500/50 flex items-center justify-center mb-2">
+                                    <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-gray-400 text-center">Sandbox</p>
+                                <p class="text-xs text-purple-400">Detonation</p>
+                            </div>
+                            <svg class="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            
+                            <!-- Step 5 -->
+                            <div class="flex flex-col items-center">
+                                <div class="w-20 h-20 rounded-xl bg-blue-500/20 border border-blue-500/50 flex items-center justify-center mb-2">
+                                    <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-gray-400 text-center">URL Rewriting</p>
+                                <p class="text-xs text-blue-400">Safe Links</p>
+                            </div>
+                            <svg class="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            
+                            <!-- Step 6 -->
+                            <div class="flex flex-col items-center">
+                                <div class="w-20 h-20 rounded-xl bg-green-500/20 border border-green-500/50 flex items-center justify-center mb-2">
+                                    <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-gray-400 text-center">Mailbox</p>
+                                <p class="text-xs text-green-400">Delivered</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email Authentication -->
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">📧 Email Authentication Protocols (SPF, DKIM, DMARC)</h3>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="bg-[#1a1a2e] rounded-xl p-4">
+                            <h4 class="text-blue-400 font-bold mb-2">SPF (Sender Policy Framework)</h4>
+                            <p class="text-gray-400 text-sm mb-3">Validates sending server IP is authorized for domain</p>
+                            <pre class="text-xs p-3 rounded-lg"><code class="text-green-400">v=spf1 include:spf.protection.outlook.com 
+include:_spf.google.com -all</code></pre>
+                            <div class="mt-3 text-xs">
+                                <p class="text-gray-500"><span class="text-green-400">+all</span> = Pass all (bad)</p>
+                                <p class="text-gray-500"><span class="text-yellow-400">~all</span> = Soft fail</p>
+                                <p class="text-gray-500"><span class="text-red-400">-all</span> = Hard fail (best)</p>
+                            </div>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-xl p-4">
+                            <h4 class="text-purple-400 font-bold mb-2">DKIM (DomainKeys Identified Mail)</h4>
+                            <p class="text-gray-400 text-sm mb-3">Cryptographic signature ensures email integrity</p>
+                            <pre class="text-xs p-3 rounded-lg"><code class="text-green-400">selector1._domainkey.domain.com
+v=DKIM1; k=rsa; p=MIGfMA0GCS...</code></pre>
+                            <div class="mt-3 text-xs">
+                                <p class="text-gray-500">• Signs email headers + body</p>
+                                <p class="text-gray-500">• Public key in DNS TXT record</p>
+                                <p class="text-gray-500">• Detects tampering in transit</p>
+                            </div>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-xl p-4">
+                            <h4 class="text-orange-400 font-bold mb-2">DMARC (Domain-based Message Auth)</h4>
+                            <p class="text-gray-400 text-sm mb-3">Policy layer combining SPF + DKIM with reporting</p>
+                            <pre class="text-xs p-3 rounded-lg"><code class="text-green-400">v=DMARC1; p=reject; rua=mailto:
+dmarc-reports@domain.com; pct=100</code></pre>
+                            <div class="mt-3 text-xs">
+                                <p class="text-gray-500"><span class="text-green-400">p=none</span> = Monitor only</p>
+                                <p class="text-gray-500"><span class="text-yellow-400">p=quarantine</span> = Send to spam</p>
+                                <p class="text-gray-500"><span class="text-red-400">p=reject</span> = Block (best)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Memory Aid for Auth -->
+                <div class="mnemonic rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-yellow-400 mb-2">🧠 Memory Aid: "SPF DKIM DMARC = Server, Document, Decision"</h3>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-black/30 rounded-lg p-3">
+                            <p class="text-blue-400 font-bold">SPF = Server Check</p>
+                            <p class="text-gray-400 text-sm">"Is this SERVER allowed to send for this domain?"</p>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-3">
+                            <p class="text-purple-400 font-bold">DKIM = Document Seal</p>
+                            <p class="text-gray-400 text-sm">"Is this DOCUMENT tampered with?"</p>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-3">
+                            <p class="text-orange-400 font-bold">DMARC = Decision Maker</p>
+                            <p class="text-gray-400 text-sm">"What DECISION to make if checks fail?"</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FireEye EX Deep Dive -->
+            <section id="fireeye" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>
+                        </svg>
+                    </span>
+                    FireEye EX (Email Security) - Deep Dive
+                </h2>
+
+                <!-- Your Experience Badge -->
+                <div class="experience-badge rounded-xl p-4 mb-8 border border-green-500/30">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <div>
+                            <p class="text-green-400 font-bold">Your Experience: Infosys • 300,000 Endpoints</p>
+                            <p class="text-gray-400 text-sm">Managed FireEye EX email security gateway protecting enterprise email infrastructure at massive scale.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div class="card rounded-2xl p-6">
+                        <h3 class="text-lg font-bold text-red-400 mb-4">🔥 FireEye EX Architecture</h3>
+                        <div class="space-y-4">
+                            <div class="bg-[#1a1a2e] rounded-lg p-4">
+                                <h4 class="text-white font-medium mb-2">Deployment Modes</h4>
+                                <ul class="space-y-2 text-sm text-gray-400">
+                                    <li class="flex items-center gap-2">
+                                        <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                                        <strong>MTA Mode (Inline)</strong> - Acts as mail transfer agent, blocks threats before delivery
+                                    </li>
+                                    <li class="flex items-center gap-2">
+                                        <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                                        <strong>SPAN/TAP Mode</strong> - Passive monitoring via network tap, alerts only
+                                    </li>
+                                    <li class="flex items-center gap-2">
+                                        <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                        <strong>BCC Mode</strong> - Receives copy of emails for analysis
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="bg-[#1a1a2e] rounded-lg p-4">
+                                <h4 class="text-white font-medium mb-2">Core Components</h4>
+                                <ul class="space-y-2 text-sm text-gray-400">
+                                    <li>• <strong>MVX Engine</strong> - Multi-Vector Virtual Execution (sandbox)</li>
+                                    <li>• <strong>YARA Rules</strong> - Custom malware detection signatures</li>
+                                    <li>• <strong>URL Analysis</strong> - Real-time URL detonation</li>
+                                    <li>• <strong>Attachment Analysis</strong> - File detonation in sandbox</li>
+                                    <li>• <strong>Threat Intelligence</strong> - iSIGHT threat feeds</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card rounded-2xl p-6">
+                        <h3 class="text-lg font-bold text-red-400 mb-4">🎯 Detection Capabilities</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between bg-[#1a1a2e] rounded-lg p-3">
+                                <span class="text-gray-300">Spear Phishing</span>
+                                <span class="text-green-400 text-sm">✓ Header analysis + sender reputation</span>
+                            </div>
+                            <div class="flex items-center justify-between bg-[#1a1a2e] rounded-lg p-3">
+                                <span class="text-gray-300">Malicious Attachments</span>
+                                <span class="text-green-400 text-sm">✓ MVX sandbox detonation</span>
+                            </div>
+                            <div class="flex items-center justify-between bg-[#1a1a2e] rounded-lg p-3">
+                                <span class="text-gray-300">Weaponized URLs</span>
+                                <span class="text-green-400 text-sm">✓ Real-time URL analysis</span>
+                            </div>
+                            <div class="flex items-center justify-between bg-[#1a1a2e] rounded-lg p-3">
+                                <span class="text-gray-300">Zero-Day Exploits</span>
+                                <span class="text-green-400 text-sm">✓ Behavioral analysis in VM</span>
+                            </div>
+                            <div class="flex items-center justify-between bg-[#1a1a2e] rounded-lg p-3">
+                                <span class="text-gray-300">Credential Harvesting</span>
+                                <span class="text-green-400 text-sm">✓ Fake login page detection</span>
+                            </div>
+                            <div class="flex items-center justify-between bg-[#1a1a2e] rounded-lg p-3">
+                                <span class="text-gray-300">Business Email Compromise</span>
+                                <span class="text-green-400 text-sm">✓ Impersonation detection</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FireEye EX Technical Deep Dive -->
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">🔧 FireEye EX Technical Operations</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-orange-400 font-medium mb-3">MVX Engine Workflow</h4>
+                            <ol class="space-y-2 text-sm text-gray-400">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-orange-400 font-bold">1.</span>
+                                    Email received → Static analysis (file type, headers, reputation)
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-orange-400 font-bold">2.</span>
+                                    Suspicious → Sent to MVX sandbox VMs (Windows 7/10, Office versions)
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-orange-400 font-bold">3.</span>
+                                    Attachment opened → Monitor for malicious behaviors
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-orange-400 font-bold">4.</span>
+                                    URL clicked → Full browser execution monitored
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-orange-400 font-bold">5.</span>
+                                    Verdict: Clean / Malicious / Suspicious + IOCs extracted
+                                </li>
+                            </ol>
+                        </div>
+                        <div>
+                            <h4 class="text-orange-400 font-medium mb-3">Alert Categories</h4>
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between bg-red-500/10 rounded p-2">
+                                    <span class="text-red-400 text-sm">CRITICAL</span>
+                                    <span class="text-gray-400 text-xs">Confirmed malware, active C2</span>
+                                </div>
+                                <div class="flex items-center justify-between bg-orange-500/10 rounded p-2">
+                                    <span class="text-orange-400 text-sm">HIGH</span>
+                                    <span class="text-gray-400 text-xs">Exploit attempt, credential theft</span>
+                                </div>
+                                <div class="flex items-center justify-between bg-yellow-500/10 rounded p-2">
+                                    <span class="text-yellow-400 text-sm">MEDIUM</span>
+                                    <span class="text-gray-400 text-xs">Suspicious behavior, unknown payload</span>
+                                </div>
+                                <div class="flex items-center justify-between bg-blue-500/10 rounded p-2">
+                                    <span class="text-blue-400 text-sm">LOW</span>
+                                    <span class="text-gray-400 text-xs">Policy violation, PUA</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FireEye CLI Commands -->
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">⌨️ FireEye EX CLI Commands</h3>
+                    <pre class="p-4 rounded-xl text-sm"><code class="text-green-400"># Check system status
+show system status
+
+# View recent alerts
+show alerts summary last 24h
+
+# Check mail queue
+show mta queue
+
+# View quarantined emails
+show quarantine list
+
+# Release quarantined email
+quarantine release message-id &lt;ID&gt;
+
+# Add sender to blocklist
+policy sender-blocklist add &lt;email@domain.com&gt;
+
+# Check threat intelligence updates
+show intelligence update-status
+
+# Export IOCs from recent alerts
+show alerts ioc last 7d format csv
+
+# View sandbox analysis results
+show analysis result &lt;submission-id&gt;
+
+# Check cluster health (if HA deployed)
+show cluster status</code></pre>
+                </div>
+
+                <!-- Your FireEye Experience Talking Points -->
+                <div class="interview-qa rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-purple-400 mb-4">💬 How to Talk About Your FireEye Experience</h3>
+                    <div class="space-y-4">
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-blue-400 font-medium mb-2">Q: Describe your experience with FireEye EX.</p>
+                            <p class="text-gray-300 text-sm">"At Infosys, I managed FireEye EX protecting 300,000 endpoints' email infrastructure. The platform was deployed in MTA mode for inline blocking. My responsibilities included monitoring the MVX sandbox analysis results, tuning YARA rules to reduce false positives, investigating high-severity alerts, and extracting IOCs to feed into our SIEM. We processed approximately 2 million emails daily with a 99.8% catch rate for malicious content."</p>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-blue-400 font-medium mb-2">Q: How did you handle a sophisticated phishing campaign?</p>
+                            <p class="text-gray-300 text-sm">"We detected a targeted spear-phishing campaign impersonating our CEO. FireEye EX flagged it due to header anomalies - the display name matched our CEO but the sending domain was slightly different (typosquatting). I immediately added the malicious domain to our blocklist, extracted all IOCs from the MVX analysis, and used our custom investigation platform to identify all recipients. We found 47 recipients, confirmed no one had clicked the credential harvesting link, and implemented additional impersonation protection rules."</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Custom Email Investigation Platform -->
+            <section id="custom-platform" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                        </svg>
+                    </span>
+                    Custom Email Investigation Platform
+                </h2>
+
+                <div class="experience-badge rounded-xl p-4 mb-8 border border-green-500/30">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <div>
+                            <p class="text-green-400 font-bold">Built From Scratch - Personal Project</p>
+                            <p class="text-gray-400 text-sm">Developed a custom email investigation tool to accelerate phishing analysis and automate IOC extraction.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div class="card rounded-2xl p-6">
+                        <h3 class="text-lg font-bold text-green-400 mb-4">🛠️ Platform Features</h3>
+                        <div class="space-y-3">
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <h4 class="text-white font-medium text-sm">Email Header Analysis</h4>
+                                <p class="text-gray-400 text-xs mt-1">Parse and visualize email headers, trace delivery path, identify spoofing attempts</p>
+                            </div>
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <h4 class="text-white font-medium text-sm">Automated IOC Extraction</h4>
+                                <p class="text-gray-400 text-xs mt-1">Extract URLs, domains, IPs, file hashes, email addresses from email body</p>
+                            </div>
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <h4 class="text-white font-medium text-sm">Threat Intel Enrichment</h4>
+                                <p class="text-gray-400 text-xs mt-1">Auto-query VirusTotal, URLScan, AbuseIPDB for reputation data</p>
+                            </div>
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <h4 class="text-white font-medium text-sm">Screenshot & Safe Preview</h4>
+                                <p class="text-gray-400 text-xs mt-1">Capture screenshots of suspicious URLs without exposing analyst</p>
+                            </div>
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <h4 class="text-white font-medium text-sm">Report Generation</h4>
+                                <p class="text-gray-400 text-xs mt-1">Auto-generate investigation reports with timeline and recommendations</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card rounded-2xl p-6">
+                        <h3 class="text-lg font-bold text-green-400 mb-4">📊 Architecture</h3>
+                        <div class="bg-[#0d0d14] rounded-xl p-4 mb-4">
+                            <pre class="text-xs"><code class="text-cyan-400">┌─────────────────────────────────────────┐
+│         Email Investigation Platform     │
+├─────────────────────────────────────────┤
+│  ┌─────────┐  ┌─────────┐  ┌─────────┐ │
+│  │ Parser  │  │Extractor│  │Enricher │ │
+│  │ Module  │→ │ Module  │→ │ Module  │ │
+│  └─────────┘  └─────────┘  └─────────┘ │
+│       ↓            ↓            ↓       │
+│  ┌─────────────────────────────────┐   │
+│  │      Investigation Database     │   │
+│  └─────────────────────────────────┘   │
+│       ↓                                 │
+│  ┌─────────────────────────────────┐   │
+│  │       Report Generator          │   │
+│  └─────────────────────────────────┘   │
+├─────────────────────────────────────────┤
+│  External APIs: VT, URLScan, AbuseIPDB  │
+└─────────────────────────────────────────┘</code></pre>
+                        </div>
+                        <div class="text-sm text-gray-400">
+                            <p><strong>Tech Stack:</strong> Python, Flask, SQLite, Bootstrap</p>
+                            <p><strong>APIs Used:</strong> VirusTotal, URLScan.io, AbuseIPDB, Shodan</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Code Samples -->
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">💻 Core Code Components</h3>
+                    
+                    <div class="mb-6">
+                        <h4 class="text-green-400 font-medium mb-3">Email Header Parser</h4>
+                        <pre class="p-4 rounded-xl text-sm overflow-x-auto"><code class="text-green-400">import email
+from email import policy
+import re
+
+def parse_email_headers(raw_email):
+    """Parse email headers and extract key security indicators"""
+    msg = email.message_from_string(raw_email, policy=policy.default)
+    
+    headers = {
+        'from': msg['From'],
+        'to': msg['To'],
+        'subject': msg['Subject'],
+        'date': msg['Date'],
+        'message_id': msg['Message-ID'],
+        'return_path': msg['Return-Path'],
+        'reply_to': msg['Reply-To'],
+        'x_originating_ip': msg['X-Originating-IP'],
+        'received_spf': msg['Received-SPF'],
+        'authentication_results': msg['Authentication-Results'],
+        'dkim_signature': msg['DKIM-Signature'],
+    }
+    
+    # Parse Received headers (trace delivery path)
+    received_headers = msg.get_all('Received', [])
+    headers['delivery_path'] = parse_received_headers(received_headers)
+    
+    # Check for spoofing indicators
+    headers['spoofing_indicators'] = check_spoofing(headers)
+    
+    return headers
+
+def check_spoofing(headers):
+    """Identify common spoofing indicators"""
+    indicators = []
+    
+    # Check if Return-Path differs from From
+    if headers['return_path'] and headers['from']:
+        from_domain = extract_domain(headers['from'])
+        return_domain = extract_domain(headers['return_path'])
+        if from_domain != return_domain:
+            indicators.append(f"Return-Path mismatch: {return_domain} vs {from_domain}")
+    
+    # Check SPF result
+    if headers['received_spf']:
+        if 'fail' in headers['received_spf'].lower():
+            indicators.append("SPF FAIL - sender not authorized")
+        elif 'softfail' in headers['received_spf'].lower():
+            indicators.append("SPF SOFTFAIL - sender possibly unauthorized")
+    
+    # Check DKIM
+    if headers['authentication_results']:
+        if 'dkim=fail' in headers['authentication_results'].lower():
+            indicators.append("DKIM FAIL - signature invalid")
+        if 'dmarc=fail' in headers['authentication_results'].lower():
+            indicators.append("DMARC FAIL - policy violation")
+    
+    return indicators</code></pre>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="text-green-400 font-medium mb-3">IOC Extractor</h4>
+                        <pre class="p-4 rounded-xl text-sm overflow-x-auto"><code class="text-green-400">import re
+import hashlib
+from urllib.parse import urlparse
+
+class IOCExtractor:
+    """Extract Indicators of Compromise from email content"""
+    
+    # Regex patterns for IOC extraction
+    PATTERNS = {
+        'url': r'https?://[^\s<>"\']+',
+        'domain': r'(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}',
+        'ip': r'\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b',
+        'email': r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}',
+        'md5': r'\b[a-fA-F0-9]{32}\b',
+        'sha1': r'\b[a-fA-F0-9]{40}\b',
+        'sha256': r'\b[a-fA-F0-9]{64}\b',
+    }
+    
+    def extract_all(self, content):
+        """Extract all IOCs from content"""
+        iocs = {
+            'urls': self.extract_urls(content),
+            'domains': self.extract_domains(content),
+            'ips': self.extract_ips(content),
+            'emails': self.extract_emails(content),
+            'hashes': self.extract_hashes(content),
+        }
+        return iocs
+    
+    def extract_urls(self, content):
+        """Extract and defang URLs"""
+        urls = re.findall(self.PATTERNS['url'], content)
+        return [{'url': url, 'defanged': self.defang_url(url)} for url in set(urls)]
+    
+    def defang_url(self, url):
+        """Defang URL for safe sharing"""
+        return url.replace('http', 'hxxp').replace('.', '[.]')
+    
+    def extract_domains(self, content):
+        """Extract unique domains"""
+        domains = re.findall(self.PATTERNS['domain'], content)
+        # Filter out common false positives
+        excluded = ['microsoft.com', 'google.com', 'outlook.com']
+        return list(set([d for d in domains if d.lower() not in excluded]))</code></pre>
+                    </div>
+
+                    <div>
+                        <h4 class="text-green-400 font-medium mb-3">Threat Intel Enrichment</h4>
+                        <pre class="p-4 rounded-xl text-sm overflow-x-auto"><code class="text-green-400">import requests
+from typing import Dict, Any
+
+class ThreatIntelEnricher:
+    """Enrich IOCs with threat intelligence from multiple sources"""
+    
+    def __init__(self, vt_api_key: str, abuseipdb_key: str):
+        self.vt_api_key = vt_api_key
+        self.abuseipdb_key = abuseipdb_key
+    
+    def enrich_url(self, url: str) -> Dict[str, Any]:
+        """Get VirusTotal analysis for URL"""
+        headers = {'x-apikey': self.vt_api_key}
+        
+        # Submit URL for analysis
+        response = requests.post(
+            'https://www.virustotal.com/api/v3/urls',
+            headers=headers,
+            data={'url': url}
+        )
+        
+        if response.status_code == 200:
+            analysis_id = response.json()['data']['id']
+            # Get analysis results
+            result = requests.get(
+                f'https://www.virustotal.com/api/v3/analyses/{analysis_id}',
+                headers=headers
+            )
+            return result.json()
+        return {'error': 'Analysis failed'}
+    
+    def enrich_ip(self, ip: str) -> Dict[str, Any]:
+        """Get AbuseIPDB reputation for IP"""
+        headers = {
+            'Key': self.abuseipdb_key,
+            'Accept': 'application/json'
+        }
+        params = {'ipAddress': ip, 'maxAgeInDays': 90}
+        
+        response = requests.get(
+            'https://api.abuseipdb.com/api/v2/check',
+            headers=headers,
+            params=params
+        )
+        
+        if response.status_code == 200:
+            data = response.json()['data']
+            return {
+                'ip': ip,
+                'abuse_confidence': data['abuseConfidenceScore'],
+                'country': data['countryCode'],
+                'isp': data['isp'],
+                'total_reports': data['totalReports'],
+                'is_malicious': data['abuseConfidenceScore'] > 50
+            }
+        return {'error': 'Lookup failed'}</code></pre>
+                    </div>
+                </div>
+
+                <!-- Talking Points for Custom Platform -->
+                <div class="interview-qa rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-purple-400 mb-4">💬 How to Talk About Your Custom Platform</h3>
+                    <div class="space-y-4">
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-blue-400 font-medium mb-2">Q: Tell me about a tool you built to solve a security problem.</p>
+                            <p class="text-gray-300 text-sm">"I built a custom email investigation platform to accelerate phishing analysis. The problem was that L1 analysts were spending 15-20 minutes per email manually extracting IOCs and checking reputation. My platform automated this - analysts paste the raw email, and within seconds get parsed headers, extracted IOCs, threat intel enrichment from VirusTotal and AbuseIPDB, and a risk score. It reduced investigation time from 15 minutes to under 3 minutes, and standardized our analysis process."</p>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-blue-400 font-medium mb-2">Q: What was the most challenging part of building it?</p>
+                            <p class="text-gray-300 text-sm">"The email header parsing was trickier than expected. Email headers can be malformed, have multiple encodings, and attackers intentionally craft confusing headers. I had to handle edge cases like internationalized domain names, encoded subjects, and nested MIME structures. I also implemented rate limiting for the threat intel APIs since free tiers have strict limits."</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Microsoft Defender for Office 365 -->
+            <section id="mdo" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </span>
+                    Microsoft Defender for Office 365 - Complete Guide
+                </h2>
+
+                <div class="experience-badge rounded-xl p-4 mb-8 border border-green-500/30">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <div>
+                            <p class="text-green-400 font-bold">Current Platform: Siemens Subsidiary • 15,000 Mailboxes</p>
+                            <p class="text-gray-400 text-sm">Microsoft 365 E5 with full Defender for Office 365 Plan 2 capabilities.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MDO Plans Comparison -->
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">📊 MDO Plan Comparison</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm comparison-table">
+                            <thead>
+                                <tr class="text-left">
+                                    <th class="p-3 rounded-tl-lg">Feature</th>
+                                    <th class="p-3">EOP (Free)</th>
+                                    <th class="p-3">Plan 1</th>
+                                    <th class="p-3 rounded-tr-lg">Plan 2 ✓</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="p-3 border-t border-[#2a2a3e]">Anti-malware</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-t border-[#2a2a3e]">Anti-spam</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-t border-[#2a2a3e]">Safe Attachments</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-red-400">✗</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-t border-[#2a2a3e]">Safe Links</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-red-400">✗</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-t border-[#2a2a3e]">Anti-phishing (Impersonation)</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-red-400">✗</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-t border-[#2a2a3e]">Threat Explorer</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-red-400">✗</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-yellow-400">Real-time only</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-green-400">✓ Full</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-t border-[#2a2a3e]">Automated Investigation (AIR)</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-red-400">✗</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-red-400">✗</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-t border-[#2a2a3e]">Attack Simulation Training</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-red-400">✗</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-red-400">✗</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-green-400">✓</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-t border-[#2a2a3e] rounded-bl-lg">Campaign Views</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-red-400">✗</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] text-red-400">✗</td>
+                                    <td class="p-3 border-t border-[#2a2a3e] rounded-br-lg text-green-400">✓</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- MDO Core Features Deep Dive -->
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div class="card rounded-2xl p-6">
+                        <h3 class="text-lg font-bold text-blue-400 mb-4">🔗 Safe Links</h3>
+                        <p class="text-gray-400 text-sm mb-4">URL rewriting and time-of-click verification</p>
+                        <div class="space-y-3">
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <h4 class="text-white font-medium text-sm">How It Works</h4>
+                                <ol class="text-gray-400 text-xs mt-2 space-y-1">
+                                    <li>1. URL rewritten to: https://nam01.safelinks.protection.outlook.com/?url=...</li>
+                                    <li>2. User clicks → Microsoft checks URL reputation in real-time</li>
+                                    <li>3. Clean → Redirect to original URL</li>
+                                    <li>4. Malicious → Block page shown, alert generated</li>
+                                </ol>
+                            </div>
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <h4 class="text-white font-medium text-sm">Policy Settings</h4>
+                                <ul class="text-gray-400 text-xs mt-2 space-y-1">
+                                    <li>• Scan URLs in emails (inbound + internal)</li>
+                                    <li>• Scan URLs in Teams messages</li>
+                                    <li>• Scan URLs in Office documents</li>
+                                    <li>• Track user clicks for reporting</li>
+                                    <li>• Do not rewrite, but block at click</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card rounded-2xl p-6">
+                        <h3 class="text-lg font-bold text-purple-400 mb-4">📎 Safe Attachments</h3>
+                        <p class="text-gray-400 text-sm mb-4">Sandbox detonation for unknown attachments</p>
+                        <div class="space-y-3">
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <h4 class="text-white font-medium text-sm">Detonation Options</h4>
+                                <ul class="text-gray-400 text-xs mt-2 space-y-1">
+                                    <li><span class="text-blue-400">Block:</span> Quarantine malicious, delay unknown</li>
+                                    <li><span class="text-green-400">Replace:</span> Deliver email, replace attachment with placeholder</li>
+                                    <li><span class="text-yellow-400">Dynamic Delivery:</span> Deliver immediately, attach after scan</li>
+                                    <li><span class="text-gray-500">Monitor:</span> Track only, no action</li>
+                                </ul>
+                            </div>
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <h4 class="text-white font-medium text-sm">Best Practice: Dynamic Delivery</h4>
+                                <p class="text-gray-400 text-xs mt-2">Users get email immediately with a placeholder. Attachment appears after sandbox analysis completes (~30 seconds to 2 minutes). Best balance of security and user experience.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Anti-Phishing Policies -->
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-orange-400 mb-4">🎣 Anti-Phishing Policies</h3>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="bg-[#1a1a2e] rounded-xl p-4">
+                            <h4 class="text-white font-medium mb-2">User Impersonation</h4>
+                            <p class="text-gray-400 text-xs mb-3">Protect specific users (executives, finance) from display name spoofing</p>
+                            <pre class="text-xs p-2 rounded bg-black/30"><code class="text-green-400"># Protected users
+CEO: john.smith@company.com
+CFO: jane.doe@company.com
+
+Action: Quarantine</code></pre>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-xl p-4">
+                            <h4 class="text-white font-medium mb-2">Domain Impersonation</h4>
+                            <p class="text-gray-400 text-xs mb-3">Detect typosquatting and lookalike domains</p>
+                            <pre class="text-xs p-2 rounded bg-black/30"><code class="text-green-400"># Protected domains
+company.com
+partner.com
+
+Detects: c0mpany.com
+         cornpany.com</code></pre>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-xl p-4">
+                            <h4 class="text-white font-medium mb-2">Mailbox Intelligence</h4>
+                            <p class="text-gray-400 text-xs mb-3">ML-based protection using contact patterns</p>
+                            <pre class="text-xs p-2 rounded bg-black/30"><code class="text-green-400"># Learns from:
+- Frequent contacts
+- Email patterns
+- Communication history
+
+Detects anomalies</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Threat Explorer -->
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-cyan-400 mb-4">🔍 Threat Explorer - Investigation Powerhouse</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-white font-medium mb-3">Key Views</h4>
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2 bg-[#1a1a2e] rounded-lg p-2">
+                                    <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                                    <span class="text-gray-300 text-sm">Malware</span>
+                                    <span class="text-gray-500 text-xs">- All detected malware in email</span>
+                                </div>
+                                <div class="flex items-center gap-2 bg-[#1a1a2e] rounded-lg p-2">
+                                    <span class="w-3 h-3 rounded-full bg-orange-500"></span>
+                                    <span class="text-gray-300 text-sm">Phish</span>
+                                    <span class="text-gray-500 text-xs">- Phishing attempts</span>
+                                </div>
+                                <div class="flex items-center gap-2 bg-[#1a1a2e] rounded-lg p-2">
+                                    <span class="w-3 h-3 rounded-full bg-purple-500"></span>
+                                    <span class="text-gray-300 text-sm">Content Malware</span>
+                                    <span class="text-gray-500 text-xs">- Malicious files in SharePoint/OneDrive</span>
+                                </div>
+                                <div class="flex items-center gap-2 bg-[#1a1a2e] rounded-lg p-2">
+                                    <span class="w-3 h-3 rounded-full bg-blue-500"></span>
+                                    <span class="text-gray-300 text-sm">All Email</span>
+                                    <span class="text-gray-500 text-xs">- Complete email telemetry</span>
+                                </div>
+                                <div class="flex items-center gap-2 bg-[#1a1a2e] rounded-lg p-2">
+                                    <span class="w-3 h-3 rounded-full bg-cyan-500"></span>
+                                    <span class="text-gray-300 text-sm">URL Clicks</span>
+                                    <span class="text-gray-500 text-xs">- Safe Links click data</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-medium mb-3">Investigation Actions</h4>
+                            <div class="space-y-2 text-sm">
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-green-400 font-medium">Soft Delete</p>
+                                    <p class="text-gray-400 text-xs">Move to Deleted Items (recoverable)</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-yellow-400 font-medium">Hard Delete</p>
+                                    <p class="text-gray-400 text-xs">Permanently remove from mailbox</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-orange-400 font-medium">Move to Junk</p>
+                                    <p class="text-gray-400 text-xs">Move to Junk Email folder</p>
+                                </div>
+                                <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                    <p class="text-red-400 font-medium">Move to Quarantine</p>
+                                    <p class="text-gray-400 text-xs">Admin-controlled quarantine</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AIR - Automated Investigation and Response -->
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-green-400 mb-4">🤖 AIR - Automated Investigation and Response</h3>
+                    <div class="bg-[#0d0d14] rounded-xl p-4 mb-4">
+                        <p class="text-gray-400 text-sm mb-4">AIR automatically investigates alerts and takes remediation actions</p>
+                        <pre class="text-xs"><code class="text-cyan-400">AIR Investigation Flow:
+┌─────────────────────────────────────────────────────────────────┐
+│  Alert Triggered (User reports phish / System detection)       │
+└──────────────────────────┬──────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────────────┐
+│  AIR Investigation Starts                                       │
+│  • Analyze email headers, content, attachments                  │
+│  • Check sender reputation across tenant                        │
+│  • Identify similar emails sent to other users                  │
+│  • Correlate with endpoint signals (if MDE integrated)          │
+└──────────────────────────┬──────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────────────┐
+│  Findings Generated                                             │
+│  • Email verdict (Phish/Malware/Clean)                          │
+│  • Impact scope (X users received similar email)                │
+│  • User actions (clicked link? opened attachment?)              │
+└──────────────────────────┬──────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────────────┐
+│  Recommended Actions                                            │
+│  • Soft delete emails from all affected mailboxes               │
+│  • Block sender/domain                                          │
+│  • Block URL across tenant                                      │
+└──────────────────────────┬──────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────────────┐
+│  Pending Approval (or Auto-approved based on policy)            │
+│  Admin reviews → Approves → Actions executed                    │
+└─────────────────────────────────────────────────────────────────┘</code></pre>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-[#1a1a2e] rounded-lg p-3">
+                            <h4 class="text-white font-medium text-sm mb-2">AIR Triggers</h4>
+                            <ul class="text-gray-400 text-xs space-y-1">
+                                <li>• User reports phishing (Report Message add-in)</li>
+                                <li>• Admin triggers from Threat Explorer</li>
+                                <li>• Automated alerts (ZAP, malware detection)</li>
+                                <li>• Compromised user alert</li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#1a1a2e] rounded-lg p-3">
+                            <h4 class="text-white font-medium text-sm mb-2">Approval Modes</h4>
+                            <ul class="text-gray-400 text-xs space-y-1">
+                                <li><span class="text-green-400">Auto:</span> Execute immediately (high confidence)</li>
+                                <li><span class="text-yellow-400">Semi-auto:</span> Require approval for some actions</li>
+                                <li><span class="text-orange-400">Manual:</span> All actions require admin approval</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- KQL Hunting Queries -->
+            <section id="kql" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                        </svg>
+                    </span>
+                    KQL Hunting Queries for Email Security
+                </h2>
+
+                <div class="card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4">📧 Email Threat Hunting Queries</h3>
+                    
+                    <div class="space-y-6">
+                        <!-- Query 1 -->
+                        <div class="bg-[#0d0d14] rounded-xl p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-cyan-400 font-medium">Find Emails from Newly Registered Domains (< 30 days)</h4>
+                                <span class="text-xs text-gray-500">High-risk sender detection</span>
+                            </div>
+                            <pre class="text-sm overflow-x-auto"><code class="text-green-400">EmailEvents
+| where Timestamp > ago(7d)
+| where EmailDirection == "Inbound"
+| extend SenderDomain = tostring(split(SenderFromAddress, "@")[1])
+| join kind=leftouter (
+    EmailUrlInfo
+    | where Timestamp > ago(7d)
+    | distinct NetworkMessageId, UrlDomain
+) on NetworkMessageId
+| where isnotempty(SenderDomain)
+| summarize 
+    EmailCount = count(),
+    Recipients = make_set(RecipientEmailAddress),
+    Subjects = make_set(Subject)
+    by SenderDomain
+| where EmailCount > 5  // Multiple emails from same domain
+| order by EmailCount desc</code></pre>
+                        </div>
+
+                        <!-- Query 2 -->
+                        <div class="bg-[#0d0d14] rounded-xl p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-cyan-400 font-medium">Users Who Clicked Safe Links and Visited Malicious URLs</h4>
+                                <span class="text-xs text-gray-500">Click-through analysis</span>
+                            </div>
+                            <pre class="text-sm overflow-x-auto"><code class="text-green-400">UrlClickEvents
+| where Timestamp > ago(7d)
+| where ActionType == "ClickBlocked" or IsClickedThrough == true
+| where ThreatTypes has_any ("Phish", "Malware")
+| summarize 
+    ClickCount = count(),
+    BlockedClicks = countif(ActionType == "ClickBlocked"),
+    ClickedThrough = countif(IsClickedThrough == true),
+    MaliciousUrls = make_set(Url)
+    by AccountUpn
+| where ClickedThrough > 0  // Users who bypassed warning
+| order by ClickedThrough desc</code></pre>
+                        </div>
+
+                        <!-- Query 3 -->
+                        <div class="bg-[#0d0d14] rounded-xl p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-cyan-400 font-medium">Phishing Campaign Detection - Similar Subject Lines</h4>
+                                <span class="text-xs text-gray-500">Campaign identification</span>
+                            </div>
+                            <pre class="text-sm overflow-x-auto"><code class="text-green-400">EmailEvents
+| where Timestamp > ago(24h)
+| where EmailDirection == "Inbound"
+| where ThreatTypes has "Phish"
+| extend SubjectNormalized = tolower(trim_end(@"\s+", trim_start(@"\s+", Subject)))
+| summarize 
+    RecipientCount = dcount(RecipientEmailAddress),
+    Recipients = make_set(RecipientEmailAddress, 10),
+    Senders = make_set(SenderFromAddress),
+    FirstSeen = min(Timestamp),
+    LastSeen = max(Timestamp)
+    by SubjectNormalized
+| where RecipientCount >= 5  // Campaign threshold
+| order by RecipientCount desc</code></pre>
+                        </div>
+
+                        <!-- Query 4 -->
+                        <div class="bg-[#0d0d14] rounded-xl p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-cyan-400 font-medium">Attachment Analysis - Suspicious File Types</h4>
+                                <span class="text-xs text-gray-500">Malicious attachment detection</span>
+                            </div>
+                            <pre class="text-sm overflow-x-auto"><code class="text-green-400">EmailAttachmentInfo
+| where Timestamp > ago(7d)
+| where FileType in ("exe", "dll", "scr", "js", "vbs", "ps1", "bat", "cmd", "hta", "iso", "img")
+    or FileName endswith ".exe.zip"
+    or FileName endswith ".docm"
+    or FileName endswith ".xlsm"
+| join kind=inner (
+    EmailEvents 
+    | where Timestamp > ago(7d)
+    | where EmailDirection == "Inbound"
+) on NetworkMessageId
+| project 
+    Timestamp,
+    SenderFromAddress,
+    RecipientEmailAddress,
+    Subject,
+    FileName,
+    FileType,
+    SHA256,
+    ThreatTypes,
+    DeliveryAction
+| order by Timestamp desc</code></pre>
+                        </div>
+
+                        <!-- Query 5 -->
+                        <div class="bg-[#0d0d14] rounded-xl p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-cyan-400 font-medium">ZAP (Zero-Hour Auto Purge) Effectiveness</h4>
+                                <span class="text-xs text-gray-500">Post-delivery remediation</span>
+                            </div>
+                            <pre class="text-sm overflow-x-auto"><code class="text-green-400">EmailPostDeliveryEvents
+| where Timestamp > ago(30d)
+| where ActionType == "ZAP"
+| summarize 
+    ZAPCount = count(),
+    PhishZAP = countif(ThreatTypes has "Phish"),
+    MalwareZAP = countif(ThreatTypes has "Malware"),
+    SpamZAP = countif(ThreatTypes has "Spam")
+    by bin(Timestamp, 1d)
+| order by Timestamp desc
+| render timechart</code></pre>
+                        </div>
+
+                        <!-- Query 6 -->
+                        <div class="bg-[#0d0d14] rounded-xl p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-cyan-400 font-medium">Executive Impersonation Attempts</h4>
+                                <span class="text-xs text-gray-500">BEC detection</span>
+                            </div>
+                            <pre class="text-sm overflow-x-auto"><code class="text-green-400">let Executives = dynamic(["ceo@company.com", "cfo@company.com", "coo@company.com"]);
+let ExecutiveNames = dynamic(["John Smith", "Jane Doe", "Bob Wilson"]);
+EmailEvents
+| where Timestamp > ago(7d)
+| where EmailDirection == "Inbound"
+| where SenderFromAddress !in (Executives)  // Not actually from executive
+| where SenderDisplayName has_any (ExecutiveNames)  // But display name matches
+| project 
+    Timestamp,
+    SenderFromAddress,
+    SenderDisplayName,
+    RecipientEmailAddress,
+    Subject,
+    ThreatTypes,
+    AuthenticationDetails
+| order by Timestamp desc</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Platform Comparison -->
+            <section id="comparison" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                    </span>
+                    Platform Comparison: FireEye EX vs MDO
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm comparison-table">
+                            <thead>
+                                <tr class="text-left">
+                                    <th class="p-4 rounded-tl-lg">Feature</th>
+                                    <th class="p-4">FireEye EX</th>
+                                    <th class="p-4 rounded-tr-lg">Microsoft Defender for O365</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium">Deployment</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">On-prem appliance / Cloud</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">Cloud-native (M365)</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium">Sandbox</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">MVX Engine (proprietary)</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">Safe Attachments detonation</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium">URL Protection</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">Real-time URL analysis</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">Safe Links (rewrite + time-of-click)</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium">Threat Intel</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">iSIGHT + Mandiant</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">Microsoft Threat Intelligence</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium">XDR Integration</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">Helix/Trellix XDR</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">Microsoft 365 Defender</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium">Automation</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">API-based, SOAR integration</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">AIR (native), Logic Apps</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium">SIEM Integration</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">Syslog, API</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">Native Sentinel connector</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 border-t border-[#2a2a3e] font-medium">Best For</td>
+                                    <td class="p-4 border-t border-[#2a2a3e]">Multi-platform email, advanced APT</td>
+                                    <td class="p-4 border-t border-[#2a2a3e] rounded-br-lg">M365 environments, unified security</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Email Threat Landscape -->
+            <section id="threats" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                    </span>
+                    Email Threat Landscape
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <!-- Threat Types -->
+                    <div class="card rounded-2xl p-6">
+                        <h3 class="text-lg font-bold text-red-400 mb-4">🎯 Common Email Threats</h3>
+                        <div class="space-y-3">
+                            <div class="attack-phase phase-delivery bg-[#1a1a2e] rounded-lg p-4 pl-6">
+                                <h4 class="text-white font-medium">Phishing</h4>
+                                <p class="text-gray-400 text-sm">Credential harvesting via fake login pages</p>
+                                <p class="text-xs text-gray-500 mt-1">Detection: URL reputation, page similarity, brand impersonation</p>
+                            </div>
+                            <div class="attack-phase phase-delivery bg-[#1a1a2e] rounded-lg p-4 pl-6">
+                                <h4 class="text-white font-medium">Spear Phishing</h4>
+                                <p class="text-gray-400 text-sm">Targeted attacks with personalized content</p>
+                                <p class="text-xs text-gray-500 mt-1">Detection: Sender anomalies, content analysis, context mismatch</p>
+                            </div>
+                            <div class="attack-phase phase-exploitation bg-[#1a1a2e] rounded-lg p-4 pl-6">
+                                <h4 class="text-white font-medium">BEC (Business Email Compromise)</h4>
+                                <p class="text-gray-400 text-sm">CEO fraud, invoice manipulation, payment redirection</p>
+                                <p class="text-xs text-gray-500 mt-1">Detection: Impersonation protection, unusual requests, domain similarity</p>
+                            </div>
+                            <div class="attack-phase phase-installation bg-[#1a1a2e] rounded-lg p-4 pl-6">
+                                <h4 class="text-white font-medium">Malware Delivery</h4>
+                                <p class="text-gray-400 text-sm">Weaponized attachments (macros, exploits)</p>
+                                <p class="text-xs text-gray-500 mt-1">Detection: Sandbox detonation, file reputation, behavioral analysis</p>
+                            </div>
+                            <div class="attack-phase phase-action bg-[#1a1a2e] rounded-lg p-4 pl-6">
+                                <h4 class="text-white font-medium">Ransomware Distribution</h4>
+                                <p class="text-gray-400 text-sm">Initial access via email for ransomware deployment</p>
+                                <p class="text-xs text-gray-500 mt-1">Detection: Known ransomware families, dropper behavior, C2 patterns</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MITRE Mapping -->
+                    <div class="card rounded-2xl p-6">
+                        <h3 class="text-lg font-bold text-purple-400 mb-4">🗺️ MITRE ATT&CK Mapping</h3>
+                        <div class="space-y-3">
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-white font-medium text-sm">T1566.001</span>
+                                    <span class="text-purple-400 text-xs">Spearphishing Attachment</span>
+                                </div>
+                                <p class="text-gray-500 text-xs mt-1">Malicious files attached to emails</p>
+                            </div>
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-white font-medium text-sm">T1566.002</span>
+                                    <span class="text-purple-400 text-xs">Spearphishing Link</span>
+                                </div>
+                                <p class="text-gray-500 text-xs mt-1">Malicious URLs in email body</p>
+                            </div>
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-white font-medium text-sm">T1566.003</span>
+                                    <span class="text-purple-400 text-xs">Spearphishing via Service</span>
+                                </div>
+                                <p class="text-gray-500 text-xs mt-1">Third-party services (LinkedIn, etc.)</p>
+                            </div>
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-white font-medium text-sm">T1534</span>
+                                    <span class="text-purple-400 text-xs">Internal Spearphishing</span>
+                                </div>
+                                <p class="text-gray-500 text-xs mt-1">Compromised account sends internal phish</p>
+                            </div>
+                            <div class="bg-[#1a1a2e] rounded-lg p-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-white font-medium text-sm">T1598</span>
+                                    <span class="text-purple-400 text-xs">Phishing for Information</span>
+                                </div>
+                                <p class="text-gray-500 text-xs mt-1">Reconnaissance via email</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Investigation Playbook -->
+            <section id="investigation" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                        </svg>
+                    </span>
+                    Email Investigation Playbook
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <div class="space-y-6">
+                        <!-- Step 1 -->
+                        <div class="relative pl-8 border-l-2 border-blue-500">
+                            <div class="absolute -left-3 top-0 w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-xs font-bold">1</div>
+                            <h4 class="text-blue-400 font-bold mb-2">Initial Triage</h4>
+                            <div class="bg-[#1a1a2e] rounded-lg p-4">
+                                <ul class="text-gray-400 text-sm space-y-2">
+                                    <li>☐ Identify alert source (user report, automated detection, threat intel)</li>
+                                    <li>☐ Capture email headers (full headers, not just visible)</li>
+                                    <li>☐ Note sender, recipient, subject, timestamp</li>
+                                    <li>☐ Check if email is still in mailbox or already actioned</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="relative pl-8 border-l-2 border-purple-500">
+                            <div class="absolute -left-3 top-0 w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center text-xs font-bold">2</div>
+                            <h4 class="text-purple-400 font-bold mb-2">Header Analysis</h4>
+                            <div class="bg-[#1a1a2e] rounded-lg p-4">
+                                <ul class="text-gray-400 text-sm space-y-2">
+                                    <li>☐ Verify SPF result (pass/fail/softfail)</li>
+                                    <li>☐ Check DKIM signature validity</li>
+                                    <li>☐ Review DMARC alignment</li>
+                                    <li>☐ Trace delivery path via Received headers</li>
+                                    <li>☐ Compare Return-Path vs From (mismatch = suspicious)</li>
+                                    <li>☐ Check X-Originating-IP for source</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="relative pl-8 border-l-2 border-orange-500">
+                            <div class="absolute -left-3 top-0 w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center text-xs font-bold">3</div>
+                            <h4 class="text-orange-400 font-bold mb-2">Content Analysis</h4>
+                            <div class="bg-[#1a1a2e] rounded-lg p-4">
+                                <ul class="text-gray-400 text-sm space-y-2">
+                                    <li>☐ Extract all URLs (check for URL shorteners, redirects)</li>
+                                    <li>☐ Analyze attachments (file type, hash, macro presence)</li>
+                                    <li>☐ Review email body for urgency tactics, threats, requests</li>
+                                    <li>☐ Check for brand impersonation (logos, formatting)</li>
+                                    <li>☐ Look for typosquatting in sender domain</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="relative pl-8 border-l-2 border-green-500">
+                            <div class="absolute -left-3 top-0 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-xs font-bold">4</div>
+                            <h4 class="text-green-400 font-bold mb-2">IOC Enrichment</h4>
+                            <div class="bg-[#1a1a2e] rounded-lg p-4">
+                                <ul class="text-gray-400 text-sm space-y-2">
+                                    <li>☐ Check URL/domain reputation (VirusTotal, URLScan)</li>
+                                    <li>☐ Lookup IP reputation (AbuseIPDB, Shodan)</li>
+                                    <li>☐ Submit file hash to VT if attachment present</li>
+                                    <li>☐ Check domain age (WHOIS) - new domains are suspicious</li>
+                                    <li>☐ Search threat intel platforms for known campaigns</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 5 -->
+                        <div class="relative pl-8 border-l-2 border-red-500">
+                            <div class="absolute -left-3 top-0 w-6 h-6 rounded-full bg-red-500 flex items-center justify-center text-xs font-bold">5</div>
+                            <h4 class="text-red-400 font-bold mb-2">Impact Assessment</h4>
+                            <div class="bg-[#1a1a2e] rounded-lg p-4">
+                                <ul class="text-gray-400 text-sm space-y-2">
+                                    <li>☐ Identify all recipients of the email</li>
+                                    <li>☐ Check if any users clicked links (Safe Links data)</li>
+                                    <li>☐ Check if any users opened attachments</li>
+                                    <li>☐ Review endpoint telemetry for compromise indicators</li>
+                                    <li>☐ Check for similar emails in tenant (campaign)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 6 -->
+                        <div class="relative pl-8 border-l-2 border-cyan-500">
+                            <div class="absolute -left-3 top-0 w-6 h-6 rounded-full bg-cyan-500 flex items-center justify-center text-xs font-bold">6</div>
+                            <h4 class="text-cyan-400 font-bold mb-2">Containment & Remediation</h4>
+                            <div class="bg-[#1a1a2e] rounded-lg p-4">
+                                <ul class="text-gray-400 text-sm space-y-2">
+                                    <li>☐ Delete/quarantine email from all mailboxes</li>
+                                    <li>☐ Block sender domain/address</li>
+                                    <li>☐ Block malicious URL at proxy/firewall</li>
+                                    <li>☐ Reset passwords for users who clicked</li>
+                                    <li>☐ Scan endpoints of affected users</li>
+                                    <li>☐ Add IOCs to blocklist/threat intel</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Metrics Section -->
+            <section id="metrics" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                    </span>
+                    Email Security Metrics & KPIs
+                </h2>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    <div class="card rounded-xl p-4 text-center">
+                        <p class="text-3xl font-bold text-blue-400">99.9%</p>
+                        <p class="text-sm text-gray-400">Malware Catch Rate</p>
+                        <p class="text-xs text-gray-500 mt-1">Target: >99%</p>
+                    </div>
+                    <div class="card rounded-xl p-4 text-center">
+                        <p class="text-3xl font-bold text-green-400">98.5%</p>
+                        <p class="text-sm text-gray-400">Phishing Detection</p>
+                        <p class="text-xs text-gray-500 mt-1">Target: >95%</p>
+                    </div>
+                    <div class="card rounded-xl p-4 text-center">
+                        <p class="text-3xl font-bold text-yellow-400">0.1%</p>
+                        <p class="text-sm text-gray-400">False Positive Rate</p>
+                        <p class="text-xs text-gray-500 mt-1">Target: <1%</p>
+                    </div>
+                    <div class="card rounded-xl p-4 text-center">
+                        <p class="text-3xl font-bold text-purple-400">&lt;5 min</p>
+                        <p class="text-sm text-gray-400">MTTR (Email)</p>
+                        <p class="text-xs text-gray-500 mt-1">Auto-remediation</p>
+                    </div>
+                </div>
+
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">📊 Key Metrics to Track</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-blue-400 font-medium mb-3">Detection Metrics</h4>
+                            <ul class="space-y-2 text-sm text-gray-400">
+                                <li>• Total threats blocked (daily/weekly/monthly)</li>
+                                <li>• Breakdown by threat type (phish, malware, spam, BEC)</li>
+                                <li>• Detection source (gateway vs post-delivery)</li>
+                                <li>• ZAP effectiveness (post-delivery catches)</li>
+                                <li>• User-reported phishing volume</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-green-400 font-medium mb-3">User Behavior Metrics</h4>
+                            <ul class="space-y-2 text-sm text-gray-400">
+                                <li>• Click-through rate on phishing</li>
+                                <li>• Users who bypassed Safe Links warnings</li>
+                                <li>• Repeat clickers (training candidates)</li>
+                                <li>• Report phishing adoption rate</li>
+                                <li>• Time to report (user awareness)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interview Q&A -->
+            <section id="interview" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </span>
+                    Interview Questions & Answers
+                </h2>
+
+                <div class="space-y-6">
+                    <!-- Q1 -->
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-blue-400 font-bold mb-3">Q: Walk me through how you would investigate a phishing email.</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"I follow a structured approach. First, I capture the full email headers and note the sender, recipient, and timestamp. Then I analyze the headers - checking SPF, DKIM, and DMARC results to identify spoofing. I compare the Return-Path to the From address - mismatches indicate spoofing.</p>
+                            <p class="text-gray-300 text-sm mt-2">Next, I extract IOCs - URLs, domains, IPs, and any file hashes. I run these through threat intel platforms like VirusTotal and URLScan. For URLs, I check domain age via WHOIS - newly registered domains are red flags.</p>
+                            <p class="text-gray-300 text-sm mt-2">Then I assess impact - how many users received it? Did anyone click? In MDO, I use Threat Explorer to find similar emails and check Safe Links click data. Finally, I remediate - delete from all mailboxes, block the sender, add IOCs to blocklists, and notify affected users."</p>
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-blue-400 font-bold mb-3">Q: How would you protect executives from BEC attacks?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"BEC protection requires layered controls. First, I'd configure anti-phishing policies with user impersonation protection - adding all executives to the protected users list with strict actions (quarantine, not just warning).</p>
+                            <p class="text-gray-300 text-sm mt-2">Second, enable domain impersonation protection to catch typosquatting - domains like 'c0mpany.com' instead of 'company.com'.</p>
+                            <p class="text-gray-300 text-sm mt-2">Third, enable Mailbox Intelligence which uses ML to learn normal communication patterns and flag anomalies.</p>
+                            <p class="text-gray-300 text-sm mt-2">Finally, I'd implement external email tagging - a banner on external emails so employees know when an email claiming to be from the CEO is actually external. I'd also work with finance to require out-of-band verification for any wire transfer requests."</p>
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-blue-400 font-bold mb-3">Q: Explain the difference between SPF, DKIM, and DMARC.</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"SPF validates the sending server - it checks if the IP address sending the email is authorized for that domain. Think of it as checking if the mail truck is authorized to deliver mail for a company.</p>
+                            <p class="text-gray-300 text-sm mt-2">DKIM is a cryptographic signature that ensures the email wasn't tampered with in transit. The sending server signs the email with a private key, and the receiving server verifies it with the public key in DNS. Think of it as a tamper-evident seal.</p>
+                            <p class="text-gray-300 text-sm mt-2">DMARC ties them together and tells receiving servers what to do when checks fail - none (just report), quarantine (send to spam), or reject (block completely). It also enables reporting so domain owners can see who's sending email as their domain.</p>
+                            <p class="text-gray-300 text-sm mt-2">For best protection, you want DMARC with p=reject, which requires both SPF and DKIM to be properly configured and passing."</p>
+                        </div>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-blue-400 font-bold mb-3">Q: What metrics would you use to measure email security effectiveness?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"I track several categories of metrics:</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>Detection metrics:</strong> Total threats blocked, breakdown by type (phishing, malware, spam), detection rate by source (gateway vs ZAP post-delivery). Our target is 99%+ catch rate for malware and 95%+ for phishing.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>False positive rate:</strong> Legitimate emails incorrectly blocked - target under 1%. Too high impacts business; too low might mean we're missing threats.</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>User behavior:</strong> Click-through rate on phishing (should decrease over time), users who bypass warnings, and user reporting rate (higher is better - means awareness is working).</p>
+                            <p class="text-gray-300 text-sm mt-2"><strong>Response metrics:</strong> MTTR for email incidents, time from detection to remediation across all mailboxes. With AIR, our target is under 5 minutes for automated cases."</p>
+                        </div>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="interview-qa rounded-2xl p-6">
+                        <p class="text-blue-400 font-bold mb-3">Q: Describe your experience with email security sandboxing.</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"At Infosys, I worked with FireEye EX which uses the MVX (Multi-Vector Virtual Execution) engine. When a suspicious attachment arrived, it was detonated in multiple VM environments - different Windows versions and Office versions - to catch evasive malware that only executes in specific conditions.</p>
+                            <p class="text-gray-300 text-sm mt-2">The sandbox monitored for malicious behaviors: registry modifications, file system changes, network callbacks to C2 servers, process injection, and credential access. Results included a verdict (malicious/suspicious/clean) plus extracted IOCs.</p>
+                            <p class="text-gray-300 text-sm mt-2">Now with MDO Safe Attachments, we use Dynamic Delivery mode - emails are delivered immediately with a placeholder, and the attachment appears after sandbox analysis (usually 30 seconds to 2 minutes). This balances security with user experience - no delays for clean emails, but malicious attachments never reach users."</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Memory Aids -->
+            <section id="mnemonics" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-pink-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                    </span>
+                    Memory Aids & Quick Reference
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Mnemonic 1 -->
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 "HEADERS" - Email Investigation Checklist</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-yellow-300"><strong>H</strong>eader analysis (SPF, DKIM, DMARC)</p>
+                            <p class="text-yellow-300"><strong>E</strong>xtract IOCs (URLs, IPs, hashes)</p>
+                            <p class="text-yellow-300"><strong>A</strong>ttachments check (sandbox if present)</p>
+                            <p class="text-yellow-300"><strong>D</strong>omain reputation (WHOIS, age, VT)</p>
+                            <p class="text-yellow-300"><strong>E</strong>nrich with threat intel</p>
+                            <p class="text-yellow-300"><strong>R</strong>ecipient scope (who else got it?)</p>
+                            <p class="text-yellow-300"><strong>S</strong>cope impact (clicks, opens, compromises)</p>
+                        </div>
+                    </div>
+
+                    <!-- Mnemonic 2 -->
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 "PHISH" - Spotting Phishing Red Flags</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-yellow-300"><strong>P</strong>ressure tactics (urgency, threats)</p>
+                            <p class="text-yellow-300"><strong>H</strong>yperlinks suspicious (hover to check)</p>
+                            <p class="text-yellow-300"><strong>I</strong>mpersonation (display name vs actual sender)</p>
+                            <p class="text-yellow-300"><strong>S</strong>pelling/grammar errors</p>
+                            <p class="text-yellow-300"><strong>H</strong>eader mismatches (Return-Path ≠ From)</p>
+                        </div>
+                    </div>
+
+                    <!-- Mnemonic 3 -->
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 MDO Features: "SALT" for Protection</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-yellow-300"><strong>S</strong>afe Links - URL time-of-click protection</p>
+                            <p class="text-yellow-300"><strong>A</strong>nti-phishing - Impersonation protection</p>
+                            <p class="text-yellow-300"><strong>L</strong>ink scanning - Safe Attachments sandboxing</p>
+                            <p class="text-yellow-300"><strong>T</strong>hreat Explorer - Investigation & hunting</p>
+                        </div>
+                    </div>
+
+                    <!-- Mnemonic 4 -->
+                    <div class="mnemonic rounded-2xl p-6">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 BEC Attack Types: "FIVE"</h3>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-yellow-300"><strong>F</strong>ake invoice scams</p>
+                            <p class="text-yellow-300"><strong>I</strong>mpersonation (CEO fraud)</p>
+                            <p class="text-yellow-300"><strong>V</strong>endor compromise</p>
+                            <p class="text-yellow-300"><strong>E</strong>mployee payroll redirect</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Reference Card -->
+                <div class="card rounded-2xl p-6 mt-8">
+                    <h3 class="text-lg font-bold text-white mb-4">📋 Quick Reference: Email Security Commands</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-blue-400 font-medium mb-3">PowerShell - Exchange Online</h4>
+                            <pre class="text-xs p-3 rounded-xl bg-[#0d0d14]"><code class="text-green-400"># Get messages from a sender
+Get-MessageTrace -SenderAddress attacker@evil.com
+
+# Search message trace by subject
+Get-MessageTrace -StartDate (Get-Date).AddDays(-7) `
+  -EndDate (Get-Date) | Where Subject -like "*invoice*"
+
+# Get Safe Links policy
+Get-SafeLinksPolicy | Format-List
+
+# Get Anti-Phishing policy
+Get-AntiPhishPolicy | Format-List
+
+# Block sender domain
+New-TenantAllowBlockListItems -ListType Sender `
+  -Block -Entries "evil.com"</code></pre>
+                        </div>
+                        <div>
+                            <h4 class="text-purple-400 font-medium mb-3">Graph API - Email Investigation</h4>
+                            <pre class="text-xs p-3 rounded-xl bg-[#0d0d14]"><code class="text-green-400"># Search messages across mailboxes
+POST /security/runHuntingQuery
+{
+  "Query": "EmailEvents | where SenderFromAddress 
+    contains 'suspicious' | take 100"
+}
+
+# Get email metadata
+GET /users/{user}/messages/{messageId}
+
+# Delete email from mailbox
+DELETE /users/{user}/messages/{messageId}
+
+# Get threat assessment
+POST /informationProtection/threatAssessmentRequests</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-[#2a2a3e] py-8 px-6">
+        <div class="max-w-7xl mx-auto text-center text-gray-500 text-sm">
+            <p>Email Security Engineering Documentation • Security Engineer Portfolio</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const menuIcon = document.getElementById('menuIcon');
+            const closeIcon = document.getElementById('closeIcon');
+            
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+            menuIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+        }
+    </script>
+<script src="../js/sidebar.js"></script>
+</body>
+</html>
