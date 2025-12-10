@@ -14,8 +14,11 @@ const sidebarHTML = `
         <a href="{{BASE}}pages/interview-prep.html" class="flex items-center gap-2 px-3 py-2 mb-2 text-sm text-cyan-400 rounded-lg bg-cyan-500/10 border border-cyan-500/30 hover:bg-cyan-500/20">
             <span>🎯</span><span class="font-medium">Interview Prep</span>
         </a>
-        <a href="{{BASE}}pages/interview-deep-dive.html" class="flex items-center gap-2 px-3 py-2 mb-4 text-sm text-emerald-400 rounded-lg bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20">
+        <a href="{{BASE}}pages/interview-deep-dive.html" class="flex items-center gap-2 px-3 py-2 mb-2 text-sm text-emerald-400 rounded-lg bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20">
             <span>🧠</span><span class="font-medium">Deep Dive (Why)</span>
+        </a>
+        <a href="{{BASE}}pages/coca-cola-interview.html" class="flex items-center gap-2 px-3 py-2 mb-4 text-sm text-red-400 rounded-lg bg-red-500/10 border border-red-500/30 hover:bg-red-500/20">
+            <span>🥤</span><span class="font-medium">Coca-Cola Prep</span>
         </a>
         <nav class="space-y-1" id="sidebar-nav">
             <div class="nav-section">

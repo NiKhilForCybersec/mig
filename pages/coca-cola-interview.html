@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coca-Cola Interview Prep | Security Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Inter', system-ui, sans-serif; }
+        .card { background: linear-gradient(145deg, #12121a, #1a1a2e); border: 1px solid #2a2a3e; }
+        .coca-cola { background: linear-gradient(135deg, #1a0a0a 0%, #1a1a2e 100%); border: 1px solid #dc2626; }
+        .behavioral { background: linear-gradient(135deg, #1a1a2e 0%, #1e1e3e 100%); border: 1px solid #8b5cf6; }
+        .technical { background: linear-gradient(135deg, #0d1f0d 0%, #1a1a2e 100%); border: 1px solid #10b981; }
+        .framework { background: linear-gradient(135deg, #1a1a0d 0%, #1a1a2e 100%); border: 1px solid #f59e0b; }
+        .scenario { background: linear-gradient(135deg, #0d1a1a 0%, #1a1a2e 100%); border: 1px solid #06b6d4; }
+        .memorize { background: linear-gradient(135deg, #1a0d1a 0%, #1a1a2e 100%); border: 1px solid #ec4899; }
+        .diagram { background: #0a0a0f; border: 1px solid #2a2a3e; font-family: 'Courier New', monospace; }
+        pre { background: #0d0d14 !important; border-radius: 8px; padding: 16px; overflow-x: auto; }
+        .answer-box { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 16px; }
+        .gold-phrase { background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b; padding: 8px 12px; margin: 8px 0; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <main class="lg:ml-64 pt-14 lg:pt-0">
+        <div class="max-w-5xl mx-auto px-6 py-12">
+            <!-- Hero -->
+            <section class="mb-12">
+                <div class="flex items-center gap-2 text-red-500 mb-4">
+                    <span class="text-2xl">🥤</span>
+                    <span class="text-sm font-medium">Coca-Cola Canada Bottling Limited</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Interview Prep - Coca-Cola</h1>
+                <p class="text-xl text-gray-400 mb-6">Tailored answers for Security Engineer role at Coke Canada Bottling</p>
+                
+                <div class="coca-cola rounded-xl p-5 mb-6">
+                    <h3 class="text-red-400 font-bold mb-3">🎯 Company Profile - Know This!</h3>
+                    <div class="grid md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <p class="text-gray-300"><strong>Company:</strong> Independent, family-owned Canadian bottler (since 2018)</p>
+                            <p class="text-gray-300"><strong>Size:</strong> 6,000+ employees across Canada</p>
+                            <p class="text-gray-300"><strong>Operations:</strong> 50+ distribution centers, 5 manufacturing plants</p>
+                            <p class="text-gray-300"><strong>Environment:</strong> Hybrid IT + OT (manufacturing, SCADA, PLCs)</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-300"><strong>Stack:</strong> Microsoft (Azure, MDE, MDC, DLP), Fortinet NGFWs</p>
+                            <p class="text-gray-300"><strong>Frameworks:</strong> NIST, ISO 27001, IEC 62443, CIS</p>
+                            <p class="text-gray-300"><strong>Focus:</strong> Zero Trust, DevSecOps, IT/OT convergence</p>
+                            <p class="text-gray-300"><strong>Culture:</strong> "Greatest Bottler, Best People" - values DEI</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- WHY COCA-COLA -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center text-red-400">1</span>
+                    Why Coca-Cola Canada Bottling?
+                </h2>
+
+                <div class="behavioral rounded-xl p-6 mb-4">
+                    <p class="text-purple-400 font-bold mb-3">Q: Why do you want to work at Coca-Cola Canada Bottling?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "Three things drew me to this role. First, <strong>the tech stack alignment</strong>—you're using Microsoft Defender, Azure security, DLP, and Fortinet NGFWs, which directly matches my experience with MDE, Sentinel, Purview DLP, and firewall administration. I can contribute immediately without a long ramp-up.<br><br>
+                            
+                            Second, <strong>the IT/OT convergence challenge</strong>. Securing manufacturing plants and distribution centers alongside corporate IT is exactly the kind of complexity I find interesting. OT security requires a different mindset—availability over confidentiality, passive monitoring, compensating controls when you can't patch. At Siemens, I worked in a similar hybrid environment, so I understand the nuances.<br><br>
+                            
+                            Third, <strong>the engineering focus</strong>. This isn't just a monitoring role—it's about designing, implementing, and automating security controls. The job description mentions DevSecOps, CI/CD pipeline security, and automation with Python/PowerShell. That's where I want to grow. I want to build security infrastructure, not just watch dashboards.<br><br>
+                            
+                            Plus, Coke Canada is an independent, family-owned business with a strong culture. I've read about your commitment to sustainability and community—the electric trucks, the 100% recycled plastic initiative. That alignment with values matters to me for a long-term fit."
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- TELL ME ABOUT YOURSELF -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400">2</span>
+                    Tell Me About Yourself
+                </h2>
+
+                <div class="behavioral rounded-xl p-6 mb-4">
+                    <p class="text-purple-400 font-bold mb-3">Full Version (60-70 seconds)</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "I started my cybersecurity career as a SOC Analyst at Cognizant, where I worked primarily with Splunk for alert triage and incident investigations. That role gave me a strong foundation in detection logic, attacker behavior, and end-to-end incident response.<br><br>
+                            
+                            I then moved into a security engineering position at Infosys, working across Trellix HX/EX/NX and Symantec DLP. I handled agent deployments, upgrades, policy tuning, and malware investigation. I also participated in evaluating next-generation EDR/XDR platforms such as CrowdStrike, Carbon Black, and Cortex XDR, and contributed to the migration from Trellix to Cortex XDR.<br><br>
+                            
+                            After relocating to Canada, I joined a Siemens subsidiary. I initially worked on Cortex XDR agent rollouts, VM broker deployments, and developing XSOAR automations. Later, I transitioned to a major security modernization project—a hybrid environment with on-prem Windows servers moving into Azure. I supported the migration from RSA NetWitness and ESET to a cloud-native Microsoft ecosystem. My responsibilities included converting RSA correlation rules into KQL for Sentinel, onboarding MDE across endpoints and servers, managing the coexistence phase of legacy and new tools, and building Logic Apps automation.<br><br>
+                            
+                            Currently, I'm working on the migration from Symantec DLP to Microsoft Purview Endpoint DLP. I joined during the pilot phase, helped with simulation-mode testing, reduced false positives, and now I'm part of the enforcement rollout—implementing block/warn actions and coordinating phased deployment with business teams. The project is nearing completion, and I'm looking for a role where I can leverage my combined experience across cloud security, detection engineering, SIEM/XDR integration, and DLP."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="behavioral rounded-xl p-6">
+                    <p class="text-purple-400 font-bold mb-3">Short Version (40-45 seconds)</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "I started as a SOC Analyst at Cognizant working with Splunk, which gave me a strong foundation in incident response. I then moved into security engineering at Infosys, where I worked with Trellix EDR, Symantec DLP, and led the migration from FireEye EDR to Cortex XDR.<br><br>
+                            
+                            After relocating to Canada, I joined Siemens. My first project focused on Cortex XDR deployments and XSOAR automations. Later, I supported a major modernization project—transitioning from RSA NetWitness and ESET to Microsoft Sentinel and MDE, converting RSA correlation rules into KQL, onboarding endpoints, and building Logic Apps playbooks.<br><br>
+                            
+                            Currently, I'm completing the migration from Symantec DLP to Microsoft Purview Endpoint DLP, focusing on policy translation, simulation testing, false-positive reduction, and phased enforcement. I'm looking for a role where I can apply this experience across cloud security, detection engineering, and DLP."
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- CONFLICT STORY - MDE vs ESET -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400">3</span>
+                    Conflict / Disagreement Stories
+                </h2>
+
+                <div class="behavioral rounded-xl p-6 mb-4">
+                    <p class="text-purple-400 font-bold mb-3">Q: Tell me about a time you had conflict with a coworker or team.</p>
+                    <p class="text-gray-500 text-xs mb-3">Story: MDE Agent Rollout vs Sysadmin (ESET Conflict)</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "During our Microsoft Defender for Endpoint rollout, I ran into significant pushback from the infrastructure team. We were migrating from ESET, and the lead sysadmin was resistant to deploying the MDE agent because he'd already seen performance issues with ESET and was concerned about running another EDR.<br><br>
+                            
+                            His argument was that ESET was 'good enough' and adding MDE would just create more overhead and potential conflicts. He also felt the security team was making decisions that impacted his servers without consulting infrastructure first.<br><br>
+                            
+                            Instead of escalating or forcing the issue, I took time to understand his actual concerns. It turned out the real worry wasn't MDE specifically—it was the historical pattern of security tools causing performance problems and him getting blamed when servers slowed down.<br><br>
+                            
+                            So I proposed a controlled approach: we'd start with a small pilot group of 10 non-critical servers, run both agents in coexistence mode temporarily, and I'd personally monitor CPU, memory, and disk I/O during the pilot. I also showed him the MDE resource consumption data from Microsoft's documentation—typically 2-3% CPU—and committed to documenting a clear rollback procedure if anything went wrong.<br><br>
+                            
+                            We ran the pilot for two weeks. The performance impact was minimal, and MDE actually caught a suspicious PowerShell execution that ESET missed. That result changed the conversation. The sysadmin became supportive, and we expanded the rollout with his team's full cooperation.<br><br>
+                            
+                            The lesson for me was that resistance often has an underlying reason that isn't immediately stated. By addressing the real concern—accountability and performance impact—rather than just pushing the technical decision, I turned a blocker into a partner."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="behavioral rounded-xl p-6 mb-4">
+                    <p class="text-purple-400 font-bold mb-3">Q: Tell me about a time you disagreed with a technical decision.</p>
+                    <p class="text-gray-500 text-xs mb-3">Story: MDE Onboarding Script Issue</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "One disagreement I handled professionally was during our MDE rollout when Infrastructure wanted to rely solely on the golden image to deploy the MDE agent, without running the onboarding script on each server.<br><br>
+                            
+                            I pushed back because skipping the script meant every cloned machine would inherit the same AAD device ID, and in Defender that causes a severe issue: multiple servers appear as a single endpoint, telemetry overlaps, and DeviceProcessEvents basically collapse into one record. You lose individual visibility.<br><br>
+                            
+                            I demonstrated this using Sentinel queries where several 'different' servers were reporting under the same AAD ID with no actionable telemetry. After showing the gap, I worked with Infra to enforce a post-image onboarding step as mandatory—run the onboarding script per machine so each device gets a unique AAD identity.<br><br>
+                            
+                            Once we aligned on that process, new servers started reporting independently, telemetry stabilized, and it prevented what would have been a persistent blind spot across all future deployments. The key was presenting data, not just opinions."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="behavioral rounded-xl p-6">
+                    <p class="text-purple-400 font-bold mb-3">Q: Tell me about a time you handled pushback from another team.</p>
+                    <p class="text-gray-500 text-xs mb-3">Story: Senior Analyst Feedback on Detection Rule</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "One example was when a senior threat analyst flagged that a detection rule I built in Sentinel had missed an event because my suppression logic was too aggressive and a key correlation condition didn't fire.<br><br>
+                            
+                            Instead of getting defensive, I walked through the telemetry with him, understood exactly where the correlation chain broke, and agreed that the suppression window needed refinement. I tuned the rule by tightening the matching logic, reducing the suppression duration, and validating it against historical samples.<br><br>
+                            
+                            After testing and redeploying, the analyst confirmed the fix and appreciated how quickly and calmly I incorporated the feedback. For me, it reinforced that good detection engineering is collaborative—feedback from experienced analysts makes the overall detection stack stronger."
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- FRAMEWORK MAPPING -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-400">4</span>
+                    Framework Mapping Questions
+                </h2>
+
+                <div class="framework rounded-xl p-6 mb-4">
+                    <p class="text-amber-400 font-bold mb-3">Q: How do you apply security frameworks to security controls?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "To align NIST or ISO with our security controls, I take the framework control list and map each requirement to an implemented security capability—whether it's a tool, policy, or process.<br><br>
+                            
+                            For example:<br>
+                            • <strong>ISO's data leakage prevention requirement</strong> → maps to Purview DLP policies<br>
+                            • <strong>NIST's anomaly detection controls</strong> → maps to Sentinel analytics and UEBA<br>
+                            • <strong>Access control requirements</strong> → maps to Conditional Access and MFA in Entra ID<br>
+                            • <strong>Privileged access management</strong> → maps to Azure PIM or CyberArk<br>
+                            • <strong>Vulnerability management</strong> → maps to Defender TVM or Qualys<br><br>
+                            
+                            Where gaps exist, I document them, assign owners, and define remediation steps with timelines. This ensures complete top-down traceability from compliance requirements to operational controls. During audits, you can show exactly which tool or process satisfies each framework requirement."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="framework rounded-xl p-6 mb-4">
+                    <p class="text-amber-400 font-bold mb-3">Example: ISO A.12.4.1 – Event Logging</p>
+                    <div class="diagram rounded-lg p-4 mb-4">
+                        <p class="text-cyan-400 text-xs mb-2">Framework Requirement → Control Mapping</p>
+                        <pre class="text-xs text-gray-300">
+ISO A.12.4.1: "Events should be logged and logs retained to support investigations."
+
+MAPPING TO CONTROLS:
+
+┌─────────────────────────────────────────────────────────────────────┐
+│  ISO REQUIREMENT          │  IMPLEMENTED CONTROL                   │
+├───────────────────────────┼─────────────────────────────────────────┤
+│  Event logging            │  Sentinel data connectors:             │
+│                           │  - Azure AD / Entra ID                 │
+│                           │  - Microsoft 365                       │
+│                           │  - Microsoft Defender for Endpoint     │
+│                           │  - Fortinet NGFWs                      │
+│                           │  - AWS CloudTrail (if applicable)      │
+│                           │  - Zscaler access logs                 │
+├───────────────────────────┼─────────────────────────────────────────┤
+│  Log retention            │  Log Analytics Workspace retention     │
+│                           │  (90 days hot, 2 years archive)        │
+├───────────────────────────┼─────────────────────────────────────────┤
+│  Investigation support    │  - Sentinel hunting queries            │
+│                           │  - MDE Advanced Hunting                │
+│                           │  - Sysmon (if deployed on servers)     │
+│                           │  - Detection rules with entity mapping │
+└───────────────────────────┴─────────────────────────────────────────┘
+
+OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
+         Sentinel + MDE + Firewalls + Retention Policies
+                        </pre>
+                    </div>
+                </div>
+
+                <div class="framework rounded-xl p-6 mb-4">
+                    <p class="text-amber-400 font-bold mb-3">More Framework Mapping Examples</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs">
+                            <thead>
+                                <tr class="border-b border-gray-700">
+                                    <th class="text-left py-2 px-3 text-amber-400">Framework Control</th>
+                                    <th class="text-left py-2 px-3 text-gray-400">Requirement</th>
+                                    <th class="text-left py-2 px-3 text-green-400">Mapped Tool/Process</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-300">
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-3">NIST PR.AC-1</td>
+                                    <td class="py-2 px-3">Identity management</td>
+                                    <td class="py-2 px-3">Entra ID, Conditional Access, MFA</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-3">NIST PR.AC-4</td>
+                                    <td class="py-2 px-3">Least privilege</td>
+                                    <td class="py-2 px-3">Azure PIM, RBAC, PAM solution</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-3">NIST DE.AE-1</td>
+                                    <td class="py-2 px-3">Anomaly detection</td>
+                                    <td class="py-2 px-3">Sentinel UEBA, MDE behavior analytics</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-3">NIST DE.CM-1</td>
+                                    <td class="py-2 px-3">Network monitoring</td>
+                                    <td class="py-2 px-3">NGFW logs, Sentinel, NDR</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-3">ISO A.8.2.3</td>
+                                    <td class="py-2 px-3">Data classification</td>
+                                    <td class="py-2 px-3">Purview sensitivity labels, SITs</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-3">ISO A.13.2.1</td>
+                                    <td class="py-2 px-3">Data transfer policies</td>
+                                    <td class="py-2 px-3">Purview DLP, CASB, email security</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-3">ISO A.12.6.1</td>
+                                    <td class="py-2 px-3">Vulnerability management</td>
+                                    <td class="py-2 px-3">Defender TVM, Qualys, patch management</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-3">IEC 62443</td>
+                                    <td class="py-2 px-3">OT network segmentation</td>
+                                    <td class="py-2 px-3">Purdue model, NGFW zones, industrial DMZ</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-3">CIS Control 8</td>
+                                    <td class="py-2 px-3">Audit log management</td>
+                                    <td class="py-2 px-3">Sentinel, Log Analytics, SIEM retention</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="framework rounded-xl p-6">
+                    <p class="text-amber-400 font-bold mb-3">Q: How do you handle compliance gaps?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "When I identify a gap between framework requirements and implemented controls, I follow a structured approach:<br><br>
+                            
+                            <strong>1. Document the gap</strong> - What's required vs what exists today<br>
+                            <strong>2. Assess the risk</strong> - What's the business impact of this gap?<br>
+                            <strong>3. Identify remediation options</strong> - Tool, process, or compensating control<br>
+                            <strong>4. Assign ownership</strong> - Who's responsible for remediation?<br>
+                            <strong>5. Set timeline</strong> - When will it be resolved?<br>
+                            <strong>6. Track to closure</strong> - Regular status updates until complete<br><br>
+                            
+                            For example, if ISO requires encryption at rest but we have unencrypted legacy databases, I'd document the gap, propose Azure SQL TDE or BitLocker depending on the system, assign it to the DBA or infrastructure team, and track it in our risk register until resolved."
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- PURVIEW DLP DEEP DIVE -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400">5</span>
+                    Purview DLP Migration (Your Flagship Project)
+                </h2>
+
+                <div class="memorize rounded-xl p-6 mb-4">
+                    <h3 class="text-pink-400 font-bold mb-3">🧠 High-Value Phrases to Memorize</h3>
+                    <div class="space-y-2">
+                        <div class="gold-phrase">
+                            <p class="text-gray-300 text-sm">"Purview uses a <strong>condition-based model</strong>, whereas Symantec uses a <strong>rule-based model</strong>."</p>
+                        </div>
+                        <div class="gold-phrase">
+                            <p class="text-gray-300 text-sm">"I translated Symantec rule logic into Purview conditions, SITs, and exceptions."</p>
+                        </div>
+                        <div class="gold-phrase">
+                            <p class="text-gray-300 text-sm">"I validated each policy in <strong>Audit Mode</strong> before moving into enforcement."</p>
+                        </div>
+                        <div class="gold-phrase">
+                            <p class="text-gray-300 text-sm">"We followed a structured, phased migration: <strong>Simulation → Audit → Enforcement</strong>."</p>
+                        </div>
+                        <div class="gold-phrase">
+                            <p class="text-gray-300 text-sm">"During the dual-running phase, Symantec remained in enforcement while Purview ran in audit-only mode."</p>
+                        </div>
+                        <div class="gold-phrase">
+                            <p class="text-gray-300 text-sm">"Tuning was primarily SIT confidence adjustments, exception creation, and aligning contextual logic."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-green-400 font-bold mb-3">Q: Walk me through your Purview Endpoint DLP migration end-to-end.</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "The Purview Endpoint DLP migration was a fully technical, end-to-end rebuild of our legacy Symantec rule base.<br><br>
+                            
+                            I started by translating Symantec's rule-based logic into Purview's condition-based model using SITs (Sensitive Information Types), EDM datasets, confidence levels, and proximity logic. Once the baseline policies were recreated, I ran both tools in parallel—Symantec in enforcement and Purview in audit mode—to compare behavioral parity and identify mismatches.<br><br>
+                            
+                            Most of the tuning work involved adjusting SIT confidence thresholds, refining EDM match requirements, and adding path, process, and domain exceptions to eliminate noise without weakening coverage. I validated every high-risk workflow, including Salesforce exports, Finance data transfers, and Engineering file movements, to ensure they behaved identically in both systems.<br><br>
+                            
+                            After the logic stabilized, I ran a controlled pilot, validated audit hits, fine-tuned remaining edge cases, and then executed a phased enforcement rollout before supporting the final decommissioning of Symantec.<br><br>
+                            
+                            By the end, we had fully rebuilt the DLP program with cleaner logic, tighter precision, and workflow-safe enforcement. False positives dropped by about 40% compared to the legacy system because of better tuning and Purview's native integration with the Microsoft ecosystem."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-green-400 font-bold mb-3">Q: How did you tune false positives in Purview?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "When I tuned false positives in Purview, I always started with root-cause analysis to understand why a policy fired—whether it was an overly strict SIT confidence level, an EDM match that was too sensitive, or a workflow pattern that wasn't part of the original rule design.<br><br>
+                            
+                            My tuning approaches included:<br>
+                            • <strong>SIT confidence adjustments</strong> - Lowering from High to Medium+High if catching too much<br>
+                            • <strong>EDM threshold refinement</strong> - Adjusting match count requirements<br>
+                            • <strong>Contextual exceptions</strong> - Path-based, process-based, or domain-based exclusions<br>
+                            • <strong>Proximity logic</strong> - Ensuring related data elements appear together<br><br>
+                            
+                            I validated every change in audit mode and replayed historical data to see how the updated logic behaved under real conditions. After confirming clean, predictable alerting, I deployed the tuned policy, documented the update, and informed the SOC so they were aware of the expected detection pattern going forward."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="technical rounded-xl p-6">
+                    <p class="text-green-400 font-bold mb-3">Q: How did you ensure no workflow breakage during enforcement?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "To prevent workflow breakage during Purview DLP enforcement, I used a combined technical and business validation approach.<br><br>
+                            
+                            I first baseline-tested every policy in audit mode and compared Purview audit hits against Symantec's live enforcement to confirm behavioral parity. From there, I mapped all high-risk workflows—Salesforce exports, Finance data movements, Engineering file transfers—and collected real samples from the business teams so I could tune SIT confidence, refine EDM match thresholds, and add exceptions only where they didn't weaken coverage.<br><br>
+                            
+                            Once the logic was stable, I ran a small pilot with representative users, monitored audit-only alerts for any anomalies, and worked directly with the business to validate that their workflows behaved exactly as expected.<br><br>
+                            
+                            After that, I expanded enforcement gradually, documented each exception in the register, and kept SOC and stakeholders updated so visibility stayed consistent. This combination of deep technical tuning and active business alignment ensured we reached full enforcement without disrupting a single critical workflow."
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- SIEM/EDR MIGRATION -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400">6</span>
+                    RSA → Sentinel Migration
+                </h2>
+
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-green-400 font-bold mb-3">Q: Walk me through how you migrated RSA NetWitness correlation rules to Sentinel KQL analytics.</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "When we migrated from RSA NetWitness to Sentinel, I started by breaking down each RSA correlation rule, mapping the legacy meta keys to Sentinel's schema, and rewriting the logic in KQL with clean entity mapping and MITRE ATT&CK alignment.<br><br>
+                            
+                            As I translated the rules, I noticed a lot of duplication in the legacy environment, so I consolidated overlapping detections and categorized everything into three groups:<br>
+                            • High-value built-in Sentinel rules (use as-is)<br>
+                            • Built-ins requiring customization<br>
+                            • Fully custom analytics (KQL from scratch)<br><br>
+                            
+                            I validated each rewritten rule using historical telemetry, tuned thresholds and suppression windows, and worked closely with the SOC to confirm the new detections behaved as expected. I also built a Sentinel workbook that monitored ingestion health, connector status, and telemetry completeness so we had a reliable view of detection readiness.<br><br>
+                            
+                            Between the deduplicated rule set, the improved KQL logic, and the visibility dashboards, we ended up with a cleaner, more accurate, and easier-to-maintain detection program than what existed in RSA. We actually finished about three months ahead of schedule."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="technical rounded-xl p-6">
+                    <p class="text-green-400 font-bold mb-3">Q: How do you design a high-fidelity detection rule in Sentinel?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "When I build a detection in Sentinel, I follow a structured 8-step process:<br><br>
+                            
+                            <strong>1. Define the threat</strong> - What attack technique? Map to MITRE ATT&CK<br>
+                            <strong>2. Identify required logs</strong> - Confirm data sources are ingesting properly<br>
+                            <strong>3. Build behavioral KQL logic</strong> - Focus on patterns, not just signatures<br>
+                            <strong>4. Add noise controls</strong> - Thresholds, time windows, entity filters, allowlists<br>
+                            <strong>5. Test with hunting queries</strong> - Run against historical data<br>
+                            <strong>6. Deploy in audit mode</strong> - Measure FP/TP ratio<br>
+                            <strong>7. Tune based on results</strong> - Refine suppression, thresholds<br>
+                            <strong>8. Enable for alerting</strong> - Document and communicate to SOC<br><br>
+                            
+                            I always review the draft with the SOC to finalize expected alert patterns before enabling it in production. The goal is high fidelity—alerts that are actionable, not noise."
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- OT SECURITY (IMPORTANT FOR COKE) -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center text-cyan-400">7</span>
+                    OT Security (Critical for Manufacturing)
+                </h2>
+
+                <div class="scenario rounded-xl p-6 mb-4">
+                    <p class="text-cyan-400 font-bold mb-3">Q: What experience do you have with OT/ICS security?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "At Siemens, I worked in a hybrid IT/OT environment where we had manufacturing systems alongside corporate IT infrastructure. While my primary focus was on the IT security stack, I gained exposure to OT security principles and the unique challenges involved.<br><br>
+                            
+                            I understand the key differences: OT prioritizes <strong>availability and safety</strong> over confidentiality. You can't just patch systems whenever you want—downtime costs millions, and some equipment runs legacy OS that vendors won't update. Active vulnerability scanning can crash PLCs, so you need passive monitoring.<br><br>
+                            
+                            The approach I'd take at Coke Canada is:<br>
+                            • <strong>Segmentation first</strong> - Purdue model, industrial DMZ, strict zone controls<br>
+                            • <strong>Passive monitoring</strong> - Network traffic analysis without active scanning<br>
+                            • <strong>Compensating controls</strong> - When you can't patch, add more monitoring and isolation<br>
+                            • <strong>IT/OT collaboration</strong> - Work closely with plant engineers who understand the equipment<br><br>
+                            
+                            I'm familiar with frameworks like IEC 62443 for industrial security and understand protocols like Modbus and EtherNet/IP at a conceptual level. I'd lean heavily on the OT team for domain expertise while bringing my IT security engineering skills to help bridge the gap."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="scenario rounded-xl p-6">
+                    <p class="text-cyan-400 font-bold mb-3">Q: How would you approach securing a manufacturing plant network?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "My approach would follow the Purdue model for segmentation:<br><br>
+                            
+                            <strong>Level 5 (Enterprise)</strong> - Corporate IT, normal security controls<br>
+                            <strong>Level 4 (Site Business)</strong> - Historians, reporting servers<br>
+                            <strong>Level 3.5 (Industrial DMZ)</strong> - Critical boundary with strict controls<br>
+                            <strong>Level 3 (Site Operations)</strong> - OT servers, engineering workstations<br>
+                            <strong>Level 2 (Area Control)</strong> - HMIs, SCADA<br>
+                            <strong>Level 1 (Basic Control)</strong> - PLCs, RTUs<br>
+                            <strong>Level 0 (Physical)</strong> - Sensors, actuators<br><br>
+                            
+                            Traffic should only flow between adjacent levels. Corporate IT should never directly access PLCs. The industrial DMZ is the critical boundary—all data exchange happens through controlled jump hosts or data diodes.<br><br>
+                            
+                            For monitoring, I'd use passive network sensors that can identify OT protocols and detect anomalies without sending packets that might disrupt equipment. Tools like Claroty, Nozomi, or Dragos are purpose-built for this.<br><br>
+                            
+                            The key is collaboration—I'd work closely with plant operations to understand their constraints and build security controls that protect without impacting production."
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- COMMON SCENARIOS -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center text-cyan-400">8</span>
+                    Scenario Questions
+                </h2>
+
+                <div class="scenario rounded-xl p-6 mb-4">
+                    <p class="text-cyan-400 font-bold mb-3">Q: A business-critical app is being blocked by ASR—what do you do?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "I follow a controlled response:<br><br>
+                            
+                            <strong>1. Validate</strong> - Confirm it's truly ASR blocking (check event data, block reason)<br>
+                            <strong>2. Assess criticality</strong> - How urgent? Is production impacted?<br>
+                            <strong>3. Reproduce and confirm FP</strong> - Verify it's a false positive, not masking risky behavior<br>
+                            <strong>4. Add targeted exclusion</strong> - Path/process/hash, not disabling the entire rule<br>
+                            <strong>5. Document</strong> - Business justification, risk assessment, approval<br>
+                            <strong>6. Monitor</strong> - Watch for potential abuse of the exception<br>
+                            <strong>7. Revalidate later</strong> - Periodic review to see if exclusion is still needed<br><br>
+                            
+                            The key is adding the minimum exception necessary to unblock the workflow without weakening the overall protection."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="scenario rounded-xl p-6 mb-4">
+                    <p class="text-cyan-400 font-bold mb-3">Q: How do you handle telemetry gaps or ingestion failures?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "When I notice telemetry gaps, my troubleshooting process is:<br><br>
+                            
+                            <strong>1. Validate the gap</strong> - Run KQL against Heartbeat table and source tables to confirm stale timestamps<br>
+                            <strong>2. Identify scope</strong> - Is it one connector, one region, or widespread?<br>
+                            <strong>3. Check the ingestion path</strong> - Connector status, DCR configuration, agent health<br>
+                            <strong>4. Coordinate with relevant team</strong> - Cloud team for AWS/Azure issues, Infra for agent issues<br>
+                            <strong>5. Fix root cause</strong> - Reconfigure DCR, restart connector, fix agent deployment<br>
+                            <strong>6. Validate recovery</strong> - Confirm data flowing with real-time and historical queries<br>
+                            <strong>7. Add monitoring</strong> - Create workbook tile or Logic App alert for this failure mode<br><br>
+                            
+                            I actually built a Sentinel workbook during our migration that visualizes ingestion health, connector status, and MDE device health so we can catch gaps within minutes rather than hours."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="scenario rounded-xl p-6">
+                    <p class="text-cyan-400 font-bold mb-3">Q: What would you improve if you joined our team?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "I'd start by understanding your current state before proposing changes. But based on what I know about the role, areas I'd focus on:<br><br>
+                            
+                            <strong>1. Detection quality</strong> - Review existing analytics for noise, tune high-FP rules, add behavior-based detections aligned to MITRE<br><br>
+                            
+                            <strong>2. Telemetry completeness</strong> - Validate coverage across endpoints, identity, cloud, OT. Build dashboards to visualize gaps<br><br>
+                            
+                            <strong>3. Automation</strong> - Identify repetitive tasks that can be scripted. Agent health monitoring, compliance reporting, alert enrichment<br><br>
+                            
+                            <strong>4. IT/OT visibility</strong> - Work with OT team to understand manufacturing network visibility, propose appropriate monitoring<br><br>
+                            
+                            <strong>5. DevSecOps integration</strong> - If not already mature, help integrate security scanning into CI/CD pipelines<br><br>
+                            
+                            I'd do this incrementally, showing value quickly while building trust with the team."
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- QUESTIONS TO ASK -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-pink-500/20 flex items-center justify-center text-pink-400">9</span>
+                    Questions to Ask Them
+                </h2>
+
+                <div class="memorize rounded-xl p-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-white font-medium mb-2">About the Role</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• What does success look like in the first 90 days?</li>
+                                <li>• How is the team structured? Who would I work most closely with?</li>
+                                <li>• What's the split between proactive engineering vs reactive operations?</li>
+                                <li>• What are the biggest security challenges facing Coke Canada right now?</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-medium mb-2">About the Tech</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• How mature is the IT/OT security integration currently?</li>
+                                <li>• What's the current state of DevSecOps adoption?</li>
+                                <li>• Are there any major security initiatives planned for this year?</li>
+                                <li>• What tools or processes are you looking to improve or replace?</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-medium mb-2">About Growth</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• What learning and certification opportunities are available?</li>
+                                <li>• How does the team handle knowledge sharing?</li>
+                                <li>• What career progression paths exist within the security team?</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-medium mb-2">Closing</h4>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Is there anything about my background that gives you pause?</li>
+                                <li>• What are the next steps in the interview process?</li>
+                                <li>• When are you looking to make a decision?</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- DAILY REVISION -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-pink-500/20 flex items-center justify-center text-pink-400">10</span>
+                    Daily Revision Checklist
+                </h2>
+
+                <div class="memorize rounded-xl p-6">
+                    <h3 class="text-pink-400 font-bold mb-3">🧠 Read Every Day Before Interview</h3>
+                    <div class="grid md:grid-cols-3 gap-4 text-sm">
+                        <div>
+                            <p class="text-white font-medium mb-2">DLP Migration</p>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>✓ Simulation → Audit → Enforcement</li>
+                                <li>✓ Dual running: Symantec enforce + Purview audit</li>
+                                <li>✓ SIT confidence tuning</li>
+                                <li>✓ EDM + contextual logic</li>
+                                <li>✓ Exceptions: path, process, domain</li>
+                                <li>✓ Business workflow validation</li>
+                                <li>✓ Condition-based vs Rule-based</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-white font-medium mb-2">SIEM/EDR Migration</p>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>✓ RSA → Sentinel KQL conversion</li>
+                                <li>✓ ESET → MDE with coexistence</li>
+                                <li>✓ Meta key to table mapping</li>
+                                <li>✓ MITRE alignment</li>
+                                <li>✓ Dual-running validation</li>
+                                <li>✓ Ingestion health workbook</li>
+                                <li>✓ Logic Apps automation</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-white font-medium mb-2">Key Stories</p>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>✓ MDE vs ESET conflict</li>
+                                <li>✓ Onboarding script disagreement</li>
+                                <li>✓ Senior analyst feedback</li>
+                                <li>✓ Framework mapping approach</li>
+                                <li>✓ Why Coca-Cola</li>
+                                <li>✓ OT security principles</li>
+                                <li>✓ Finished 3 months early</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+<script src="../js/sidebar.js"></script>
+</body>
+</html>
