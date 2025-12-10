@@ -66,7 +66,7 @@
                         <p class="text-gray-300 text-sm leading-relaxed">
                             "Three things drew me to this role. First, <strong>the tech stack alignment</strong>—you're using Microsoft Defender, Azure security, DLP, and Fortinet NGFWs, which directly matches my experience with MDE, Sentinel, Purview DLP, and firewall administration. I can contribute immediately without a long ramp-up.<br><br>
                             
-                            Second, <strong>the IT/OT convergence challenge</strong>. Securing manufacturing plants and distribution centers alongside corporate IT is exactly the kind of complexity I find interesting. OT security requires a different mindset—availability over confidentiality, passive monitoring, compensating controls when you can't patch. At Siemens, I worked in a similar hybrid environment, so I understand the nuances.<br><br>
+                            Second, <strong>the IT/OT convergence challenge</strong>. Securing manufacturing plants and distribution centers alongside corporate IT is exactly the kind of complexity I want to grow into. I've studied OT security concepts—the Purdue model, IEC 62443, the priority shift from confidentiality to availability—and I find it genuinely interesting. While my hands-on experience is on the IT side, I'm eager to learn OT security and contribute to bridging that gap. My IT security engineering skills in detection, monitoring, and automation would translate well once I understand the OT constraints.<br><br>
                             
                             Third, <strong>the engineering focus</strong>. This isn't just a monitoring role—it's about designing, implementing, and automating security controls. The job description mentions DevSecOps, CI/CD pipeline security, and automation with Python/PowerShell. That's where I want to grow. I want to build security infrastructure, not just watch dashboards.<br><br>
                             
@@ -461,17 +461,17 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                     <p class="text-cyan-400 font-bold mb-3">Q: What experience do you have with OT/ICS security?</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "At Siemens, I worked in a hybrid IT/OT environment where we had manufacturing systems alongside corporate IT infrastructure. While my primary focus was on the IT security stack, I gained exposure to OT security principles and the unique challenges involved.<br><br>
+                            "I'll be upfront—my hands-on experience is on the IT security side: SIEM, EDR, DLP, cloud security. I haven't directly worked with PLCs, SCADA systems, or industrial networks yet. However, OT security is an area I'm genuinely interested in and have been actively studying.<br><br>
                             
-                            I understand the key differences: OT prioritizes <strong>availability and safety</strong> over confidentiality. You can't just patch systems whenever you want—downtime costs millions, and some equipment runs legacy OS that vendors won't update. Active vulnerability scanning can crash PLCs, so you need passive monitoring.<br><br>
+                            From my research and self-study, I understand the fundamental differences: OT prioritizes <strong>availability and safety</strong> over confidentiality. You can't just patch systems on a whim—downtime costs millions, and some equipment runs legacy OS that vendors won't update. Active vulnerability scanning can crash PLCs, so you need passive monitoring approaches.<br><br>
                             
-                            The approach I'd take at Coke Canada is:<br>
-                            • <strong>Segmentation first</strong> - Purdue model, industrial DMZ, strict zone controls<br>
-                            • <strong>Passive monitoring</strong> - Network traffic analysis without active scanning<br>
-                            • <strong>Compensating controls</strong> - When you can't patch, add more monitoring and isolation<br>
-                            • <strong>IT/OT collaboration</strong> - Work closely with plant engineers who understand the equipment<br><br>
+                            What I bring is strong IT security engineering skills that can support OT security efforts:<br>
+                            • <strong>Network segmentation</strong> - I understand firewall zones and can help enforce IT/OT boundaries<br>
+                            • <strong>Detection engineering</strong> - Building alerts for anomalous traffic patterns<br>
+                            • <strong>Incident response</strong> - IR principles apply, though containment strategies differ<br>
+                            • <strong>Collaboration mindset</strong> - I'd lean heavily on OT engineers who know the equipment<br><br>
                             
-                            I'm familiar with frameworks like IEC 62443 for industrial security and understand protocols like Modbus and EtherNet/IP at a conceptual level. I'd lean heavily on the OT team for domain expertise while bringing my IT security engineering skills to help bridge the gap."
+                            I'm familiar with frameworks like IEC 62443 and the Purdue model from studying, and I understand protocols like Modbus and EtherNet/IP at a conceptual level. I see this role as an opportunity to learn OT security properly while contributing my IT security expertise from day one."
                         </p>
                     </div>
                 </div>
@@ -480,21 +480,23 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                     <p class="text-cyan-400 font-bold mb-3">Q: How would you approach securing a manufacturing plant network?</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "My approach would follow the Purdue model for segmentation:<br><br>
+                            "Based on my research and studying OT security frameworks, I'd approach this methodically—but I want to be clear that I'd need to learn from your OT team and understand your specific environment first.<br><br>
                             
-                            <strong>Level 5 (Enterprise)</strong> - Corporate IT, normal security controls<br>
+                            From what I've studied, the Purdue model provides a solid segmentation framework:<br><br>
+                            
+                            <strong>Level 5 (Enterprise)</strong> - Corporate IT, where my experience is strongest<br>
                             <strong>Level 4 (Site Business)</strong> - Historians, reporting servers<br>
-                            <strong>Level 3.5 (Industrial DMZ)</strong> - Critical boundary with strict controls<br>
+                            <strong>Level 3.5 (Industrial DMZ)</strong> - Critical boundary I'd focus on<br>
                             <strong>Level 3 (Site Operations)</strong> - OT servers, engineering workstations<br>
                             <strong>Level 2 (Area Control)</strong> - HMIs, SCADA<br>
                             <strong>Level 1 (Basic Control)</strong> - PLCs, RTUs<br>
                             <strong>Level 0 (Physical)</strong> - Sensors, actuators<br><br>
                             
-                            Traffic should only flow between adjacent levels. Corporate IT should never directly access PLCs. The industrial DMZ is the critical boundary—all data exchange happens through controlled jump hosts or data diodes.<br><br>
+                            The principle is that traffic should only flow between adjacent levels. The industrial DMZ is where IT and OT meet, and that's where I could contribute immediately—helping enforce boundaries using firewall rules and monitoring for policy violations.<br><br>
                             
-                            For monitoring, I'd use passive network sensors that can identify OT protocols and detect anomalies without sending packets that might disrupt equipment. Tools like Claroty, Nozomi, or Dragos are purpose-built for this.<br><br>
+                            For OT-specific monitoring, I know tools like Claroty, Nozomi, or Dragos are purpose-built for passive network analysis without disrupting equipment. I'd want to learn how those integrate with the SIEM and what detection use cases make sense for your environment.<br><br>
                             
-                            The key is collaboration—I'd work closely with plant operations to understand their constraints and build security controls that protect without impacting production."
+                            Honestly, I'd start by listening and learning from plant operations teams. They know what's critical, what can't be touched, and where the real risks are. My job would be to bring security engineering discipline while respecting operational constraints."
                         </p>
                     </div>
                 </div>
@@ -555,15 +557,15 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                             
                             <strong>1. Detection quality</strong> - Review existing analytics for noise, tune high-FP rules, add behavior-based detections aligned to MITRE<br><br>
                             
-                            <strong>2. Telemetry completeness</strong> - Validate coverage across endpoints, identity, cloud, OT. Build dashboards to visualize gaps<br><br>
+                            <strong>2. Telemetry completeness</strong> - Validate coverage across endpoints, identity, and cloud. Build dashboards to visualize gaps<br><br>
                             
                             <strong>3. Automation</strong> - Identify repetitive tasks that can be scripted. Agent health monitoring, compliance reporting, alert enrichment<br><br>
                             
-                            <strong>4. IT/OT visibility</strong> - Work with OT team to understand manufacturing network visibility, propose appropriate monitoring<br><br>
+                            <strong>4. Learn OT security</strong> - This is an area I want to grow in. I'd work with the OT team to understand the manufacturing environment, learn what monitoring makes sense, and figure out how I can contribute from the IT/OT boundary<br><br>
                             
                             <strong>5. DevSecOps integration</strong> - If not already mature, help integrate security scanning into CI/CD pipelines<br><br>
                             
-                            I'd do this incrementally, showing value quickly while building trust with the team."
+                            I'd do this incrementally, showing value quickly on IT security while learning the OT side."
                         </p>
                     </div>
                 </div>
@@ -662,7 +664,7 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                                 <li>✓ Senior analyst feedback</li>
                                 <li>✓ Framework mapping approach</li>
                                 <li>✓ Why Coca-Cola</li>
-                                <li>✓ OT security principles</li>
+                                <li>✓ OT interest (honest about learning)</li>
                                 <li>✓ Finished 3 months early</li>
                             </ul>
                         </div>
