@@ -621,15 +621,803 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
             </section>
 
             <!-- ============================================ -->
+            <!-- TECHNICAL DEEP DIVE - NGFW -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400">11</span>
+                    Technical Deep Dive: Next-Generation Firewalls
+                </h2>
+
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-green-400 font-bold mb-3">Q1: Walk me through how you would design and implement a firewall rule change process that balances security requirements with business agility.</p>
+                    <p class="text-gray-500 text-xs mb-3">What they're assessing: Change management, risk assessment, operational workflows</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "At my current role, we follow a structured change management process for firewall rules that I helped refine. Here's how I approach it:<br><br>
+                            
+                            <strong>1. Request & Justification</strong><br>
+                            Every change starts with a formal request through our ticketing system. The requester documents business justification, source/destination, ports, and expected duration. This creates an audit trail and forces people to think through what they actually need.<br><br>
+                            
+                            <strong>2. Security Review</strong><br>
+                            I review each request against least privilege principles. I ask: Is this the minimum access needed? Can we use application-level rules instead of port-based? Are we opening anything to the internet that shouldn't be? I push back on overly broad requests like 'any-to-any' rules.<br><br>
+                            
+                            <strong>3. Validation & Testing</strong><br>
+                            Before implementing in production, I validate the rule logic won't conflict with existing policies. On Fortinet, I use the policy lookup tool to check for conflicts. For high-risk changes, we test in a maintenance window first.<br><br>
+                            
+                            <strong>4. Implementation with Rollback Plan</strong><br>
+                            I always document the current state before making changes so I can quickly rollback if something breaks. For critical systems, I coordinate with the application owner to test immediately after the change.<br><br>
+                            
+                            <strong>5. Review & Cleanup</strong><br>
+                            Temporary rules get expiration dates. I schedule quarterly reviews to identify unused rules using traffic logs. Stale rules are security debt—they accumulate if you don't actively clean them up."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-green-400 font-bold mb-3">Q2: You notice unusual traffic patterns that bypass traditional firewall rules. How would you investigate and respond using NGFW capabilities?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "This is where the 'next-gen' capabilities really matter. Here's my investigation approach:<br><br>
+                            
+                            <strong>1. Application Identification</strong><br>
+                            First, I'd check if the traffic is using application tunneling or port obfuscation. NGFWs like Fortinet can identify applications regardless of port—so even if something is running on port 443, it'll show if it's actually HTTPS, SSH-over-HTTPS, or something else entirely. I'd look at the application control logs to see what's being identified.<br><br>
+                            
+                            <strong>2. SSL/TLS Inspection Review</strong><br>
+                            If traffic is encrypted, it could be creating blind spots. I'd check if SSL inspection is enabled for that traffic flow. Sometimes legitimate apps break with inspection, so there may be bypass rules that attackers could exploit. I'd review the decrypt policy exceptions.<br><br>
+                            
+                            <strong>3. Deep Packet Inspection</strong><br>
+                            I'd enable detailed logging and packet capture for the suspicious traffic to analyze payload patterns. Looking for signatures of known tunneling tools like DNS tunneling, ICMP tunneling, or HTTP-over-DNS.<br><br>
+                            
+                            <strong>4. Threat Intelligence Correlation</strong><br>
+                            Cross-reference the destination IPs and domains against our threat intelligence feeds. Fortinet's FortiGuard provides real-time threat intel that can identify C2 domains or known malicious infrastructure.<br><br>
+                            
+                            <strong>5. Immediate Response</strong><br>
+                            If I confirm malicious activity, I'd implement a temporary block while investigating further. Then I'd pivot to our EDR (MDE) to check the source endpoint for compromise indicators. Finally, document everything and create a permanent policy based on findings."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="technical rounded-xl p-6">
+                    <p class="text-green-400 font-bold mb-3">Q3: Explain your approach to troubleshooting asymmetric routing issues that are causing firewall state table problems in a multi-site environment.</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "Asymmetric routing is tricky because stateful firewalls expect to see both sides of a conversation. Here's how I'd troubleshoot:<br><br>
+                            
+                            <strong>1. Identify the Problem</strong><br>
+                            First, confirm it's actually asymmetric routing. Symptoms include random connection drops, TCP resets, and firewall logs showing 'no matching session' or 'asymmetric traffic dropped.' I'd use packet captures on both the firewall and endpoints to trace the traffic path in both directions.<br><br>
+                            
+                            <strong>2. Analyze the Routing</strong><br>
+                            Check routing tables across all sites and network devices. In multi-site environments, this often happens when there are multiple paths to the same destination—like when you have dual ISPs or MPLS + internet backup. Traffic goes out one path but returns via another, hitting a different firewall that doesn't have the session state.<br><br>
+                            
+                            <strong>3. Solutions I'd Consider</strong><br>
+                            • <strong>Fix the routing</strong> - Adjust routing metrics so traffic is symmetric. This is the cleanest solution if feasible.<br>
+                            • <strong>Stateful failover clustering</strong> - If using HA firewall pairs, ensure session state is synchronized between them.<br>
+                            • <strong>Asymmetric routing support</strong> - Some NGFWs have settings to tolerate asymmetric traffic, though this weakens security posture.<br>
+                            • <strong>Source-based routing</strong> - Use policy-based routing to ensure return traffic follows the same path.<br><br>
+                            
+                            <strong>4. Validate & Document</strong><br>
+                            After implementing the fix, I'd test affected applications thoroughly and monitor the firewall state table for a few days to confirm the issue is resolved. Then document the root cause and solution for future reference."
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- TECHNICAL DEEP DIVE - CLOUD SECURITY -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400">12</span>
+                    Technical Deep Dive: Cloud Security & Azure
+                </h2>
+
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-blue-400 font-bold mb-3">Q4: How would you design a security architecture for a multi-tier application migrating to Azure, considering network segmentation, identity management, and data protection?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "I've worked on securing Azure environments at my current role, particularly around integrating Microsoft Sentinel and Defender for Cloud. Here's my architecture approach:<br><br>
+                            
+                            <strong>Network Segmentation</strong><br>
+                            • Separate VNets for each tier (web, app, data) with controlled peering<br>
+                            • NSGs at the subnet level with explicit deny rules—only allow what's needed<br>
+                            • Application Security Groups (ASGs) to group VMs by function rather than managing individual IPs<br>
+                            • Azure Private Link for PaaS services so database traffic never touches the public internet<br>
+                            • Azure Firewall or NVA for centralized egress filtering and logging<br><br>
+                            
+                            <strong>Identity Management</strong><br>
+                            • Entra ID (Azure AD) as the identity provider with Conditional Access policies<br>
+                            • MFA enforced for all users, phishing-resistant methods for admins<br>
+                            • Managed Identities for application-to-service authentication—no credentials stored in code<br>
+                            • Azure PIM for just-in-time privileged access with approval workflows<br>
+                            • Regular access reviews to catch permission creep<br><br>
+                            
+                            <strong>Data Protection</strong><br>
+                            • Azure Key Vault for secrets, keys, and certificates with RBAC<br>
+                            • Encryption at rest (default) and in transit (TLS 1.2+)<br>
+                            • Azure SQL TDE for database encryption<br>
+                            • Purview for data classification and DLP if sensitive data is involved<br><br>
+                            
+                            <strong>Monitoring & Detection</strong><br>
+                            • Microsoft Defender for Cloud for CSPM and workload protection<br>
+                            • Sentinel for SIEM with data connectors for all Azure services<br>
+                            • Diagnostic settings enabled on everything, logs flowing to Log Analytics"
+                        </p>
+                    </div>
+                </div>
+
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-blue-400 font-bold mb-3">Q5: Describe your experience with Azure Policy and how you would use it to enforce security compliance across multiple subscriptions.</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "I've worked with Azure Policy for enforcing security baselines and preparing for compliance audits. Here's my approach:<br><br>
+                            
+                            <strong>My Experience</strong><br>
+                            At Siemens, we use Azure Policy to enforce security standards across our Azure subscriptions. I've created custom policies for things like requiring specific NSG rules, enforcing encryption, and blocking public blob access.<br><br>
+                            
+                            <strong>Implementation Strategy</strong><br>
+                            • <strong>Start in Audit Mode</strong> - Never deploy in 'Deny' mode first. I always start with 'Audit' to understand the current compliance state and identify what would break.<br>
+                            • <strong>Use Management Groups</strong> - Apply policies at the management group level so they inherit down to all subscriptions. This ensures consistency without manually applying to each subscription.<br>
+                            • <strong>Policy Initiatives</strong> - Bundle related policies together. I use the built-in initiatives like 'Azure Security Benchmark' as a starting point, then add custom policies for organization-specific requirements.<br><br>
+                            
+                            <strong>Key Policies I've Implemented</strong><br>
+                            • Require MDE extension on all VMs<br>
+                            • Deny public IP addresses on VMs (with exceptions for approved jump boxes)<br>
+                            • Require diagnostic settings on all resources<br>
+                            • Enforce minimum TLS versions<br>
+                            • Require specific tags for cost allocation and ownership<br><br>
+                            
+                            <strong>Exception Management</strong><br>
+                            Real environments need exceptions. I create exemptions with documented business justification, owner, and expiration date. These get reviewed quarterly. The goal is security, not blocking legitimate business needs."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="technical rounded-xl p-6">
+                    <p class="text-blue-400 font-bold mb-3">Q6: What are the key differences between securing IaaS versus PaaS resources in Azure, and how does your security approach change?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "This is fundamentally about the shared responsibility model, and it changes my focus significantly:<br><br>
+                            
+                            <strong>IaaS (VMs) - More Control, More Responsibility</strong><br>
+                            With IaaS, I'm responsible for everything from the OS up:<br>
+                            • OS hardening and CIS benchmark compliance<br>
+                            • Patch management (we use Azure Update Management)<br>
+                            • Endpoint protection (MDE agent deployment)<br>
+                            • Host-based firewall rules<br>
+                            • Antimalware and monitoring agents<br>
+                            • Disk encryption configuration<br><br>
+                            
+                            At my current role, I manage the MDE deployment across our Azure VMs. It's similar to on-prem—I need to ensure agents are healthy, policies are applied, and baselines are enforced.<br><br>
+                            
+                            <strong>PaaS (App Services, Azure SQL, etc.) - Different Focus</strong><br>
+                            Microsoft handles infrastructure security, so I focus on:<br>
+                            • Access control and authentication (Managed Identities, RBAC)<br>
+                            • Network isolation (Private Endpoints, VNet integration)<br>
+                            • Service-specific security settings (SQL firewall rules, App Service access restrictions)<br>
+                            • Data protection and encryption configuration<br>
+                            • Logging and monitoring setup<br><br>
+                            
+                            <strong>Practical Example</strong><br>
+                            For a VM running SQL Server: I handle OS patching, SQL patching, firewall rules, backup configuration, TDE setup, and monitoring.<br>
+                            For Azure SQL PaaS: Microsoft handles all that infrastructure. I focus on firewall rules, Private Link, TDE keys in Key Vault, auditing, and threat detection settings.<br><br>
+                            
+                            The security effort doesn't decrease with PaaS—it shifts. You trade operational overhead for configuration discipline."
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- TECHNICAL DEEP DIVE - DEVSECOPS -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400">13</span>
+                    Technical Deep Dive: DevSecOps & CI/CD Security
+                </h2>
+
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-purple-400 font-bold mb-3">Q7: How would you integrate security scanning into a CI/CD pipeline without significantly impacting deployment velocity?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "I'll be honest—DevSecOps is an area I'm actively building experience in. I understand the principles and have implemented some aspects, but I'm eager to go deeper at Coke Canada. Here's my approach:<br><br>
+                            
+                            <strong>Shift Left Without Breaking Flow</strong><br>
+                            The key is running the right scans at the right stages:<br>
+                            • <strong>Pre-commit</strong> - IDE plugins for developers to catch issues before code even hits the repo. Fast, immediate feedback.<br>
+                            • <strong>Pull Request</strong> - SAST (Static Analysis) runs automatically. Block merge only for critical/high findings; warn on medium/low.<br>
+                            • <strong>Build Stage</strong> - Dependency scanning (SCA) to catch vulnerable libraries. This is fast and catches most third-party risks.<br>
+                            • <strong>Staging</strong> - DAST (Dynamic) scans run against deployed app. These take longer, so run in parallel or off-hours.<br><br>
+                            
+                            <strong>Balancing Speed and Security</strong><br>
+                            • Use risk-based thresholds—don't block everything. Critical vulnerabilities block deployment; medium/low get tracked and fixed on schedule.<br>
+                            • Cache scan results to avoid redundant scanning of unchanged code.<br>
+                            • Run expensive scans in parallel with other pipeline stages, not serially.<br>
+                            • Give developers clear, actionable feedback—not just 'vulnerability found' but 'here's how to fix it.'<br><br>
+                            
+                            <strong>What I'd Want to Learn at Coke Canada</strong><br>
+                            I'd be interested in how your DevSecOps maturity is structured—what tools are in place, where the gaps are, and how I can contribute to improving the program."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-purple-400 font-bold mb-3">Q8: Explain how you would implement infrastructure-as-code security scanning and policy enforcement for Terraform or ARM templates.</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "IaC security is critical because misconfigurations at the infrastructure level can be catastrophic. Here's my approach:<br><br>
+                            
+                            <strong>Multi-Stage Scanning</strong><br>
+                            • <strong>Pre-commit</strong> - Tools like tfsec or Checkov run locally. Developers catch issues before pushing. Fast feedback loop.<br>
+                            • <strong>PR Validation</strong> - Automated scan in CI pipeline. Results posted as PR comments so reviewers see security findings alongside code changes.<br>
+                            • <strong>Deployment Gate</strong> - Final validation against organizational policies before terraform apply. This is the hard stop.<br>
+                            • <strong>Post-Deployment</strong> - Continuous compliance monitoring. Azure Policy catches drift if someone makes manual changes.<br><br>
+                            
+                            <strong>Tools I'm Familiar With</strong><br>
+                            • Checkov - Open source, comprehensive rules for Terraform, ARM, CloudFormation<br>
+                            • tfsec - Terraform-specific, very fast<br>
+                            • Azure Policy - Native enforcement for ARM deployments<br>
+                            • Defender for Cloud - Provides IaC scanning as part of DevOps security<br><br>
+                            
+                            <strong>Common Misconfigurations I'd Catch</strong><br>
+                            • Storage accounts with public access enabled<br>
+                            • VMs with public IPs and no NSG<br>
+                            • Databases without encryption or with overly permissive firewall rules<br>
+                            • Resources missing required tags (ownership, cost center)<br>
+                            • Hardcoded secrets in templates (this happens more than it should)<br><br>
+                            
+                            The goal is catching these before deployment, not after a security incident."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="technical rounded-xl p-6">
+                    <p class="text-purple-400 font-bold mb-3">Q9: A development team wants to deploy a new microservice but security scanning is showing multiple vulnerabilities. How do you handle this conflict?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "This is a common scenario, and how you handle it defines whether security is seen as a partner or a blocker. Here's my approach:<br><br>
+                            
+                            <strong>1. Triage Together</strong><br>
+                            I'd schedule a quick call with the dev team to review findings together—not just email them a report. Walk through each vulnerability: Is it a false positive? Is it actually exploitable in their deployment context? Categorize by actual risk, not just CVSS score.<br><br>
+                            
+                            <strong>2. Identify Quick Wins</strong><br>
+                            Often, some vulnerabilities are easy fixes—dependency updates, configuration changes. Get those done immediately. For the harder ones, understand the timeline and effort required.<br><br>
+                            
+                            <strong>3. Risk-Based Decision</strong><br>
+                            If critical/high vulnerabilities remain:<br>
+                            • Can we add compensating controls? Network segmentation, WAF rules, enhanced monitoring?<br>
+                            • What's the business impact of delaying deployment?<br>
+                            • Can we do a limited deployment (internal only, single region) while fixing issues?<br><br>
+                            
+                            <strong>4. Document Risk Acceptance</strong><br>
+                            If the business decides to proceed despite risks, I document it formally—what the risk is, what compensating controls are in place, who approved it, and the committed remediation timeline. This isn't about covering my own back; it's about making the risk visible and tracked.<br><br>
+                            
+                            <strong>5. Follow Through</strong><br>
+                            I'd add the remediation items to my tracking system and follow up. Security debt, like technical debt, compounds if you don't actively manage it."
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- TECHNICAL DEEP DIVE - PAM -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center text-yellow-400">14</span>
+                    Technical Deep Dive: Privileged Access Management
+                </h2>
+
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-yellow-400 font-bold mb-3">Q10: Walk me through your approach to implementing a PAM solution for a hybrid environment with both on-premises and cloud infrastructure.</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "I've worked with Azure PIM for cloud privileged access, and I understand the principles that apply to broader PAM implementation. Here's how I'd approach a hybrid environment:<br><br>
+                            
+                            <strong>Phase 1: Discovery</strong><br>
+                            Before implementing anything, you need to know what you're protecting. Identify all privileged accounts:<br>
+                            • Local admin accounts on servers<br>
+                            • Domain admin and service accounts in AD<br>
+                            • Cloud admin roles (Azure, M365)<br>
+                            • Database admin accounts<br>
+                            • Network device credentials<br>
+                            This always reveals more accounts than anyone expects.<br><br>
+                            
+                            <strong>Phase 2: Prioritized Onboarding</strong><br>
+                            Start with the highest-risk accounts—Domain Admins, Azure Global Admins, database SAs. Implement:<br>
+                            • Password vaulting with automatic rotation<br>
+                            • Session recording for audit trail<br>
+                            • Just-in-time access with approval workflows<br>
+                            Then expand to service accounts, application credentials, and eventually all privileged access.<br><br>
+                            
+                            <strong>Phase 3: Integrate with Identity</strong><br>
+                            For hybrid environments, integrate PAM with both on-prem AD and Entra ID. This gives you:<br>
+                            • Single pane of glass for privileged access requests<br>
+                            • Consistent policy enforcement across environments<br>
+                            • Unified audit logs<br><br>
+                            
+                            <strong>Azure PIM Specifically</strong><br>
+                            I've configured Azure PIM for just-in-time elevation of Azure roles. Key settings I implement:<br>
+                            • Time-bound role assignments (4-8 hours max)<br>
+                            • MFA required for activation<br>
+                            • Justification required<br>
+                            • Approval workflow for highly sensitive roles<br>
+                            • Regular access reviews"
+                        </p>
+                    </div>
+                </div>
+
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-yellow-400 font-bold mb-3">Q11: How would you handle a scenario where a critical application requires a shared privileged account but the development team resists PAM implementation due to workflow concerns?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "This is very similar to the challenges I faced during the MDE deployment at Siemens. The infrastructure team had legitimate concerns about workflow disruption. Here's how I'd handle it:<br><br>
+                            
+                            <strong>1. Listen First</strong><br>
+                            Meet with the team to understand their specific concerns. Usually it's:<br>
+                            • 'We need quick access during incidents'<br>
+                            • 'Automated jobs use this account and can't handle check-out/check-in'<br>
+                            • 'We've always done it this way'<br>
+                            Understanding the real workflow helps me design a solution that works.<br><br>
+                            
+                            <strong>2. Address Each Concern</strong><br>
+                            • <strong>Quick access needs</strong> - Configure emergency/break-glass procedures with expedited approval. Or pre-staged sessions for incident response.<br>
+                            • <strong>Automated jobs</strong> - Use API-based credential retrieval so scripts can pull credentials programmatically without human checkout. This actually improves security because credentials rotate without breaking automation.<br>
+                            • <strong>Change resistance</strong> - This is where pilots help. Show them it works, address issues, build confidence.<br><br>
+                            
+                            <strong>3. Pilot with Their Input</strong><br>
+                            Deploy to a subset of their systems first, with their team involved in testing. Adjust policies based on real feedback. Document what works.<br><br>
+                            
+                            <strong>4. Make Security Invisible</strong><br>
+                            The best security doesn't feel like friction. If I can implement PAM in a way that's actually easier than the current process—single sign-on, auto-credential injection, no more password resets—they'll adopt it willingly."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="technical rounded-xl p-6">
+                    <p class="text-yellow-400 font-bold mb-3">Q12: Explain your strategy for managing privileged access to cloud platforms like Azure, where traditional PAM solutions may not fully apply.</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "Cloud PAM is different because you're managing roles and permissions, not just credentials. Here's my strategy using Azure-native tools:<br><br>
+                            
+                            <strong>Azure PIM for Role Elevation</strong><br>
+                            This is my primary tool for Azure privileged access:<br>
+                            • Users have 'eligible' roles, not 'active' roles<br>
+                            • When they need access, they activate through PIM with justification<br>
+                            • Access is time-bound (I typically set 4-8 hours maximum)<br>
+                            • MFA is required at activation<br>
+                            • For sensitive roles like Global Admin, I require approval<br><br>
+                            
+                            <strong>Managed Identities for Applications</strong><br>
+                            This eliminates credential management entirely for app-to-service authentication. Instead of storing a connection string with credentials, the app authenticates using its Azure identity. No passwords to rotate, no secrets to leak.<br><br>
+                            
+                            <strong>Azure Key Vault for Remaining Secrets</strong><br>
+                            For credentials that must exist (third-party integrations, legacy systems):<br>
+                            • Store in Key Vault with RBAC<br>
+                            • Enable soft-delete and purge protection<br>
+                            • Set up access policies that limit who can retrieve secrets<br>
+                            • Log all access attempts to Sentinel<br><br>
+                            
+                            <strong>Conditional Access for Privileged Operations</strong><br>
+                            Layer additional controls on privileged access:<br>
+                            • Require managed/compliant device<br>
+                            • Block access from risky locations<br>
+                            • Require phishing-resistant MFA (FIDO2, Windows Hello)<br><br>
+                            
+                            <strong>Monitoring</strong><br>
+                            All PIM activations and Key Vault accesses flow to Sentinel. I've built detection rules for anomalous privileged access patterns."
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- TECHNICAL DEEP DIVE - VULN MANAGEMENT -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center text-orange-400">15</span>
+                    Technical Deep Dive: Vulnerability Management
+                </h2>
+
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-orange-400 font-bold mb-3">Q13: How do you prioritize vulnerability remediation when you have thousands of findings across your environment?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "At Siemens, we use Microsoft Defender Threat and Vulnerability Management (TVM), which helps with prioritization. But the framework I apply is tool-agnostic:<br><br>
+                            
+                            <strong>My Prioritization Framework</strong><br>
+                            • <strong>Tier 1 - Immediate (24-48 hours)</strong>: Critical vulns on internet-facing systems OR any actively exploited vulnerability (KEV list). These get emergency patching.<br>
+                            • <strong>Tier 2 - Urgent (7 days)</strong>: High-severity on internal systems with sensitive data, or critical on internal systems.<br>
+                            • <strong>Tier 3 - Standard (30 days)</strong>: Medium severity or high severity with significant compensating controls already in place.<br>
+                            • <strong>Tier 4 - Scheduled (next maintenance window)</strong>: Low severity, or vulnerabilities on isolated systems with limited exposure.<br><br>
+                            
+                            <strong>Key Factors Beyond CVSS</strong><br>
+                            CVSS alone isn't enough. I consider:<br>
+                            • <strong>Asset criticality</strong> - A medium vuln on a payment system matters more than a critical vuln on a test server<br>
+                            • <strong>Exploit availability</strong> - Is there a public exploit? Is it actively used in the wild?<br>
+                            • <strong>Network exposure</strong> - Internet-facing vs. internal vs. isolated<br>
+                            • <strong>Compensating controls</strong> - Do we have EDR, segmentation, or other mitigations that reduce real risk?<br>
+                            • <strong>Data classification</strong> - What's at stake if this system is compromised?<br><br>
+                            
+                            <strong>Practical Reality</strong><br>
+                            You'll never get to zero vulnerabilities. The goal is reducing risk, not chasing metrics. I'd rather have 100 well-prioritized vulnerabilities being actively worked than 10,000 in a spreadsheet no one looks at."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-orange-400 font-bold mb-3">Q14: Describe your experience with vulnerability scanning in OT/ICS environments and how it differs from traditional IT scanning.</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "I'll be upfront—I don't have hands-on OT vulnerability scanning experience. My background is IT security. However, I've studied the principles and understand why it's fundamentally different:<br><br>
+                            
+                            <strong>Why IT Scanning Doesn't Work in OT</strong><br>
+                            • <strong>Fragility</strong> - Active scanning can crash PLCs or disrupt processes. I've read case studies where a Nessus scan brought down a manufacturing line. You can't just run authenticated scans against a 20-year-old controller.<br>
+                            • <strong>Availability priority</strong> - In IT, we accept some downtime for security. In OT, unplanned downtime can cost millions or create safety risks.<br>
+                            • <strong>Legacy systems</strong> - Many OT systems run Windows XP or proprietary RTOS that vendors won't update. Traditional patch management doesn't apply.<br>
+                            • <strong>Vendor dependencies</strong> - Changes often require vendor approval or void support contracts.<br><br>
+                            
+                            <strong>What I'd Do Instead</strong><br>
+                            • <strong>Passive monitoring</strong> - Tools like Claroty, Nozomi, or Dragos that analyze network traffic without sending packets. They can identify assets, vulnerabilities, and anomalies without active probing.<br>
+                            • <strong>Scheduled maintenance windows</strong> - If active scanning is needed, coordinate with plant operations during planned downtime.<br>
+                            • <strong>Virtual patching</strong> - When you can't patch, add compensating controls—network segmentation, IPS rules, enhanced monitoring.<br>
+                            • <strong>Asset inventory first</strong> - You can't secure what you don't know exists. Build a detailed inventory of OT assets, firmware versions, and vendor support status.<br><br>
+                            
+                            <strong>How I'd Contribute</strong><br>
+                            This is an area I want to learn. I'd work closely with your OT team to understand the constraints and bring my IT security engineering skills to help bridge the gap."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="technical rounded-xl p-6">
+                    <p class="text-orange-400 font-bold mb-3">Q15: Your vulnerability scanner is producing a high rate of false positives. How do you address this while maintaining effective vulnerability management?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "False positives erode trust in the vulnerability management program. If teams learn that most findings are noise, they start ignoring everything. Here's how I'd address it:<br><br>
+                            
+                            <strong>1. Root Cause Analysis</strong><br>
+                            First, understand WHY we're getting false positives:<br>
+                            • <strong>Authentication issues</strong> - Scanner can't authenticate and is making assumptions based on banners. Fix credentials or deploy authenticated scanning.<br>
+                            • <strong>Version detection problems</strong> - Scanner thinks it's vulnerable based on version string, but we've backported the fix. Common with RHEL/CentOS.<br>
+                            • <strong>Environment-specific issues</strong> - Scanner doesn't understand our configuration or compensating controls.<br><br>
+                            
+                            <strong>2. Tune Scanner Policies</strong><br>
+                            • Disable checks that consistently produce false positives for our specific stack<br>
+                            • Adjust scanning intensity—sometimes aggressive scans trigger false positives<br>
+                            • Create documented exceptions with justification for each<br><br>
+                            
+                            <strong>3. Validation Process</strong><br>
+                            Before sending findings to remediation teams, security analysts should validate a sample. Build a knowledge base of common false positives. This also builds credibility—when you DO send a finding, teams know it's real.<br><br>
+                            
+                            <strong>4. Feedback Loop</strong><br>
+                            When a team reports a false positive, investigate and update policies. Track false positive rates over time as a quality metric.<br><br>
+                            
+                            <strong>My Experience</strong><br>
+                            With Defender TVM, I've seen similar issues—particularly with version detection on custom-built applications. The solution was working with dev teams to ensure accurate version reporting and creating exceptions where appropriate."
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- TECHNICAL DEEP DIVE - DLP & EMAIL -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-pink-500/20 flex items-center justify-center text-pink-400">16</span>
+                    Technical Deep Dive: DLP & Email Security
+                </h2>
+
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-pink-400 font-bold mb-3">Q16: How would you design and implement a DLP program that protects sensitive data without creating excessive friction for users?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "This is my wheelhouse—I'm currently leading a Purview DLP migration from Symantec, and user friction was a major design consideration. Here's my approach:<br><br>
+                            
+                            <strong>1. Start with Data Classification</strong><br>
+                            Before writing any DLP policy, understand what you're protecting. Work with business units to identify:<br>
+                            • What data actually needs protection (not everything is sensitive)<br>
+                            • Where it lives and how it flows<br>
+                            • Who needs legitimate access<br>
+                            This prevents over-broad policies that block everything.<br><br>
+                            
+                            <strong>2. Phased Enforcement: Simulation → Audit → Warn → Block</strong><br>
+                            This is critical. At Siemens, we run every new policy through this progression:<br>
+                            • <strong>Simulation</strong> - Policy runs invisibly, just collecting data on what WOULD be blocked<br>
+                            • <strong>Audit</strong> - Log violations but don't show users anything yet<br>
+                            • <strong>Warn</strong> - Show users a policy tip, let them override with justification<br>
+                            • <strong>Block</strong> - Only after we've validated the policy doesn't break legitimate workflows<br><br>
+                            
+                            <strong>3. Contextual Policies</strong><br>
+                            In Purview, I use conditions beyond just 'contains SSN':<br>
+                            • Recipient domain - Internal vs. external makes a difference<br>
+                            • Sender department - Finance sharing financial data is different than random employee<br>
+                            • File location - SharePoint to SharePoint is different than SharePoint to personal email<br>
+                            • User override - Allow justified business exceptions with audit trail<br><br>
+                            
+                            <strong>4. Clear User Communication</strong><br>
+                            Policy tips should explain WHY something was blocked and WHAT the user can do. 'Policy violation' means nothing. 'This email contains what appears to be credit card numbers. If this is legitimate business, click here to request an exception' is actionable.<br><br>
+                            
+                            <strong>Result</strong><br>
+                            Our Purview migration achieved 40% reduction in false positives compared to Symantec through better contextual logic and SIT confidence tuning."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-pink-400 font-bold mb-3">Q17: Explain your approach to combating sophisticated phishing attacks that bypass traditional email security controls.</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "Phishing is the initial access vector for most breaches, so this is a constant focus. Here's my defense-in-depth approach:<br><br>
+                            
+                            <strong>Technical Controls (Email Layer)</strong><br>
+                            • <strong>SPF/DKIM/DMARC</strong> - Properly configured to reject failures, not just quarantine. This blocks domain spoofing.<br>
+                            • <strong>Microsoft Defender for Office 365</strong> - Safe Links rewrites URLs and checks at time-of-click, not just delivery. Safe Attachments detonates in sandbox.<br>
+                            • <strong>Anti-spoofing policies</strong> - Protect against look-alike domains and display name impersonation<br>
+                            • <strong>External email tagging</strong> - Banner on external emails so users know when something comes from outside<br><br>
+                            
+                            <strong>Technical Controls (Beyond Email)</strong><br>
+                            • <strong>Conditional Access</strong> - Even if credentials are phished, attackers can't use them without a compliant device and MFA<br>
+                            • <strong>Phishing-resistant MFA</strong> - FIDO2 keys or Windows Hello for Business can't be phished via AitM (Adversary in the Middle) attacks<br>
+                            • <strong>Browser isolation</strong> - High-risk links open in isolated container<br>
+                            • <strong>EDR/MDE</strong> - Catches credential harvesting attempts on endpoints<br><br>
+                            
+                            <strong>User Training</strong><br>
+                            • Regular phishing simulations with immediate training for clickers<br>
+                            • Make reporting easy—one-click 'Report Phish' button in Outlook<br>
+                            • Recognize and reward good catches<br>
+                            • Focus on verification procedures, not just 'don't click suspicious links'<br><br>
+                            
+                            <strong>Detection & Response</strong><br>
+                            • Sentinel detections for impossible travel, suspicious inbox rules, mail forwarding to external addresses<br>
+                            • Regular review of risky sign-ins in Entra ID<br>
+                            • Playbook for compromised account response (which I can detail if you ask)"
+                        </p>
+                    </div>
+                </div>
+
+                <div class="technical rounded-xl p-6">
+                    <p class="text-pink-400 font-bold mb-3">Q18: A business executive's account is compromised and sending phishing emails internally. Walk through your incident response process.</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "This is a critical scenario—executive accounts have high trust and access. Speed matters. Here's my response:<br><br>
+                            
+                            <strong>Immediate Containment (First 15 Minutes)</strong><br>
+                            • <strong>Disable the account</strong> - Stop the bleeding. In Entra ID, disable sign-in, revoke all refresh tokens<br>
+                            • <strong>Block/recall malicious emails</strong> - Use Defender for O365 Threat Explorer to find and delete the phishing emails from all mailboxes<br>
+                            • <strong>Reset password</strong> - Even though account is disabled, reset password immediately<br>
+                            • <strong>Notify the executive</strong> - Through out-of-band channel (phone call), not email<br><br>
+                            
+                            <strong>Impact Assessment (Next 1-2 Hours)</strong><br>
+                            • <strong>Who received the phishing?</strong> - Get full recipient list from Threat Explorer<br>
+                            • <strong>Who clicked?</strong> - Check Safe Links click data and EDR for any secondary compromises<br>
+                            • <strong>What did attacker access?</strong> - Review Unified Audit Log for mailbox access, file downloads, SharePoint access<br>
+                            • <strong>Persistence mechanisms?</strong> - Check for inbox rules forwarding to external addresses, OAuth app consents, delegates added<br><br>
+                            
+                            <strong>Investigation</strong><br>
+                            • <strong>Initial access vector</strong> - Check sign-in logs. Where did the compromise happen? Phishing? Credential stuffing? AitM?<br>
+                            • <strong>Timeline reconstruction</strong> - Build a timeline of attacker actions using Sentinel and UAL<br>
+                            • <strong>Lateral movement</strong> - Did they access other systems? Check MDE for activity from compromised device<br><br>
+                            
+                            <strong>Communication & Recovery</strong><br>
+                            • <strong>Org-wide alert</strong> - 'We detected a phishing campaign from [compromised user]. Do not click links in emails from them sent between [times]. If you clicked, contact IT Security immediately.'<br>
+                            • <strong>Re-enable account</strong> - Only after removing all persistence, resetting credentials, validating MFA, and briefing the executive on what happened<br><br>
+                            
+                            <strong>Post-Incident</strong><br>
+                            • Document lessons learned<br>
+                            • Improve controls (Was MFA phishable? Do we need hardware keys for executives?)<br>
+                            • Update detection rules based on what we learned"
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- TECHNICAL DEEP DIVE - EDR -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center text-red-400">17</span>
+                    Technical Deep Dive: Endpoint Detection & Response
+                </h2>
+
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-red-400 font-bold mb-3">Q19: How do you balance EDR sensitivity to detect advanced threats while minimizing alert fatigue for the security team?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "This is something I dealt with extensively during the ESET to MDE migration. Alert fatigue is real—if analysts are drowning in noise, they miss the real threats. Here's my approach:<br><br>
+                            
+                            <strong>Start with Baselines</strong><br>
+                            When we deployed MDE, I started with Microsoft's recommended policies but ran them in audit mode for two weeks. This showed me what normal looks like in our environment—which admin tools trigger alerts, what scheduled tasks run, which scripts are legitimate.<br><br>
+                            
+                            <strong>Tuning Strategy</strong><br>
+                            • <strong>Allowlists for known-good</strong> - After validation, create exclusions for legitimate admin tools, LOB applications, and automated processes. Document WHY each exclusion exists.<br>
+                            • <strong>Suppression rules</strong> - For repetitive low-value alerts that can't be excluded, create suppression rules. Example: Alert on PowerShell execution from specific service account that runs approved automation.<br>
+                            • <strong>Severity adjustment</strong> - Not every 'High' alert is actually high in our context. Tune severity based on our environment.<br><br>
+                            
+                            <strong>Alert Triage Workflow</strong><br>
+                            • <strong>Tier 1</strong> - High-confidence, high-severity alerts get immediate analyst attention<br>
+                            • <strong>Tier 2</strong> - Medium-confidence alerts are batched for periodic review<br>
+                            • <strong>Automated enrichment</strong> - Before an analyst sees an alert, it's automatically enriched with asset context, user info, threat intel. This saves investigation time.<br><br>
+                            
+                            <strong>Metrics I Track</strong><br>
+                            • Alert volume by category (trending up or down?)<br>
+                            • True positive rate (are we tuning effectively?)<br>
+                            • Mean time to triage and resolve<br>
+                            • Coverage gaps (any endpoint types not generating expected telemetry?)<br><br>
+                            
+                            The goal is high-fidelity alerts. I'd rather have 10 meaningful alerts per day than 1,000 that analysts ignore."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-red-400 font-bold mb-3">Q20: Describe a situation where you had to investigate a potential ransomware infection. What EDR capabilities would you leverage?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "I haven't responded to an active ransomware incident, but I've investigated suspicious activity that could have been pre-ransomware. Here's my EDR-based investigation approach:<br><br>
+                            
+                            <strong>Immediate Actions</strong><br>
+                            • <strong>Network isolation</strong> - In MDE, I can isolate the endpoint immediately while maintaining agent connectivity. This stops lateral movement while preserving my investigation ability.<br>
+                            • <strong>Kill suspicious processes</strong> - If I see active encryption (rapid file modifications), kill the process immediately using MDE Live Response.<br><br>
+                            
+                            <strong>Investigation Using MDE</strong><br>
+                            • <strong>Device timeline</strong> - Walk through the execution chain. What ran, when, from where? Look for suspicious process trees—especially Word/Excel spawning PowerShell, or unknown executables from Temp folders.<br>
+                            • <strong>File analysis</strong> - Check hash reputation. Is it known malware? When was it first seen globally vs. in our environment?<br>
+                            • <strong>Network connections</strong> - Any C2 communication? Unusual outbound connections?<br>
+                            • <strong>Persistence mechanisms</strong> - Registry modifications, scheduled tasks, services created<br><br>
+                            
+                            <strong>Scope Assessment</strong><br>
+                            Once I understand the infection, I need to know if it spread:<br>
+                            • Search for the same hash across all endpoints<br>
+                            • Look for same C2 domains/IPs in network logs<br>
+                            • Check for lateral movement indicators—pass-the-hash, RDP from infected system<br><br>
+                            
+                            <strong>Evidence Collection</strong><br>
+                            Using MDE Live Response:<br>
+                            • Collect memory dump before remediation<br>
+                            • Grab relevant event logs, prefetch, registry hives<br>
+                            • Capture suspicious files for further analysis<br><br>
+                            
+                            <strong>Remediation</strong><br>
+                            • Remove malware and persistence<br>
+                            • Coordinate with backup team for data recovery if needed<br>
+                            • Reset credentials for affected user<br>
+                            • Root cause analysis—how did it get in?"
+                        </p>
+                    </div>
+                </div>
+
+                <div class="technical rounded-xl p-6">
+                    <p class="text-red-400 font-bold mb-3">Q21: How would you deploy EDR to a large fleet of endpoints with minimal disruption to business operations?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "I did exactly this at Siemens—migrating from ESET to MDE across our endpoint fleet. Here's what I learned:<br><br>
+                            
+                            <strong>Planning Phase</strong><br>
+                            • <strong>Pilot group selection</strong> - Start with IT department endpoints. They're technical, tolerant of issues, and give good feedback.<br>
+                            • <strong>Coexistence testing</strong> - We ran MDE alongside ESET initially to validate there were no conflicts. Some EDR combinations fight each other.<br>
+                            • <strong>Performance baseline</strong> - Measure system performance before deployment so you can compare.<br><br>
+                            
+                            <strong>Deployment Strategy</strong><br>
+                            • <strong>Wave-based rollout</strong> - We did IT → Engineering → Finance → Operations. Each wave was ~10% of fleet.<br>
+                            • <strong>SCCM/Intune deployment</strong> - Used existing endpoint management for automated installation. No manual intervention needed.<br>
+                            • <strong>Maintenance windows</strong> - For servers, scheduled during approved change windows.<br><br>
+                            
+                            <strong>Key Lesson: The Onboarding Script Issue</strong><br>
+                            We discovered that cloning from golden images caused all VMs to share the same device ID in MDE. Telemetry collapsed—multiple servers looked like one device. Solution: Enforce post-image onboarding script that generates unique device IDs. This is now part of our standard deployment process.<br><br>
+                            
+                            <strong>Monitoring During Rollout</strong><br>
+                            • Built a deployment health dashboard showing agent status, version, last check-in<br>
+                            • Monitored for performance complaints<br>
+                            • Tracked policy application status<br><br>
+                            
+                            <strong>Post-Deployment Optimization</strong><br>
+                            • Started with policies in audit mode<br>
+                            • Tuned based on environment-specific noise<br>
+                            • Gradually moved to enforcement<br>
+                            • Documented exclusions and their justifications"
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- TECHNICAL DEEP DIVE - FRAMEWORKS -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center text-cyan-400">18</span>
+                    Technical Deep Dive: Security Frameworks & Compliance
+                </h2>
+
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-cyan-400 font-bold mb-3">Q22: How do you approach aligning security controls with multiple frameworks like NIST, ISO 27001, and SOC 2 simultaneously?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "The key insight is that frameworks overlap significantly. You're not implementing three separate programs—you're implementing one security program that maps to multiple frameworks. Here's my approach:<br><br>
+                            
+                            <strong>Unified Control Framework</strong><br>
+                            I create a master control set that satisfies all applicable frameworks. For example, MFA implementation satisfies:<br>
+                            • NIST 800-53 IA-2 (Identification and Authentication)<br>
+                            • ISO 27001 A.9.4.2 (Secure log-on procedures)<br>
+                            • SOC 2 CC6.1 (Logical access controls)<br>
+                            One implementation, three frameworks checked off.<br><br>
+                            
+                            <strong>Practical Example from My Work</strong><br>
+                            Our Sentinel deployment maps to multiple framework requirements:<br>
+                            • <strong>NIST DE.AE-1</strong> (Anomaly detection) → Sentinel UEBA and analytics rules<br>
+                            • <strong>ISO A.12.4.1</strong> (Event logging) → Sentinel data connectors and retention<br>
+                            • <strong>SOC 2 CC7.2</strong> (Security monitoring) → Real-time alerting and dashboards<br><br>
+                            
+                            <strong>Evidence Management</strong><br>
+                            • Collect evidence once, use for multiple audits<br>
+                            • Screenshot of Sentinel analytics rule satisfies logging requirements for all three frameworks<br>
+                            • Maintain clear documentation mapping controls to framework requirements<br><br>
+                            
+                            <strong>Gap Analysis Process</strong><br>
+                            When assessing compliance:<br>
+                            1. List all requirements from applicable frameworks<br>
+                            2. Map existing controls to requirements<br>
+                            3. Identify gaps where no control exists<br>
+                            4. Prioritize remediation based on risk, not checkbox counting<br>
+                            5. Track progress and evidence in a centralized system<br><br>
+                            
+                            The goal is security effectiveness, not audit theater. Good security naturally maps to frameworks."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="technical rounded-xl p-6">
+                    <p class="text-cyan-400 font-bold mb-3">Q23: Explain how you would use CIS Benchmarks to establish security baselines across a diverse infrastructure.</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "CIS Benchmarks are prescriptive and actionable—exactly what you need for establishing baselines. Here's my implementation approach:<br><br>
+                            
+                            <strong>Benchmark Selection</strong><br>
+                            • Identify all platforms in the environment (Windows Server, Windows 10/11, Ubuntu, Azure, etc.)<br>
+                            • Download the applicable CIS Benchmarks<br>
+                            • Choose profile level: Level 1 for most systems (balanced security/operability), Level 2 for high-security systems<br><br>
+                            
+                            <strong>Customization</strong><br>
+                            CIS Benchmarks are recommendations, not mandates. Some don't fit every environment:<br>
+                            • Review each control against business and technical requirements<br>
+                            • Document exceptions with business justification<br>
+                            • Get stakeholder approval before finalizing baseline<br><br>
+                            
+                            <strong>Implementation Methods</strong><br>
+                            • <strong>Golden images</strong> - Bake CIS hardening into base images for VMs. Every new system starts compliant.<br>
+                            • <strong>Group Policy</strong> - For Windows environments, import CIS GPO templates<br>
+                            • <strong>Azure Policy</strong> - Use built-in CIS benchmark initiatives for Azure resources<br>
+                            • <strong>Configuration management</strong> - Ansible playbooks or DSC for ongoing enforcement and drift remediation<br><br>
+                            
+                            <strong>Compliance Scanning</strong><br>
+                            • Use Defender for Cloud for continuous CIS assessment in Azure<br>
+                            • On-prem, tools like CIS-CAT or Qualys can assess against benchmarks<br>
+                            • Build dashboards showing compliance percentage by system type<br><br>
+                            
+                            <strong>Continuous Process</strong><br>
+                            • Schedule regular scans (weekly or monthly)<br>
+                            • Alert on critical deviations<br>
+                            • Update baselines when CIS releases new benchmark versions<br>
+                            • Review exceptions annually—are they still valid?"
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
             <!-- DAILY REVISION -->
             <!-- ============================================ -->
             <section class="mb-16">
                 <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
-                    <span class="w-8 h-8 rounded-lg bg-pink-500/20 flex items-center justify-center text-pink-400">10</span>
+                    <span class="w-8 h-8 rounded-lg bg-pink-500/20 flex items-center justify-center text-pink-400">19</span>
                     Daily Revision Checklist
                 </h2>
 
-                <div class="memorize rounded-xl p-6">
+                <div class="memorize rounded-xl p-6 mb-4">
                     <h3 class="text-pink-400 font-bold mb-3">🧠 Read Every Day Before Interview</h3>
                     <div class="grid md:grid-cols-3 gap-4 text-sm">
                         <div>
@@ -666,6 +1454,56 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                                 <li>✓ Why Coca-Cola</li>
                                 <li>✓ OT interest (honest about learning)</li>
                                 <li>✓ Finished 3 months early</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="memorize rounded-xl p-6">
+                    <h3 class="text-pink-400 font-bold mb-3">🔧 Technical Deep Dive Quick Reference</h3>
+                    <div class="grid md:grid-cols-4 gap-4 text-sm">
+                        <div>
+                            <p class="text-white font-medium mb-2">NGFW & Cloud</p>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>✓ Change mgmt process</li>
+                                <li>✓ Asymmetric routing fix</li>
+                                <li>✓ App-ID + DPI</li>
+                                <li>✓ NSGs + ASGs</li>
+                                <li>✓ Azure Policy audit→deny</li>
+                                <li>✓ IaaS vs PaaS responsibility</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-white font-medium mb-2">PAM & Identity</p>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>✓ Azure PIM JIT access</li>
+                                <li>✓ Managed Identities (no creds)</li>
+                                <li>✓ Key Vault for secrets</li>
+                                <li>✓ Time-bound role assignments</li>
+                                <li>✓ Approval workflows</li>
+                                <li>✓ Break-glass procedures</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-white font-medium mb-2">Vuln Mgmt & EDR</p>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>✓ Prioritization framework</li>
+                                <li>✓ Beyond CVSS factors</li>
+                                <li>✓ OT = passive monitoring</li>
+                                <li>✓ False positive tuning</li>
+                                <li>✓ EDR wave-based rollout</li>
+                                <li>✓ Alert triage workflow</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-white font-medium mb-2">Frameworks</p>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>✓ One control → many frameworks</li>
+                                <li>✓ Evidence reuse across audits</li>
+                                <li>✓ CIS Level 1 vs Level 2</li>
+                                <li>✓ Golden images hardening</li>
+                                <li>✓ Security effectiveness > checkbox</li>
+                                <li>✓ Gap analysis process</li>
                             </ul>
                         </div>
                     </div>
