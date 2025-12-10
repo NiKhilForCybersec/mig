@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Deep Dive | Security Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Inter', system-ui, sans-serif; }
+        .card { background: linear-gradient(145deg, #12121a, #1a1a2e); border: 1px solid #2a2a3e; }
+        .understand { background: linear-gradient(135deg, #0d2818 0%, #1a1a2e 100%); border: 1px solid #10b981; }
+        .answer { background: linear-gradient(135deg, #1a1a2e 0%, #1e1e3e 100%); border: 1px solid #3b82f6; }
+        .followup { background: linear-gradient(135deg, #2d1b4e 0%, #1a1a2e 100%); border: 1px solid #8b5cf6; }
+        .diagram { background: #0a0a0f; border: 1px solid #2a2a3e; font-family: monospace; }
+        .realworld { background: linear-gradient(135deg, #1a1a2e 0%, #2a1a1a 100%); border: 1px solid #f59e0b; }
+        pre { background: #0d0d14 !important; border-radius: 8px; padding: 16px; overflow-x: auto; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <main class="lg:ml-64 pt-14 lg:pt-0">
+        <div class="max-w-5xl mx-auto px-6 py-12">
+            <!-- Hero -->
+            <section class="mb-12">
+                <div class="flex items-center gap-2 text-emerald-400 mb-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                    <span class="text-sm font-medium">Deep Understanding</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Interview Deep Dive</h1>
+                <p class="text-xl text-gray-400 mb-6">Understand the WHY behind every answer - not just what to say</p>
+                
+                <div class="card rounded-xl p-4 mb-8">
+                    <p class="text-gray-300 text-sm">This page explains concepts in depth so you truly understand them. Use <a href="interview-prep.html" class="text-cyan-400 hover:underline">Interview Prep</a> for quick answer delivery, use THIS page to understand the concepts.</p>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- DNS SINKHOLE - DEEP DIVE -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400">1</span>
+                    DNS Sinkhole
+                </h2>
+
+                <!-- What to Say -->
+                <div class="answer rounded-xl p-5 mb-4">
+                    <h3 class="text-blue-400 font-bold mb-3">💬 What to Say in Interview</h3>
+                    <p class="text-gray-300 text-sm">"A DNS sinkhole redirects malicious domain lookups to a controlled IP instead of the real attacker server. It breaks the malware's communication channel and helps us detect infected machines."</p>
+                </div>
+
+                <!-- Deep Understanding -->
+                <div class="understand rounded-xl p-5 mb-4">
+                    <h3 class="text-emerald-400 font-bold mb-3">🧠 Understand This (The Real Explanation)</h3>
+                    
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">How DNS Normally Works:</p>
+                        <p class="text-gray-300 text-sm mb-3">When you type "google.com", your computer asks a DNS server "what's the IP address?" DNS responds with "142.250.x.x" and your browser connects there.</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">How Malware Uses DNS:</p>
+                        <p class="text-gray-300 text-sm mb-3">Malware needs to "phone home" to get instructions from the attacker. It's programmed with a domain like "evil-c2-server.com". When it runs, it does a DNS lookup to find the attacker's server IP, then connects to receive commands (download more malware, steal data, encrypt files, etc.)</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">What a Sinkhole Does:</p>
+                        <p class="text-gray-300 text-sm mb-3">We configure our DNS servers to LIE about malicious domains. When malware asks "where is evil-c2-server.com?", instead of returning the real attacker IP, we return an IP we control (like 10.0.0.100 - an internal server or black hole). The malware connects to our server instead of the attacker's. It can't get instructions, so the attack chain breaks.</p>
+                    </div>
+
+                    <div class="diagram rounded-lg p-4 mb-4">
+                        <p class="text-cyan-400 text-xs mb-2">Visual: Normal vs Sinkholed</p>
+                        <pre class="text-xs text-gray-300">
+NORMAL (Bad):
+Malware → "Where is evil-c2.com?" → DNS → "It's 185.x.x.x (attacker)"
+Malware → Connects to 185.x.x.x → Gets instructions → Does bad things
+
+SINKHOLED (Good):
+Malware → "Where is evil-c2.com?" → DNS Sinkhole → "It's 10.0.0.100 (us)"
+Malware → Connects to 10.0.0.100 → Gets nothing → Attack fails
+Security Team → Sees connection to sinkhole → Knows machine is infected!
+                        </pre>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">Why It's Powerful:</p>
+                        <ul class="text-gray-300 text-sm space-y-1">
+                            <li>• <strong>Breaks attacks</strong> - Malware can't communicate with attacker</li>
+                            <li>• <strong>Detection</strong> - Any machine trying to reach sinkhole IP = infected</li>
+                            <li>• <strong>Scale</strong> - Block thousands of malicious domains with one config</li>
+                            <li>• <strong>No endpoint agent needed</strong> - Works at network level</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Real World Example -->
+                <div class="realworld rounded-xl p-5 mb-4">
+                    <h3 class="text-amber-400 font-bold mb-3">🌍 Real World Example</h3>
+                    <p class="text-gray-300 text-sm mb-3"><strong>Scenario:</strong> You get threat intel that "malware-update.xyz" is a C2 domain used by ransomware.</p>
+                    <p class="text-gray-300 text-sm mb-3"><strong>Action:</strong> Add it to your DNS sinkhole. Now if ANY machine in your network tries to reach it, they get your sinkhole IP instead.</p>
+                    <p class="text-gray-300 text-sm"><strong>Result:</strong> Next morning, you see 3 machines tried to connect to the sinkhole IP. You just found 3 infected machines BEFORE the ransomware could activate!</p>
+                </div>
+
+                <!-- Follow-up Questions -->
+                <div class="followup rounded-xl p-5">
+                    <h3 class="text-purple-400 font-bold mb-3">🎯 Possible Follow-up Questions</h3>
+                    <div class="space-y-3 text-sm">
+                        <div>
+                            <p class="text-gray-300 font-medium">Q: How do you get the list of malicious domains?</p>
+                            <p class="text-gray-400">A: Threat intelligence feeds (commercial like Recorded Future, free like abuse.ch), industry sharing groups (ISACs), your own incident investigations, and vendor feeds built into NGFWs.</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-300 font-medium">Q: Can attackers bypass this?</p>
+                            <p class="text-gray-400">A: Yes - they can hardcode IPs instead of domains, use DNS-over-HTTPS to bypass your DNS, or use domain generation algorithms (DGAs) that create random domains. That's why sinkholing is one layer, not the only defense.</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-300 font-medium">Q: Where do you implement it?</p>
+                            <p class="text-gray-400">A: Internal DNS servers (Windows DNS, BIND), NGFWs with DNS filtering (Palo Alto, Fortinet), cloud DNS security (Cisco Umbrella, Zscaler), or even Pi-hole for small environments.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- NGFW vs TRADITIONAL FIREWALL - DEEP DIVE -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400">2</span>
+                    NGFW vs Traditional Firewall
+                </h2>
+
+                <div class="answer rounded-xl p-5 mb-4">
+                    <h3 class="text-blue-400 font-bold mb-3">💬 What to Say</h3>
+                    <p class="text-gray-300 text-sm">"Traditional firewalls work at Layer 3-4 - they see IPs and ports. NGFWs work at Layer 7 - they understand applications. So even if two apps use port 443, the NGFW knows the difference and can apply different policies."</p>
+                </div>
+
+                <div class="understand rounded-xl p-5 mb-4">
+                    <h3 class="text-emerald-400 font-bold mb-3">🧠 Understand This</h3>
+                    
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">OSI Model Quick Refresher:</p>
+                        <div class="diagram rounded-lg p-3 mb-3">
+                            <pre class="text-xs text-gray-300">
+Layer 7 - Application   ← NGFW sees HERE (HTTP, HTTPS, DNS, apps)
+Layer 6 - Presentation
+Layer 5 - Session
+Layer 4 - Transport     ← Traditional FW sees HERE (TCP/UDP ports)
+Layer 3 - Network       ← Traditional FW sees HERE (IP addresses)
+Layer 2 - Data Link
+Layer 1 - Physical
+                            </pre>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">Traditional Firewall Limitation:</p>
+                        <p class="text-gray-300 text-sm mb-3">A traditional firewall rule says "Allow TCP port 443 from 10.0.0.0/24 to any". It doesn't know WHAT'S on port 443. Could be:</p>
+                        <ul class="text-gray-400 text-sm space-y-1 ml-4">
+                            <li>• Legitimate HTTPS to your bank</li>
+                            <li>• Someone tunneling SSH over 443 to bypass controls</li>
+                            <li>• Malware C2 traffic pretending to be HTTPS</li>
+                            <li>• Dropbox file uploads (data exfiltration risk)</li>
+                        </ul>
+                        <p class="text-gray-300 text-sm mt-2">Traditional FW allows ALL of these because port 443 is allowed. It's blind to the application.</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">How NGFW Sees Differently:</p>
+                        <p class="text-gray-300 text-sm mb-3">NGFW does Deep Packet Inspection (DPI). It looks INSIDE the traffic to identify the actual application. Even on port 443, it can tell:</p>
+                        <ul class="text-gray-400 text-sm space-y-1 ml-4">
+                            <li>• "This is Salesforce" → Allow</li>
+                            <li>• "This is Dropbox" → Block (or allow with logging)</li>
+                            <li>• "This is SSH tunneled over HTTPS" → Block</li>
+                            <li>• "This matches malware signature" → Block + Alert</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">Key NGFW Features:</p>
+                        <div class="grid md:grid-cols-2 gap-3">
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <p class="text-cyan-400 text-xs font-medium mb-1">Application Awareness (App-ID)</p>
+                                <p class="text-gray-400 text-xs">Identifies 3000+ applications regardless of port, encryption, or evasion technique</p>
+                            </div>
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <p class="text-cyan-400 text-xs font-medium mb-1">User Awareness (User-ID)</p>
+                                <p class="text-gray-400 text-xs">Rules based on AD users/groups, not just IP addresses. "Allow Sales team to use Salesforce"</p>
+                            </div>
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <p class="text-cyan-400 text-xs font-medium mb-1">SSL/TLS Decryption</p>
+                                <p class="text-gray-400 text-xs">Decrypts HTTPS to inspect traffic, re-encrypts before sending. Can see inside encrypted connections.</p>
+                            </div>
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <p class="text-cyan-400 text-xs font-medium mb-1">Integrated IPS</p>
+                                <p class="text-gray-400 text-xs">Intrusion Prevention built-in. Blocks exploits, not just at perimeter but inline.</p>
+                            </div>
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <p class="text-cyan-400 text-xs font-medium mb-1">Threat Intelligence</p>
+                                <p class="text-gray-400 text-xs">Real-time updates on malicious IPs, domains, file hashes. Auto-blocks known bad.</p>
+                            </div>
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <p class="text-cyan-400 text-xs font-medium mb-1">Sandboxing</p>
+                                <p class="text-gray-400 text-xs">Unknown files sent to cloud sandbox for analysis before allowing.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="realworld rounded-xl p-5 mb-4">
+                    <h3 class="text-amber-400 font-bold mb-3">🌍 Real World Example</h3>
+                    <p class="text-gray-300 text-sm mb-2"><strong>Problem:</strong> Employee wants to use personal Dropbox to "work from home easier"</p>
+                    <p class="text-gray-300 text-sm mb-2"><strong>Traditional FW:</strong> Can't stop it - Dropbox uses HTTPS (443), which is allowed.</p>
+                    <p class="text-gray-300 text-sm"><strong>NGFW:</strong> Rule says "Block Dropbox, Allow OneDrive". Even though both use 443, NGFW knows the difference. Employee sees "This application is blocked by company policy."</p>
+                </div>
+
+                <div class="followup rounded-xl p-5">
+                    <h3 class="text-purple-400 font-bold mb-3">🎯 Follow-up Questions</h3>
+                    <div class="space-y-3 text-sm">
+                        <div>
+                            <p class="text-gray-300 font-medium">Q: What about performance impact of DPI?</p>
+                            <p class="text-gray-400">A: Yes, there's overhead. That's why you size NGFWs based on throughput WITH features enabled, not just raw throughput. A firewall rated at 10Gbps might only do 2Gbps with full DPI, SSL decrypt, and threat prevention.</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-300 font-medium">Q: What NGFW vendors have you used?</p>
+                            <p class="text-gray-400">A: Palo Alto (most common in enterprise), Fortinet FortiGate (good price/performance), Cisco Firepower, Check Point. Each has strengths - Palo Alto's App-ID is industry-leading, Fortinet has great price for SMB.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- ZERO TRUST - DEEP DIVE -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400">3</span>
+                    Zero Trust Architecture
+                </h2>
+
+                <div class="answer rounded-xl p-5 mb-4">
+                    <h3 class="text-blue-400 font-bold mb-3">💬 What to Say</h3>
+                    <p class="text-gray-300 text-sm">"Zero Trust means 'never trust, always verify.' Instead of trusting users because they're on the corporate network, we verify every access request based on identity, device health, location, and what they're trying to access. The three principles are: Verify explicitly, Least privilege, Assume breach."</p>
+                </div>
+
+                <div class="understand rounded-xl p-5 mb-4">
+                    <h3 class="text-emerald-400 font-bold mb-3">🧠 Understand This</h3>
+                    
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">The Old Model (Castle and Moat):</p>
+                        <div class="diagram rounded-lg p-3 mb-3">
+                            <pre class="text-xs text-gray-300">
+        INTERNET (Untrusted)
+              │
+         [Firewall] ← The "moat"
+              │
+    ┌─────────────────────┐
+    │   CORPORATE NETWORK │ ← The "castle"
+    │                     │
+    │  Once inside, you   │
+    │  can access         │
+    │  EVERYTHING         │ ← THIS IS THE PROBLEM
+    │                     │
+    └─────────────────────┘
+                            </pre>
+                        </div>
+                        <p class="text-gray-300 text-sm">Problem: If attacker gets past the firewall (phishing, VPN compromise, insider), they have free movement inside. Most breaches happen this way.</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">Zero Trust Model:</p>
+                        <div class="diagram rounded-lg p-3 mb-3">
+                            <pre class="text-xs text-gray-300">
+    ┌──────────────────────────────────────────┐
+    │         EVERY ACCESS = VERIFIED          │
+    │                                          │
+    │  User → [Identity Check]                 │
+    │         [Device Health Check]            │
+    │         [Location Check]                 │
+    │         [What are you accessing?]        │
+    │         [Is this normal behavior?]       │
+    │                ↓                         │
+    │         GRANT MINIMUM ACCESS             │
+    │         FOR LIMITED TIME                 │
+    │                                          │
+    │  Even INSIDE network = still verify      │
+    └──────────────────────────────────────────┘
+                            </pre>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">Three Core Principles (VLA):</p>
+                        <div class="space-y-3">
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <p class="text-red-400 font-medium">1. Verify Explicitly</p>
+                                <p class="text-gray-400 text-sm">Authenticate and authorize based on ALL available data points:</p>
+                                <ul class="text-gray-400 text-xs mt-1 ml-4 space-y-1">
+                                    <li>• User identity (who are you?)</li>
+                                    <li>• Device health (is your laptop compliant? patched? encrypted?)</li>
+                                    <li>• Location (are you in expected country?)</li>
+                                    <li>• Network (corporate WiFi vs coffee shop?)</li>
+                                    <li>• What you're accessing (is this normal for your role?)</li>
+                                    <li>• Risk signals (impossible travel? new device?)</li>
+                                </ul>
+                            </div>
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <p class="text-yellow-400 font-medium">2. Least Privilege Access</p>
+                                <p class="text-gray-400 text-sm">Give minimum access needed, for minimum time:</p>
+                                <ul class="text-gray-400 text-xs mt-1 ml-4 space-y-1">
+                                    <li>• Just-In-Time (JIT) access - request when needed, expires after</li>
+                                    <li>• Just-Enough-Access (JEA) - only what you need for task</li>
+                                    <li>• No standing admin rights - elevate only when required</li>
+                                </ul>
+                            </div>
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <p class="text-purple-400 font-medium">3. Assume Breach</p>
+                                <p class="text-gray-400 text-sm">Design as if attackers are ALREADY inside:</p>
+                                <ul class="text-gray-400 text-xs mt-1 ml-4 space-y-1">
+                                    <li>• Micro-segmentation - every workload isolated</li>
+                                    <li>• Encrypt everything - even internal traffic</li>
+                                    <li>• Continuous monitoring - detect lateral movement</li>
+                                    <li>• Minimize blast radius - breach of one thing doesn't = breach of everything</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">Zero Trust in Practice (Microsoft Example):</p>
+                        <p class="text-gray-300 text-sm mb-2">User tries to access SharePoint:</p>
+                        <ol class="text-gray-400 text-sm space-y-1 ml-4">
+                            <li>1. <strong>Entra ID</strong> verifies identity (password + MFA)</li>
+                            <li>2. <strong>Conditional Access</strong> checks: Is device compliant? Location OK? Sign-in risk low?</li>
+                            <li>3. If all pass → Grant access to JUST SharePoint (not everything)</li>
+                            <li>4. If risky → Require additional verification or block</li>
+                            <li>5. <strong>Session controls</strong> - can't download to unmanaged device</li>
+                            <li>6. <strong>Continuous evaluation</strong> - if device becomes non-compliant mid-session, access revoked</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="realworld rounded-xl p-5 mb-4">
+                    <h3 class="text-amber-400 font-bold mb-3">🌍 Real World Example</h3>
+                    <p class="text-gray-300 text-sm mb-2"><strong>Old way:</strong> User connects to VPN → Full network access → Can reach any server</p>
+                    <p class="text-gray-300 text-sm mb-2"><strong>Zero Trust:</strong> User authenticates → Conditional Access checks device → Only granted access to specific apps they need → Each app verifies again → Session monitored for anomalies</p>
+                    <p class="text-gray-300 text-sm"><strong>Result:</strong> Even if attacker steals credentials, they can't access anything because they fail device compliance check. Even if they compromise one app, they can't move laterally because everything else requires separate verification.</p>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- PAM - DEEP DIVE -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400">4</span>
+                    Privileged Access Management (PAM)
+                </h2>
+
+                <div class="answer rounded-xl p-5 mb-4">
+                    <h3 class="text-blue-400 font-bold mb-3">💬 What to Say</h3>
+                    <p class="text-gray-300 text-sm">"PAM controls access to high-privilege accounts like domain admins and root. Key capabilities are: credential vaulting so nobody knows the actual password, session recording for audit, and just-in-time access so privileges are temporary. Most breaches involve privileged credentials, so protecting them is critical."</p>
+                </div>
+
+                <div class="understand rounded-xl p-5 mb-4">
+                    <h3 class="text-emerald-400 font-bold mb-3">🧠 Understand This</h3>
+                    
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">Why Privileged Accounts Are Dangerous:</p>
+                        <p class="text-gray-300 text-sm mb-2">Think about what these accounts can do:</p>
+                        <ul class="text-gray-400 text-sm space-y-1 ml-4">
+                            <li>• <strong>Domain Admin</strong> - Control entire Active Directory, every user, every computer</li>
+                            <li>• <strong>Root/Local Admin</strong> - Full control of a system, can install anything</li>
+                            <li>• <strong>Database Admin</strong> - Access all data, can export entire databases</li>
+                            <li>• <strong>Cloud Admin</strong> - Create/delete resources, access all storage</li>
+                        </ul>
+                        <p class="text-gray-300 text-sm mt-2">If attacker gets ONE of these, game over. That's why they're the #1 target.</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">The Problem PAM Solves:</p>
+                        <div class="diagram rounded-lg p-3 mb-3">
+                            <pre class="text-xs text-gray-300">
+WITHOUT PAM:
+- Admin knows password "SuperSecret123"
+- Password never changes
+- Admin uses it from any machine
+- No record of what admin did
+- If admin leaves, password still works
+- If attacker steals password, works forever
+
+WITH PAM:
+- Password stored in encrypted vault
+- Admin doesn't know actual password
+- Password rotates automatically (daily/hourly)
+- Admin "checks out" access when needed
+- Every action recorded on video
+- Access expires after 4 hours
+- Attacker steals hash? It's already rotated!
+                            </pre>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">Core PAM Capabilities:</p>
+                        <div class="space-y-3">
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <p class="text-cyan-400 font-medium">1. Credential Vaulting</p>
+                                <p class="text-gray-400 text-sm">Passwords stored encrypted in secure vault. Users never see actual password - they "check out" access through the PAM system which injects credentials automatically.</p>
+                            </div>
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <p class="text-cyan-400 font-medium">2. Automatic Rotation</p>
+                                <p class="text-gray-400 text-sm">Passwords changed automatically on schedule. Even if attacker dumps hashes from memory, they're useless tomorrow.</p>
+                            </div>
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <p class="text-cyan-400 font-medium">3. Session Recording</p>
+                                <p class="text-gray-400 text-sm">Video recording of everything done during privileged session. For auditing ("what did the contractor do?") and forensics ("how did the breach happen?").</p>
+                            </div>
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <p class="text-cyan-400 font-medium">4. Just-In-Time (JIT) Access</p>
+                                <p class="text-gray-400 text-sm">No standing privileges. Request access → Approval workflow → Get access for limited time → Auto-revoke. You're only admin when you need to be.</p>
+                            </div>
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <p class="text-cyan-400 font-medium">5. Privileged Access Workstations (PAW)</p>
+                                <p class="text-gray-400 text-sm">Admins can only use privileged credentials from hardened, dedicated machines. Can't accidentally use domain admin from your regular browsing laptop.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">Common PAM Tools:</p>
+                        <ul class="text-gray-300 text-sm space-y-1">
+                            <li>• <strong>CyberArk</strong> - Enterprise leader, full featured</li>
+                            <li>• <strong>BeyondTrust</strong> - Strong in endpoint privilege management</li>
+                            <li>• <strong>Azure PIM</strong> (Privileged Identity Management) - Cloud-native for Azure/M365 roles</li>
+                            <li>• <strong>HashiCorp Vault</strong> - Popular for DevOps/secrets management</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="realworld rounded-xl p-5 mb-4">
+                    <h3 class="text-amber-400 font-bold mb-3">🌍 Real World: How I'd Explain Azure PIM</h3>
+                    <p class="text-gray-300 text-sm mb-2">"In Azure PIM, I'm 'eligible' for Global Admin but don't have it active. When I need to make a change:</p>
+                    <ol class="text-gray-400 text-sm ml-4 space-y-1">
+                        <li>1. I request activation in the portal</li>
+                        <li>2. I provide justification ('need to modify Conditional Access policy')</li>
+                        <li>3. I complete MFA</li>
+                        <li>4. I get Global Admin for 8 hours max</li>
+                        <li>5. Everything I do is logged</li>
+                        <li>6. Access auto-revokes after 8 hours</li>
+                    </ol>
+                    <p class="text-gray-300 text-sm mt-2">So 95% of the time I have no admin rights at all - much smaller attack surface."</p>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- DLP IMPLEMENTATION - DEEP DIVE -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400">5</span>
+                    DLP Implementation (Your Real Experience!)
+                </h2>
+
+                <div class="answer rounded-xl p-5 mb-4">
+                    <h3 class="text-blue-400 font-bold mb-3">💬 What to Say</h3>
+                    <p class="text-gray-300 text-sm">"I led a DLP migration from Symantec to Microsoft Purview. The key was phased rollout: Discovery first to understand data, then Audit mode to see what policies would catch, Tune to reduce false positives, Warn mode to educate users, and finally Block for high-risk actions. Took about 6 months but we reduced false positives by 40% compared to the old system."</p>
+                </div>
+
+                <div class="understand rounded-xl p-5 mb-4">
+                    <h3 class="text-emerald-400 font-bold mb-3">🧠 Understand This</h3>
+                    
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">What DLP Actually Does:</p>
+                        <p class="text-gray-300 text-sm mb-2">Data Loss Prevention monitors data movement and blocks/alerts when sensitive data goes somewhere it shouldn't:</p>
+                        <ul class="text-gray-400 text-sm space-y-1 ml-4">
+                            <li>• Emailing credit card numbers to personal Gmail</li>
+                            <li>• Uploading source code to public GitHub</li>
+                            <li>• Copying customer PII to USB drive</li>
+                            <li>• Printing HR documents with SSNs</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">Why Phased Rollout is Critical:</p>
+                        <div class="diagram rounded-lg p-3 mb-3">
+                            <pre class="text-xs text-gray-300">
+WRONG WAY (What NOT to do):
+Day 1: Turn on blocking → Finance can't send reports
+       → Sales can't email contracts → Executives angry
+       → IT flooded with tickets → DLP turned off
+       → Project labeled "failed"
+
+RIGHT WAY (Phased):
+Month 1-2: AUDIT MODE - Just watch, don't block anything
+           → Learn what sensitive data exists
+           → See normal business workflows
+           → Identify false positive patterns
+
+Month 3-4: TUNE - Adjust detection rules
+           → Add exclusions for legitimate workflows
+           → Refine sensitivity labels
+           → Reduce noise
+
+Month 5:   WARN MODE - Notify users but allow override
+           → User sees "This looks sensitive, are you sure?"
+           → User can proceed with justification
+           → Educates users about data handling
+           → Gathers data on overrides
+
+Month 6+:  BLOCK MODE (graduated)
+           → Block highest risk first (CC numbers external)
+           → Warn for medium risk
+           → Monitor for low risk
+                            </pre>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">Your Purview Migration Story (Use This!):</p>
+                        <div class="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm mb-2"><strong>Challenge:</strong> Migrating from Symantec DLP (legacy) to Microsoft Purview Endpoint DLP while maintaining protection.</p>
+                            <p class="text-gray-300 text-sm mb-2"><strong>Approach:</strong></p>
+                            <ol class="text-gray-400 text-sm ml-4 space-y-1">
+                                <li>1. Ran both systems in parallel during transition</li>
+                                <li>2. Rebuilt detection logic - Symantec regex ≠ Microsoft sensitive info types</li>
+                                <li>3. Used Purview's built-in trainable classifiers (ML-based detection)</li>
+                                <li>4. Phased: Audit → Warn → Block over 6 months</li>
+                                <li>5. Created custom sensitive info types for company-specific data</li>
+                            </ol>
+                            <p class="text-gray-300 text-sm mt-2"><strong>Result:</strong> 40% fewer false positives because of better tuning. Full integration with Microsoft ecosystem (Defender, Sentinel alerts).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="followup rounded-xl p-5">
+                    <h3 class="text-purple-400 font-bold mb-3">🎯 Follow-up Questions</h3>
+                    <div class="space-y-3 text-sm">
+                        <div>
+                            <p class="text-gray-300 font-medium">Q: How do you handle false positives?</p>
+                            <p class="text-gray-400">A: Create exclusions for known good workflows (e.g., finance reports to auditors), use contextual rules (SSN pattern in HR email = OK, SSN to personal email = block), regularly review and tune based on user feedback.</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-300 font-medium">Q: What data did you protect?</p>
+                            <p class="text-gray-400">A: PII (SSN, credit cards, passport numbers), financial data, intellectual property (source code, designs), health information. Prioritized based on regulatory requirements and business risk.</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-300 font-medium">Q: How did users react?</p>
+                            <p class="text-gray-400">A: Initial pushback, but warn mode helped - users understood what was sensitive. Made sure to communicate WHY before rollout. Provided training. The key is not surprising people with blocks.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- OT vs IT SECURITY - DEEP DIVE -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400">6</span>
+                    OT vs IT Security
+                </h2>
+
+                <div class="answer rounded-xl p-5 mb-4">
+                    <h3 class="text-blue-400 font-bold mb-3">💬 What to Say</h3>
+                    <p class="text-gray-300 text-sm">"The biggest difference is priorities: IT is about data confidentiality, OT is about availability and safety. In IT, we patch monthly. In OT, some systems can't be patched for years because of vendor certification, downtime costs, or legacy OS. You can't just run vulnerability scans against OT - it might crash a PLC. The approach is heavy segmentation, passive monitoring, and compensating controls."</p>
+                </div>
+
+                <div class="understand rounded-xl p-5 mb-4">
+                    <h3 class="text-emerald-400 font-bold mb-3">🧠 Understand This</h3>
+                    
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">What is OT (Operational Technology)?</p>
+                        <p class="text-gray-300 text-sm mb-2">Hardware and software that monitors/controls physical processes:</p>
+                        <ul class="text-gray-400 text-sm space-y-1 ml-4">
+                            <li>• <strong>SCADA</strong> - Supervisory Control and Data Acquisition (monitors/controls industrial processes)</li>
+                            <li>• <strong>PLC</strong> - Programmable Logic Controller (controls machinery)</li>
+                            <li>• <strong>DCS</strong> - Distributed Control System (process control)</li>
+                            <li>• <strong>HMI</strong> - Human Machine Interface (operator screens)</li>
+                            <li>• Manufacturing robots, power grid controls, water treatment, etc.</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">Key Differences Table:</p>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-xs">
+                                <thead>
+                                    <tr class="border-b border-gray-700">
+                                        <th class="text-left py-2 px-3 text-gray-400">Aspect</th>
+                                        <th class="text-left py-2 px-3 text-cyan-400">IT</th>
+                                        <th class="text-left py-2 px-3 text-orange-400">OT</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-gray-300">
+                                    <tr class="border-b border-gray-800">
+                                        <td class="py-2 px-3 font-medium">Priority</td>
+                                        <td class="py-2 px-3">Confidentiality first</td>
+                                        <td class="py-2 px-3">Availability & Safety first</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-800">
+                                        <td class="py-2 px-3 font-medium">Downtime tolerance</td>
+                                        <td class="py-2 px-3">Minutes to hours OK</td>
+                                        <td class="py-2 px-3">Seconds can cost millions</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-800">
+                                        <td class="py-2 px-3 font-medium">Patching</td>
+                                        <td class="py-2 px-3">Monthly (Patch Tuesday)</td>
+                                        <td class="py-2 px-3">Yearly or never</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-800">
+                                        <td class="py-2 px-3 font-medium">System age</td>
+                                        <td class="py-2 px-3">3-5 year refresh</td>
+                                        <td class="py-2 px-3">15-30 years</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-800">
+                                        <td class="py-2 px-3 font-medium">OS</td>
+                                        <td class="py-2 px-3">Current Windows/Linux</td>
+                                        <td class="py-2 px-3">Windows XP, proprietary RTOS</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-800">
+                                        <td class="py-2 px-3 font-medium">Scanning</td>
+                                        <td class="py-2 px-3">Active scanning OK</td>
+                                        <td class="py-2 px-3">Passive only (active can crash systems)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 px-3 font-medium">Breach impact</td>
+                                        <td class="py-2 px-3">Data stolen, financial loss</td>
+                                        <td class="py-2 px-3">Physical damage, safety risk, environmental</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">Purdue Model (OT Network Segmentation):</p>
+                        <div class="diagram rounded-lg p-3 mb-3">
+                            <pre class="text-xs text-gray-300">
+Level 5: Enterprise Network (IT)
+         ─────────────────────────
+         [DMZ / Firewall]          ← CRITICAL BOUNDARY
+         ─────────────────────────
+Level 4: Site Business Planning
+Level 3: Site Operations (Historians, OT servers)
+         ─────────────────────────
+         [Industrial DMZ]
+         ─────────────────────────
+Level 2: Area Supervisory Control (HMI, SCADA)
+Level 1: Basic Control (PLCs, RTUs)
+Level 0: Physical Process (Sensors, Actuators)
+
+RULE: Traffic should only flow between adjacent levels!
+      Level 5 should NEVER directly talk to Level 1
+                            </pre>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">OT Security Approach:</p>
+                        <ul class="text-gray-300 text-sm space-y-2">
+                            <li>✓ <strong>Network segmentation</strong> - Isolate OT from IT, segment within OT</li>
+                            <li>✓ <strong>Passive monitoring</strong> - Tools like Claroty, Nozomi, Dragos that watch traffic without sending packets</li>
+                            <li>✓ <strong>Whitelist approach</strong> - Only allow known-good traffic patterns</li>
+                            <li>✓ <strong>Physical security</strong> - Lock down USB ports, console access</li>
+                            <li>✓ <strong>Compensating controls</strong> - If can't patch, add more monitoring, segment more</li>
+                            <li>✗ <strong>DON'T</strong> run active vulnerability scans</li>
+                            <li>✗ <strong>DON'T</strong> install agents without vendor approval</li>
+                            <li>✗ <strong>DON'T</strong> push patches without extensive testing</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="realworld rounded-xl p-5 mb-4">
+                    <h3 class="text-amber-400 font-bold mb-3">🌍 Why This Matters (Real Incidents)</h3>
+                    <ul class="text-gray-300 text-sm space-y-2">
+                        <li>• <strong>Colonial Pipeline (2021)</strong> - Ransomware on IT side, but shut down OT pipelines as precaution. East coast fuel shortage.</li>
+                        <li>• <strong>Ukraine Power Grid (2015)</strong> - Attackers accessed SCADA, remotely opened breakers. 230,000 people lost power.</li>
+                        <li>• <strong>Triton/TRISIS (2017)</strong> - Malware targeted SAFETY systems in petrochemical plant. Could have caused explosion.</li>
+                    </ul>
+                    <p class="text-gray-400 text-sm mt-2">This is why OT security is critical - it's not just data, it's physical safety.</p>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- DEVSECOPS / CI-CD - DEEP DIVE -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400">7</span>
+                    DevSecOps & CI/CD Security
+                </h2>
+
+                <div class="answer rounded-xl p-5 mb-4">
+                    <h3 class="text-blue-400 font-bold mb-3">💬 What to Say</h3>
+                    <p class="text-gray-300 text-sm">"DevSecOps is about shifting security left - finding issues early when they're cheap to fix. In the pipeline, I'd add: secrets scanning at commit, SAST and SCA at build, DAST at test, and IaC scanning before deploy. The key is not slowing developers down - fail builds only for critical issues, give clear remediation guidance, and automate everything."</p>
+                </div>
+
+                <div class="understand rounded-xl p-5 mb-4">
+                    <h3 class="text-emerald-400 font-bold mb-3">🧠 Understand This</h3>
+                    
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">What "Shift Left" Means:</p>
+                        <div class="diagram rounded-lg p-3 mb-3">
+                            <pre class="text-xs text-gray-300">
+Traditional: Security at the END
+Plan → Code → Build → Test → Deploy → [SECURITY REVIEW] → Prod
+                                              ↑
+                                    Finding bugs HERE is expensive!
+                                    Have to go back and fix code
+                                    Delays release
+
+Shift Left: Security throughout
+Plan → Code → Build → Test → Deploy → Prod
+  ↑      ↑       ↑       ↑       ↑
+  │      │       │       │       └── Runtime protection
+  │      │       │       └────────── DAST testing  
+  │      │       └────────────────── SAST + SCA
+  │      └────────────────────────── Secrets scanning
+  └───────────────────────────────── Threat modeling
+
+Find bugs EARLY = cheap to fix, faster releases
+                            </pre>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">Security Tools at Each Stage:</p>
+                        <div class="space-y-3">
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <p class="text-blue-400 font-medium mb-1">📝 CODE (Pre-commit / Commit)</p>
+                                <ul class="text-gray-400 text-xs space-y-1">
+                                    <li>• <strong>Secrets scanning</strong> - Find AWS keys, passwords before they hit repo (git-secrets, Gitleaks, GitHub secret scanning)</li>
+                                    <li>• <strong>Linting</strong> - Security-focused code linters</li>
+                                    <li>• <strong>IDE plugins</strong> - Real-time feedback as developers type</li>
+                                </ul>
+                            </div>
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <p class="text-yellow-400 font-medium mb-1">🔨 BUILD</p>
+                                <ul class="text-gray-400 text-xs space-y-1">
+                                    <li>• <strong>SAST (Static Application Security Testing)</strong> - Scans source code for vulnerabilities without running it (SonarQube, Checkmarx, Semgrep)</li>
+                                    <li>• <strong>SCA (Software Composition Analysis)</strong> - Checks dependencies for known CVEs (Snyk, Dependabot, OWASP Dependency-Check)</li>
+                                    <li>• <strong>Container scanning</strong> - Check base images for vulnerabilities (Trivy, Anchore)</li>
+                                </ul>
+                            </div>
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <p class="text-green-400 font-medium mb-1">🧪 TEST</p>
+                                <ul class="text-gray-400 text-xs space-y-1">
+                                    <li>• <strong>DAST (Dynamic Application Security Testing)</strong> - Actually attacks running application (OWASP ZAP, Burp Suite)</li>
+                                    <li>• <strong>IAST (Interactive)</strong> - Agent inside app during testing, best of both</li>
+                                    <li>• <strong>API security testing</strong> - Test API endpoints for auth issues, injection</li>
+                                </ul>
+                            </div>
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <p class="text-orange-400 font-medium mb-1">🚀 DEPLOY</p>
+                                <ul class="text-gray-400 text-xs space-y-1">
+                                    <li>• <strong>IaC scanning</strong> - Check Terraform/CloudFormation for misconfigs (Checkov, tfsec)</li>
+                                    <li>• <strong>Image signing</strong> - Verify containers haven't been tampered with</li>
+                                    <li>• <strong>Policy gates</strong> - Block deploy if security requirements not met</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-white font-medium mb-2">Making It Work (Don't Be the Blocker):</p>
+                        <ul class="text-gray-300 text-sm space-y-2">
+                            <li>✓ <strong>Fail fast, fail informatively</strong> - Clear error messages with remediation links</li>
+                            <li>✓ <strong>Tune your thresholds</strong> - Break build only for Critical/High, warn for Medium</li>
+                            <li>✓ <strong>Baseline existing issues</strong> - Don't fail on day 1 for 1000 old issues</li>
+                            <li>✓ <strong>Fast feedback</strong> - SAST results in minutes, not hours</li>
+                            <li>✓ <strong>Developer-friendly tools</strong> - IDE integration, PR comments, not just reports</li>
+                            <li>✗ Avoid becoming the "team that blocks everything"</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="realworld rounded-xl p-5">
+                    <h3 class="text-amber-400 font-bold mb-3">🌍 Example Pipeline</h3>
+                    <div class="diagram rounded-lg p-3">
+                        <pre class="text-xs text-gray-300">
+GitHub Actions Example:
+┌─────────────────────────────────────────────────────────┐
+│  on: [push, pull_request]                               │
+│                                                         │
+│  jobs:                                                  │
+│    security-scan:                                       │
+│      - secrets-scan (Gitleaks)     → FAIL if found     │
+│      - sast-scan (Semgrep)         → FAIL if Critical  │
+│      - dependency-check (Snyk)     → FAIL if High CVE  │
+│      - container-scan (Trivy)      → WARN if Medium    │
+│      - iac-scan (Checkov)          → FAIL if High      │
+│                                                         │
+│    build:                                               │
+│      needs: security-scan          → Only if passed    │
+│                                                         │
+│    deploy-staging:                                      │
+│      needs: build                                       │
+│      - dast-scan (ZAP)             → Report only       │
+│                                                         │
+│    deploy-prod:                                         │
+│      needs: deploy-staging                              │
+│      - manual approval required                         │
+└─────────────────────────────────────────────────────────┘
+                        </pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Navigation -->
+            <section class="mb-16">
+                <div class="card rounded-xl p-6">
+                    <h3 class="text-white font-bold mb-4">📚 More Topics in Main Interview Prep</h3>
+                    <p class="text-gray-400 text-sm mb-4">This page covers the most complex technical topics. For behavioral questions and more technical Q&A, see:</p>
+                    <div class="flex gap-4">
+                        <a href="interview-prep.html" class="bg-cyan-500/20 border border-cyan-500/30 rounded-lg px-4 py-2 text-cyan-400 text-sm hover:bg-cyan-500/30 transition">🎯 Interview Prep (All Q&A)</a>
+                        <a href="cheatsheet.html" class="bg-yellow-500/20 border border-yellow-500/30 rounded-lg px-4 py-2 text-yellow-400 text-sm hover:bg-yellow-500/30 transition">🧠 Cheat Sheet (Mnemonics)</a>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+<script src="../js/sidebar.js"></script>
+</body>
+</html>

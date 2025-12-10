@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Prep | Security Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Inter', system-ui, sans-serif; }
+        .card { background: linear-gradient(145deg, #12121a, #1a1a2e); border: 1px solid #2a2a3e; }
+        .behavioral { background: linear-gradient(135deg, #1a1a2e 0%, #1e1e3e 100%); border: 1px solid #3b82f6; }
+        .technical { background: linear-gradient(135deg, #1a1a2e 0%, #1e1e3e 100%); border: 1px solid #10b981; }
+        .scenario { background: linear-gradient(135deg, #1a1a2e 0%, #1e1e3e 100%); border: 1px solid #f59e0b; }
+        .tip { background: linear-gradient(135deg, #1a1a2e 0%, #2a2a3e 100%); border: 1px solid #8b5cf6; }
+        pre { background: #0d0d14 !important; border-radius: 8px; padding: 16px; overflow-x: auto; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <main class="lg:ml-64 pt-14 lg:pt-0">
+        <div class="max-w-5xl mx-auto px-6 py-12">
+            <!-- Hero -->
+            <section id="overview" class="mb-12">
+                <div class="flex items-center gap-2 text-cyan-400 mb-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                    <span class="text-sm font-medium">Interview Preparation</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Security Engineer Interview Prep</h1>
+                <p class="text-xl text-gray-400 mb-6">Behavioral + Technical questions with natural, human-like answers</p>
+                
+                <div class="tip rounded-xl p-4 mb-8">
+                    <p class="text-purple-400 font-medium mb-2">💡 Answer Framework: Keep it Natural</p>
+                    <p class="text-gray-400 text-sm">Don't memorize word-for-word. Understand the story, hit key points, speak like you're talking to a colleague. Use "I" not "we" - they want YOUR contribution.</p>
+                </div>
+            </section>
+
+            <!-- ======================= -->
+            <!-- BEHAVIORAL QUESTIONS -->
+            <!-- ======================= -->
+            <section id="behavioral" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                    </span>
+                    Behavioral Questions
+                </h2>
+
+                <div class="space-y-6">
+                    <!-- Why this company -->
+                    <div class="behavioral rounded-2xl p-6">
+                        <p class="text-blue-400 font-bold text-lg mb-3">Q: Why do you want to work at [Company Name]?</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "Honestly, a few things stood out to me. First, the scope - you're securing IT, OT, and cloud all together. That's rare and really interesting because most places only focus on one piece. I've been doing a lot of cloud security work with Microsoft's stack, but I'm excited to get hands-on with OT environments too.<br><br>
+                                Second, I looked at your security posture and saw you're using [mention tools from JD if known - NGFWs, EDR, etc.]. I've worked extensively with similar tools, especially on the DLP side where I just led a migration from Symantec to Microsoft Purview.<br><br>
+                                And honestly? I like that this role is engineering-focused, not just operations. Building automation, working with DevSecOps, infrastructure-as-code - that's where I want to grow. I don't just want to respond to alerts all day, I want to build systems that prevent issues in the first place."
+                            </p>
+                        </div>
+                        <div class="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3">
+                            <p class="text-purple-400 text-xs font-medium">💡 Tip: Research the company! Mention their industry, recent news, tech stack if public. Show you did homework.</p>
+                        </div>
+                    </div>
+
+                    <!-- Tell me about yourself -->
+                    <div class="behavioral rounded-2xl p-6">
+                        <p class="text-blue-400 font-bold text-lg mb-3">Q: Tell me about yourself / Walk me through your background</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "Sure! I've been in security for about 5 years now. Started as an L1 SOC analyst at Cognizant working with Splunk - lots of alert triage, learning how attacks actually look in logs.<br><br>
+                                Then moved to Infosys where I got into the engineering side - worked with Trellix for endpoint security and Symantec DLP. That's where I really learned how to deploy and tune security tools, not just use them.<br><br>
+                                Now I'm at a Siemens subsidiary as a Security Engineer. The big project I've been leading is migrating our DLP from Symantec to Microsoft Purview Endpoint DLP. Started in pilot, built the policies, and now we're in enforcement mode with block actions. I've also worked a lot with Cortex XDR, Microsoft Sentinel, and the whole Defender stack.<br><br>
+                                What I'm looking for now is more breadth - I want to work across firewalls, cloud security, PAM, the full stack. That's what drew me to this role."
+                            </p>
+                        </div>
+                        <div class="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3">
+                            <p class="text-purple-400 text-xs font-medium">💡 Keep it under 2 minutes. Past → Present → Future. End with why you're here.</p>
+                        </div>
+                    </div>
+
+                    <!-- Conflict with coworker -->
+                    <div class="behavioral rounded-2xl p-6">
+                        <p class="text-blue-400 font-bold text-lg mb-3">Q: Tell me about a conflict with a coworker and how you handled it</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "Yeah, this happened during the DLP migration. We had a sysadmin who was really pushing back on the endpoint agent deployment. He was worried about performance impact on user machines and kept delaying the rollout in his region.<br><br>
+                                Instead of escalating right away, I asked if we could sit down and look at the data together. I pulled the actual CPU and memory metrics from our pilot group - showed him it was like 2% CPU average, barely noticeable. I also offered to do a smaller pilot in his region first so he could see it himself.<br><br>
+                                Turns out his real concern was that he'd get blamed if something went wrong. So I made sure our rollback plan was solid and documented, and I told him I'd be the one on the hook if there were issues since it was my project.<br><br>
+                                After that, he was actually helpful - even caught a few edge cases I missed. I learned that when someone's pushing back, there's usually a reason that isn't obvious. Better to understand it than fight it."
+                            </p>
+                        </div>
+                        <div class="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3">
+                            <p class="text-purple-400 text-xs font-medium">💡 Show empathy, not ego. Don't badmouth the person. Focus on resolution and what you learned.</p>
+                        </div>
+                    </div>
+
+                    <!-- Challenging project -->
+                    <div class="behavioral rounded-2xl p-6">
+                        <p class="text-blue-400 font-bold text-lg mb-3">Q: Describe a challenging project you worked on</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "The Purview DLP migration has been my biggest challenge. We had Symantec DLP for years, thousands of policies, and users were used to it. Moving to a completely new platform while keeping data protected the whole time - that was tricky.<br><br>
+                                The main challenges were: first, we couldn't just turn off Symantec and turn on Purview. We ran them in parallel for months, which meant double the agent overhead. Second, the policies don't translate 1-to-1. Symantec regex doesn't work the same as Microsoft's sensitive info types. I had to rebuild a lot of detection logic from scratch.<br><br>
+                                What I did was break it into phases. Started with audit-only mode so we could see what Purview would catch without blocking anything. Tuned for like two months based on false positives. Then moved to warn mode - users got notified but could override. Collected that data too. Now we're in block mode for the critical stuff, warn for medium risk.<br><br>
+                                The result? We actually reduced false positives by 40% compared to old Symantec because I had all that tuning data. And we're now integrated with the Microsoft ecosystem - Defender, Sentinel, it all talks together."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Failure / Mistake -->
+                    <div class="behavioral rounded-2xl p-6">
+                        <p class="text-blue-400 font-bold text-lg mb-3">Q: Tell me about a time you failed or made a mistake</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "Early in the DLP project, I pushed a policy to production that was too aggressive. It was supposed to block credit card numbers in emails, but the regex also matched some internal part numbers that happened to have similar patterns. Finance team couldn't send purchase orders for half a day.<br><br>
+                                I found out when I got a call from my manager saying the CFO was asking questions. Not a great feeling. I rolled back the policy immediately, then spent the evening fixing the regex to be more specific - added context rules so it only triggers when there's actually payment-related content around the numbers.<br><br>
+                                What I changed after that: I now always run new policies in audit mode for at least a week, no matter how confident I am. I also set up a test group of users who agreed to be guinea pigs - they get policies first and give feedback before wider rollout. Haven't had a similar incident since.<br><br>
+                                It was embarrassing, but it taught me that in security, being careful is more important than being fast."
+                            </p>
+                        </div>
+                        <div class="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3">
+                            <p class="text-purple-400 text-xs font-medium">💡 Own it completely. Show what you learned. Prove it won't happen again.</p>
+                        </div>
+                    </div>
+
+                    <!-- Disagree with manager -->
+                    <div class="behavioral rounded-2xl p-6">
+                        <p class="text-blue-400 font-bold text-lg mb-3">Q: Tell me about a time you disagreed with your manager</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "This happened when we were deciding on the EDR solution. My manager wanted to stick with our existing tool because of the sunk cost and relationships with the vendor. I thought we should move to Microsoft Defender for Endpoint because we were already deep in the Microsoft ecosystem - Sentinel, Entra, Intune, everything.<br><br>
+                                I didn't argue in the meeting. Instead, I put together a comparison document - total cost of ownership, integration capabilities, feature gaps. Showed that with MDE, we'd get native integration with our SIEM, no extra connector maintenance, and it was actually cheaper with our E5 licensing.<br><br>
+                                I presented it to him privately first, not in front of the team. Gave him time to think about it. He actually appreciated that I came with data instead of just opinions. We ended up doing a 90-day proof of concept with MDE on a subset of machines. The results spoke for themselves and we made the switch.<br><br>
+                                I learned that if you disagree, come with evidence and give people a graceful way to change their mind."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Why leaving current job -->
+                    <div class="behavioral rounded-2xl p-6">
+                        <p class="text-blue-400 font-bold text-lg mb-3">Q: Why are you looking to leave your current role?</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "I've learned a ton in my current role, especially around DLP and endpoint security. But I'm at a point where I want to expand my scope. Right now I'm mostly focused on data protection and endpoint - I want to get into firewalls, PAM, cloud infrastructure security, the full stack.<br><br>
+                                This role covers IT, OT, and cloud all together, plus the DevSecOps piece with CI/CD integration. That's exactly the breadth I'm looking for. I want to be a well-rounded security engineer, not just specialized in one area.<br><br>
+                                Also, honestly, the engineering focus appeals to me. I want to build automation, write code, design architectures - not just operate existing tools. This role seems to have that balance."
+                            </p>
+                        </div>
+                        <div class="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3">
+                            <p class="text-purple-400 text-xs font-medium">💡 Never badmouth current employer. Focus on what you're moving TOWARD, not away from.</p>
+                        </div>
+                    </div>
+
+                    <!-- Prioritization -->
+                    <div class="behavioral rounded-2xl p-6">
+                        <p class="text-blue-400 font-bold text-lg mb-3">Q: How do you prioritize when everything is urgent?</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "First thing I do is figure out what's actually urgent versus what just feels urgent. Real urgent is: active security incident, critical vulnerability being exploited, something broken that's blocking business. Everything else can probably wait a few hours.<br><br>
+                                For actual prioritization, I think about impact and effort. What affects the most users or the most critical systems? What can I fix quickly to get some wins? Sometimes a 15-minute fix for a medium issue is better than spending all day on one complex thing while other stuff piles up.<br><br>
+                                I'm also not afraid to push back or negotiate timelines. If someone says they need something today, I'll ask what specifically needs it today and what breaks if we do it tomorrow. Usually there's more flexibility than people initially say.<br><br>
+                                When I'm really overloaded, I communicate early. I'll tell my manager 'here's what's on my plate, here's what I think the priority order is, let me know if you see it differently.' Better than missing deadlines silently."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======================= -->
+            <!-- TECHNICAL QUESTIONS -->
+            <!-- ======================= -->
+            <section id="technical" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                    </span>
+                    Technical Questions
+                </h2>
+
+                <div class="space-y-6">
+                    <!-- DNS Sinkhole -->
+                    <div class="technical rounded-2xl p-6">
+                        <p class="text-green-400 font-bold text-lg mb-3">Q: What is a DNS sinkhole and when would you use it?</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "A DNS sinkhole is basically a lie we tell malware. When a compromised machine tries to look up a malicious domain - like a C2 server - instead of giving it the real IP, we redirect it to a controlled IP address, usually an internal server or just a black hole.<br><br>
+                                Think of it like this: malware says 'where's evil-c2-server.com?' and instead of answering '185.x.x.x', our DNS says 'it's at 10.0.0.100' - which is a server we control. The malware tries to connect there, fails to get instructions, and we've broken the attack chain.<br><br>
+                                I'd use it for a few things: blocking known malicious domains from threat intel feeds, containing an active infection so it can't phone home, and also as a detection mechanism - if we see lots of machines trying to hit the sinkhole IP, we know we have infected hosts.<br><br>
+                                We've done this with our NGFWs that have DNS-layer filtering. You can also set it up on internal DNS servers or use something like Cisco Umbrella for cloud-based sinkholing."
+                            </p>
+                        </div>
+                        <div class="bg-[#0d0d14] rounded-lg p-3 mt-3">
+                            <p class="text-cyan-400 text-xs font-medium mb-2">Quick diagram:</p>
+                            <pre class="text-xs text-gray-400">Infected PC → DNS Query "malware-c2.com" → DNS Sinkhole → Returns 10.0.0.100 (fake)
+                                                                                    ↓
+                                                            Malware connects to sinkhole, NOT attacker
+                                                            Security team sees connection = detection</pre>
+                        </div>
+                    </div>
+
+                    <!-- NGFW vs Traditional -->
+                    <div class="technical rounded-2xl p-6">
+                        <p class="text-green-400 font-bold text-lg mb-3">Q: What's the difference between a traditional firewall and an NGFW?</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "Traditional firewalls work at layers 3-4 - they see IP addresses and ports. So you can say 'allow traffic from 10.0.0.0/24 to port 443' but that's about it. If something malicious goes over port 443, traditional firewall doesn't care - port's allowed.<br><br>
+                                NGFWs go up to layer 7 - application layer. They understand what's actually happening in the traffic. So even if something's on port 443, the NGFW knows whether it's legitimate HTTPS, or someone tunneling SSH, or a known malware signature. You can write rules like 'allow Salesforce but block Dropbox' - it knows the difference even though both use HTTPS.<br><br>
+                                Main NGFW features I'd highlight: deep packet inspection, application awareness, integrated IPS, SSL/TLS decryption, user identity integration so you can write rules based on AD groups not just IPs, and threat intelligence feeds built in.<br><br>
+                                In practice, I've worked mostly with Palo Alto and Fortinet. The app-ID feature is huge - you can see exactly what applications are running through your network and make smart decisions."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Zero Trust -->
+                    <div class="technical rounded-2xl p-6">
+                        <p class="text-green-400 font-bold text-lg mb-3">Q: Explain Zero Trust architecture</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "Zero Trust basically means 'never trust, always verify.' The old model was castle-and-moat - once you're inside the network, you're trusted. Zero Trust says no, we verify every single access request regardless of where it comes from.<br><br>
+                                Three core principles I remember: <strong>Verify explicitly</strong> - authenticate and authorize based on all available data points like user identity, device health, location, what they're trying to access. <strong>Least privilege</strong> - give minimum access needed, just-in-time, just-enough. <strong>Assume breach</strong> - design like attackers are already inside, segment everything, encrypt everything, log everything.<br><br>
+                                In practice, this means things like: identity-based access instead of network-based, micro-segmentation so one compromised server can't reach everything, continuous validation not just at login, device health checks before allowing access.<br><br>
+                                We've implemented pieces of this - Conditional Access policies in Entra ID that check device compliance before allowing access, network segmentation between environments, privileged access workstations for admins. It's a journey, not a one-time project."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- PAM -->
+                    <div class="technical rounded-2xl p-6">
+                        <p class="text-green-400 font-bold text-lg mb-3">Q: What is PAM and why is it important?</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "PAM is Privileged Access Management - it's how we control and monitor access to high-privilege accounts like domain admins, root accounts, database admins, cloud admin roles. These are the keys to the kingdom, so they need extra protection.<br><br>
+                                Core capabilities: <strong>Credential vaulting</strong> - privileged passwords stored encrypted, rotated automatically, users check them out instead of knowing them. <strong>Session recording</strong> - record what admins do for audit and forensics. <strong>Just-in-time access</strong> - you don't have admin rights all the time, you request them for a specific task, they expire after.<br><br>
+                                Why it matters? Most breaches involve privileged credentials at some point. Attacker gets in with phishing, then hunts for admin creds to move laterally. If those creds are vaulted and rotated every 24 hours, the hash they stole yesterday doesn't work today.<br><br>
+                                I've worked with PIM in Azure - Privileged Identity Management. You request a role, it requires approval or MFA, you get it for 8 hours max, everything's logged. Similar concept to CyberArk or BeyondTrust if you've used those."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- DLP Implementation -->
+                    <div class="technical rounded-2xl p-6">
+                        <p class="text-green-400 font-bold text-lg mb-3">Q: How would you implement a DLP solution from scratch?</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "First thing - don't jump to blocking. That's a mistake I've seen people make. Start with understanding the data.<br><br>
+                                <strong>Step 1: Data discovery and classification.</strong> What sensitive data do we have? Where does it live? PII, financial data, IP, healthcare data? Work with compliance and legal to define what's actually sensitive.<br><br>
+                                <strong>Step 2: Deploy in audit/monitor mode.</strong> Turn on the tool but don't block anything. Just watch. See where sensitive data is flowing, who's handling it, what's normal behavior. This takes weeks, not days.<br><br>
+                                <strong>Step 3: Tune and reduce noise.</strong> You'll see tons of false positives. That finance report that looks like it has SSNs but doesn't. Tune the detection rules, add exclusions for legitimate workflows, build context into your rules.<br><br>
+                                <strong>Step 4: Warn mode.</strong> Start notifying users when they do something risky, but let them proceed with justification. This educates users and gives you more data.<br><br>
+                                <strong>Step 5: Block mode</strong> - but only for the highest risk stuff first. Credit cards going to personal email? Block. Internal document to external drive? Maybe just warn.<br><br>
+                                The key is phased rollout. We did this with Purview - took about 6 months from pilot to full enforcement. Rushing it just creates chaos and makes business teams hate security."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- DevSecOps -->
+                    <div class="technical rounded-2xl p-6">
+                        <p class="text-green-400 font-bold text-lg mb-3">Q: How would you integrate security into a CI/CD pipeline?</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "The goal is 'shift left' - find security issues early when they're cheap to fix, not in production when it's expensive and risky. Here's what I'd add at each stage:<br><br>
+                                <strong>Code commit:</strong> Pre-commit hooks for secrets scanning - catch AWS keys and passwords before they even hit the repo. Tools like git-secrets or Gitleaks.<br><br>
+                                <strong>Build phase:</strong> SAST (static analysis) - scan source code for vulnerabilities. SCA (software composition analysis) - check dependencies for known CVEs. If you're building containers, scan the base images too.<br><br>
+                                <strong>Test phase:</strong> DAST (dynamic testing) - spin up the app and actually attack it. API security testing if it's an API.<br><br>
+                                <strong>Deploy:</strong> Infrastructure-as-code scanning - make sure Terraform or ARM templates aren't creating public S3 buckets or open security groups. Verify image signatures.<br><br>
+                                The key is making it not slow developers down too much. Set thresholds - fail the build for critical vulns, warn for medium, ignore low. Give developers clear feedback on how to fix things. Don't just say 'vulnerability found' - link to the remediation guide.<br><br>
+                                I'd use something like GitHub Advanced Security, Snyk, or Checkmarx depending on the stack."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- IaC Security -->
+                    <div class="technical rounded-2xl p-6">
+                        <p class="text-green-400 font-bold text-lg mb-3">Q: What security considerations for Infrastructure-as-Code?</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "IaC is great for security because infrastructure becomes reviewable and repeatable. But it also means misconfigurations get deployed at scale, fast. So we need guardrails.<br><br>
+                                <strong>Secrets management:</strong> Never hardcode credentials in Terraform or CloudFormation. Use vault references, environment variables, or cloud-native secret managers. I've seen AWS keys in git repos - instant compromise.<br><br>
+                                <strong>Policy as code:</strong> Use tools like Checkov, tfsec, or Azure Policy to enforce standards. Block templates that create public storage, unrestricted security groups, unencrypted databases. Make it a gate in the pipeline.<br><br>
+                                <strong>Least privilege for automation:</strong> The service principal or IAM role running your IaC shouldn't be admin. Scope it to what it actually needs to create.<br><br>
+                                <strong>Drift detection:</strong> Someone might change things manually in the console. Detect when actual state differs from code state.<br><br>
+                                <strong>Module security:</strong> If using community modules, review them. Don't blindly trust terraform-aws-modules without checking what they do.<br><br>
+                                The goal is that your IaC becomes the single source of truth, and anything deployed through it is secure by default."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- EDR vs Antivirus -->
+                    <div class="technical rounded-2xl p-6">
+                        <p class="text-green-400 font-bold text-lg mb-3">Q: What's the difference between EDR and traditional antivirus?</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "Traditional AV is signature-based - it has a database of known bad file hashes, and if it sees a match, it blocks. Problem is, attackers just change one byte and the hash is different. It's reactive and easily evaded.<br><br>
+                                EDR is behavior-based and much more comprehensive. It's constantly recording what's happening on the endpoint - process creation, network connections, file modifications, registry changes. Then it analyzes behaviors, not just signatures.<br><br>
+                                So if a PowerShell process spawns from Word, downloads something, and starts encrypting files - AV might miss it if the payload is new. EDR sees the behavior chain and says 'this looks like ransomware' even if it's never seen that specific malware before.<br><br>
+                                EDR also gives you investigation capabilities. When something happens, you can go back and see the full timeline - what process started it, what network connections it made, what it touched. With AV, you just get 'blocked bad file' - not very helpful for understanding the attack.<br><br>
+                                I've worked with Cortex XDR and Microsoft Defender for Endpoint. The response piece is huge too - you can isolate machines remotely, kill processes, collect forensic data, all from the console."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Vulnerability Prioritization -->
+                    <div class="technical rounded-2xl p-6">
+                        <p class="text-green-400 font-bold text-lg mb-3">Q: You have 1000 vulnerabilities. How do you prioritize?</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "CVSS score is a starting point but not the answer. A CVSS 9.0 on an isolated test server matters less than a CVSS 7.0 on an internet-facing payment system.<br><br>
+                                My prioritization factors:<br><br>
+                                <strong>1. Exploitability:</strong> Is there a public exploit? Is it on CISA KEV (Known Exploited Vulnerabilities)? If attackers are actively using it in the wild, it jumps to the top.<br><br>
+                                <strong>2. Asset criticality:</strong> What's the business impact? Crown jewels versus test systems? Internet-facing versus internal only?<br><br>
+                                <strong>3. Compensating controls:</strong> Is there a WAF in front? Is the network segmented? EDR coverage? These reduce actual risk even if vuln exists.<br><br>
+                                <strong>4. Remediation effort:</strong> Can we patch easily or does it require downtime and change control? Sometimes quick wins on medium vulns make sense while you plan the complex ones.<br><br>
+                                In practice, I'd filter: Critical + internet-facing + exploit available = fix this week. Critical + internal + no exploit = fix this month. Medium + low asset = fix this quarter or accept risk with compensating controls.<br><br>
+                                Tools like Defender for Endpoint's TVM or Qualys can help with this context-based prioritization."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- OT vs IT Security -->
+                    <div class="technical rounded-2xl p-6">
+                        <p class="text-green-400 font-bold text-lg mb-3">Q: What are the differences between OT and IT security?</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "Big differences. IT is data - confidentiality matters most. OT is physical processes - availability and safety matter most. If a server goes down in IT, people can't work. If a PLC goes down in OT, a manufacturing line stops or worse, someone could get hurt.<br><br>
+                                <strong>Patching:</strong> In IT, we patch monthly. In OT, some systems run for years without patches because the vendor hasn't certified updates, or downtime costs millions, or the OS is end-of-life but the equipment still works fine.<br><br>
+                                <strong>Legacy systems:</strong> OT has equipment from the 90s running Windows XP or proprietary OSes. Can't just replace a $2 million machine because the OS is old.<br><br>
+                                <strong>Network:</strong> OT networks need to be air-gapped or heavily segmented from IT. Purdue model - levels 0-5 with strict controls between them. Never let someone RDP directly from corporate network to a SCADA system.<br><br>
+                                <strong>Scanning:</strong> You can't just run Nessus against OT systems - it might crash a PLC. Passive monitoring and network-based detection are safer.<br><br>
+                                The approach is: segment heavily, monitor passively, patch when possible, use compensating controls when not. Defense in depth is even more critical."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Python/PowerShell Automation -->
+                    <div class="technical rounded-2xl p-6">
+                        <p class="text-green-400 font-bold text-lg mb-3">Q: What security tasks have you automated with Python or PowerShell?</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "A few examples from my work:<br><br>
+                                <strong>User offboarding automation (PowerShell):</strong> When someone leaves, script disables the account, removes from groups, forwards email, revokes cloud sessions, and generates a report. Used to take 30 minutes manually, now it's 2 minutes and nothing gets missed.<br><br>
+                                <strong>Threat intel enrichment (Python):</strong> Takes IOCs from our SIEM alerts, queries VirusTotal, AbuseIPDB, and our internal threat intel, adds context automatically to the ticket. Saves analysts from copy-pasting hashes into five different tools.<br><br>
+                                <strong>Compliance reporting (PowerShell):</strong> Pulls data from Entra ID, Intune, Defender - builds a report on MFA adoption, device compliance, conditional access coverage. Runs weekly, catches drift before auditors do.<br><br>
+                                <strong>Log parsing (Python):</strong> Some legacy systems don't have proper SIEM integration. Wrote parsers to normalize logs and forward to Sentinel via the Log Analytics API.<br><br>
+                                My philosophy is: if I do something more than twice, I think about scripting it. The script becomes documentation too - anyone can see exactly what the process is."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======================= -->
+            <!-- SCENARIO QUESTIONS -->
+            <!-- ======================= -->
+            <section id="scenarios" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                    </span>
+                    Scenario / Situational Questions
+                </h2>
+
+                <div class="space-y-6">
+                    <!-- Active incident -->
+                    <div class="scenario rounded-2xl p-6">
+                        <p class="text-yellow-400 font-bold text-lg mb-3">Q: You discover a compromised server. What do you do?</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "First thing - don't panic and don't just shut it down. I'd follow the incident response process: PICERL.<br><br>
+                                <strong>Immediate (Identification):</strong> Confirm it's actually compromised, not a false positive. What's the evidence? Check EDR alerts, network traffic, user reports.<br><br>
+                                <strong>Containment:</strong> Isolate it from the network - either network-level isolation or using EDR to contain. NOT shut down yet, because I want to preserve memory evidence. Block any malicious IPs it's talking to at the firewall.<br><br>
+                                <strong>Preserve evidence:</strong> If we might need forensics, capture memory image before anything else. Document everything I do with timestamps.<br><br>
+                                <strong>Scope the damage:</strong> What else did it touch? Check lateral movement indicators - did it connect to other systems? Any credentials accessed? What data was on it?<br><br>
+                                <strong>Communication:</strong> Loop in my manager, follow the incident communication plan. Depending on severity, might need to inform legal, compliance, executives.<br><br>
+                                <strong>Eradication and recovery:</strong> Once we understand the full scope, remove the threat, rebuild if necessary from known-good image, monitor for reinfection.<br><br>
+                                Throughout this, I'm documenting everything for the post-incident review."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- CEO exception request -->
+                    <div class="scenario rounded-2xl p-6">
+                        <p class="text-yellow-400 font-bold text-lg mb-3">Q: The CEO wants an exception to a security policy. How do you handle it?</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "I wouldn't just say no, and I wouldn't just say yes. I'd understand the business need first - what are they trying to accomplish? Sometimes there's a secure way to achieve the same goal that they didn't think of.<br><br>
+                                If there's no alternative, I'd explain the risk clearly in business terms, not technical jargon. Not 'this violates our policy' but 'if we do this, here's what could happen and what it could cost.'<br><br>
+                                If they still want to proceed, I'd document the risk formally - who requested it, what the risk is, what compensating controls we'll put in place, and who accepts the risk. Get sign-off in writing.<br><br>
+                                Then I'd implement compensating controls. Extra monitoring on their account, shorter session timeouts, additional alerting, whatever reduces the risk.<br><br>
+                                Ultimately, executives can accept business risk - that's their job. My job is to make sure they understand the risk and we've done what we can to minimize it. I'm not the one who gets to decide business priorities, but I do get to make sure decisions are informed."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Tight deadline, security concerns -->
+                    <div class="scenario rounded-2xl p-6">
+                        <p class="text-yellow-400 font-bold text-lg mb-3">Q: A project team wants to skip security review because of a deadline. What do you do?</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "I get it - business deadlines are real. But I'd push back constructively, not just block them.<br><br>
+                                First, I'd understand the timeline and scope. What's actually launching? What's the risk level? A marketing landing page is different from a payment processing system.<br><br>
+                                Then I'd offer options: Can we do an abbreviated review focused on the highest-risk areas? Can we launch with extra monitoring and do a full review in parallel? Can we reduce scope for initial launch and add features after review?<br><br>
+                                I'd also be clear about the risk. 'If we skip review and there's a breach, here's what happens...' Sometimes when people understand the consequences, they find that deadline is more flexible than they thought.<br><br>
+                                If they absolutely insist, I'd document the risk acceptance, implement whatever compensating controls I can quickly, and set up aggressive monitoring so we catch issues fast.<br><br>
+                                The worst outcome is being seen as the team that always says no and slows things down. I want to be the team that finds ways to say yes securely."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Vendor security assessment -->
+                    <div class="scenario rounded-2xl p-6">
+                        <p class="text-yellow-400 font-bold text-lg mb-3">Q: How would you assess a new vendor's security before onboarding?</p>
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "Start with understanding what we're giving them access to. Are they handling our data? Accessing our network? Just providing software we run ourselves? Risk level drives depth of assessment.<br><br>
+                                <strong>Documentation review:</strong> Request their SOC 2 Type 2 report, ISO 27001 cert if they have one, pen test results. SOC 2 is the minimum for any SaaS vendor handling our data.<br><br>
+                                <strong>Security questionnaire:</strong> Standard questions about encryption, access controls, incident response, data handling, subprocessors. SIG or CAIQ if they're familiar with those frameworks.<br><br>
+                                <strong>Technical review:</strong> If they're connecting to our network, what's the integration method? API with OAuth? VPN? Direct connection? Review their technical architecture.<br><br>
+                                <strong>Contract terms:</strong> Make sure security requirements are in the contract - breach notification timelines, right to audit, data deletion at end of contract, insurance requirements.<br><br>
+                                <strong>Continuous monitoring:</strong> Initial assessment isn't enough. Annual reassessment, monitor for security news about them, review their updated SOC reports yearly.<br><br>
+                                I'd tier vendors by risk - critical vendors with access to sensitive data get full assessment, low-risk get abbreviated review."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======================= -->
+            <!-- QUESTIONS TO ASK THEM -->
+            <!-- ======================= -->
+            <section id="your-questions" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </span>
+                    Questions to Ask Them
+                </h2>
+
+                <div class="card rounded-2xl p-6">
+                    <p class="text-gray-400 mb-4">Always have questions ready - it shows you're engaged and thinking ahead.</p>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-[#0d0d14] rounded-lg p-4">
+                            <p class="text-cyan-400 font-medium mb-2">About the Role</p>
+                            <ul class="text-gray-300 text-sm space-y-2">
+                                <li>• "What would my first 90 days look like? What are the immediate priorities?"</li>
+                                <li>• "What does success look like in this role after one year?"</li>
+                                <li>• "How is the security team structured? Who would I work most closely with?"</li>
+                                <li>• "What's the split between reactive work (incidents) and proactive work (building tools, improvements)?"</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-[#0d0d14] rounded-lg p-4">
+                            <p class="text-green-400 font-medium mb-2">About the Tech & Challenges</p>
+                            <ul class="text-gray-300 text-sm space-y-2">
+                                <li>• "What's the current security stack? Any tools you're looking to replace or add?"</li>
+                                <li>• "What are the biggest security challenges you're facing right now?"</li>
+                                <li>• "How mature is the OT security program compared to IT? What's the roadmap there?"</li>
+                                <li>• "How integrated is security into the DevOps process today? Where do you want it to be?"</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-[#0d0d14] rounded-lg p-4">
+                            <p class="text-purple-400 font-medium mb-2">About Growth & Culture</p>
+                            <ul class="text-gray-300 text-sm space-y-2">
+                                <li>• "What opportunities are there for learning and certifications?"</li>
+                                <li>• "How does the security team handle disagreements about risk or priorities?"</li>
+                                <li>• "What do you enjoy most about working here?"</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-[#0d0d14] rounded-lg p-4">
+                            <p class="text-orange-400 font-medium mb-2">Closing Strong</p>
+                            <ul class="text-gray-300 text-sm space-y-2">
+                                <li>• "Is there anything about my background that gives you pause or that you'd like me to clarify?"</li>
+                                <li>• "What are the next steps in the process?"</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Reference -->
+            <section id="quick-ref" class="mb-16">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    </span>
+                    Quick Reference - Key Things to Remember
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="card rounded-xl p-5">
+                        <h3 class="text-cyan-400 font-bold mb-3">🎯 Your Key Experience Highlights</h3>
+                        <ul class="text-gray-300 text-sm space-y-2">
+                            <li>• <strong>DLP Migration:</strong> Led Symantec → Purview migration (audit → warn → block)</li>
+                            <li>• <strong>EDR:</strong> Cortex XDR, Microsoft Defender for Endpoint</li>
+                            <li>• <strong>SIEM:</strong> Splunk, Microsoft Sentinel, RSA NetWitness</li>
+                            <li>• <strong>Cloud:</strong> Azure security, Conditional Access, Defender for Cloud</li>
+                            <li>• <strong>SOC:</strong> L1-L2 analysis, alert triage, playbook development</li>
+                        </ul>
+                    </div>
+
+                    <div class="card rounded-xl p-5">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Key Frameworks to Drop</h3>
+                        <ul class="text-gray-300 text-sm space-y-2">
+                            <li>• <strong>IR:</strong> PICERL (Prepare, Identify, Contain, Eradicate, Recover, Lessons)</li>
+                            <li>• <strong>Zero Trust:</strong> Never trust, always verify. VLA principle.</li>
+                            <li>• <strong>Defense in Depth:</strong> Multiple layers, assume each can fail</li>
+                            <li>• <strong>Least Privilege:</strong> Minimum access for minimum time</li>
+                            <li>• <strong>Shift Left:</strong> Find issues early in development</li>
+                        </ul>
+                    </div>
+
+                    <div class="card rounded-xl p-5">
+                        <h3 class="text-green-400 font-bold mb-3">✅ Interview Do's</h3>
+                        <ul class="text-gray-300 text-sm space-y-2">
+                            <li>• Use specific examples from your experience</li>
+                            <li>• Say "I" not "we" - show YOUR contribution</li>
+                            <li>• Admit when you don't know, then explain how you'd find out</li>
+                            <li>• Ask clarifying questions before answering complex scenarios</li>
+                            <li>• Show enthusiasm for the specific role, not just any job</li>
+                        </ul>
+                    </div>
+
+                    <div class="card rounded-xl p-5">
+                        <h3 class="text-red-400 font-bold mb-3">❌ Interview Don'ts</h3>
+                        <ul class="text-gray-300 text-sm space-y-2">
+                            <li>• Don't badmouth previous employers or coworkers</li>
+                            <li>• Don't give one-word answers - elaborate with examples</li>
+                            <li>• Don't lie or exaggerate - you'll get caught in technical deep-dives</li>
+                            <li>• Don't say "we never had issues" - everyone has failures to learn from</li>
+                            <li>• Don't ask about salary/benefits in first round (usually)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+<script src="../js/sidebar.js"></script>
+</body>
+</html>

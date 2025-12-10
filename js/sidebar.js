@@ -8,8 +8,14 @@ const sidebarHTML = `
             </div>
             <div><p class="text-white font-bold text-sm">Security Engineer</p><p class="text-[10px] text-gray-500">Knowledge Base</p></div>
         </a>
-        <a href="{{BASE}}pages/cheatsheet.html" class="flex items-center gap-2 px-3 py-2 mb-4 text-sm text-yellow-400 rounded-lg bg-yellow-500/10 border border-yellow-500/30 hover:bg-yellow-500/20">
+        <a href="{{BASE}}pages/cheatsheet.html" class="flex items-center gap-2 px-3 py-2 mb-2 text-sm text-yellow-400 rounded-lg bg-yellow-500/10 border border-yellow-500/30 hover:bg-yellow-500/20">
             <span>🧠</span><span class="font-medium">Cheat Sheet</span>
+        </a>
+        <a href="{{BASE}}pages/interview-prep.html" class="flex items-center gap-2 px-3 py-2 mb-2 text-sm text-cyan-400 rounded-lg bg-cyan-500/10 border border-cyan-500/30 hover:bg-cyan-500/20">
+            <span>🎯</span><span class="font-medium">Interview Prep</span>
+        </a>
+        <a href="{{BASE}}pages/interview-deep-dive.html" class="flex items-center gap-2 px-3 py-2 mb-4 text-sm text-emerald-400 rounded-lg bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20">
+            <span>🧠</span><span class="font-medium">Deep Dive (Why)</span>
         </a>
         <nav class="space-y-1" id="sidebar-nav">
             <div class="nav-section">
@@ -22,6 +28,7 @@ const sidebarHTML = `
                     <a href="{{BASE}}pages/soc-operations.html" class="slink" data-p="soc-operations"><span class="dot bg-cyan-500"></span>SOC Operations</a>
                     <a href="{{BASE}}pages/threat-intelligence.html" class="slink" data-p="threat-intelligence"><span class="dot bg-purple-500"></span>Threat Intelligence</a>
                     <a href="{{BASE}}pages/network-security.html" class="slink" data-p="network-security"><span class="dot bg-green-500"></span>Network Security</a>
+                    <a href="{{BASE}}pages/ngfw-deep-dive.html" class="slink" data-p="ngfw-deep-dive"><span class="dot bg-orange-500"></span>NGFW Deep Dive</a>
                     <a href="{{BASE}}pages/cloud-security.html" class="slink" data-p="cloud-security"><span class="dot bg-blue-400"></span>Cloud Security</a>
                     <a href="{{BASE}}pages/zero-trust.html" class="slink" data-p="zero-trust"><span class="dot bg-red-400"></span>Zero Trust</a>
                     <a href="{{BASE}}pages/data-security.html" class="slink" data-p="data-security"><span class="dot bg-purple-400"></span>Data Security</a>

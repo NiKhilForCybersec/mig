@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGFW Deep Dive | Security Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Inter', system-ui, sans-serif; }
+        .card { background: linear-gradient(145deg, #12121a, #1a1a2e); border: 1px solid #2a2a3e; }
+        .vendor-palo { border-left: 4px solid #f97316; }
+        .vendor-forti { border-left: 4px solid #ef4444; }
+        .vendor-cisco { border-left: 4px solid #3b82f6; }
+        .vendor-check { border-left: 4px solid #a855f7; }
+        .diagram { background: #0a0a0f; border: 1px solid #2a2a3e; font-family: 'Courier New', monospace; }
+        .config-block { background: #0d0d14; border: 1px solid #1e3a5f; }
+        .tip { background: linear-gradient(135deg, #1a1a2e 0%, #2a2a3e 100%); border: 1px solid #f59e0b; }
+        .interview { background: linear-gradient(135deg, #1a1a2e 0%, #1e1e3e 100%); border: 1px solid #8b5cf6; }
+        .daily-ops { background: linear-gradient(135deg, #0d1f0d 0%, #1a1a2e 100%); border: 1px solid #10b981; }
+        pre { background: #0d0d14 !important; border-radius: 8px; padding: 16px; overflow-x: auto; }
+        code { font-family: 'Courier New', monospace; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <main class="lg:ml-64 pt-14 lg:pt-0">
+        <div class="max-w-6xl mx-auto px-6 py-12">
+            <!-- Hero -->
+            <section class="mb-12">
+                <div class="flex items-center gap-2 text-orange-400 mb-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    <span class="text-sm font-medium">Network Security Deep Dive</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Next-Generation Firewalls (NGFW)</h1>
+                <p class="text-xl text-gray-400 mb-6">Complete guide: Vendors, Architecture, Configuration, Daily Operations</p>
+            </section>
+
+            <!-- Quick Interview Answer -->
+            <section class="mb-12">
+                <div class="interview rounded-xl p-6">
+                    <h3 class="text-purple-400 font-bold text-lg mb-3">💬 Quick Interview Answer</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed">"NGFWs go beyond traditional port-based firewalls by adding Layer 7 application awareness, user identity integration, integrated IPS, SSL decryption, and threat intelligence. I've worked primarily with Palo Alto and Fortinet. Day-to-day, I handle rule optimization, policy changes through change management, troubleshooting connectivity issues, reviewing logs for threats, and ensuring HA failover works. The key differentiator is App-ID - the firewall knows the difference between legitimate HTTPS and someone tunneling unauthorized traffic over port 443."</p>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- TRADITIONAL VS NGFW -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400">1</span>
+                    Traditional Firewall vs NGFW
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="card rounded-xl p-5">
+                        <h3 class="text-red-400 font-bold mb-3">❌ Traditional Firewall (Stateful)</h3>
+                        <ul class="text-gray-400 text-sm space-y-2">
+                            <li>• Works at <strong>Layer 3-4</strong> (IP addresses, ports)</li>
+                            <li>• Rules: "Allow TCP 443 from 10.0.0.0/24 to any"</li>
+                            <li>• <strong>Blind</strong> to application content</li>
+                            <li>• Can't distinguish Salesforce from Dropbox (both use 443)</li>
+                            <li>• No SSL inspection</li>
+                            <li>• Separate IPS appliance needed</li>
+                            <li>• No user awareness (IP-based only)</li>
+                        </ul>
+                    </div>
+                    <div class="card rounded-xl p-5">
+                        <h3 class="text-green-400 font-bold mb-3">✅ Next-Generation Firewall</h3>
+                        <ul class="text-gray-400 text-sm space-y-2">
+                            <li>• Works at <strong>Layer 7</strong> (application layer)</li>
+                            <li>• Rules: "Allow Salesforce for Sales team, block Dropbox"</li>
+                            <li>• <strong>Deep Packet Inspection</strong> (DPI)</li>
+                            <li>• Application awareness regardless of port</li>
+                            <li>• SSL/TLS decryption built-in</li>
+                            <li>• Integrated IPS, sandboxing, threat intel</li>
+                            <li>• User/group-based policies (AD integration)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="diagram rounded-xl p-4 mb-6">
+                    <p class="text-cyan-400 text-sm font-medium mb-3">OSI Model - Where Firewalls Operate</p>
+                    <pre class="text-xs text-gray-300">
+┌─────────────────────────────────────────────────────────────────────┐
+│  Layer 7 - Application    │  HTTP, HTTPS, DNS, FTP, SSH, Apps      │ ← NGFW inspects HERE
+│  Layer 6 - Presentation   │  SSL/TLS, Encryption                   │ ← NGFW decrypts HERE
+│  Layer 5 - Session        │  Sessions, Connections                 │
+│  Layer 4 - Transport      │  TCP/UDP, Ports                        │ ← Traditional FW
+│  Layer 3 - Network        │  IP Addresses, Routing                 │ ← Traditional FW
+│  Layer 2 - Data Link      │  MAC Addresses, Switches               │
+│  Layer 1 - Physical       │  Cables, Signals                       │
+└─────────────────────────────────────────────────────────────────────┘
+
+Traditional: "Is port 443 allowed?" → Yes → Pass (doesn't care what's inside)
+NGFW:        "Is port 443 allowed?" → Yes → "What app is this?" → "BitTorrent tunneled over HTTPS" → BLOCK
+                    </pre>
+                </div>
+
+                <div class="card rounded-xl p-5">
+                    <h3 class="text-white font-bold mb-3">Key NGFW Capabilities</h3>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-black/30 rounded-lg p-3">
+                            <p class="text-orange-400 font-medium text-sm mb-1">Application Awareness</p>
+                            <p class="text-gray-400 text-xs">Identifies 3000+ apps regardless of port, protocol, or encryption. Detects evasion techniques.</p>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-3">
+                            <p class="text-orange-400 font-medium text-sm mb-1">User Identification</p>
+                            <p class="text-gray-400 text-xs">Maps IP → Username via AD/LDAP. Write rules for "Marketing Group" not "10.20.30.0/24".</p>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-3">
+                            <p class="text-orange-400 font-medium text-sm mb-1">SSL/TLS Decryption</p>
+                            <p class="text-gray-400 text-xs">Decrypt, inspect, re-encrypt HTTPS traffic. See inside encrypted connections.</p>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-3">
+                            <p class="text-orange-400 font-medium text-sm mb-1">Integrated IPS</p>
+                            <p class="text-gray-400 text-xs">Intrusion Prevention with real-time signature updates. Blocks exploits inline.</p>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-3">
+                            <p class="text-orange-400 font-medium text-sm mb-1">Threat Intelligence</p>
+                            <p class="text-gray-400 text-xs">Cloud-based feeds of malicious IPs, domains, file hashes. Auto-updated.</p>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-3">
+                            <p class="text-orange-400 font-medium text-sm mb-1">Sandboxing</p>
+                            <p class="text-gray-400 text-xs">Unknown files sent to cloud sandbox for behavioral analysis before delivery.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- VENDOR COMPARISON -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400">2</span>
+                    Major NGFW Vendors
+                </h2>
+
+                <!-- Palo Alto -->
+                <div class="card vendor-palo rounded-xl p-6 mb-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-lg bg-orange-500/20 flex items-center justify-center">
+                            <span class="text-orange-400 font-bold text-lg">PA</span>
+                        </div>
+                        <div>
+                            <h3 class="text-orange-400 font-bold text-xl">Palo Alto Networks</h3>
+                            <p class="text-gray-500 text-sm">Industry Leader | Enterprise Standard</p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-white font-medium mb-2">Key Technologies:</p>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• <strong>App-ID</strong> - Application identification (industry best)</li>
+                                <li>• <strong>User-ID</strong> - User-to-IP mapping via AD</li>
+                                <li>• <strong>Content-ID</strong> - Threat prevention, URL filtering</li>
+                                <li>• <strong>WildFire</strong> - Cloud-based sandboxing</li>
+                                <li>• <strong>Panorama</strong> - Centralized management</li>
+                                <li>• <strong>GlobalProtect</strong> - VPN client</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-white font-medium mb-2">Product Lines:</p>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• <strong>PA-400 Series</strong> - Branch/SMB (PA-410, PA-440, PA-450)</li>
+                                <li>• <strong>PA-800 Series</strong> - Mid-size (PA-820, PA-850)</li>
+                                <li>• <strong>PA-3200 Series</strong> - Enterprise edge</li>
+                                <li>• <strong>PA-5200 Series</strong> - Large enterprise/DC</li>
+                                <li>• <strong>PA-7000 Series</strong> - Service provider/hyperscale</li>
+                                <li>• <strong>VM-Series</strong> - Virtual (AWS, Azure, GCP, VMware)</li>
+                                <li>• <strong>CN-Series</strong> - Container/Kubernetes</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <p class="text-white font-medium mb-2">Management Interfaces:</p>
+                        <div class="grid md:grid-cols-3 gap-3">
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <p class="text-cyan-400 text-xs font-medium">Web GUI</p>
+                                <p class="text-gray-500 text-xs">https://firewall-ip (Port 443)</p>
+                            </div>
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <p class="text-cyan-400 text-xs font-medium">CLI (SSH)</p>
+                                <p class="text-gray-500 text-xs">PAN-OS command line</p>
+                            </div>
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <p class="text-cyan-400 text-xs font-medium">API</p>
+                                <p class="text-gray-500 text-xs">XML/REST API for automation</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="config-block rounded-lg p-4 mt-4">
+                        <p class="text-cyan-400 text-xs font-medium mb-2">Sample PAN-OS CLI Commands:</p>
+                        <pre class="text-xs text-green-400">
+# Show system info
+> show system info
+
+# Show running configuration
+> show config running
+
+# Show security policy
+> show running security-policy
+
+# Show application usage
+> show running application
+
+# Show active sessions
+> show session all filter destination 8.8.8.8
+
+# Show threat logs
+> show log threat
+
+# Test security policy (what rule matches)
+> test security-policy-match source 10.1.1.100 destination 8.8.8.8 protocol 6 application web-browsing
+
+# Commit configuration
+> commit
+
+# Show HA status
+> show high-availability state</pre>
+                    </div>
+                </div>
+
+                <!-- Fortinet -->
+                <div class="card vendor-forti rounded-xl p-6 mb-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-lg bg-red-500/20 flex items-center justify-center">
+                            <span class="text-red-400 font-bold text-lg">FG</span>
+                        </div>
+                        <div>
+                            <h3 class="text-red-400 font-bold text-xl">Fortinet FortiGate</h3>
+                            <p class="text-gray-500 text-sm">Best Price/Performance | Security Fabric</p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-white font-medium mb-2">Key Technologies:</p>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• <strong>FortiOS</strong> - Operating system</li>
+                                <li>• <strong>Security Processing Units (SPU)</strong> - Custom ASIC chips for performance</li>
+                                <li>• <strong>FortiGuard</strong> - Threat intelligence services</li>
+                                <li>• <strong>Security Fabric</strong> - Integration across Fortinet products</li>
+                                <li>• <strong>FortiSandbox</strong> - Sandboxing (on-prem or cloud)</li>
+                                <li>• <strong>FortiManager</strong> - Centralized management</li>
+                                <li>• <strong>FortiAnalyzer</strong> - Logging and reporting</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-white font-medium mb-2">Product Lines:</p>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• <strong>FortiGate 40F-90F</strong> - SOHO/Branch</li>
+                                <li>• <strong>FortiGate 100F-200F</strong> - SMB</li>
+                                <li>• <strong>FortiGate 400F-900F</strong> - Mid-Enterprise</li>
+                                <li>• <strong>FortiGate 1000F-3000F</strong> - Large Enterprise</li>
+                                <li>• <strong>FortiGate 4000F+</strong> - Data Center/Hyperscale</li>
+                                <li>• <strong>FortiGate-VM</strong> - Virtual appliance</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="config-block rounded-lg p-4 mt-4">
+                        <p class="text-cyan-400 text-xs font-medium mb-2">Sample FortiOS CLI Commands:</p>
+                        <pre class="text-xs text-green-400">
+# Show system status
+FGT # get system status
+
+# Show interface configuration  
+FGT # show system interface
+
+# Show firewall policy
+FGT # show firewall policy
+
+# Show active sessions
+FGT # get system session list
+
+# Diagnose debug flow (packet tracing)
+FGT # diagnose debug flow filter addr 10.1.1.100
+FGT # diagnose debug flow trace start 100
+FGT # diagnose debug enable
+
+# Show application control profile
+FGT # show application list
+
+# Show HA status
+FGT # get system ha status
+
+# Execute policy lookup
+FGT # diagnose firewall iprope lookup <src_ip> <dst_ip> <protocol> <src_port> <dst_port></pre>
+                    </div>
+                </div>
+
+                <!-- Cisco -->
+                <div class="card vendor-cisco rounded-xl p-6 mb-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                            <span class="text-blue-400 font-bold text-lg">FP</span>
+                        </div>
+                        <div>
+                            <h3 class="text-blue-400 font-bold text-xl">Cisco Secure Firewall (Firepower)</h3>
+                            <p class="text-gray-500 text-sm">Cisco Ecosystem | Acquired Sourcefire</p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-white font-medium mb-2">Key Technologies:</p>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• <strong>Firepower Threat Defense (FTD)</strong> - Unified software</li>
+                                <li>• <strong>Snort IPS</strong> - Industry-standard IPS engine</li>
+                                <li>• <strong>Cisco Talos</strong> - Threat intelligence</li>
+                                <li>• <strong>AMP for Networks</strong> - Malware protection</li>
+                                <li>• <strong>Firepower Management Center (FMC)</strong> - Central management</li>
+                                <li>• <strong>Cisco Defense Orchestrator (CDO)</strong> - Cloud management</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-white font-medium mb-2">Product Lines:</p>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• <strong>Firepower 1000 Series</strong> - Branch/SMB</li>
+                                <li>• <strong>Firepower 2100 Series</strong> - Edge</li>
+                                <li>• <strong>Firepower 4100 Series</strong> - Enterprise</li>
+                                <li>• <strong>Firepower 9300</strong> - Data Center (modular)</li>
+                                <li>• <strong>Secure Firewall 3100</strong> - New generation</li>
+                                <li>• <strong>FTDv</strong> - Virtual (AWS, Azure, VMware)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="config-block rounded-lg p-4 mt-4">
+                        <p class="text-cyan-400 text-xs font-medium mb-2">Sample FTD CLI Commands:</p>
+                        <pre class="text-xs text-green-400">
+# Enter diagnostic CLI
+> system support diagnostic-cli
+
+# Show running config (ASA syntax in FTD)
+firepower# show running-config
+
+# Show connections
+firepower# show conn
+
+# Show access-list hit counts
+firepower# show access-list
+
+# Packet tracer (simulate traffic)
+firepower# packet-tracer input INSIDE tcp 10.1.1.100 12345 8.8.8.8 443
+
+# Show failover status
+firepower# show failover
+
+# Show snort statistics
+> show snort statistics</pre>
+                    </div>
+                </div>
+
+                <!-- Check Point -->
+                <div class="card vendor-check rounded-xl p-6 mb-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                            <span class="text-purple-400 font-bold text-lg">CP</span>
+                        </div>
+                        <div>
+                            <h3 class="text-purple-400 font-bold text-xl">Check Point</h3>
+                            <p class="text-gray-500 text-sm">Pioneer in Firewall | Strong in Europe</p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-white font-medium mb-2">Key Technologies:</p>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• <strong>Gaia OS</strong> - Unified operating system</li>
+                                <li>• <strong>Software Blades</strong> - Modular feature licensing</li>
+                                <li>• <strong>ThreatCloud</strong> - Threat intelligence</li>
+                                <li>• <strong>SandBlast</strong> - Zero-day protection</li>
+                                <li>• <strong>SmartConsole</strong> - Management client</li>
+                                <li>• <strong>Smart-1 Cloud</strong> - Cloud management</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-white font-medium mb-2">Product Lines:</p>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• <strong>Quantum Spark</strong> - SMB (1500, 1600, 1800)</li>
+                                <li>• <strong>Quantum Security Gateways</strong> - Enterprise (6000, 7000, 16000, 26000)</li>
+                                <li>• <strong>Quantum Maestro</strong> - Hyperscale orchestration</li>
+                                <li>• <strong>CloudGuard</strong> - Cloud security (AWS, Azure, GCP)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="config-block rounded-lg p-4 mt-4">
+                        <p class="text-cyan-400 text-xs font-medium mb-2">Sample Check Point CLI Commands:</p>
+                        <pre class="text-xs text-green-400">
+# Enter expert mode
+> expert
+
+# Show cluster status
+[Expert@gateway]# cphaprob stat
+
+# Show policy name
+[Expert@gateway]# fw stat
+
+# Show connections table
+[Expert@gateway]# fw tab -t connections -s
+
+# Packet capture
+[Expert@gateway]# tcpdump -i eth1 host 10.1.1.100
+
+# Show interface status
+[Expert@gateway]# ifconfig -a
+
+# Show CPU/Memory
+[Expert@gateway]# cpstat os -f multi_cpu
+[Expert@gateway]# free -m
+
+# Policy installation status
+[Expert@gateway]# cpstat fw</pre>
+                    </div>
+                </div>
+
+                <!-- Vendor Comparison Table -->
+                <div class="card rounded-xl p-6">
+                    <h3 class="text-white font-bold mb-4">Vendor Comparison Summary</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs">
+                            <thead>
+                                <tr class="border-b border-gray-700">
+                                    <th class="text-left py-2 px-3 text-gray-400">Aspect</th>
+                                    <th class="text-left py-2 px-3 text-orange-400">Palo Alto</th>
+                                    <th class="text-left py-2 px-3 text-red-400">Fortinet</th>
+                                    <th class="text-left py-2 px-3 text-blue-400">Cisco</th>
+                                    <th class="text-left py-2 px-3 text-purple-400">Check Point</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-300">
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-3 font-medium">Best For</td>
+                                    <td class="py-2 px-3">Enterprise, App visibility</td>
+                                    <td class="py-2 px-3">Price/performance, SMB-Enterprise</td>
+                                    <td class="py-2 px-3">Cisco shops, IPS strength</td>
+                                    <td class="py-2 px-3">EU compliance, stability</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-3 font-medium">App-ID Strength</td>
+                                    <td class="py-2 px-3 text-green-400">★★★★★</td>
+                                    <td class="py-2 px-3 text-yellow-400">★★★★☆</td>
+                                    <td class="py-2 px-3 text-yellow-400">★★★☆☆</td>
+                                    <td class="py-2 px-3 text-yellow-400">★★★★☆</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-3 font-medium">Management UI</td>
+                                    <td class="py-2 px-3 text-green-400">★★★★★</td>
+                                    <td class="py-2 px-3 text-green-400">★★★★☆</td>
+                                    <td class="py-2 px-3 text-yellow-400">★★★☆☆ (complex)</td>
+                                    <td class="py-2 px-3 text-yellow-400">★★★☆☆</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-3 font-medium">Price</td>
+                                    <td class="py-2 px-3 text-red-400">$$$$ (Premium)</td>
+                                    <td class="py-2 px-3 text-green-400">$$ (Best value)</td>
+                                    <td class="py-2 px-3 text-yellow-400">$$$ (Mid-range)</td>
+                                    <td class="py-2 px-3 text-yellow-400">$$$ (Mid-range)</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-3 font-medium">Central Mgmt</td>
+                                    <td class="py-2 px-3">Panorama</td>
+                                    <td class="py-2 px-3">FortiManager</td>
+                                    <td class="py-2 px-3">FMC / CDO</td>
+                                    <td class="py-2 px-3">SmartConsole</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-3 font-medium">Logging</td>
+                                    <td class="py-2 px-3">Panorama / Cortex DL</td>
+                                    <td class="py-2 px-3">FortiAnalyzer</td>
+                                    <td class="py-2 px-3">FMC / SecureX</td>
+                                    <td class="py-2 px-3">SmartLog</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-3 font-medium">Gartner Position</td>
+                                    <td class="py-2 px-3 text-green-400">Leader</td>
+                                    <td class="py-2 px-3 text-green-400">Leader</td>
+                                    <td class="py-2 px-3 text-yellow-400">Challenger</td>
+                                    <td class="py-2 px-3 text-yellow-400">Challenger</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- TYPICAL ARCHITECTURE -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400">3</span>
+                    Typical NGFW Architecture
+                </h2>
+
+                <div class="diagram rounded-xl p-4 mb-6">
+                    <p class="text-cyan-400 text-sm font-medium mb-3">Enterprise Network with NGFW</p>
+                    <pre class="text-xs text-gray-300">
+                                    ┌─────────────────────┐
+                                    │      INTERNET       │
+                                    └──────────┬──────────┘
+                                               │
+                                    ┌──────────▼──────────┐
+                                    │    ISP Router       │
+                                    └──────────┬──────────┘
+                                               │
+                         ┌─────────────────────┴─────────────────────┐
+                         │                                           │
+              ┌──────────▼──────────┐                     ┌──────────▼──────────┐
+              │    NGFW - Primary   │◄────── HA ─────────►│   NGFW - Secondary  │
+              │    (Active)         │      Heartbeat      │   (Passive)         │
+              └──────────┬──────────┘                     └─────────────────────┘
+                         │
+          ┌──────────────┼──────────────┬──────────────────┐
+          │              │              │                  │
+    ┌─────▼─────┐  ┌─────▼─────┐  ┌─────▼─────┐    ┌──────▼──────┐
+    │   DMZ     │  │ Internal  │  │   Guest   │    │   Server    │
+    │  Zone     │  │   Zone    │  │   Zone    │    │   Zone      │
+    │           │  │           │  │           │    │             │
+    │ Web/Mail  │  │ Users     │  │ Isolated  │    │ DC, Apps    │
+    │ Servers   │  │ Endpoints │  │ WiFi      │    │ Databases   │
+    └───────────┘  └───────────┘  └───────────┘    └─────────────┘
+    
+    Zones enable micro-segmentation - traffic between zones passes through NGFW
+                    </pre>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="card rounded-xl p-5">
+                        <h3 class="text-white font-bold mb-3">Security Zones (Common Setup)</h3>
+                        <ul class="text-gray-400 text-sm space-y-2">
+                            <li><strong class="text-red-400">Untrust / Outside:</strong> Internet-facing, highest risk</li>
+                            <li><strong class="text-orange-400">DMZ:</strong> Public-facing servers (web, mail, DNS)</li>
+                            <li><strong class="text-yellow-400">Guest:</strong> Isolated visitor/BYOD network</li>
+                            <li><strong class="text-green-400">Trust / Inside:</strong> Internal users, endpoints</li>
+                            <li><strong class="text-blue-400">Server / Datacenter:</strong> Critical servers, databases</li>
+                            <li><strong class="text-purple-400">Management:</strong> Admin access, out-of-band</li>
+                        </ul>
+                    </div>
+                    <div class="card rounded-xl p-5">
+                        <h3 class="text-white font-bold mb-3">High Availability Modes</h3>
+                        <ul class="text-gray-400 text-sm space-y-2">
+                            <li><strong class="text-green-400">Active/Passive:</strong> One firewall handles traffic, other on standby. Simpler, no session sharing needed.</li>
+                            <li><strong class="text-blue-400">Active/Active:</strong> Both handle traffic, load balanced. Better performance, more complex.</li>
+                            <li><strong class="text-cyan-400">HA Heartbeat:</strong> Dedicated link between firewalls to detect failure (typically via HA ports).</li>
+                            <li><strong class="text-yellow-400">Session Sync:</strong> Active shares session table with passive for seamless failover.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="diagram rounded-xl p-4 mb-6">
+                    <p class="text-cyan-400 text-sm font-medium mb-3">Data Center / East-West Traffic Architecture</p>
+                    <pre class="text-xs text-gray-300">
+Traditional: Only North-South protected
+                    │
+              ┌─────▼─────┐
+              │   NGFW    │ ← Perimeter only
+              └─────┬─────┘
+                    │
+         ┌──────────┴──────────┐
+         │     Data Center     │
+         │  ┌────┐  ┌────┐     │
+         │  │App1│──│App2│     │ ← East-West traffic UNPROTECTED
+         │  └────┘  └────┘     │    (lateral movement risk!)
+         └─────────────────────┘
+
+Modern: East-West Micro-segmentation
+                    │
+              ┌─────▼─────┐
+              │   NGFW    │ ← Perimeter
+              └─────┬─────┘
+                    │
+         ┌──────────┴──────────┐
+         │     Data Center     │
+         │  ┌────┐     ┌────┐  │
+         │  │App1│─FW──│App2│  │ ← Virtual FW or host-based
+         │  └────┘     └────┘  │    segmentation between workloads
+         └─────────────────────┘
+                    </pre>
+                </div>
+
+                <div class="card rounded-xl p-5">
+                    <h3 class="text-white font-bold mb-3">Traffic Flow Processing Order</h3>
+                    <p class="text-gray-400 text-sm mb-3">When a packet hits the NGFW, it goes through these checks in order:</p>
+                    <div class="diagram rounded-lg p-3">
+                        <pre class="text-xs text-gray-300">
+Packet Arrives
+     │
+     ▼
+┌─────────────────┐
+│ 1. Session      │ ← Is this part of existing allowed session?
+│    Lookup       │   If yes → Fast path, skip to step 8
+└────────┬────────┘
+         │ New session
+         ▼
+┌─────────────────┐
+│ 2. App-ID       │ ← What application is this?
+│    Detection    │   (may need multiple packets)
+└────────┬────────┘
+         ▼
+┌─────────────────┐
+│ 3. User-ID      │ ← Who is the user? (IP → Username)
+│    Lookup       │
+└────────┬────────┘
+         ▼
+┌─────────────────┐
+│ 4. Security     │ ← Does a rule allow this?
+│    Policy Match │   Source/Dest/User/App/Service
+└────────┬────────┘
+         │ If allowed...
+         ▼
+┌─────────────────┐
+│ 5. SSL Decrypt  │ ← If HTTPS and decryption enabled
+│    (optional)   │
+└────────┬────────┘
+         ▼
+┌─────────────────┐
+│ 6. Content      │ ← IPS, Anti-virus, Anti-spyware
+│    Inspection   │   URL filtering, File blocking
+└────────┬────────┘
+         ▼
+┌─────────────────┐
+│ 7. Logging      │ ← Log the session
+└────────┬────────┘
+         ▼
+┌─────────────────┐
+│ 8. Forward      │ ← Send packet to destination
+│    or Drop      │
+└─────────────────┘
+                        </pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- DAILY OPERATIONS -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400">4</span>
+                    Security Engineer Daily Operations
+                </h2>
+
+                <div class="daily-ops rounded-xl p-6 mb-6">
+                    <h3 class="text-emerald-400 font-bold text-lg mb-4">🔧 What You Actually Do Day-to-Day</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-white font-medium mb-2">Rule Management (50% of time)</p>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Process access requests (tickets from users/teams)</li>
+                                <li>• Create new rules following least privilege</li>
+                                <li>• Review and approve rule changes</li>
+                                <li>• Remove unused/expired rules (rule cleanup)</li>
+                                <li>• Document rules with proper descriptions</li>
+                                <li>• Follow change management process</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-white font-medium mb-2">Monitoring & Troubleshooting (30%)</p>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Monitor threat logs for attacks</li>
+                                <li>• Investigate blocked traffic complaints</li>
+                                <li>• Packet captures for connectivity issues</li>
+                                <li>• Check HA status and failover health</li>
+                                <li>• Monitor CPU/memory/session utilization</li>
+                                <li>• Review and tune IPS/threat policies</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-white font-medium mb-2">Maintenance (15%)</p>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Schedule and apply software updates</li>
+                                <li>• Update threat signatures</li>
+                                <li>• Review and renew licenses</li>
+                                <li>• Backup configurations</li>
+                                <li>• Test HA failover (planned)</li>
+                                <li>• Capacity planning</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-white font-medium mb-2">Projects & Improvements (5%)</p>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• Deploy new features (SSL decrypt, sandboxing)</li>
+                                <li>• Rule optimization and consolidation</li>
+                                <li>• Automate repetitive tasks</li>
+                                <li>• Create reports for management</li>
+                                <li>• Security architecture improvements</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rule Request Workflow -->
+                <div class="card rounded-xl p-5 mb-6">
+                    <h3 class="text-white font-bold mb-3">Typical Firewall Rule Request Workflow</h3>
+                    <div class="diagram rounded-lg p-3">
+                        <pre class="text-xs text-gray-300">
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│  1. User    │     │  2. Ticket  │     │ 3. Security │     │ 4. Peer     │
+│  submits    │────►│  created    │────►│ Engineer    │────►│ Review      │
+│  request    │     │  (SNOW/Jira)│     │ analyzes    │     │ (4-eyes)    │
+└─────────────┘     └─────────────┘     └─────────────┘     └──────┬──────┘
+                                                                   │
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌──────▼──────┐
+│  8. Close   │     │ 7. Test &   │     │ 6. Deploy   │     │ 5. CAB      │
+│  ticket     │◄────│ Verify      │◄────│ in change   │◄────│ Approval    │
+│             │     │             │     │ window      │     │ (if major)  │
+└─────────────┘     └─────────────┘     └─────────────┘     └─────────────┘
+
+Key Questions During Analysis:
+• Why is this access needed? (Business justification)
+• What's the minimum access required? (Least privilege)
+• Is the destination already accessible another way?
+• What's the expiration? (Temporary vs permanent)
+• Is this request from an authorized person?
+                        </pre>
+                    </div>
+                </div>
+
+                <!-- Common Troubleshooting -->
+                <div class="card rounded-xl p-5 mb-6">
+                    <h3 class="text-white font-bold mb-3">Common Troubleshooting Scenarios</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-yellow-400 font-medium mb-2">🔍 "My application is being blocked"</p>
+                            <ol class="text-gray-400 text-sm space-y-1 ml-4">
+                                <li>1. Get source IP, destination IP, port/protocol</li>
+                                <li>2. Check traffic logs for deny entries</li>
+                                <li>3. Identify which rule is blocking (or implicit deny)</li>
+                                <li>4. Verify App-ID - is the app identified correctly?</li>
+                                <li>5. Check if user-ID is resolving correctly</li>
+                                <li>6. If legitimate, create rule through change process</li>
+                            </ol>
+                            <div class="config-block rounded p-2 mt-2">
+                                <p class="text-cyan-400 text-xs mb-1">Palo Alto: Test policy match</p>
+                                <code class="text-green-400 text-xs">test security-policy-match source 10.1.1.100 destination 8.8.8.8 protocol 6 application dns</code>
+                            </div>
+                        </div>
+
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-yellow-400 font-medium mb-2">🔍 "Slow performance / high latency"</p>
+                            <ol class="text-gray-400 text-sm space-y-1 ml-4">
+                                <li>1. Check firewall CPU and memory utilization</li>
+                                <li>2. Check session table utilization (near max?)</li>
+                                <li>3. Is SSL decryption overloading the box?</li>
+                                <li>4. Review throughput vs rated capacity</li>
+                                <li>5. Check for asymmetric routing issues</li>
+                                <li>6. Packet captures to measure latency at each hop</li>
+                            </ol>
+                        </div>
+
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-yellow-400 font-medium mb-2">🔍 "HA failover occurred unexpectedly"</p>
+                            <ol class="text-gray-400 text-sm space-y-1 ml-4">
+                                <li>1. Check system logs for failure reason</li>
+                                <li>2. Verify heartbeat link status</li>
+                                <li>3. Check monitored interfaces/paths</li>
+                                <li>4. Review hardware health (fans, PSU, disk)</li>
+                                <li>5. Confirm both units have same config/version</li>
+                                <li>6. Document root cause, consider tuning thresholds</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rule Best Practices -->
+                <div class="card rounded-xl p-5">
+                    <h3 class="text-white font-bold mb-3">Firewall Rule Best Practices</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
+                            <p class="text-green-400 font-medium text-sm mb-2">✅ DO</p>
+                            <ul class="text-gray-400 text-xs space-y-1">
+                                <li>• Follow least privilege (specific sources/destinations)</li>
+                                <li>• Use address groups and service groups</li>
+                                <li>• Add descriptive names and comments</li>
+                                <li>• Include ticket number in rule description</li>
+                                <li>• Set expiration for temporary rules</li>
+                                <li>• Place more specific rules above general ones</li>
+                                <li>• Log security-relevant traffic</li>
+                                <li>• Review rules periodically (quarterly)</li>
+                            </ul>
+                        </div>
+                        <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
+                            <p class="text-red-400 font-medium text-sm mb-2">❌ DON'T</p>
+                            <ul class="text-gray-400 text-xs space-y-1">
+                                <li>• Create "any any any" rules</li>
+                                <li>• Leave rules without descriptions</li>
+                                <li>• Duplicate existing rules</li>
+                                <li>• Disable rules instead of deleting (cleanup later)</li>
+                                <li>• Allow direct internet to internal servers</li>
+                                <li>• Skip change management "just this once"</li>
+                                <li>• Forget to test after changes</li>
+                                <li>• Ignore unused rule reports</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- SSL DECRYPTION -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400">5</span>
+                    SSL/TLS Decryption (Deep Dive)
+                </h2>
+
+                <div class="card rounded-xl p-5 mb-6">
+                    <h3 class="text-white font-bold mb-3">Why SSL Decryption Matters</h3>
+                    <p class="text-gray-400 text-sm mb-3">Over 90% of web traffic is encrypted (HTTPS). Without decryption, your NGFW is blind to:</p>
+                    <ul class="text-gray-400 text-sm space-y-1 ml-4">
+                        <li>• Malware downloads over HTTPS</li>
+                        <li>• Data exfiltration to cloud storage</li>
+                        <li>• Command & Control traffic</li>
+                        <li>• Policy violations (unauthorized apps)</li>
+                    </ul>
+                </div>
+
+                <div class="diagram rounded-xl p-4 mb-6">
+                    <p class="text-cyan-400 text-sm font-medium mb-3">SSL Forward Proxy (Outbound Decryption)</p>
+                    <pre class="text-xs text-gray-300">
+Without Decryption:
+User ───[HTTPS encrypted]───► NGFW ───[HTTPS encrypted]───► Website
+                                │
+                          Can't see inside!
+                          Only sees IP/Port
+
+With SSL Forward Proxy:
+User ───[HTTPS]───► NGFW ───[Decrypt]───[Inspect]───[Re-encrypt]───► Website
+          │            │                                      │
+          │            └── FW acts as proxy, presents its    │
+          │                own cert to user's browser        │
+          │                                                  │
+          └── User must trust FW's CA certificate ──────────┘
+              (deployed via GPO or MDM)
+
+The NGFW:
+1. Intercepts TLS handshake
+2. Establishes new TLS session with destination
+3. Presents its own certificate to client
+4. Decrypts traffic, inspects it
+5. Re-encrypts and forwards
+                    </pre>
+                </div>
+
+                <div class="card rounded-xl p-5 mb-6">
+                    <h3 class="text-white font-bold mb-3">SSL Decryption Considerations</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-black/30 rounded-lg p-3">
+                            <p class="text-yellow-400 font-medium text-sm mb-2">⚠️ Challenges</p>
+                            <ul class="text-gray-400 text-xs space-y-1">
+                                <li>• <strong>Performance impact</strong> - Decryption is CPU intensive</li>
+                                <li>• <strong>Certificate deployment</strong> - FW CA must be trusted</li>
+                                <li>• <strong>Certificate pinning</strong> - Some apps fail (banking, etc.)</li>
+                                <li>• <strong>Privacy concerns</strong> - Legal in some regions?</li>
+                                <li>• <strong>Compliance</strong> - Some data must NOT be decrypted (healthcare, finance)</li>
+                            </ul>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-3">
+                            <p class="text-green-400 font-medium text-sm mb-2">✅ Best Practices</p>
+                            <ul class="text-gray-400 text-xs space-y-1">
+                                <li>• <strong>Exclude sensitive categories</strong> - Healthcare, finance, gov</li>
+                                <li>• <strong>Exclude cert-pinned apps</strong> - Banking, Windows Update</li>
+                                <li>• <strong>Start with high-risk categories</strong> - Unknown, newly registered</li>
+                                <li>• <strong>Monitor performance</strong> - Size hardware appropriately</li>
+                                <li>• <strong>Get legal approval</strong> - HR/Legal sign-off on policy</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- INTERVIEW QUESTIONS -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400">6</span>
+                    Interview Questions & Answers
+                </h2>
+
+                <div class="space-y-6">
+                    <div class="interview rounded-xl p-5">
+                        <p class="text-purple-400 font-bold mb-3">Q: What's the difference between a stateful firewall and NGFW?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"Stateful firewalls track connection state and work at layers 3-4 - they see IP addresses and ports. They allow return traffic for established connections but can't see what's inside the packets. NGFWs add layer 7 visibility - they identify applications regardless of port, integrate user identity from AD, decrypt SSL to inspect encrypted traffic, and include IPS, URL filtering, and threat intelligence. So NGFW is stateful plus application awareness plus integrated security services."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview rounded-xl p-5">
+                        <p class="text-purple-400 font-bold mb-3">Q: How do you troubleshoot a user reporting blocked traffic?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"First, I get specifics - source IP, destination, port, application. Then I check traffic logs filtered by that source IP around the time of the issue. If I see a deny, I identify which rule matched - implicit deny or explicit block. I also check App-ID - sometimes the app is misidentified. If the traffic should be allowed, I create a rule through proper change management. If it's being blocked for good reason, I explain to the user why and offer alternatives if possible. I always test after making changes using packet capture or session logging to confirm the fix."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview rounded-xl p-5">
+                        <p class="text-purple-400 font-bold mb-3">Q: How do you approach firewall rule cleanup?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"I run reports showing rules with zero hits over 90 days - these are candidates for removal. But I don't just delete them - first I disable with a date tag, wait 30 days, monitor for any breakage. I also look for overlapping rules where a broader rule makes specific ones redundant. Shadow rules that never match because something above catches the traffic first. And duplicate rules that do the same thing. I document the cleanup in change management and schedule it during low-risk periods. The goal is reducing attack surface and improving performance without breaking anything."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview rounded-xl p-5">
+                        <p class="text-purple-400 font-bold mb-3">Q: Explain how you would implement a new NGFW from scratch.</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"I'd start with requirements - throughput needs, features required, HA requirements, budget. Then architecture design - where does it sit, what zones, what traffic flows through it. For the actual deployment: initial config in a lab first, configure interfaces and zones, set up management access, integrate with AD for User-ID, configure logging to SIEM. Then build the base policy - start with deny-all, explicitly allow what's needed. Enable security profiles gradually - IPS first, then URL filtering, then SSL decryption for high-risk categories. Test thoroughly before cutover, have a rollback plan. After go-live, monitor closely for a week, tune false positives, then enable additional features incrementally."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview rounded-xl p-5">
+                        <p class="text-purple-400 font-bold mb-3">Q: What are the security considerations for SSL decryption?</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"SSL decryption is essential because 90%+ of traffic is encrypted - without it you're blind. But there are considerations: Performance - decryption is CPU intensive, need to size hardware appropriately. Privacy - get HR/legal approval, create policy. Exclusions - some traffic should never be decrypted: banking, healthcare, certificate-pinned apps. Compliance - some regulations prohibit decrypting certain data types. Certificate management - your CA cert needs to be trusted by all endpoints, deploy via GPO. Start with high-risk categories first - newly registered domains, unknown categories - then expand based on visibility needs."</p>
+                        </div>
+                    </div>
+
+                    <div class="interview rounded-xl p-5">
+                        <p class="text-purple-400 font-bold mb-3">Q: You mentioned you've worked with [Palo Alto/Fortinet]. Walk me through a typical day.</p>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm">"Morning starts with checking overnight alerts - any critical threats blocked, any HA events, any capacity warnings. Then I review the queue of firewall change requests - analyze each one for security risk, verify business justification, ensure least privilege. After changes are approved and implemented, I test them and update the ticket. Throughout the day I troubleshoot connectivity issues - users reporting blocked apps, which means checking logs, identifying the blocking rule, and either adjusting policy or explaining why it's blocked. I also spend time on proactive work - reviewing unused rules for cleanup, optimizing rule order, checking for software updates and planning patching windows. Weekly I review threat logs for patterns, monthly I generate reports for management."</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- QUICK REFERENCE -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center text-yellow-400">7</span>
+                    Quick Reference
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="tip rounded-xl p-5">
+                        <h3 class="text-yellow-400 font-bold mb-3">🧠 Key Terms to Know</h3>
+                        <ul class="text-gray-300 text-sm space-y-1">
+                            <li><strong>App-ID:</strong> Application identification</li>
+                            <li><strong>User-ID:</strong> IP-to-user mapping</li>
+                            <li><strong>DPI:</strong> Deep Packet Inspection</li>
+                            <li><strong>UTM:</strong> Unified Threat Management</li>
+                            <li><strong>IPS:</strong> Intrusion Prevention System</li>
+                            <li><strong>NAT:</strong> Network Address Translation</li>
+                            <li><strong>PAT:</strong> Port Address Translation</li>
+                            <li><strong>HA:</strong> High Availability</li>
+                            <li><strong>FQDN:</strong> Fully Qualified Domain Name</li>
+                            <li><strong>EDL:</strong> External Dynamic List</li>
+                        </ul>
+                    </div>
+
+                    <div class="tip rounded-xl p-5">
+                        <h3 class="text-yellow-400 font-bold mb-3">🔢 Common Ports</h3>
+                        <div class="text-gray-300 text-xs font-mono">
+                            <p>20-21: FTP | 22: SSH | 23: Telnet</p>
+                            <p>25: SMTP | 53: DNS | 67-68: DHCP</p>
+                            <p>80: HTTP | 110: POP3 | 143: IMAP</p>
+                            <p>443: HTTPS | 445: SMB | 389: LDAP</p>
+                            <p>636: LDAPS | 1433: MSSQL | 3306: MySQL</p>
+                            <p>3389: RDP | 5432: PostgreSQL</p>
+                            <p>8080: HTTP-Alt | 8443: HTTPS-Alt</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+<script src="../js/sidebar.js"></script>
+</body>
+</html>
