@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OT Security | Security Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Inter', system-ui, sans-serif; }
+        .card { background: linear-gradient(145deg, #12121a, #1a1a2e); border: 1px solid #2a2a3e; }
+        .ot-card { background: linear-gradient(135deg, #1a0d0d 0%, #1a1a2e 100%); border: 1px solid #dc2626; }
+        .it-card { background: linear-gradient(135deg, #0d1a1a 0%, #1a1a2e 100%); border: 1px solid #06b6d4; }
+        .hybrid-card { background: linear-gradient(135deg, #1a1a0d 0%, #1a1a2e 100%); border: 1px solid #f59e0b; }
+        .purdue-card { background: linear-gradient(135deg, #0d1a0d 0%, #1a1a2e 100%); border: 1px solid #10b981; }
+        .interview-qa { background: linear-gradient(135deg, #1a1a2e 0%, #1e1e3e 100%); border: 1px solid #8b5cf6; }
+        .memorize { background: linear-gradient(135deg, #1a0d1a 0%, #1a1a2e 100%); border: 1px solid #ec4899; }
+        .vendor-card { background: linear-gradient(135deg, #1a1a2e 0%, #0d0d1a 100%); border: 1px solid #6366f1; }
+        .warning-card { background: linear-gradient(135deg, #1a1a0d 0%, #1a1a2e 100%); border: 1px solid #ef4444; }
+        .diagram { background: #0a0a0f; border: 1px solid #2a2a3e; font-family: 'Courier New', monospace; }
+        pre { background: #0d0d14 !important; border-radius: 8px; padding: 16px; overflow-x: auto; }
+        .answer-box { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 16px; }
+        .level-5 { background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; }
+        .level-4 { background: rgba(249, 115, 22, 0.1); border-left: 4px solid #f97316; }
+        .level-3 { background: rgba(234, 179, 8, 0.1); border-left: 4px solid #eab308; }
+        .level-2 { background: rgba(34, 197, 94, 0.1); border-left: 4px solid #22c55e; }
+        .level-1 { background: rgba(59, 130, 246, 0.1); border-left: 4px solid #3b82f6; }
+        .level-0 { background: rgba(168, 85, 247, 0.1); border-left: 4px solid #a855f7; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <main class="lg:ml-64 lg:pl-6 pt-14 lg:pt-0">
+        <div class="max-w-5xl mx-auto px-6 py-12">
+
+            <!-- ============================================ -->
+            <!-- HERO SECTION -->
+            <!-- ============================================ -->
+            <section class="mb-12">
+                <div class="flex items-center gap-2 text-red-400 mb-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                    <span class="text-sm font-medium">OT/ICS Security</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">OT Security Engineering</h1>
+                <p class="text-xl text-gray-400 mb-6">Securing Industrial Control Systems, SCADA, PLCs in Manufacturing & Critical Infrastructure</p>
+
+                <div class="flex flex-wrap gap-3 mb-8">
+                    <span class="px-4 py-2 rounded-full bg-red-500/20 text-red-400 text-sm font-medium border border-red-500/30">ICS/SCADA</span>
+                    <span class="px-4 py-2 rounded-full bg-orange-500/20 text-orange-400 text-sm font-medium border border-orange-500/30">Purdue Model</span>
+                    <span class="px-4 py-2 rounded-full bg-green-500/20 text-green-400 text-sm font-medium border border-green-500/30">IEC 62443</span>
+                    <span class="px-4 py-2 rounded-full bg-blue-500/20 text-blue-400 text-sm font-medium border border-blue-500/30">IT/OT Convergence</span>
+                    <span class="px-4 py-2 rounded-full bg-purple-500/20 text-purple-400 text-sm font-medium border border-purple-500/30">Manufacturing</span>
+                </div>
+
+                <!-- 30-Second Answer -->
+                <div class="hybrid-card rounded-xl p-5 mb-6">
+                    <h3 class="text-yellow-400 font-bold mb-3">⚡ 30-Second Interview Answer</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed">
+                        "OT security protects industrial control systems—PLCs, SCADA, HMIs—that run manufacturing processes. Unlike IT where confidentiality is priority #1, OT prioritizes <strong class="text-yellow-400">availability and safety</strong>—you can't just reboot a bottling line or push patches without testing. The architecture follows the Purdue Model with strict segmentation: Level 0-2 for physical processes, Level 3 for site operations, and a DMZ separating OT from IT. Key controls include dual firewalls between IT/OT, jump hosts for secure access, allowlisting instead of blocklisting, passive monitoring to avoid disrupting processes, and strict vendor remote access controls. I'm familiar with frameworks like IEC 62443 and NIST SP 800-82 that guide OT security programs."
+                    </p>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- SECTION 1: IT vs OT FUNDAMENTALS -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center text-red-400">1</span>
+                    IT vs OT: Fundamental Differences
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <!-- IT Card -->
+                    <div class="it-card rounded-xl p-5">
+                        <h3 class="text-cyan-400 font-bold mb-4 flex items-center gap-2">
+                            <span>💻</span> Information Technology (IT)
+                        </h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Priority:</span>
+                                <span class="text-cyan-300">Confidentiality → Integrity → Availability</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Patching:</span>
+                                <span class="text-cyan-300">Monthly patch cycles, auto-updates</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Downtime:</span>
+                                <span class="text-cyan-300">Acceptable for maintenance windows</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Lifecycle:</span>
+                                <span class="text-cyan-300">3-5 years typical</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Security:</span>
+                                <span class="text-cyan-300">Active scanning, agents, EDR</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Protocols:</span>
+                                <span class="text-cyan-300">TCP/IP, HTTP, SMB, RDP</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- OT Card -->
+                    <div class="ot-card rounded-xl p-5">
+                        <h3 class="text-red-400 font-bold mb-4 flex items-center gap-2">
+                            <span>🏭</span> Operational Technology (OT)
+                        </h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Priority:</span>
+                                <span class="text-red-300">Safety → Availability → Integrity</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Patching:</span>
+                                <span class="text-red-300">Annual during planned shutdowns</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Downtime:</span>
+                                <span class="text-red-300">$10K-$100K+ per hour losses</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Lifecycle:</span>
+                                <span class="text-red-300">15-25+ years typical</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Security:</span>
+                                <span class="text-red-300">Passive monitoring, no agents</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Protocols:</span>
+                                <span class="text-red-300">Modbus, DNP3, OPC, EtherNet/IP</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Critical Difference Box -->
+                <div class="warning-card rounded-xl p-5">
+                    <h4 class="text-red-400 font-bold mb-3">⚠️ Why OT Security is Different - Critical Understanding</h4>
+                    <div class="grid md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <p class="text-gray-300 mb-2"><strong class="text-white">Safety First:</strong> A misconfigured PLC can cause physical harm—explosions, chemical spills, equipment damage, injuries. IT mistakes cause data breaches; OT mistakes can hurt people.</p>
+                            <p class="text-gray-300 mb-2"><strong class="text-white">No Reboots:</strong> You can't just "turn it off and on again." Stopping a bottling line mid-production ruins product and costs money.</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-300 mb-2"><strong class="text-white">Legacy Systems:</strong> Windows XP, Windows 7, and proprietary RTOS still run critical processes. They can't be upgraded because vendors no longer support the control software.</p>
+                            <p class="text-gray-300 mb-2"><strong class="text-white">Vendor Dependencies:</strong> Only Rockwell can touch the Allen-Bradley PLC. Only Siemens can touch the SIMATIC. These vendors need remote access.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- SECTION 2: PURDUE MODEL ARCHITECTURE -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400">2</span>
+                    Purdue Model Architecture
+                </h2>
+
+                <p class="text-gray-400 mb-6">The Purdue Enterprise Reference Architecture (PERA) is the standard model for industrial network segmentation. IEC 62443 uses this as the foundation for OT security zones.</p>
+
+                <!-- ASCII Diagram -->
+                <div class="diagram rounded-xl p-6 mb-6 overflow-x-auto">
+                    <pre class="text-xs text-green-400 whitespace-pre">
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                              PURDUE MODEL - COCA-COLA BOTTLING                  │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │  LEVEL 5: ENTERPRISE NETWORK                           [IT ZONE]        │   │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                   │   │
+│  │  │   Azure AD   │  │   SAP ERP    │  │   Office 365 │                   │   │
+│  │  │  Entra ID    │  │  Financials  │  │   Email      │                   │   │
+│  │  └──────────────┘  └──────────────┘  └──────────────┘                   │   │
+│  │  Corporate users, business applications, cloud services                  │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                                        │                                        │
+│                                   [FIREWALL 1]                                  │
+│                                   Palo Alto / Fortinet                          │
+│                                        │                                        │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │  LEVEL 4: SITE BUSINESS PLANNING                       [IT ZONE]        │   │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                   │   │
+│  │  │  Historian   │  │   MES        │  │  Reporting   │                   │   │
+│  │  │  (Replica)   │  │  Interface   │  │  Dashboards  │                   │   │
+│  │  └──────────────┘  └──────────────┘  └──────────────┘                   │   │
+│  │  Production scheduling, inventory management, business analytics         │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                                        │                                        │
+│                               ════════════════════                              │
+│                               ║   IT/OT DMZ      ║  ← Industrial DMZ            │
+│                               ║                  ║                              │
+│                               ║  ┌────────────┐  ║                              │
+│                               ║  │ Jump Host  │  ║  ← Secure access point       │
+│                               ║  │ (Bastion)  │  ║                              │
+│                               ║  └────────────┘  ║                              │
+│                               ║  ┌────────────┐  ║                              │
+│                               ║  │  Claroty   │  ║  ← OT monitoring             │
+│                               ║  │  Nozomi    │  ║                              │
+│                               ║  └────────────┘  ║                              │
+│                               ║  ┌────────────┐  ║                              │
+│                               ║  │  Patch     │  ║  ← OT patch staging          │
+│                               ║  │  Server    │  ║                              │
+│                               ║  └────────────┘  ║                              │
+│                               ║  ┌────────────┐  ║                              │
+│                               ║  │  AV        │  ║  ← Signature updates         │
+│                               ║  │  Relay     │  ║                              │
+│                               ║  └────────────┘  ║                              │
+│                               ════════════════════                              │
+│                                        │                                        │
+│                                   [FIREWALL 2]                                  │
+│                                   Palo Alto / Fortinet                          │
+│                                        │                                        │
+│  ╔═════════════════════════════════════════════════════════════════════════╗   │
+│  ║  LEVEL 3: SITE OPERATIONS                              [OT ZONE]        ║   │
+│  ║  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                   ║   │
+│  ║  │  Historian   │  │   SCADA      │  │  Engineering │                   ║   │
+│  ║  │  (Primary)   │  │   Server     │  │  Workstation │                   ║   │
+│  ║  └──────────────┘  └──────────────┘  └──────────────┘                   ║   │
+│  ║  Site-wide monitoring, data collection, engineering access               ║   │
+│  ╚═════════════════════════════════════════════════════════════════════════╝   │
+│                                        │                                        │
+│  ╔═════════════════════════════════════════════════════════════════════════╗   │
+│  ║  LEVEL 2: AREA SUPERVISORY CONTROL                     [OT ZONE]        ║   │
+│  ║  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                   ║   │
+│  ║  │   HMI        │  │   HMI        │  │   HMI        │                   ║   │
+│  ║  │  Bottling    │  │  Packaging   │  │  Warehouse   │                   ║   │
+│  ║  └──────────────┘  └──────────────┘  └──────────────┘                   ║   │
+│  ║  Operator interfaces, local control, area supervision                    ║   │
+│  ╚═════════════════════════════════════════════════════════════════════════╝   │
+│                                        │                                        │
+│  ╔═════════════════════════════════════════════════════════════════════════╗   │
+│  ║  LEVEL 1: BASIC CONTROL                                [OT ZONE]        ║   │
+│  ║  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                   ║   │
+│  ║  │    PLC       │  │    PLC       │  │    RTU       │                   ║   │
+│  ║  │  Rockwell    │  │   Siemens    │  │   Schneider  │                   ║   │
+│  ║  └──────────────┘  └──────────────┘  └──────────────┘                   ║   │
+│  ║  Controllers executing control logic, safety systems                     ║   │
+│  ╚═════════════════════════════════════════════════════════════════════════╝   │
+│                                        │                                        │
+│  ╔═════════════════════════════════════════════════════════════════════════╗   │
+│  ║  LEVEL 0: PHYSICAL PROCESS                             [OT ZONE]        ║   │
+│  ║  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                   ║   │
+│  ║  │   Sensors    │  │   Actuators  │  │   Valves     │                   ║   │
+│  ║  │  Temp/Press  │  │   Motors     │  │   Pumps      │                   ║   │
+│  ║  └──────────────┘  └──────────────┘  └──────────────┘                   ║   │
+│  ║  Physical equipment: sensors, motors, valves, conveyors                  ║   │
+│  ╚═════════════════════════════════════════════════════════════════════════╝   │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+KEY: [IT ZONE] = Traditional IT security applies
+     [OT ZONE] = OT-specific security controls (no agents, passive monitoring)
+     DMZ = Only authorized, inspected traffic crosses this boundary
+                    </pre>
+                </div>
+
+                <!-- Level Details -->
+                <div class="space-y-4">
+                    <div class="level-5 rounded-lg p-4">
+                        <h4 class="text-red-400 font-bold mb-2">Level 5: Enterprise Network</h4>
+                        <p class="text-gray-300 text-sm">Corporate IT systems—ERP (SAP), email, cloud services, business applications. Standard IT security controls apply. This is where corporate SOC monitors from.</p>
+                    </div>
+                    <div class="level-4 rounded-lg p-4">
+                        <h4 class="text-orange-400 font-bold mb-2">Level 4: Site Business Planning</h4>
+                        <p class="text-gray-300 text-sm">Plant-level business systems—production scheduling, inventory management, reporting. Receives data from OT but doesn't control processes directly.</p>
+                    </div>
+                    <div class="level-3 rounded-lg p-4">
+                        <h4 class="text-yellow-400 font-bold mb-2">Level 3.5: Industrial DMZ (Critical!)</h4>
+                        <p class="text-gray-300 text-sm">The security boundary between IT and OT. Contains jump hosts, data diodes, patch servers, OT monitoring tools. <strong>No direct connections between L4 and L3</strong>—everything goes through DMZ services.</p>
+                    </div>
+                    <div class="level-2 rounded-lg p-4">
+                        <h4 class="text-green-400 font-bold mb-2">Level 3: Site Operations (SCADA)</h4>
+                        <p class="text-gray-300 text-sm">SCADA servers, historians, engineering workstations. Site-wide visibility and control. This is where process engineers work.</p>
+                    </div>
+                    <div class="level-1 rounded-lg p-4">
+                        <h4 class="text-blue-400 font-bold mb-2">Level 2: Area Supervisory Control (HMI)</h4>
+                        <p class="text-gray-300 text-sm">Human-Machine Interfaces for operators. Each production area (bottling, packaging, palletizing) has dedicated HMIs. Operators control processes from here.</p>
+                    </div>
+                    <div class="level-0 rounded-lg p-4">
+                        <h4 class="text-purple-400 font-bold mb-2">Level 1: Basic Control (PLC/RTU)</h4>
+                        <p class="text-gray-300 text-sm">Programmable Logic Controllers and Remote Terminal Units. These execute control logic—"if temperature > 40°C, open cooling valve." Safety Instrumented Systems (SIS) live here.</p>
+                    </div>
+                    <div class="card rounded-lg p-4">
+                        <h4 class="text-gray-400 font-bold mb-2">Level 0: Physical Process</h4>
+                        <p class="text-gray-300 text-sm">The actual physical equipment—sensors measuring temperature/pressure/flow, motors, valves, pumps, conveyors. These connect to PLCs via industrial I/O.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- SECTION 3: COCA-COLA MANUFACTURING ARCHITECTURE -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center text-red-400">3</span>
+                    Manufacturing Environment: Coca-Cola Bottling
+                </h2>
+
+                <p class="text-gray-400 mb-6">A typical Coca-Cola bottling plant has multiple production lines, each with its own control systems. Understanding the operational context helps design appropriate security controls.</p>
+
+                <!-- Production Line Diagram -->
+                <div class="diagram rounded-xl p-6 mb-6 overflow-x-auto">
+                    <pre class="text-xs text-cyan-400 whitespace-pre">
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                        BOTTLING PLANT PRODUCTION FLOW                           │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐      │
+│  │   WATER     │───►│   SYRUP     │───►│   MIXING    │───►│ CARBONATION │      │
+│  │  TREATMENT  │    │   ROOM      │    │   TANKS     │    │   SYSTEM    │      │
+│  │             │    │             │    │             │    │             │      │
+│  │  PLC: AB    │    │  PLC: AB    │    │  PLC: AB    │    │  PLC: Siemens│     │
+│  │  1756-L73   │    │  1756-L73   │    │  1756-L73   │    │  S7-1500    │      │
+│  └─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘      │
+│                                                                  │              │
+│                                                                  ▼              │
+│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐      │
+│  │  PALLETIZER │◄───│   CASE      │◄───│   LABELING  │◄───│   FILLER    │      │
+│  │   WRAPPER   │    │   PACKER    │    │   MACHINE   │    │   LINE      │      │
+│  │             │    │             │    │             │    │             │      │
+│  │  PLC: AB    │    │  PLC: AB    │    │  PLC: Krones│    │  PLC: Krones│      │
+│  │  CompactLogix│   │  1756-L73   │    │  Proprietary│    │  Proprietary│      │
+│  └─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘      │
+│         │                                                                       │
+│         ▼                                                                       │
+│  ┌─────────────┐    Each PLC controlled by dedicated HMI                       │
+│  │  WAREHOUSE  │    All PLCs report to central SCADA                           │
+│  │  AUTOMATION │    Historian captures all process data                         │
+│  │  AGVs/AS-RS │    Safety systems independent of control                       │
+│  └─────────────┘                                                                │
+│                                                                                 │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│  COMMON VENDORS IN BEVERAGE MANUFACTURING:                                      │
+│  • PLCs: Rockwell Allen-Bradley, Siemens, Schneider                            │
+│  • Filling/Labeling: Krones, Sidel, KHS (often proprietary controllers)        │
+│  • SCADA: Wonderware, Ignition, FactoryTalk                                    │
+│  • Historian: OSIsoft PI, Wonderware Historian                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <!-- OT Assets Table -->
+                <div class="card rounded-xl p-5 mb-6">
+                    <h3 class="text-white font-bold mb-4">Typical OT Assets in a Bottling Plant</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b border-gray-700">
+                                    <th class="text-left py-2 text-gray-400">Asset Type</th>
+                                    <th class="text-left py-2 text-gray-400">Typical Quantity</th>
+                                    <th class="text-left py-2 text-gray-400">Security Considerations</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-300">
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2">PLCs</td>
+                                    <td class="py-2">50-200 per plant</td>
+                                    <td class="py-2">No authentication, cleartext protocols, legacy firmware</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2">HMIs</td>
+                                    <td class="py-2">20-50 per plant</td>
+                                    <td class="py-2">Windows-based, often unpatched, shared logins</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2">SCADA Servers</td>
+                                    <td class="py-2">2-5 per plant</td>
+                                    <td class="py-2">Critical availability, historian integration</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2">Engineering Workstations</td>
+                                    <td class="py-2">5-10 per plant</td>
+                                    <td class="py-2">Contains PLC code, high-value target</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2">Network Switches</td>
+                                    <td class="py-2">30-100 per plant</td>
+                                    <td class="py-2">Industrial managed switches, often flat network</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2">Safety Systems (SIS)</td>
+                                    <td class="py-2">5-15 per plant</td>
+                                    <td class="py-2">Air-gapped from control network, never touched remotely</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- SECTION 4: DUAL FIREWALL ARCHITECTURE -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center text-orange-400">4</span>
+                    Dual Firewall & DMZ Architecture
+                </h2>
+
+                <p class="text-gray-400 mb-6">The IT/OT boundary requires two firewalls with a DMZ between them. This ensures that even if one firewall is compromised, the attacker cannot directly reach OT systems.</p>
+
+                <!-- Dual Firewall Diagram -->
+                <div class="diagram rounded-xl p-6 mb-6 overflow-x-auto">
+                    <pre class="text-xs text-orange-400 whitespace-pre">
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                         DUAL FIREWALL ARCHITECTURE                              │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│     IT NETWORK (Level 4-5)                                                      │
+│     ┌─────────────────────────────────────────────────────────────────────┐    │
+│     │  Corporate Users    │    Business Apps    │    Cloud Services       │    │
+│     │  10.0.0.0/16        │    SAP, O365        │    Azure, AWS           │    │
+│     └─────────────────────────────────────────────────────────────────────┘    │
+│                                        │                                        │
+│                                        ▼                                        │
+│     ┌─────────────────────────────────────────────────────────────────────┐    │
+│     │  ████████████████████  FIREWALL 1  ████████████████████████████████ │    │
+│     │                       (IT-Facing Firewall)                          │    │
+│     │  Vendor: Palo Alto PA-5220 / Fortinet 600E                          │    │
+│     │                                                                     │    │
+│     │  RULES (Outbound from IT → DMZ):                                    │    │
+│     │  ├── ALLOW: IT Admins → Jump Host (RDP 3389, SSH 22)               │    │
+│     │  ├── ALLOW: Monitoring → Claroty/Nozomi (443)                      │    │
+│     │  ├── ALLOW: Patch Server → DMZ Patch Repo (445, 443)               │    │
+│     │  ├── ALLOW: Historian Replica sync (1433, proprietary)             │    │
+│     │  └── DENY: ALL other traffic to DMZ                                │    │
+│     │                                                                     │    │
+│     │  RULES (Inbound from DMZ → IT):                                     │    │
+│     │  ├── ALLOW: Claroty alerts → SIEM (514 syslog, 443 API)            │    │
+│     │  ├── ALLOW: Historian replica → BI tools (read-only)               │    │
+│     │  └── DENY: ALL other traffic from DMZ                              │    │
+│     └─────────────────────────────────────────────────────────────────────┘    │
+│                                        │                                        │
+│                                        ▼                                        │
+│     ┌─────────────────────────────────────────────────────────────────────┐    │
+│     │                      INDUSTRIAL DMZ (Level 3.5)                     │    │
+│     │                      172.16.100.0/24                                │    │
+│     │                                                                     │    │
+│     │  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌───────────┐        │    │
+│     │  │ Jump Host │  │  Claroty  │  │  Patch    │  │ Historian │        │    │
+│     │  │ (Bastion) │  │  Nozomi   │  │  Server   │  │  Replica  │        │    │
+│     │  │           │  │           │  │           │  │           │        │    │
+│     │  │ .10       │  │ .20       │  │ .30       │  │ .40       │        │    │
+│     │  └───────────┘  └───────────┘  └───────────┘  └───────────┘        │    │
+│     │                                                                     │    │
+│     │  ┌───────────┐  ┌───────────┐  ┌───────────┐                       │    │
+│     │  │ AV Relay  │  │  Remote   │  │  File     │                       │    │
+│     │  │ Server    │  │  Access   │  │  Transfer │                       │    │
+│     │  │           │  │  Gateway  │  │  Server   │                       │    │
+│     │  │ .50       │  │ .60       │  │ .70       │                       │    │
+│     │  └───────────┘  └───────────┘  └───────────┘                       │    │
+│     └─────────────────────────────────────────────────────────────────────┘    │
+│                                        │                                        │
+│                                        ▼                                        │
+│     ┌─────────────────────────────────────────────────────────────────────┐    │
+│     │  ████████████████████  FIREWALL 2  ████████████████████████████████ │    │
+│     │                       (OT-Facing Firewall)                          │    │
+│     │  Vendor: Palo Alto PA-5220 / Fortinet 600E                          │    │
+│     │                                                                     │    │
+│     │  RULES (Outbound from DMZ → OT):                                    │    │
+│     │  ├── ALLOW: Jump Host → Engineering WS (RDP 3389) - TIME LIMITED   │    │
+│     │  ├── ALLOW: Claroty sensor → OT network (SPAN/mirror - read only)  │    │
+│     │  ├── ALLOW: Patch Server → WSUS relay in OT (8530)                 │    │
+│     │  ├── ALLOW: AV Relay → OT endpoints (signature updates)            │    │
+│     │  └── DENY: ALL other traffic to OT                                 │    │
+│     │                                                                     │    │
+│     │  RULES (Inbound from OT → DMZ):                                     │    │
+│     │  ├── ALLOW: Historian → Replica sync (1433, proprietary)           │    │
+│     │  ├── ALLOW: SCADA → Claroty sensor (passive, mirror traffic)       │    │
+│     │  └── DENY: ALL other traffic from OT (OT should NEVER initiate)    │    │
+│     │                                                                     │    │
+│     │  CRITICAL: Deep packet inspection for OT protocols (Modbus, etc.)  │    │
+│     └─────────────────────────────────────────────────────────────────────┘    │
+│                                        │                                        │
+│                                        ▼                                        │
+│     OT NETWORK (Level 0-3)                                                      │
+│     ┌─────────────────────────────────────────────────────────────────────┐    │
+│     │  SCADA Servers    │    HMIs    │    PLCs    │    Physical Process   │    │
+│     │  192.168.0.0/16   │            │            │                       │    │
+│     └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <!-- Firewall Rules Explanation -->
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="card rounded-xl p-5">
+                        <h4 class="text-orange-400 font-bold mb-3">🔥 Firewall 1 (IT-Facing)</h4>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li>• Managed by IT security team</li>
+                            <li>• Standard enterprise NGFW features</li>
+                            <li>• App-ID, User-ID, threat prevention</li>
+                            <li>• Integrates with corporate SIEM</li>
+                            <li>• Blocks all OT protocols (shouldn't exist here)</li>
+                            <li>• Rate limiting on DMZ-bound traffic</li>
+                        </ul>
+                    </div>
+                    <div class="ot-card rounded-xl p-5">
+                        <h4 class="text-red-400 font-bold mb-3">🔥 Firewall 2 (OT-Facing)</h4>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li>• Co-managed by IT security + OT engineering</li>
+                            <li>• OT protocol inspection (Modbus, DNP3, OPC)</li>
+                            <li>• Understands PLC commands (read vs write)</li>
+                            <li>• Can block dangerous function codes</li>
+                            <li>• Time-based rules for maintenance windows</li>
+                            <li>• Change control with OT sign-off required</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Why Two Firewalls -->
+                <div class="hybrid-card rounded-xl p-5">
+                    <h4 class="text-yellow-400 font-bold mb-3">🤔 Why Two Firewalls? (Interview Question)</h4>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "Defense in depth. If an attacker compromises Firewall 1 through an IT-side vulnerability, they land in the DMZ—not directly in OT. The DMZ contains only hardened intermediary services, not production systems. To reach OT, they'd need to also compromise Firewall 2, which has completely different rules, possibly different vendor (to avoid single-vendor vulnerabilities), and requires OT team approval for any changes. Additionally, different teams manage each firewall—IT security owns FW1, OT/IT jointly own FW2—creating separation of duties."
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- SECTION 5: JUMP HOSTS / BASTION CONFIGURATION -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400">5</span>
+                    Jump Hosts & Secure Access
+                </h2>
+
+                <p class="text-gray-400 mb-6">No one connects directly from IT to OT. All administrative access goes through hardened jump hosts in the DMZ, with full session recording and privileged access management.</p>
+
+                <!-- Jump Host Architecture -->
+                <div class="diagram rounded-xl p-6 mb-6 overflow-x-auto">
+                    <pre class="text-xs text-purple-400 whitespace-pre">
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                         JUMP HOST ACCESS FLOW                                   │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│   IT USER (OT Engineer/Admin)                                                   │
+│   ┌─────────────────┐                                                           │
+│   │  Corporate      │  1. User requests access via PAM                          │
+│   │  Workstation    │     (CyberArk, BeyondTrust)                               │
+│   │  10.1.50.100    │                                                           │
+│   └────────┬────────┘                                                           │
+│            │                                                                    │
+│            ▼  2. MFA challenge (Duo, Azure MFA)                                 │
+│   ┌─────────────────┐                                                           │
+│   │  PAM Gateway    │  3. PAM validates:                                        │
+│   │  (CyberArk PSM) │     - User identity (AD group membership)                 │
+│   │                 │     - Time window (is maintenance scheduled?)             │
+│   │                 │     - Approval workflow (manager approved?)               │
+│   └────────┬────────┘     - Risk score (is this normal behavior?)              │
+│            │                                                                    │
+│            ▼  4. Session brokered through jump host                             │
+│   ┌─────────────────────────────────────────────────────────────────────┐      │
+│   │                      DMZ - JUMP HOST                                 │      │
+│   │  ┌─────────────────────────────────────────────────────────────┐    │      │
+│   │  │  Windows Server 2022 (Hardened)                             │    │      │
+│   │  │  - No direct internet access                                │    │      │
+│   │  │  - No local admin for users                                 │    │      │
+│   │  │  - Only RDP/SSH tools installed                             │    │      │
+│   │  │  - Application allowlisting (AppLocker)                     │    │      │
+│   │  │  - Full session recording enabled                           │    │      │
+│   │  │  - USB disabled, clipboard restricted                       │    │      │
+│   │  │  - 4-hour session timeout, auto-disconnect                  │    │      │
+│   │  └─────────────────────────────────────────────────────────────┘    │      │
+│   │                                                                      │      │
+│   │  INSTALLED TOOLS ONLY:                                               │      │
+│   │  ├── RDP Client (mstsc.exe)                                         │      │
+│   │  ├── SSH Client (PuTTY or built-in OpenSSH)                         │      │
+│   │  ├── Rockwell Studio 5000 Logix Designer                            │      │
+│   │  ├── Siemens TIA Portal                                             │      │
+│   │  ├── SCADA Client (Wonderware, Ignition)                            │      │
+│   │  └── Approved file transfer tool (WinSCP - restricted paths)        │      │
+│   └─────────────────────────────────────────────────────────────────────┘      │
+│            │                                                                    │
+│            ▼  5. Connection to OT asset                                         │
+│   ┌─────────────────┐                                                           │
+│   │  OT Target      │  6. All keystrokes/screens recorded                       │
+│   │  (HMI, EWS,     │     Session stored for 90+ days                          │
+│   │   SCADA)        │     Available for incident investigation                  │
+│   │  192.168.10.50  │                                                           │
+│   └─────────────────┘                                                           │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <!-- Jump Host Configuration -->
+                <div class="card rounded-xl p-5 mb-6">
+                    <h3 class="text-white font-bold mb-4">Jump Host Hardening Checklist</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-purple-400 font-semibold mb-3">OS Hardening</h4>
+                            <ul class="space-y-2 text-sm text-gray-300">
+                                <li>☑ Windows Server 2022 with latest patches</li>
+                                <li>☑ CIS Benchmark Level 1 applied</li>
+                                <li>☑ Local admin accounts disabled</li>
+                                <li>☑ Built-in Administrator renamed/disabled</li>
+                                <li>☑ Guest account disabled</li>
+                                <li>☑ Unnecessary services disabled</li>
+                                <li>☑ Windows Firewall enabled (deny all inbound except RDP from PAM)</li>
+                                <li>☑ BitLocker enabled</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-purple-400 font-semibold mb-3">Access Controls</h4>
+                            <ul class="space-y-2 text-sm text-gray-300">
+                                <li>☑ AppLocker allowlist (only approved .exe)</li>
+                                <li>☑ PowerShell Constrained Language Mode</li>
+                                <li>☑ No internet access (proxy blocked)</li>
+                                <li>☑ USB storage disabled via GPO</li>
+                                <li>☑ Clipboard copy/paste disabled or logged</li>
+                                <li>☑ Session timeout: 4 hours max</li>
+                                <li>☑ Idle timeout: 15 minutes</li>
+                                <li>☑ Concurrent sessions: 1 per user</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAM Integration -->
+                <div class="vendor-card rounded-xl p-5">
+                    <h4 class="text-indigo-400 font-bold mb-3">🔐 PAM Integration for OT Access</h4>
+                    <div class="grid md:grid-cols-2 gap-6 text-sm">
+                        <div>
+                            <p class="text-gray-400 mb-2 font-semibold">CyberArk Privileged Session Manager:</p>
+                            <ul class="space-y-1 text-gray-300">
+                                <li>• Credentials never exposed to user</li>
+                                <li>• Just-in-time access provisioning</li>
+                                <li>• Full video recording of sessions</li>
+                                <li>• Keystroke logging with search</li>
+                                <li>• Automatic password rotation</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-gray-400 mb-2 font-semibold">Access Workflow:</p>
+                            <ol class="space-y-1 text-gray-300 list-decimal list-inside">
+                                <li>User opens ServiceNow ticket for OT access</li>
+                                <li>OT manager approves (emergency: auto-approve)</li>
+                                <li>User authenticates to CyberArk with MFA</li>
+                                <li>CyberArk launches session through jump host</li>
+                                <li>Session recorded, user never sees password</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- SECTION 6: VENDOR REMOTE ACCESS -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400">6</span>
+                    Vendor Remote Access
+                </h2>
+
+                <p class="text-gray-400 mb-6">OT environments depend on equipment vendors (Rockwell, Siemens, Krones) for support, upgrades, and troubleshooting. Providing secure remote access without exposing OT networks is critical.</p>
+
+                <!-- Vendor Access Flow -->
+                <div class="diagram rounded-xl p-6 mb-6 overflow-x-auto">
+                    <pre class="text-xs text-indigo-400 whitespace-pre">
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                         VENDOR REMOTE ACCESS ARCHITECTURE                       │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  VENDOR (Rockwell, Siemens, Krones)                                            │
+│  ┌─────────────────┐                                                            │
+│  │  Vendor Tech    │  1. Vendor creates support ticket                          │
+│  │  Remote Office  │  2. Plant OT team approves access window                   │
+│  │                 │  3. Vendor receives time-limited credentials               │
+│  └────────┬────────┘                                                            │
+│           │                                                                     │
+│           ▼  Via Internet (encrypted)                                           │
+│  ┌─────────────────────────────────────────────────────────────────────┐       │
+│  │                    SECURE REMOTE ACCESS GATEWAY                      │       │
+│  │                    (Claroty SRA / Dispel / Cisco)                    │       │
+│  │                                                                      │       │
+│  │  Features:                                                           │       │
+│  │  ├── No VPN client needed (browser-based)                           │       │
+│  │  ├── MFA required (vendor's phone/token)                            │       │
+│  │  ├── Time-limited sessions (2-hour default)                         │       │
+│  │  ├── Geo-IP restrictions (block unexpected countries)               │       │
+│  │  ├── Full session recording (video + keystrokes)                    │       │
+│  │  ├── File transfer approval workflow                                │       │
+│  │  ├── Protocol-level filtering (allow Logix5000, block PowerShell)   │       │
+│  │  └── Live session monitoring by plant staff                         │       │
+│  └─────────────────────────────────────────────────────────────────────┘       │
+│           │                                                                     │
+│           │  Within corporate network                                           │
+│           ▼                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────┐       │
+│  │                         INDUSTRIAL DMZ                               │       │
+│  │  ┌───────────────┐                                                   │       │
+│  │  │ Vendor Jump   │  Dedicated jump host per vendor                   │       │
+│  │  │ Host (Rockwell)│  Only Rockwell tools installed                   │       │
+│  │  └───────────────┘                                                   │       │
+│  │  ┌───────────────┐                                                   │       │
+│  │  │ Vendor Jump   │  Only Siemens TIA Portal installed               │       │
+│  │  │ Host (Siemens)│                                                   │       │
+│  │  └───────────────┘                                                   │       │
+│  └─────────────────────────────────────────────────────────────────────┘       │
+│           │                                                                     │
+│           ▼  Through OT Firewall (time-limited rule)                            │
+│  ┌─────────────────┐                                                            │
+│  │  Target PLC/HMI │  Vendor can ONLY access pre-approved assets               │
+│  │  (Specific IP)  │  Access automatically revoked after window                │
+│  └─────────────────┘                                                            │
+│                                                                                 │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│  VENDOR ACCESS CONTROLS:                                                        │
+│  ✓ Time window: 2-8 hours max, must be during business hours                   │
+│  ✓ Asset scope: Only specific PLCs/HMIs approved in ticket                     │
+│  ✓ Monitoring: Plant engineer watches session live (mandatory for PLC writes)  │
+│  ✓ File transfer: Requires separate approval, scanned by AV before release     │
+│  ✓ Emergency access: On-call OT manager can approve after-hours                │
+│  ✓ Audit trail: Full recording retained 1+ year                                │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <!-- Vendor Access Solutions -->
+                <div class="grid md:grid-cols-3 gap-4 mb-6">
+                    <div class="vendor-card rounded-xl p-4">
+                        <h4 class="text-indigo-400 font-bold mb-2">Claroty SRA</h4>
+                        <p class="text-gray-400 text-xs mb-2">Secure Remote Access</p>
+                        <ul class="space-y-1 text-xs text-gray-300">
+                            <li>• OT-native solution</li>
+                            <li>• Protocol-aware filtering</li>
+                            <li>• Integrates with Claroty detection</li>
+                            <li>• Agentless for vendors</li>
+                        </ul>
+                    </div>
+                    <div class="vendor-card rounded-xl p-4">
+                        <h4 class="text-indigo-400 font-bold mb-2">Dispel</h4>
+                        <p class="text-gray-400 text-xs mb-2">Zero Trust Remote Access</p>
+                        <ul class="space-y-1 text-xs text-gray-300">
+                            <li>• Moving target defense</li>
+                            <li>• Ephemeral infrastructure</li>
+                            <li>• No persistent VPN</li>
+                            <li>• Browser-based access</li>
+                        </ul>
+                    </div>
+                    <div class="vendor-card rounded-xl p-4">
+                        <h4 class="text-indigo-400 font-bold mb-2">CyberArk Alero</h4>
+                        <p class="text-gray-400 text-xs mb-2">Vendor PAM</p>
+                        <ul class="space-y-1 text-xs text-gray-300">
+                            <li>• Extends CyberArk to vendors</li>
+                            <li>• Biometric authentication</li>
+                            <li>• Zero-footprint access</li>
+                            <li>• Just-in-time provisioning</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Vendor Access Policy -->
+                <div class="warning-card rounded-xl p-5">
+                    <h4 class="text-red-400 font-bold mb-3">⚠️ Vendor Access Policy Requirements</h4>
+                    <div class="grid md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <p class="text-white font-semibold mb-2">Before Access:</p>
+                            <ul class="space-y-1 text-gray-300">
+                                <li>• Signed NDA and security agreement</li>
+                                <li>• Background check verification</li>
+                                <li>• Security awareness training completed</li>
+                                <li>• Specific scope documented in ticket</li>
+                                <li>• Plant OT manager approval</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-white font-semibold mb-2">During Access:</p>
+                            <ul class="space-y-1 text-gray-300">
+                                <li>• Plant engineer monitoring live (for PLC changes)</li>
+                                <li>• No unauthorized file transfers</li>
+                                <li>• No scope creep (only approved assets)</li>
+                                <li>• Immediate termination if policy violated</li>
+                                <li>• All changes documented</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- SECTION 7: VULNERABILITY MANAGEMENT IN OT -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center text-cyan-400">7</span>
+                    Vulnerability Management in OT
+                </h2>
+
+                <p class="text-gray-400 mb-6">OT vulnerability management is fundamentally different from IT. You can't just run Nessus scans and auto-patch—active scanning can crash PLCs, and patches require extensive testing before deployment.</p>
+
+                <!-- IT vs OT Vuln Mgmt -->
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="it-card rounded-xl p-5">
+                        <h4 class="text-cyan-400 font-bold mb-3">💻 IT Vulnerability Management</h4>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li>✓ Active scanning with Nessus, Qualys, Rapid7</li>
+                            <li>✓ Aggressive authenticated scans</li>
+                            <li>✓ Monthly patch cycles</li>
+                            <li>✓ Auto-deployment via WSUS/SCCM</li>
+                            <li>✓ 30-day SLA for critical CVEs</li>
+                            <li>✓ Can reboot servers during maintenance</li>
+                        </ul>
+                    </div>
+                    <div class="ot-card rounded-xl p-5">
+                        <h4 class="text-red-400 font-bold mb-3">🏭 OT Vulnerability Management</h4>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li>⚠ Passive scanning only (network TAP/SPAN)</li>
+                            <li>⚠ Never scan PLCs directly (can crash them)</li>
+                            <li>⚠ Annual patching during planned shutdowns</li>
+                            <li>⚠ Manual deployment after vendor approval</li>
+                            <li>⚠ Risk-based prioritization, not SLA-driven</li>
+                            <li>⚠ Compensating controls when patching impossible</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- OT Vuln Mgmt Process -->
+                <div class="diagram rounded-xl p-6 mb-6 overflow-x-auto">
+                    <pre class="text-xs text-cyan-400 whitespace-pre">
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                       OT VULNERABILITY MANAGEMENT WORKFLOW                      │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  1. DISCOVERY                    2. ASSESSMENT                                  │
+│  ┌──────────────────────┐        ┌──────────────────────┐                      │
+│  │ Passive Asset        │        │ CVE Correlation      │                      │
+│  │ Discovery            │───────►│                      │                      │
+│  │                      │        │ • Match assets to    │                      │
+│  │ • Claroty/Nozomi     │        │   ICS-CERT advisories│                      │
+│  │ • Network traffic    │        │ • Vendor bulletins   │                      │
+│  │   analysis           │        │ • NVD database       │                      │
+│  │ • SPAN port mirror   │        │                      │                      │
+│  │ • NO active scanning │        │ Output: Risk-ranked  │                      │
+│  └──────────────────────┘        │ vulnerability list   │                      │
+│                                  └──────────┬───────────┘                      │
+│                                             │                                   │
+│                                             ▼                                   │
+│  ┌──────────────────────────────────────────────────────────────────────────┐  │
+│  │                        3. RISK ASSESSMENT                                │  │
+│  │                                                                          │  │
+│  │  For each vulnerability, evaluate:                                       │  │
+│  │                                                                          │  │
+│  │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐          │  │
+│  │  │ EXPLOITABILITY  │  │   IMPACT        │  │  EXPOSURE       │          │  │
+│  │  │                 │  │                 │  │                 │          │  │
+│  │  │ • Known exploit?│  │ • Safety impact?│  │ • Internet      │          │  │
+│  │  │ • Requires auth?│  │ • Production    │  │   reachable?    │          │  │
+│  │  │ • Network vs    │  │   impact?       │  │ • IT-accessible?│          │  │
+│  │  │   local?        │  │ • Regulatory?   │  │ • Vendor access?│          │  │
+│  │  └─────────────────┘  └─────────────────┘  └─────────────────┘          │  │
+│  │                                                                          │  │
+│  │  OUTPUT: Risk score (Critical/High/Medium/Low) + recommended action      │  │
+│  └──────────────────────────────────────────────────────────────────────────┘  │
+│                                             │                                   │
+│                                             ▼                                   │
+│  4. REMEDIATION DECISION                                                        │
+│  ┌──────────────────────────────────────────────────────────────────────────┐  │
+│  │                                                                          │  │
+│  │  ┌─────────────────────────────────────────────────────────────────┐    │  │
+│  │  │ CAN WE PATCH?                                                   │    │  │
+│  │  │                                                                 │    │  │
+│  │  │  YES                          │  NO (common in OT)              │    │  │
+│  │  │  ───────────────────────      │  ──────────────────────────     │    │  │
+│  │  │  • Schedule for next          │  • Implement compensating       │    │  │
+│  │  │    maintenance window         │    controls:                    │    │  │
+│  │  │  • Test in lab environment    │    - Network segmentation       │    │  │
+│  │  │  • Vendor approval required   │    - Firewall rules to block    │    │  │
+│  │  │  • Rollback plan documented   │      exploit path               │    │  │
+│  │  │  • OT team on standby         │    - Enhanced monitoring        │    │  │
+│  │  │                               │    - Application allowlisting   │    │  │
+│  │  │                               │    - Physical access controls   │    │  │
+│  │  │                               │  • Document risk acceptance     │    │  │
+│  │  └─────────────────────────────────────────────────────────────────┘    │  │
+│  └──────────────────────────────────────────────────────────────────────────┘  │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <!-- Compensating Controls -->
+                <div class="card rounded-xl p-5 mb-6">
+                    <h4 class="text-white font-bold mb-4">Common Compensating Controls (When Patching is Impossible)</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b border-gray-700">
+                                    <th class="text-left py-2 text-gray-400">Vulnerability Type</th>
+                                    <th class="text-left py-2 text-gray-400">Compensating Control</th>
+                                    <th class="text-left py-2 text-gray-400">Example</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-300">
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2">Remote code execution</td>
+                                    <td class="py-2">Network segmentation</td>
+                                    <td class="py-2">Block vulnerable port at OT firewall</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2">Default credentials</td>
+                                    <td class="py-2">Network access control</td>
+                                    <td class="py-2">Only allow connections from authorized HMIs</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2">Protocol vulnerability</td>
+                                    <td class="py-2">Deep packet inspection</td>
+                                    <td class="py-2">Block malicious Modbus function codes</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2">Windows OS vulnerability</td>
+                                    <td class="py-2">Application allowlisting</td>
+                                    <td class="py-2">Only allow SCADA application to run</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2">USB-based malware</td>
+                                    <td class="py-2">Physical controls + scanning</td>
+                                    <td class="py-2">USB scanning kiosk, disable USB in BIOS</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- OT Patching Schedule -->
+                <div class="hybrid-card rounded-xl p-5">
+                    <h4 class="text-yellow-400 font-bold mb-3">📅 Typical OT Patching Schedule</h4>
+                    <div class="grid md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <p class="text-white font-semibold mb-2">HMIs & Engineering Workstations:</p>
+                            <ul class="space-y-1 text-gray-300">
+                                <li>• Quarterly patches (during scheduled downtime)</li>
+                                <li>• Tested in lab 2+ weeks before production</li>
+                                <li>• Vendor compatibility verified</li>
+                                <li>• Rollback image ready</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-white font-semibold mb-2">PLCs & Controllers:</p>
+                            <ul class="space-y-1 text-gray-300">
+                                <li>• Annual firmware updates (during shutdown)</li>
+                                <li>• Only when vendor-released and tested</li>
+                                <li>• Full backup before any change</li>
+                                <li>• Often: "don't touch unless broken"</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- SECTION 8: OT MONITORING & DETECTION -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400">8</span>
+                    OT Monitoring & Detection
+                </h2>
+
+                <p class="text-gray-400 mb-6">OT networks require passive monitoring—you can't install EDR agents on PLCs. Specialized OT security platforms analyze network traffic to detect anomalies and threats.</p>
+
+                <!-- OT Monitoring Architecture -->
+                <div class="diagram rounded-xl p-6 mb-6 overflow-x-auto">
+                    <pre class="text-xs text-green-400 whitespace-pre">
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                         OT MONITORING ARCHITECTURE                              │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│     OT NETWORK                                                                  │
+│     ┌─────────────────────────────────────────────────────────────────────┐    │
+│     │                                                                     │    │
+│     │    ┌─────┐    ┌─────┐    ┌─────┐    ┌─────┐    ┌─────┐            │    │
+│     │    │ PLC │    │ PLC │    │ HMI │    │SCADA│    │ EWS │            │    │
+│     │    └──┬──┘    └──┬──┘    └──┬──┘    └──┬──┘    └──┬──┘            │    │
+│     │       │          │          │          │          │                │    │
+│     │    ═══╪══════════╪══════════╪══════════╪══════════╪═══             │    │
+│     │       │          │          │          │          │                │    │
+│     │       │          │     OT Network Switch                           │    │
+│     │       │          │     (Cisco IE / Stratix)                        │    │
+│     │       │          │          │                                      │    │
+│     │       │          │          │ SPAN/Mirror Port                     │    │
+│     │       │          │          │          │                           │    │
+│     │       │          │          │          ▼                           │    │
+│     │       │          │          │   ┌─────────────┐                    │    │
+│     │       │          │          │   │   Claroty   │  Passive sensor    │    │
+│     │       │          │          └──►│   Sensor    │  (read-only)       │    │
+│     │       │          │              │             │  Sees all traffic  │    │
+│     │       │          │              └──────┬──────┘                    │    │
+│     └───────┼──────────┼─────────────────────┼──────────────────────────┘    │
+│             │          │                     │                               │
+│             │          │                     │ (through DMZ)                 │
+│             │          │                     ▼                               │
+│     ┌───────┴──────────┴─────────────────────────────────────────────────┐   │
+│     │                         INDUSTRIAL DMZ                              │   │
+│     │                                                                     │   │
+│     │  ┌─────────────────────────────────────────────────────────────┐   │   │
+│     │  │                  Claroty / Nozomi Platform                  │   │   │
+│     │  │                                                             │   │   │
+│     │  │  CAPABILITIES:                                              │   │   │
+│     │  │  ├── Asset Discovery: Auto-inventory all OT devices         │   │   │
+│     │  │  ├── Protocol Analysis: Decode Modbus, DNP3, S7, EtherNet/IP│   │   │
+│     │  │  ├── Baseline Learning: Normal traffic patterns             │   │   │
+│     │  │  ├── Anomaly Detection: Deviations from baseline            │   │   │
+│     │  │  ├── Vulnerability Matching: CVEs for discovered assets     │   │   │
+│     │  │  ├── Threat Detection: Known ICS malware signatures         │   │   │
+│     │  │  └── Alerting: To SIEM, email, SOAR                         │   │   │
+│     │  │                                                             │   │   │
+│     │  │  DETECTIONS:                                                │   │   │
+│     │  │  ├── New device on OT network                               │   │   │
+│     │  │  ├── PLC firmware changed                                   │   │   │
+│     │  │  ├── PLC logic modified                                     │   │   │
+│     │  │  ├── Unauthorized protocol (RDP in OT!)                     │   │   │
+│     │  │  ├── IT protocols crossing into OT                          │   │   │
+│     │  │  ├── Reconnaissance scanning detected                       │   │   │
+│     │  │  └── Known ICS malware C2 communication                     │   │   │
+│     │  └─────────────────────────────────────────────────────────────┘   │   │
+│     │                              │                                      │   │
+│     └──────────────────────────────┼──────────────────────────────────────┘   │
+│                                    │ Syslog/API                              │
+│                                    ▼                                         │
+│     ┌─────────────────────────────────────────────────────────────────────┐  │
+│     │                    CORPORATE SOC / SIEM                             │  │
+│     │                    (Microsoft Sentinel)                             │  │
+│     │                                                                     │  │
+│     │  OT alerts correlated with IT security events                      │  │
+│     │  Single pane of glass for security team                            │  │
+│     │  Playbooks for OT-specific incidents                               │  │
+│     └─────────────────────────────────────────────────────────────────────┘  │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <!-- OT Monitoring Platforms -->
+                <div class="grid md:grid-cols-3 gap-4 mb-6">
+                    <div class="purdue-card rounded-xl p-4">
+                        <h4 class="text-green-400 font-bold mb-2">Claroty</h4>
+                        <p class="text-gray-400 text-xs mb-2">OT Security Leader</p>
+                        <ul class="space-y-1 text-xs text-gray-300">
+                            <li>• Deep OT protocol support</li>
+                            <li>• Virtual segmentation</li>
+                            <li>• Secure Remote Access (SRA)</li>
+                            <li>• Integrates with CyberArk</li>
+                        </ul>
+                    </div>
+                    <div class="purdue-card rounded-xl p-4">
+                        <h4 class="text-green-400 font-bold mb-2">Nozomi Networks</h4>
+                        <p class="text-gray-400 text-xs mb-2">OT & IoT Visibility</p>
+                        <ul class="space-y-1 text-xs text-gray-300">
+                            <li>• AI-powered anomaly detection</li>
+                            <li>• Strong IT/OT correlation</li>
+                            <li>• Cloud-based management</li>
+                            <li>• Good Sentinel integration</li>
+                        </ul>
+                    </div>
+                    <div class="purdue-card rounded-xl p-4">
+                        <h4 class="text-green-400 font-bold mb-2">Dragos</h4>
+                        <p class="text-gray-400 text-xs mb-2">ICS Threat Intelligence</p>
+                        <ul class="space-y-1 text-xs text-gray-300">
+                            <li>• Best-in-class threat intel</li>
+                            <li>• ICS-specific playbooks</li>
+                            <li>• Incident response services</li>
+                            <li>• Activity group tracking</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Detection Examples -->
+                <div class="card rounded-xl p-5">
+                    <h4 class="text-white font-bold mb-4">Example OT Detections</h4>
+                    <div class="space-y-4">
+                        <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
+                            <p class="text-red-400 font-semibold text-sm">🚨 CRITICAL: PLC Logic Change Detected</p>
+                            <p class="text-gray-400 text-xs">Rockwell 1756-L73 at 192.168.10.50 - Ladder logic modified from unknown workstation (not Engineering WS)</p>
+                        </div>
+                        <div class="bg-orange-500/10 border border-orange-500/30 rounded-lg p-3">
+                            <p class="text-orange-400 font-semibold text-sm">⚠️ HIGH: Unauthorized Protocol in OT Zone</p>
+                            <p class="text-gray-400 text-xs">RDP traffic detected from 192.168.10.105 (HMI-BOTTLING-03) - RDP should not exist in Level 2</p>
+                        </div>
+                        <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+                            <p class="text-yellow-400 font-semibold text-sm">⚡ MEDIUM: New Device on OT Network</p>
+                            <p class="text-gray-400 text-xs">Unknown MAC address 00:1A:2B:3C:4D:5E detected on VLAN 100 - Asset not in inventory</p>
+                        </div>
+                        <div class="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
+                            <p class="text-blue-400 font-semibold text-sm">ℹ️ INFO: Firmware Version Change</p>
+                            <p class="text-gray-400 text-xs">Siemens S7-1500 firmware changed from v2.8.3 to v2.9.2 - Verify this was authorized maintenance</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- SECTION 9: SECURITY ENGINEER DAILY OPERATIONS -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400">9</span>
+                    Security Engineer: OT Daily Operations
+                </h2>
+
+                <p class="text-gray-400 mb-6">What does a security engineer actually do day-to-day when supporting OT environments? Here's a realistic breakdown.</p>
+
+                <!-- Daily Operations -->
+                <div class="card rounded-xl p-5 mb-6">
+                    <h4 class="text-white font-bold mb-4">🌅 Typical Day Supporting OT Security</h4>
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-blue-500 pl-4">
+                            <p class="text-blue-400 font-semibold">8:00 AM - Morning Checks</p>
+                            <ul class="text-sm text-gray-300 mt-2 space-y-1">
+                                <li>• Review Claroty/Nozomi alerts from overnight</li>
+                                <li>• Check OT firewall logs for blocked traffic</li>
+                                <li>• Verify jump host and remote access gateway status</li>
+                                <li>• Review any vendor access sessions from previous day</li>
+                            </ul>
+                        </div>
+                        <div class="border-l-4 border-green-500 pl-4">
+                            <p class="text-green-400 font-semibold">9:00 AM - Collaboration with OT Team</p>
+                            <ul class="text-sm text-gray-300 mt-2 space-y-1">
+                                <li>• Standup with plant engineers on planned changes</li>
+                                <li>• Review change requests for security impact</li>
+                                <li>• Coordinate upcoming vendor remote access windows</li>
+                                <li>• Discuss any anomalies detected in monitoring</li>
+                            </ul>
+                        </div>
+                        <div class="border-l-4 border-yellow-500 pl-4">
+                            <p class="text-yellow-400 font-semibold">10:00 AM - Vulnerability Review</p>
+                            <ul class="text-sm text-gray-300 mt-2 space-y-1">
+                                <li>• Check ICS-CERT advisories for relevant vulnerabilities</li>
+                                <li>• Correlate with asset inventory—do we have affected devices?</li>
+                                <li>• If yes: assess exploitability, document compensating controls</li>
+                                <li>• Update vulnerability tracking spreadsheet/system</li>
+                            </ul>
+                        </div>
+                        <div class="border-l-4 border-orange-500 pl-4">
+                            <p class="text-orange-400 font-semibold">11:00 AM - Access Management</p>
+                            <ul class="text-sm text-gray-300 mt-2 space-y-1">
+                                <li>• Process OT access requests (ServiceNow tickets)</li>
+                                <li>• Set up time-limited firewall rules for vendor access</li>
+                                <li>• Review and approve/deny file transfer requests</li>
+                                <li>• Audit jump host access logs</li>
+                            </ul>
+                        </div>
+                        <div class="border-l-4 border-purple-500 pl-4">
+                            <p class="text-purple-400 font-semibold">1:00 PM - Project Work</p>
+                            <ul class="text-sm text-gray-300 mt-2 space-y-1">
+                                <li>• Network segmentation improvements</li>
+                                <li>• Onboarding new plant to monitoring platform</li>
+                                <li>• Developing OT-specific SIEM detection rules</li>
+                                <li>• Documenting OT security procedures</li>
+                            </ul>
+                        </div>
+                        <div class="border-l-4 border-red-500 pl-4">
+                            <p class="text-red-400 font-semibold">3:00 PM - Incident Response (if needed)</p>
+                            <ul class="text-sm text-gray-300 mt-2 space-y-1">
+                                <li>• Investigate alerts that escalated from SOC</li>
+                                <li>• Coordinate with plant personnel on containment</li>
+                                <li>• Balance security response with production impact</li>
+                                <li>• Document findings and lessons learned</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Skills -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="card rounded-xl p-5">
+                        <h4 class="text-cyan-400 font-bold mb-3">Technical Skills for OT Security</h4>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li>• Network security (firewalls, segmentation, VLANs)</li>
+                            <li>• Industrial protocols (Modbus, DNP3, OPC, EtherNet/IP)</li>
+                            <li>• Windows system administration</li>
+                            <li>• OT monitoring platforms (Claroty, Nozomi, Dragos)</li>
+                            <li>• SIEM integration and correlation</li>
+                            <li>• Vulnerability assessment (passive methods)</li>
+                            <li>• PAM solutions (CyberArk, BeyondTrust)</li>
+                            <li>• IEC 62443 and NIST SP 800-82 frameworks</li>
+                        </ul>
+                    </div>
+                    <div class="card rounded-xl p-5">
+                        <h4 class="text-purple-400 font-bold mb-3">Soft Skills & Mindset</h4>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li>• <strong>Patience:</strong> OT changes slowly—plan for months, not days</li>
+                            <li>• <strong>Collaboration:</strong> Work WITH OT engineers, not against them</li>
+                            <li>• <strong>Communication:</strong> Translate security risk to business impact</li>
+                            <li>• <strong>Caution:</strong> "First, do no harm" to production</li>
+                            <li>• <strong>Flexibility:</strong> Accept that patching isn't always possible</li>
+                            <li>• <strong>Documentation:</strong> Everything must be recorded</li>
+                            <li>• <strong>Vendor Relations:</strong> Build trust with equipment vendors</li>
+                            <li>• <strong>Regulatory Awareness:</strong> Understand compliance requirements</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- SECTION 10: COMMON OT PROTOCOLS -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400">10</span>
+                    Common OT/ICS Protocols
+                </h2>
+
+                <p class="text-gray-400 mb-6">Understanding OT protocols is essential for security monitoring. Unlike IT protocols, most OT protocols were designed without security—no encryption, no authentication.</p>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-gray-700">
+                                <th class="text-left py-3 text-gray-400">Protocol</th>
+                                <th class="text-left py-3 text-gray-400">Port</th>
+                                <th class="text-left py-3 text-gray-400">Use Case</th>
+                                <th class="text-left py-3 text-gray-400">Security Issues</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-300">
+                            <tr class="border-b border-gray-800">
+                                <td class="py-3 text-cyan-400 font-semibold">Modbus TCP</td>
+                                <td class="py-3">502</td>
+                                <td class="py-3">PLC communication, SCADA polling</td>
+                                <td class="py-3 text-red-400">No auth, no encryption, replay attacks</td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-3 text-cyan-400 font-semibold">DNP3</td>
+                                <td class="py-3">20000</td>
+                                <td class="py-3">Utilities, water/power SCADA</td>
+                                <td class="py-3 text-yellow-400">Optional auth (Secure Auth v5)</td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-3 text-cyan-400 font-semibold">EtherNet/IP</td>
+                                <td class="py-3">44818, 2222</td>
+                                <td class="py-3">Rockwell Allen-Bradley PLCs</td>
+                                <td class="py-3 text-red-400">CIP protocol has minimal security</td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-3 text-cyan-400 font-semibold">S7comm</td>
+                                <td class="py-3">102</td>
+                                <td class="py-3">Siemens S7 PLCs</td>
+                                <td class="py-3 text-red-400">No auth (S7comm+/TLS in newer)</td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-3 text-cyan-400 font-semibold">OPC UA</td>
+                                <td class="py-3">4840</td>
+                                <td class="py-3">Modern industrial data exchange</td>
+                                <td class="py-3 text-green-400">Designed with security (TLS, auth)</td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-3 text-cyan-400 font-semibold">OPC DA (Classic)</td>
+                                <td class="py-3">135 (DCOM)</td>
+                                <td class="py-3">Legacy data access</td>
+                                <td class="py-3 text-red-400">DCOM-based, Windows dependency</td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-3 text-cyan-400 font-semibold">BACnet</td>
+                                <td class="py-3">47808</td>
+                                <td class="py-3">Building automation (HVAC)</td>
+                                <td class="py-3 text-red-400">No native security</td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-3 text-cyan-400 font-semibold">PROFINET</td>
+                                <td class="py-3">Ethernet</td>
+                                <td class="py-3">Siemens automation</td>
+                                <td class="py-3 text-yellow-400">Layer 2, limited security options</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- SECTION 11: FRAMEWORKS & COMPLIANCE -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center text-yellow-400">11</span>
+                    OT Security Frameworks
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="card rounded-xl p-5">
+                        <h4 class="text-yellow-400 font-bold mb-3">IEC 62443</h4>
+                        <p class="text-gray-400 text-sm mb-3">International standard for industrial automation security</p>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li>• Defines security levels (SL 1-4)</li>
+                            <li>• Zone and conduit model for segmentation</li>
+                            <li>• Requirements for product developers</li>
+                            <li>• Requirements for system integrators</li>
+                            <li>• Requirements for asset owners</li>
+                            <li>• Basis for OT security programs</li>
+                        </ul>
+                    </div>
+                    <div class="card rounded-xl p-5">
+                        <h4 class="text-yellow-400 font-bold mb-3">NIST SP 800-82</h4>
+                        <p class="text-gray-400 text-sm mb-3">Guide to ICS Security</p>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li>• ICS architecture overview</li>
+                            <li>• Threat and vulnerability analysis</li>
+                            <li>• Risk management approach</li>
+                            <li>• Security controls guidance</li>
+                            <li>• Incident response for ICS</li>
+                            <li>• Complements NIST CSF for OT</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="card rounded-xl p-4">
+                        <h4 class="text-cyan-400 font-bold mb-2">NERC CIP</h4>
+                        <p class="text-gray-400 text-xs">Critical Infrastructure Protection for power grid. Mandatory for electric utilities in North America.</p>
+                    </div>
+                    <div class="card rounded-xl p-4">
+                        <h4 class="text-cyan-400 font-bold mb-2">ISA/IEC 62443</h4>
+                        <p class="text-gray-400 text-xs">ISA's implementation of IEC 62443. Widely adopted in manufacturing and process industries.</p>
+                    </div>
+                    <div class="card rounded-xl p-4">
+                        <h4 class="text-cyan-400 font-bold mb-2">FDA 21 CFR Part 11</h4>
+                        <p class="text-gray-400 text-xs">Electronic records/signatures for pharma and food/beverage. Relevant to Coca-Cola's manufacturing.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- SECTION 12: INTERVIEW QUESTIONS -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400">12</span>
+                    Interview Questions & Answers
+                </h2>
+
+                <!-- Q1 -->
+                <div class="interview-qa rounded-xl p-6 mb-4">
+                    <p class="text-purple-400 font-bold mb-3">Q1: How is OT security different from IT security?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "The fundamental difference is priority. In IT, we follow the CIA triad with confidentiality first—protecting data from unauthorized access. In OT, it's flipped to <strong class="text-yellow-400">AIC: Availability, Integrity, then Confidentiality</strong>. A bottling plant losing production costs tens of thousands per hour. Safety is actually the top priority above all—a misconfigured PLC could cause physical harm.
+
+                            <br><br>This changes everything about how we approach security. We can't just push patches monthly—OT systems might only get patched annually during planned shutdowns. We can't run aggressive vulnerability scans—they can crash PLCs. We can't install EDR agents on legacy Windows XP systems running HMIs. Instead, we use passive monitoring, network segmentation, and compensating controls. The lifecycle is also different—IT assets last 3-5 years, OT assets run for 15-25 years, meaning we're securing systems designed before cybersecurity was a concern."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="interview-qa rounded-xl p-6 mb-4">
+                    <p class="text-purple-400 font-bold mb-3">Q2: Explain the Purdue Model and why it matters for OT security.</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "The Purdue Model defines a hierarchical architecture for industrial networks, creating clear boundaries between business systems and physical processes. Level 5 is the enterprise network—ERP, email, cloud. Level 4 is site business planning. Between Level 4 and 3 is the critical <strong class="text-yellow-400">Industrial DMZ</strong>—this is where we place jump hosts, OT monitoring platforms, and data transfer servers. Level 3 is site operations with SCADA and historians. Level 2 is area control with HMIs. Level 1 is PLCs and controllers. Level 0 is the physical process—sensors, motors, valves.
+
+                            <br><br>The security principle is strict: <strong class="text-yellow-400">no direct connections between IT (Level 4-5) and OT (Level 0-3)</strong>. Everything goes through the DMZ with dual firewalls. IT firewall faces IT, OT firewall faces OT, and even if one is compromised, the attacker lands in a hardened DMZ, not production systems. This architecture is the foundation of IEC 62443 zone and conduit requirements."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="interview-qa rounded-xl p-6 mb-4">
+                    <p class="text-purple-400 font-bold mb-3">Q3: How would you handle vulnerability management in an OT environment?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "OT vulnerability management requires a completely different approach than IT. First, <strong class="text-yellow-400">discovery is passive</strong>—we use tools like Claroty or Nozomi that monitor network traffic from SPAN ports rather than active scanning, which could crash PLCs.
+
+                            <br><br>For prioritization, I'd look at three factors: exploitability (is there a known exploit, does it require authentication, network vs local), impact (safety implications, production impact, regulatory), and exposure (is it internet-reachable, IT-accessible, or isolated). Many OT vulnerabilities have CVSSv3 scores of 9+ but are practically unexploitable because the device is on an isolated network segment.
+
+                            <br><br>For remediation, patching is often impossible—the vendor may not support updates, or we can't take production down. So we implement <strong class="text-yellow-400">compensating controls</strong>: network segmentation to block the attack path, firewall rules to restrict access, application allowlisting on HMIs, or enhanced monitoring for exploitation attempts. Every vulnerability gets documented with either a remediation plan or a risk acceptance with compensating controls."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Q4 -->
+                <div class="interview-qa rounded-xl p-6 mb-4">
+                    <p class="text-purple-400 font-bold mb-3">Q4: How do you provide secure remote access for vendors?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "Vendor remote access is essential for OT—equipment like Krones filling machines requires vendor support for maintenance. But it's also a significant risk vector.
+
+                            <br><br>The architecture I'm familiar with uses a <strong class="text-yellow-400">Secure Remote Access gateway</strong> in the DMZ—solutions like Claroty SRA, Dispel, or CyberArk Alero. Vendors connect through this gateway, not through a traditional VPN. Key controls include:
+
+                            <br><br>• <strong>Time-limited access</strong>—2-8 hour windows, must be pre-scheduled
+                            <br>• <strong>Asset-scoped access</strong>—vendor can only reach specific approved PLCs/HMIs
+                            <br>• <strong>MFA required</strong>—even for vendors
+                            <br>• <strong>Full session recording</strong>—video plus keystrokes, retained for 1+ year
+                            <br>• <strong>Live monitoring</strong>—for PLC logic changes, a plant engineer watches the session
+                            <br>• <strong>File transfer controls</strong>—separate approval workflow, AV scanning before release to OT
+
+                            <br><br>The workflow starts with a support ticket, OT manager approval, then the vendor receives temporary credentials. The firewall rule enabling access is time-based and auto-expires."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Q5 -->
+                <div class="interview-qa rounded-xl p-6 mb-4">
+                    <p class="text-purple-400 font-bold mb-3">Q5: What would you do if you detected suspicious activity in the OT network?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "OT incident response requires balancing security with production continuity. Unlike IT where I might immediately isolate a compromised system, in OT, <strong class="text-yellow-400">I need to coordinate with operations</strong> before taking any action that could impact production.
+
+                            <br><br>My approach:
+                            <br><br>1. <strong>Assess the alert</strong>—what does Claroty/Nozomi tell us? Is it a new device, protocol anomaly, or known malware signature?
+                            <br>2. <strong>Determine criticality</strong>—is this affecting safety systems? Is production at risk?
+                            <br>3. <strong>Coordinate with OT</strong>—call the plant engineer. They know what's normal and what's scheduled.
+                            <br>4. <strong>Containment options</strong>—can we block at the firewall without stopping production? Can we isolate at the switch level?
+                            <br>5. <strong>Evidence preservation</strong>—capture network traffic, don't wipe the system yet
+                            <br>6. <strong>Escalation</strong>—if it's a confirmed intrusion, we may need to involve ICS-CERT, leadership, and potentially law enforcement
+
+                            <br><br>The key is <strong class="text-yellow-400">communication and caution</strong>. An overly aggressive response could cause more damage than the attacker. But we also can't ignore it—threats like TRITON/TRISIS have shown that OT attacks can target safety systems."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Q6 -->
+                <div class="interview-qa rounded-xl p-6 mb-4">
+                    <p class="text-purple-400 font-bold mb-3">Q6: What experience do you have with OT security?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "My hands-on experience is primarily on the IT security side—EDR/XDR, SIEM, DLP—but I've developed strong knowledge of OT security concepts because it's clearly the direction the industry is heading, especially for manufacturing environments like Coca-Cola.
+
+                            <br><br>At my current role at a Siemens subsidiary, I've been exposed to discussions about IT/OT convergence and understand the challenges of securing industrial environments. I'm familiar with the Purdue Model architecture, IEC 62443 framework requirements, and how tools like Claroty and Nozomi integrate with enterprise security stacks like Microsoft Sentinel.
+
+                            <br><br>What I bring is <strong class="text-yellow-400">strong fundamentals in network security, segmentation, SIEM integration, and access control</strong>—which are directly applicable to OT. I understand the mindset shift required: prioritizing availability over confidentiality, working with OT engineers rather than dictating to them, and accepting that compensating controls are often more practical than patching.
+
+                            <br><br>I'm genuinely interested in growing into OT security, and I believe my IT security engineering background provides a solid foundation. The security principles are the same—defense in depth, least privilege, monitoring—just applied differently."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Q7 -->
+                <div class="interview-qa rounded-xl p-6 mb-4">
+                    <p class="text-purple-400 font-bold mb-3">Q7: How would you approach securing a new manufacturing plant?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "I'd approach it in phases, starting with understanding before implementing controls:
+
+                            <br><br><strong class="text-yellow-400">Phase 1: Discovery & Assessment</strong>
+                            <br>• Deploy passive asset discovery (Claroty/Nozomi sensor via SPAN port)
+                            <br>• Build complete asset inventory: PLCs, HMIs, SCADA, network devices
+                            <br>• Map network topology and identify existing segmentation
+                            <br>• Interview OT engineers to understand critical processes and dependencies
+                            <br>• Review existing documentation and network diagrams
+
+                            <br><br><strong class="text-yellow-400">Phase 2: Architecture Review</strong>
+                            <br>• Evaluate against Purdue Model—is there proper IT/OT separation?
+                            <br>• Assess firewall rules between zones
+                            <br>• Review remote access methods (jump hosts, vendor access)
+                            <br>• Identify gaps compared to IEC 62443 requirements
+
+                            <br><br><strong class="text-yellow-400">Phase 3: Quick Wins</strong>
+                            <br>• Implement network segmentation where missing
+                            <br>• Deploy or tune OT monitoring platform
+                            <br>• Establish secure remote access solution
+                            <br>• Remove any unnecessary IT/OT connections
+
+                            <br><br><strong class="text-yellow-400">Phase 4: Ongoing Program</strong>
+                            <br>• Integrate OT alerts into SIEM (Sentinel)
+                            <br>• Establish vulnerability management process
+                            <br>• Develop OT-specific incident response playbooks
+                            <br>• Train SOC on OT alerts and escalation procedures
+
+                            <br><br>Throughout, I'd be collaborating closely with plant operations—they know the environment best, and security implementations need their buy-in to succeed."
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- SECTION 13: QUICK REFERENCE / MEMORIZATION -->
+            <!-- ============================================ -->
+            <section class="mb-16">
+                <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-pink-500/20 flex items-center justify-center text-pink-400">13</span>
+                    Quick Reference
+                </h2>
+
+                <!-- Memorization Box -->
+                <div class="memorize rounded-xl p-6 mb-6">
+                    <h3 class="text-pink-400 font-bold mb-4">🧠 Memorize for Interview</h3>
+                    <div class="grid md:grid-cols-2 gap-6 text-sm">
+                        <div>
+                            <p class="text-white font-semibold mb-2">OT vs IT Priority:</p>
+                            <p class="text-gray-300 mb-4">IT: <strong>C</strong>onfidentiality → <strong>I</strong>ntegrity → <strong>A</strong>vailability<br>OT: <strong>S</strong>afety → <strong>A</strong>vailability → <strong>I</strong>ntegrity → <strong>C</strong>onfidentiality</p>
+                            
+                            <p class="text-white font-semibold mb-2">Purdue Levels:</p>
+                            <p class="text-gray-300 mb-4">L5: Enterprise, L4: Site Business, <strong>DMZ</strong>, L3: Site Ops (SCADA), L2: Area (HMI), L1: Control (PLC), L0: Physical</p>
+                            
+                            <p class="text-white font-semibold mb-2">Key Frameworks:</p>
+                            <p class="text-gray-300">IEC 62443 (zones/conduits), NIST SP 800-82 (ICS guide), NERC CIP (power grid)</p>
+                        </div>
+                        <div>
+                            <p class="text-white font-semibold mb-2">Dual Firewall Purpose:</p>
+                            <p class="text-gray-300 mb-4">Defense in depth—compromise FW1, land in DMZ, not OT. Different teams, possibly different vendors.</p>
+                            
+                            <p class="text-white font-semibold mb-2">Why No Active Scanning:</p>
+                            <p class="text-gray-300 mb-4">PLCs can crash from unexpected traffic. Passive monitoring via SPAN ports only.</p>
+                            
+                            <p class="text-white font-semibold mb-2">Compensating Controls:</p>
+                            <p class="text-gray-300">Segmentation, allowlisting, monitoring, firewall rules—when patching impossible.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Terms -->
+                <div class="card rounded-xl p-5 mb-6">
+                    <h4 class="text-white font-bold mb-4">Key OT Terms</h4>
+                    <div class="grid md:grid-cols-2 gap-4 text-sm">
+                        <div class="space-y-2">
+                            <p><span class="text-cyan-400 font-semibold">PLC:</span> <span class="text-gray-400">Programmable Logic Controller - executes control logic</span></p>
+                            <p><span class="text-cyan-400 font-semibold">HMI:</span> <span class="text-gray-400">Human-Machine Interface - operator control panel</span></p>
+                            <p><span class="text-cyan-400 font-semibold">SCADA:</span> <span class="text-gray-400">Supervisory Control and Data Acquisition</span></p>
+                            <p><span class="text-cyan-400 font-semibold">RTU:</span> <span class="text-gray-400">Remote Terminal Unit - field device</span></p>
+                            <p><span class="text-cyan-400 font-semibold">DCS:</span> <span class="text-gray-400">Distributed Control System</span></p>
+                            <p><span class="text-cyan-400 font-semibold">SIS:</span> <span class="text-gray-400">Safety Instrumented System - independent safety layer</span></p>
+                        </div>
+                        <div class="space-y-2">
+                            <p><span class="text-cyan-400 font-semibold">Historian:</span> <span class="text-gray-400">Time-series database for process data</span></p>
+                            <p><span class="text-cyan-400 font-semibold">MES:</span> <span class="text-gray-400">Manufacturing Execution System</span></p>
+                            <p><span class="text-cyan-400 font-semibold">OPC:</span> <span class="text-gray-400">Open Platform Communications - data exchange standard</span></p>
+                            <p><span class="text-cyan-400 font-semibold">Modbus:</span> <span class="text-gray-400">Serial/TCP protocol for PLCs</span></p>
+                            <p><span class="text-cyan-400 font-semibold">EtherNet/IP:</span> <span class="text-gray-400">Rockwell industrial Ethernet protocol</span></p>
+                            <p><span class="text-cyan-400 font-semibold">Ladder Logic:</span> <span class="text-gray-400">PLC programming language</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notable OT Attacks -->
+                <div class="warning-card rounded-xl p-5">
+                    <h4 class="text-red-400 font-bold mb-4">Notable OT/ICS Attacks (Know These)</h4>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex gap-4">
+                            <span class="text-red-400 font-semibold w-32">Stuxnet (2010)</span>
+                            <span class="text-gray-300">First known cyberweapon targeting industrial systems. Destroyed Iranian nuclear centrifuges via PLC manipulation.</span>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="text-red-400 font-semibold w-32">Ukraine Grid (2015/2016)</span>
+                            <span class="text-gray-300">Russian attacks on Ukrainian power grid. First confirmed cyber attacks causing power outages.</span>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="text-red-400 font-semibold w-32">TRITON/TRISIS (2017)</span>
+                            <span class="text-gray-300">Targeted Safety Instrumented Systems at Saudi petrochemical plant. Could have caused physical harm.</span>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="text-red-400 font-semibold w-32">Colonial Pipeline (2021)</span>
+                            <span class="text-gray-300">Ransomware attack that shut down major US fuel pipeline. IT attack with OT impact.</span>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="text-red-400 font-semibold w-32">Oldsmar Water (2021)</span>
+                            <span class="text-gray-300">Attacker accessed water treatment HMI and increased sodium hydroxide to dangerous levels.</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+<script src="../js/sidebar.js"></script>
+</body>
+</html>

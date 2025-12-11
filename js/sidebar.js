@@ -32,6 +32,7 @@ const sidebarHTML = `
                     <a href="{{BASE}}pages/threat-intelligence.html" class="slink" data-p="threat-intelligence"><span class="dot bg-purple-500"></span>Threat Intelligence</a>
                     <a href="{{BASE}}pages/network-security.html" class="slink" data-p="network-security"><span class="dot bg-green-500"></span>Network Security</a>
                     <a href="{{BASE}}pages/ngfw-deep-dive.html" class="slink" data-p="ngfw-deep-dive"><span class="dot bg-orange-500"></span>NGFW Deep Dive</a>
+                    <a href="{{BASE}}pages/ot-security.html" class="slink" data-p="ot-security"><span class="dot bg-red-500"></span>OT/ICS Security</a>
                     <a href="{{BASE}}pages/cloud-security.html" class="slink" data-p="cloud-security"><span class="dot bg-blue-400"></span>Cloud Security</a>
                     <a href="{{BASE}}pages/zero-trust.html" class="slink" data-p="zero-trust"><span class="dot bg-red-400"></span>Zero Trust</a>
                     <a href="{{BASE}}pages/data-security.html" class="slink" data-p="data-security"><span class="dot bg-purple-400"></span>Data Security</a>
