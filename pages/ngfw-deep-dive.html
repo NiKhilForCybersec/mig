@@ -1060,40 +1060,173 @@ Common Causes:
                     Interview Questions & Answers
                 </h2>
 
-                <div class="space-y-4">
-                    <div class="interview rounded-xl p-5">
-                        <p class="text-purple-400 font-bold mb-3">Q: What's the difference between a traditional firewall and an NGFW?</p>
-                        <p class="text-gray-300 text-sm">"Traditional firewalls operate at Layers 3-4, making decisions based on IP addresses and ports. NGFWs add Layer 7 visibility - they identify applications regardless of port, integrate with AD for user-based policies, decrypt SSL traffic, and include integrated IPS, URL filtering, and sandboxing. The key differentiator is application awareness - an NGFW knows if someone is using legitimate HTTPS or tunneling BitTorrent over port 443."</p>
+                <div class="space-y-6">
+                    <!-- Q1: Traditional vs NGFW -->
+                    <div class="interview rounded-xl p-6">
+                        <p class="text-purple-400 font-bold mb-4">Q: What's the difference between a traditional firewall and an NGFW?</p>
+                        <div class="answer-box bg-black/20 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "So the fundamental difference comes down to <em>what</em> the firewall can see and understand. A traditional firewall—think the classic Cisco ASA or older Check Point—operates at Layers 3 and 4. It sees IP addresses, ports, and protocols. If I write a rule that says 'allow TCP 443 outbound,' it'll permit anything on that port. The problem? Attackers figured this out years ago. They tunnel everything over 443 because they know it's usually open.
+                                <br><br>
+                                An NGFW flips this on its head. It operates at Layer 7—the application layer—so it actually understands <em>what</em> application is running, not just which port it's using. Palo Alto calls this App-ID, Fortinet calls it Application Control. The firewall does deep packet inspection, looks at the payload, and identifies whether that traffic on port 443 is legitimate HTTPS, or if someone's trying to sneak BitTorrent or Tor through it.
+                                <br><br>
+                                But it goes beyond just application awareness. NGFWs integrate with Active Directory through User-ID, so instead of writing rules for IP addresses that change when someone moves desks, I write rules for user groups. 'Allow Marketing to access social media'—and it applies regardless of which device they're on.
+                                <br><br>
+                                Then you've got integrated security services—IPS that's actually inline, not bolted on as a separate box. URL filtering that categorizes websites in real-time. Sandboxing that can detonate suspicious files before they reach endpoints. And critically, SSL decryption—because if you can't see inside encrypted traffic, you're blind to 90% of what's happening on your network.
+                                <br><br>
+                                The way I think about it: a traditional firewall is a bouncer checking IDs at the door. An NGFW is a bouncer who also knows what you're carrying, who you work for, what you're planning to do inside, and can call for backup if something looks suspicious."
+                            </p>
+                        </div>
                     </div>
 
-                    <div class="interview rounded-xl p-5">
-                        <p class="text-purple-400 font-bold mb-3">Q: How do you troubleshoot a user who can't access a website?</p>
-                        <p class="text-gray-300 text-sm">"First, I get specifics - the exact URL, error message, user's IP, and time. Then I check traffic logs filtered by source IP. I look for whether it's a deny, which rule matched, and why. Common causes: URL category block, App-ID mismatch, security profile blocking, or SSL decryption issues. If legitimate, I create an exception through change management. If it's a valid block, I explain to the user. I always test after changes to confirm the fix."</p>
+                    <!-- Q2: Troubleshooting -->
+                    <div class="interview rounded-xl p-6">
+                        <p class="text-purple-400 font-bold mb-4">Q: A user reports they can't access a website. Walk me through your troubleshooting process.</p>
+                        <div class="answer-box bg-black/20 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "Alright, so this is probably the most common request I deal with. First thing I do is resist the urge to immediately start clicking through firewall logs—I need context first.
+                                <br><br>
+                                I ask the user: <em>What's the exact URL?</em> Not 'a website,' I need the specific address. <em>What error do you see?</em> A connection timeout is different from a block page. <em>What time did this happen?</em> Logs rotate, timestamps matter. <em>Has this ever worked before?</em> That tells me if it's a new application or a regression. And I get their IP address—either from them or from our asset inventory.
+                                <br><br>
+                                Now I go to the firewall. On a Palo Alto, I'd filter traffic logs: source IP equals the user's IP, destination contains the domain. I'm looking for whether the session was allowed, denied, or dropped. If it's denied, I check which rule matched and why.
+                                <br><br>
+                                The usual suspects? URL filtering blocked it as 'malware' or 'gambling' or whatever category. That's an easy fix if it's a false positive—I check the site reputation, and if it's legitimate, I add an exception. Sometimes App-ID is the culprit—the firewall identified the application as something unexpected. I had a case where a legitimate business app was being classified as 'unknown-tcp' because it was custom software, so the rule allowing 'web-browsing' didn't match.
+                                <br><br>
+                                SSL decryption issues are sneaky. The site might use certificate pinning, so our decryption breaks the connection. The user sees a certificate error or the app just fails silently. I check if the domain is in our decryption exclusion list—banking sites, healthcare, anything with compliance implications should already be excluded.
+                                <br><br>
+                                Once I identify the cause, I don't just fix it and move on. If it requires a rule change, that goes through change management—I document the business justification, the specific change, and the testing I'll do afterward. After implementing, I have the user test again while I watch the logs in real-time. Nothing worse than closing a ticket only to have them reply 'still broken.'
+                                <br><br>
+                                And if it turns out the block was valid—like they were trying to access something against policy—I explain it professionally. 'This site is blocked under our acceptable use policy. If you believe this is a business need, please have your manager submit an exception request.' I'm not the policy police, but I do enforce what's been decided."
+                            </p>
+                        </div>
                     </div>
 
-                    <div class="interview rounded-xl p-5">
-                        <p class="text-purple-400 font-bold mb-3">Q: Explain SSL decryption and its considerations.</p>
-                        <p class="text-gray-300 text-sm">"SSL decryption is essential because 90%+ of traffic is encrypted. The firewall acts as a man-in-the-middle - it intercepts the TLS handshake, presents its own certificate to the client, and establishes a separate encrypted session with the server. Key considerations: performance impact (CPU-intensive), privacy (need HR/legal approval), exclusions (never decrypt banking, healthcare, certificate-pinned apps), and certificate deployment (clients must trust the firewall's CA via GPO or MDM)."</p>
+                    <!-- Q3: SSL Decryption -->
+                    <div class="interview rounded-xl p-6">
+                        <p class="text-purple-400 font-bold mb-4">Q: Explain SSL/TLS decryption and the considerations around implementing it.</p>
+                        <div class="answer-box bg-black/20 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "SSL decryption is one of those capabilities that's absolutely essential but also comes with significant baggage—technical, legal, and ethical.
+                                <br><br>
+                                Let me start with the <em>why</em>. Something like 95% of web traffic is now encrypted. That's great for privacy, but it's a nightmare for security. Without decryption, your firewall, your IPS, your DLP—they're all blind. They see an encrypted blob going to an IP address. Could be someone checking Gmail, could be malware exfiltrating your customer database. You can't tell.
+                                <br><br>
+                                So how does it work? The firewall performs a man-in-the-middle—and I know that sounds bad, but it's controlled and intentional. When a user connects to, say, example.com, the firewall intercepts the TLS handshake. It presents its own certificate to the user, signed by an internal CA. Then it establishes a <em>separate</em> encrypted connection to the real server. The firewall sits in the middle, decrypting traffic from the user, inspecting it, re-encrypting it, and sending it to the destination. The user's browser shows a valid certificate because their machine trusts our internal CA—pushed via Group Policy.
+                                <br><br>
+                                Now the considerations. <strong>Performance</strong> is the first one. Decryption is CPU-intensive. Every session that gets decrypted adds load. On older firewalls, enabling decryption for all traffic could tank your throughput. Newer models have dedicated SSL processing chips, but you still need to size appropriately. We actually had to upgrade our firewall hardware when we expanded decryption because we were hitting 80% CPU during peak hours.
+                                <br><br>
+                                <strong>Privacy and legal</strong>—this is where you need HR and Legal involved before you flip the switch. In some jurisdictions, intercepting encrypted traffic has legal implications. You need clear policies that employees acknowledge. 'Network traffic on corporate systems may be monitored and inspected.' And practically, you can't decrypt everything. Banking sites—never touch those, regulatory nightmare. Healthcare portals—HIPAA implications. Government sites—they often use certificate pinning anyway.
+                                <br><br>
+                                <strong>Technical exclusions</strong> are a whole category. Certificate pinning is when an app is hardcoded to expect a specific certificate, not just any valid one. If you try to decrypt, the app breaks. Mobile apps are notorious for this. Windows Update, Apple services, video conferencing tools—these typically need exclusions. I maintain a pretty extensive exclusion list, and it's something I review quarterly because apps change their infrastructure.
+                                <br><br>
+                                <strong>Certificate deployment</strong> is the operational challenge. Every client needs to trust your decryption CA. For domain-joined Windows machines, Group Policy handles it. For BYO devices, it's harder—you might need MDM enrollment. And guest networks? We just don't decrypt guest traffic—it's not worth the support headache.
+                                <br><br>
+                                The payoff is worth it though. Once we enabled decryption, we caught things we never knew were happening. Malware callbacks hidden in HTTPS. Users uploading sensitive files to personal cloud storage. Even legitimate security issues like outdated TLS versions that we couldn't see before. You can't protect what you can't see."
+                            </p>
+                        </div>
                     </div>
 
-                    <div class="interview rounded-xl p-5">
-                        <p class="text-purple-400 font-bold mb-3">Q: How do you approach firewall rule cleanup?</p>
-                        <p class="text-gray-300 text-sm">"I run reports showing rules with zero hits over 90 days. But I don't just delete them. First, I disable with a date tag, wait 30 days, and monitor for breakage. I also look for shadow rules that never match, overlapping rules where a broader rule makes specific ones redundant, and duplicates. I document everything in change management. The goal is reducing attack surface and improving performance without breaking anything."</p>
+                    <!-- Q4: Rule Cleanup -->
+                    <div class="interview rounded-xl p-6">
+                        <p class="text-purple-400 font-bold mb-4">Q: How do you approach firewall rule cleanup and optimization?</p>
+                        <div class="answer-box bg-black/20 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "Rule cleanup is one of those unglamorous but critical tasks that separates mature security programs from chaotic ones. I've inherited firewalls with 500+ rules where nobody could tell you what half of them did. That's technical debt that creates real risk.
+                                <br><br>
+                                My approach starts with <strong>data gathering</strong>. I pull a rule usage report—both Palo Alto and FortiGate can show you hit counts over time. I'm specifically looking for rules with zero hits in the last 90 days. But here's the thing—I don't just delete them. A rule might exist for a quarterly process that hasn't run yet. Or disaster recovery that thankfully hasn't been triggered.
+                                <br><br>
+                                So my process is <strong>disable first, delete later</strong>. I disable the rule and add a comment with the date and my initials: 'Disabled 2024-03-15 NK - Zero hits 90 days - Delete after 2024-04-15 if no issues.' Then I wait 30 days. If nobody screams, I delete it in the next maintenance window. If something breaks, re-enabling takes 30 seconds.
+                                <br><br>
+                                Beyond unused rules, I look for <strong>shadow rules</strong>—rules that can never match because a broader rule above them catches the traffic first. Classic example: Rule 10 allows 'any to any on port 443.' Rule 47 allows 'Sales group to CRM server on port 443.' Rule 47 will never match because Rule 10 already caught it. These are dangerous because someone thinks they removed access to the CRM by deleting Rule 47, but traffic still flows through Rule 10.
+                                <br><br>
+                                I also hunt for <strong>overly permissive rules</strong>. Anything with 'any' in source, destination, or service is a red flag. Sometimes they're legitimate—DNS needs to be available to everyone—but often they're lazy rules that someone created during a late-night troubleshooting session and never tightened. 'Just allow any-any for now, we'll fix it later.' Later never comes.
+                                <br><br>
+                                <strong>Rule order optimization</strong> matters for performance. Firewalls evaluate rules top-to-bottom and stop at first match. If your most-hit rule is at position 200, every session evaluates 199 rules that don't match before hitting it. I move high-traffic rules toward the top—within logical sections, of course. I'm not putting a server rule before my user rules just for performance.
+                                <br><br>
+                                Finally, I look at <strong>consolidation opportunities</strong>. Ten rules allowing different subnets to the same server can often become one rule using an address group. This isn't just aesthetics—fewer rules means faster evaluation and easier auditing.
+                                <br><br>
+                                I do this cleanup quarterly, and I track metrics: total rule count over time, percentage of rules with hits in 90 days, number of 'any' rules. Management likes seeing those numbers trend in the right direction, and it keeps me honest about maintaining hygiene."
+                            </p>
+                        </div>
                     </div>
 
-                    <div class="interview rounded-xl p-5">
-                        <p class="text-purple-400 font-bold mb-3">Q: Walk me through handling an emergency IP block request.</p>
-                        <p class="text-gray-300 text-sm">"For emergencies, I act first and document later. I immediately create an address object for the malicious IP, add a deny rule at the top of the policy, and commit. Then I verify the block by checking logs. After containment, I investigate - what triggered this? Check historical logs for internal hosts that communicated with it. I create an incident ticket, add the IOCs to our threat intel, and eventually move the temporary block to a permanent blocklist."</p>
+                    <!-- Q5: Emergency Block -->
+                    <div class="interview rounded-xl p-6">
+                        <p class="text-purple-400 font-bold mb-4">Q: Walk me through handling an emergency request to block a malicious IP.</p>
+                        <div class="answer-box bg-black/20 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "Emergency blocks are where you earn your paycheck. The SOC calls and says 'We're seeing active C2 communication to this IP, we need it blocked NOW.' Adrenaline kicks in, but you have to stay methodical.
+                                <br><br>
+                                <strong>First 60 seconds</strong>—I'm acting, not debating. I log into the firewall, create an address object for the malicious IP with a clear name: 'BLOCK-IOC-20240315-C2' so it's obvious what it is later. I create a deny rule at the very top of the policy—above everything else—source any, destination that IP, deny and log. On Palo Alto: commit. On FortiGate: save. That IP is now blocked across the enterprise.
+                                <br><br>
+                                <strong>Verification</strong>—I don't trust that it worked just because I clicked save. I check the traffic logs in real-time. If any internal host tries to reach that IP, I should see deny entries hitting my new rule. If the SOC can tell me a specific compromised host, I filter for that source and confirm blocks are happening.
+                                <br><br>
+                                <strong>Then I breathe</strong> and start the investigation. This is where the real work begins. I pull historical logs—last 24 hours, last 7 days—for any traffic to or from that IP. Which internal hosts communicated with it? When did it start? How much data transferred? This tells me the scope of potential compromise. I feed this back to the SOC and the IR team.
+                                <br><br>
+                                <strong>Documentation</strong> happens in parallel. I open an incident ticket if one doesn't exist. I document exactly what I did, when I did it, and what I observed. Screenshots of the rule, log samples showing blocks. This matters for post-incident review and for legal if this turns into something bigger.
+                                <br><br>
+                                <strong>IOC expansion</strong>—one IP is rarely the whole story. I check threat intel feeds for associated indicators. Same malware family often uses multiple C2 servers. I might add additional IPs, domains to blocklists. If we use External Dynamic Lists, I make sure this IOC gets added so it persists and synchronizes across all our firewalls.
+                                <br><br>
+                                <strong>Follow-up</strong>—after the immediate fire is out, I review whether this was something our existing controls should have caught. Did our threat prevention miss it? Is there a signature we need to enable? Could URL filtering have blocked it if we'd categorized it differently? Every incident is a learning opportunity.
+                                <br><br>
+                                The whole philosophy is <strong>contain fast, investigate thoroughly, improve continuously</strong>. That emergency block might stay in place for days while IR does their work, but eventually it either gets moved to our permanent threat blocklist or removed once we've confirmed the threat is neutralized."
+                            </p>
+                        </div>
                     </div>
 
-                    <div class="interview rounded-xl p-5">
-                        <p class="text-purple-400 font-bold mb-3">Q: How do you balance security with business agility for firewall changes?</p>
-                        <p class="text-gray-300 text-sm">"I use a formal change management process but with risk-based urgency. Standard changes go through normal review - business justification, security assessment, least privilege, testing plan. But I have pre-approved emergency procedures for security incidents. For all changes, I push back on overly broad rules - 'any to any' is never acceptable. I use App-ID instead of just ports when possible. I do quarterly reviews to identify unused rules - stale rules are security debt."</p>
+                    <!-- Q6: Security vs Agility -->
+                    <div class="interview rounded-xl p-6">
+                        <p class="text-purple-400 font-bold mb-4">Q: How do you balance security controls with business needs and agility?</p>
+                        <div class="answer-box bg-black/20 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "This is honestly one of the harder parts of the job—and where a lot of security people get it wrong. I've seen two failure modes: the 'Department of No' that blocks everything and becomes an obstacle, and the 'Yes to Everything' that rubber-stamps requests and accumulates risk. Neither serves the organization.
+                                <br><br>
+                                My philosophy is <strong>security should enable the business, not obstruct it</strong>—but that doesn't mean saying yes to bad ideas. It means finding secure ways to accomplish business objectives.
+                                <br><br>
+                                Practically, I use a <strong>tiered change process</strong>. Standard changes—things we do regularly with known risk profiles—have pre-approved procedures. Opening a port for a well-understood application with proper documentation? I can do that same-day with just my review. It still gets logged and documented, but I'm not creating bureaucracy for routine work.
+                                <br><br>
+                                <strong>Non-standard changes</strong> get more scrutiny. Someone wants to allow direct RDP from the internet? That's a conversation. I ask: what's the business need? Usually it's 'I want to work from home.' Okay, we have a VPN for that. Or 'The vendor needs access.' We have a vendor access process for that. I'm not just saying no—I'm redirecting to secure alternatives that accomplish the same goal.
+                                <br><br>
+                                When business really pushes back—'the CEO needs this, it's urgent'—I don't just cave. I <strong>document the risk</strong> clearly. 'This rule allows inbound RDP which exposes us to brute force attacks, BlueKeep exploitation, and credential theft. If you accept this risk, please acknowledge in writing.' Suddenly people find the VPN isn't so inconvenient after all. Risk acceptance has a way of clarifying priorities.
+                                <br><br>
+                                I also <strong>push back on scope creep</strong>. Someone asks to allow traffic to 'the vendor's servers.' Which servers? What ports? What application? I'm not creating 'any any' rules because someone couldn't be bothered to get specifics. Least privilege isn't negotiable—but I'll work with them to define exactly what they need.
+                                <br><br>
+                                <strong>Emergency procedures</strong> exist for genuine emergencies. If production is down and we need to open something immediately, I'll do it—but it comes with a mandatory review within 48 hours to either properly document and secure it, or remove it. No 'temporary' rules lasting three years.
+                                <br><br>
+                                Finally, I maintain <strong>relationships</strong>. I have coffee with the networking team, I chat with developers, I understand what projects are coming. When I know context, I can proactively identify security requirements instead of being surprised by last-minute requests. 'Hey, I heard you're deploying a new CRM. Let's talk about what firewall rules you'll need.' That's way better than getting a panicked ticket the night before go-live."
+                            </p>
+                        </div>
                     </div>
 
-                    <div class="interview rounded-xl p-5">
-                        <p class="text-purple-400 font-bold mb-3">Q: Describe a typical day managing firewalls.</p>
-                        <p class="text-gray-300 text-sm">"Morning starts with checking overnight alerts - critical threats blocked, HA events, capacity warnings. Then I review the queue of firewall change requests - analyze each for security risk, verify business justification, ensure least privilege. After implementing approved changes, I test and update tickets. Throughout the day, I troubleshoot connectivity issues - checking logs, identifying blocking rules. Proactively, I review unused rules, optimize rule order, check for firmware updates. Weekly I review threat logs for patterns, monthly I generate reports for management."</p>
+                    <!-- Q7: Typical Day -->
+                    <div class="interview rounded-xl p-6">
+                        <p class="text-purple-400 font-bold mb-4">Q: Describe what a typical day looks like for you managing firewalls.</p>
+                        <div class="answer-box bg-black/20 rounded-lg p-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "No two days are exactly the same, but there's definitely a rhythm. Let me walk you through a typical Tuesday, because Monday is usually catching up on weekend alerts and Friday is change freeze.
+                                <br><br>
+                                <strong>8:00 AM - Morning triage.</strong> Coffee in hand, I check my monitoring dashboards. Did anything catch fire overnight? I'm looking at: high-severity threat prevention alerts that need investigation, any HA failover events that might indicate hardware issues, CPU/memory utilization trends, and failed admin login attempts. On a good day, this is 15 minutes of 'everything looks fine.' On a bad day, this becomes my whole morning.
+                                <br><br>
+                                <strong>8:30 AM - Change request queue.</strong> I pull up ServiceNow and see what firewall change requests came in. Each one gets an initial assessment: Is this complete enough to work on? Does it have business justification? Is the requester authorized to ask for this? I'll kick back incomplete requests early rather than waste time on them later.
+                                <br><br>
+                                <strong>9:00 AM - Change implementation.</strong> For approved changes, I implement in a maintenance window—even small changes. I've been burned by 'quick' changes that broke something. I follow my checklist: document current state, implement change, verify logs show expected behavior, update the ticket with evidence. For anything significant, I send a 'completed' email to stakeholders.
+                                <br><br>
+                                <strong>10:00 AM - The first escalation.</strong> Inevitably, someone can't access something. I get pulled into a troubleshooting session. Walk through my diagnostic process, find the blocking rule, determine if it's a policy issue or a legitimate block. This can take 10 minutes or 2 hours depending on complexity.
+                                <br><br>
+                                <strong>11:30 AM - Project work.</strong> This is where I try to make forward progress on bigger initiatives. Right now, I'm working on improving our URL filtering categories and building automation to sync blocklists across multiple firewalls. Or documenting procedures. Or reviewing whether we can tighten some older permissive rules. This is the 'make things better' time that often gets eaten by reactive work.
+                                <br><br>
+                                <strong>1:00 PM - Lunch.</strong> I actually take lunch. Burnout is real in security, and I've learned that stepping away makes afternoon me more effective than working through.
+                                <br><br>
+                                <strong>2:00 PM - Meetings.</strong> CAB review for this week's changes. Or a project sync about an upcoming application deployment that needs firewall rules. Or a vendor demo of some new feature. Security is collaborative—I spend more time in meetings than I expected when I started.
+                                <br><br>
+                                <strong>3:30 PM - Proactive work.</strong> I set aside time to review threat logs from the past week. Any blocked attacks worth investigating further? Any patterns suggesting reconnaissance? I also check for software updates—firewall vendors release security patches and I need to track what's available versus what we're running.
+                                <br><br>
+                                <strong>4:30 PM - Documentation and handoff.</strong> I update any tickets I worked today with detailed notes. If I'm mid-investigation on something, I document where I left off so I—or whoever's on call—can pick it up. I check the on-call schedule and make sure the coverage plan is clear.
+                                <br><br>
+                                <strong>5:00 PM - End of day.</strong> Unless something's actively on fire, I close the laptop. I'm on an on-call rotation for after-hours emergencies, but I've learned that sustainable security requires actual rest. The firewall will still be there tomorrow.
+                                <br><br>
+                                The reality is, maybe 30% of my time is hands-on-keyboard firewall work. The rest is communication, documentation, meetings, and thinking strategically about how to improve our security posture. That was surprising to me early in my career, but it's what makes the difference between a technician and an engineer."
+                            </p>
+                        </div>
                     </div>
                 </div>
             </section>

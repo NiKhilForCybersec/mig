@@ -1339,133 +1339,218 @@ KEY: [IT ZONE] = Traditional IT security applies
                 </h2>
 
                 <!-- Q1 -->
-                <div class="interview-qa rounded-xl p-6 mb-4">
-                    <p class="text-purple-400 font-bold mb-3">Q1: How is OT security different from IT security?</p>
+                <div class="interview-qa rounded-xl p-6 mb-6">
+                    <p class="text-purple-400 font-bold mb-4">Q1: How is OT security different from IT security?</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "The fundamental difference is priority. In IT, we follow the CIA triad with confidentiality first—protecting data from unauthorized access. In OT, it's flipped to <strong class="text-yellow-400">AIC: Availability, Integrity, then Confidentiality</strong>. A bottling plant losing production costs tens of thousands per hour. Safety is actually the top priority above all—a misconfigured PLC could cause physical harm.
-
-                            <br><br>This changes everything about how we approach security. We can't just push patches monthly—OT systems might only get patched annually during planned shutdowns. We can't run aggressive vulnerability scans—they can crash PLCs. We can't install EDR agents on legacy Windows XP systems running HMIs. Instead, we use passive monitoring, network segmentation, and compensating controls. The lifecycle is also different—IT assets last 3-5 years, OT assets run for 15-25 years, meaning we're securing systems designed before cybersecurity was a concern."
+                            "This is honestly one of the first things I had to unlearn when I started looking into OT security, because the instincts you develop in IT don't always translate.
+                            <br><br>
+                            In IT, we live by the CIA triad—Confidentiality, Integrity, Availability. Protect the data first, make sure it's accurate, then worry about uptime. In OT, it's completely inverted. Actually, there's an even higher priority than availability: <strong class="text-yellow-400">Safety</strong>. A misconfigured PLC in a chemical plant could cause an explosion. A compromised controller in a food processing facility could contaminate product. We're not just talking about data breaches—we're talking about physical harm to people.
+                            <br><br>
+                            So the priority stack becomes Safety, Availability, Integrity, then Confidentiality. And this changes everything about how you approach security.
+                            <br><br>
+                            <strong>Patching</strong>—in IT, I'm used to monthly patch cycles, Patch Tuesday, automatic updates. In OT? Some systems get patched <em>annually</em>, during planned maintenance shutdowns. And even then, you can't just apply the latest Windows update to an HMI running a 15-year-old SCADA application. You have to test exhaustively, get vendor approval, have rollback plans ready. I've read about plants that still run Windows XP—not because they don't know it's end-of-life, but because the control software that runs their $10 million production line only works on XP, and the vendor went out of business.
+                            <br><br>
+                            <strong>Scanning</strong>—in IT, I'd run Nessus or Qualys to find vulnerabilities. In OT, aggressive network scanning can actually crash PLCs. These controllers weren't designed to handle a barrage of unexpected packets. So we use passive monitoring—tap into a SPAN port, watch traffic, never inject anything. You're observing, not probing.
+                            <br><br>
+                            <strong>Downtime</strong>—in IT, I can take a server down for maintenance at 2 AM on Sunday. In OT, some processes run 24/7 for months between scheduled shutdowns. A bottling line running continuously—if you stop it mid-batch, you might ruin thousands of dollars of product. The business impact of unplanned downtime is measured in tens of thousands of dollars per hour.
+                            <br><br>
+                            <strong>Lifecycle</strong>—IT assets last 3-5 years before refresh. OT equipment runs for 15, 20, sometimes 25+ years. That PLC installed in 2005 is still controlling a critical process, and it was designed before cybersecurity was a consideration. You can't just swap it out—it's integrated into the physical process.
+                            <br><br>
+                            The mindset shift is moving from 'secure it properly' to 'secure it <em>appropriately</em> without breaking production.' Compensating controls become your best friend. Can't patch? Segment. Can't install an agent? Monitor passively. Can't authenticate? Restrict network access. It's security with constraints that IT rarely faces."
                         </p>
                     </div>
                 </div>
 
                 <!-- Q2 -->
-                <div class="interview-qa rounded-xl p-6 mb-4">
-                    <p class="text-purple-400 font-bold mb-3">Q2: Explain the Purdue Model and why it matters for OT security.</p>
+                <div class="interview-qa rounded-xl p-6 mb-6">
+                    <p class="text-purple-400 font-bold mb-4">Q2: Explain the Purdue Model and why it matters for OT security.</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "The Purdue Model defines a hierarchical architecture for industrial networks, creating clear boundaries between business systems and physical processes. Level 5 is the enterprise network—ERP, email, cloud. Level 4 is site business planning. Between Level 4 and 3 is the critical <strong class="text-yellow-400">Industrial DMZ</strong>—this is where we place jump hosts, OT monitoring platforms, and data transfer servers. Level 3 is site operations with SCADA and historians. Level 2 is area control with HMIs. Level 1 is PLCs and controllers. Level 0 is the physical process—sensors, motors, valves.
-
-                            <br><br>The security principle is strict: <strong class="text-yellow-400">no direct connections between IT (Level 4-5) and OT (Level 0-3)</strong>. Everything goes through the DMZ with dual firewalls. IT firewall faces IT, OT firewall faces OT, and even if one is compromised, the attacker lands in a hardened DMZ, not production systems. This architecture is the foundation of IEC 62443 zone and conduit requirements."
+                            "The Purdue Model—or more formally, the Purdue Enterprise Reference Architecture—is basically the blueprint for how industrial networks should be structured. It's been around since the 90s, but it's still the foundation for modern OT security standards like IEC 62443.
+                            <br><br>
+                            Think of it as a layered cake with clear boundaries. Let me walk through it from bottom to top, because that's how the physical process flows.
+                            <br><br>
+                            <strong class="text-purple-400">Level 0</strong> is the physical process itself—sensors measuring temperature, pressure, flow rates. Motors, valves, pumps, conveyors. This is actual machinery that moves atoms, not bits. These devices have no concept of security; they respond to electrical signals from the controllers above them.
+                            <br><br>
+                            <strong class="text-blue-400">Level 1</strong> is where the PLCs and RTUs live—Programmable Logic Controllers and Remote Terminal Units. These are the brains that execute control logic. 'If temperature exceeds 40 degrees, open the cooling valve.' They run deterministic code in real-time loops, often thousands of times per second. Safety Instrumented Systems also live here—independent safety layers that can shut down a process if something dangerous is detected.
+                            <br><br>
+                            <strong class="text-green-400">Level 2</strong> is area supervisory control—the HMIs, or Human-Machine Interfaces. This is where operators interact with the process. Touch screens showing tank levels, pump status, alarm conditions. Each production area—say, bottling, packaging, palletizing—has its own HMIs. Operators make adjustments, acknowledge alarms, start and stop sequences from here.
+                            <br><br>
+                            <strong class="text-yellow-400">Level 3</strong> is site operations—SCADA servers, historians, engineering workstations. This is where you see the whole plant, not just one area. Process engineers analyze trends from the historian data. The SCADA system aggregates data from all the PLCs and presents a unified view.
+                            <br><br>
+                            Now here's where it gets critical for security: between Level 3 and Level 4 sits the <strong class="text-red-400">Industrial DMZ</strong>. This is the security boundary between OT and IT. Jump hosts for remote access go here. OT monitoring platforms like Claroty or Nozomi. Data transfer servers that move historian data to business systems. Patch servers that stage updates before they go to OT. The DMZ is where you broker all interaction between the worlds.
+                            <br><br>
+                            <strong class="text-orange-400">Level 4</strong> is site business planning—production scheduling, inventory management, reporting dashboards. This is technically IT, but it needs data from OT to function.
+                            <br><br>
+                            <strong class="text-red-400">Level 5</strong> is the enterprise network—ERP, email, cloud services, corporate users. Standard IT security applies here.
+                            <br><br>
+                            The golden rule is: <strong class="text-yellow-400">no direct connections between Level 4-5 and Level 0-3</strong>. Everything goes through the DMZ. If an attacker compromises a corporate workstation, they can't pivot directly into PLCs. They'd have to get through the IT firewall, land in the DMZ, compromise a DMZ service, get through the OT firewall, and then reach operational assets. Each boundary is a chance to detect and stop them.
+                            <br><br>
+                            This is why the Purdue Model matters—it provides <em>defense in depth</em> architecturally. It's not just a nice diagram; it's the structural basis for keeping production safe from cyber threats that enter through the corporate network. IEC 62443 formalizes this with the concept of zones and conduits, but Purdue is where it all started."
                         </p>
                     </div>
                 </div>
 
                 <!-- Q3 -->
-                <div class="interview-qa rounded-xl p-6 mb-4">
-                    <p class="text-purple-400 font-bold mb-3">Q3: How would you handle vulnerability management in an OT environment?</p>
+                <div class="interview-qa rounded-xl p-6 mb-6">
+                    <p class="text-purple-400 font-bold mb-4">Q3: How would you handle vulnerability management in an OT environment?</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "OT vulnerability management requires a completely different approach than IT. First, <strong class="text-yellow-400">discovery is passive</strong>—we use tools like Claroty or Nozomi that monitor network traffic from SPAN ports rather than active scanning, which could crash PLCs.
-
-                            <br><br>For prioritization, I'd look at three factors: exploitability (is there a known exploit, does it require authentication, network vs local), impact (safety implications, production impact, regulatory), and exposure (is it internet-reachable, IT-accessible, or isolated). Many OT vulnerabilities have CVSSv3 scores of 9+ but are practically unexploitable because the device is on an isolated network segment.
-
-                            <br><br>For remediation, patching is often impossible—the vendor may not support updates, or we can't take production down. So we implement <strong class="text-yellow-400">compensating controls</strong>: network segmentation to block the attack path, firewall rules to restrict access, application allowlisting on HMIs, or enhanced monitoring for exploitation attempts. Every vulnerability gets documented with either a remediation plan or a risk acceptance with compensating controls."
+                            "Vulnerability management in OT is an exercise in creative problem-solving, because the playbook from IT just doesn't work.
+                            <br><br>
+                            <strong>Discovery</strong> is the first challenge. In IT, I'd deploy Nessus, run authenticated scans, get a comprehensive vulnerability report in a few hours. In OT? Active scanning is dangerous. I've read reports of PLCs crashing from Nmap scans—these devices weren't designed to handle unexpected network traffic. Some will reset, some will freeze, some will fail into an unsafe state.
+                            <br><br>
+                            So we use <strong>passive discovery</strong>. Deploy a sensor on a SPAN port or network TAP, let it listen to traffic for a few weeks. Tools like Claroty, Nozomi, or Dragos can identify OT assets by analyzing the protocols they speak. 'Oh, there's Modbus traffic to this IP—that's probably a PLC. The firmware banner says it's a Rockwell 1756-L73 running version 31.011.' You build your asset inventory without touching anything.
+                            <br><br>
+                            <strong>Vulnerability correlation</strong> comes next. Once I know what assets I have, I cross-reference against ICS-CERT advisories, vendor security bulletins, and CVE databases. 'We have 15 Siemens S7-1500 PLCs running firmware 2.8.3—are there any known vulnerabilities?' The OT monitoring platforms automate a lot of this, highlighting assets with known CVEs.
+                            <br><br>
+                            Here's where it gets interesting: <strong>risk assessment</strong> in OT is different. A vulnerability might have a CVSS score of 9.8—critical in IT terms. But in OT, I have to ask additional questions:
+                            <br><br>
+                            • <em>Is this asset network-accessible?</em> A PLC on an isolated cell network with no route to IT is harder to exploit than one on a converged network.
+                            <br>• <em>Is there a known exploit?</em> Theoretical vulnerabilities are lower priority than ones with Metasploit modules available.
+                            <br>• <em>What's the safety impact?</em> A vulnerability in an HMI displaying production metrics is different from one in a Safety Instrumented System.
+                            <br>• <em>Can we compensate?</em> Network segmentation might reduce a critical to a low if the attack path is blocked.
+                            <br><br>
+                            <strong>Remediation</strong> is where we really diverge from IT. Patching a PLC isn't like patching Windows. First, you need the vendor's blessing—applying an untested firmware update could break the control logic. Then you need a maintenance window, which might be months away. You need a tested rollback plan because if the update fails mid-production, you need to recover fast.
+                            <br><br>
+                            More often than not, the answer is <strong>compensating controls</strong>. Can't patch the PLC? Put a firewall rule in front of it that only allows traffic from its designated HMI. Can't update the Windows XP HMI? Enable application allowlisting so only the SCADA application runs. Can't fix the default credentials? Restrict physical access and monitor for unauthorized connections.
+                            <br><br>
+                            Every vulnerability gets documented with one of three outcomes: remediation plan with timeline, compensating controls implemented, or formal risk acceptance signed by plant management. No vulnerability just floats in limbo. We might live with some risks longer than IT would tolerate, but we do it knowingly and with mitigations in place.
+                            <br><br>
+                            I track metrics like vulnerability age, compensating control coverage, and patch compliance during maintenance windows. It's not the same as IT's '30-day SLA for critical CVEs,' but it's a disciplined, risk-based approach appropriate for the environment."
                         </p>
                     </div>
                 </div>
 
                 <!-- Q4 -->
-                <div class="interview-qa rounded-xl p-6 mb-4">
-                    <p class="text-purple-400 font-bold mb-3">Q4: How do you provide secure remote access for vendors?</p>
+                <div class="interview-qa rounded-xl p-6 mb-6">
+                    <p class="text-purple-400 font-bold mb-4">Q4: How do you provide secure remote access for vendors while protecting OT systems?</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "Vendor remote access is essential for OT—equipment like Krones filling machines requires vendor support for maintenance. But it's also a significant risk vector.
-
-                            <br><br>The architecture I'm familiar with uses a <strong class="text-yellow-400">Secure Remote Access gateway</strong> in the DMZ—solutions like Claroty SRA, Dispel, or CyberArk Alero. Vendors connect through this gateway, not through a traditional VPN. Key controls include:
-
-                            <br><br>• <strong>Time-limited access</strong>—2-8 hour windows, must be pre-scheduled
-                            <br>• <strong>Asset-scoped access</strong>—vendor can only reach specific approved PLCs/HMIs
-                            <br>• <strong>MFA required</strong>—even for vendors
-                            <br>• <strong>Full session recording</strong>—video plus keystrokes, retained for 1+ year
-                            <br>• <strong>Live monitoring</strong>—for PLC logic changes, a plant engineer watches the session
-                            <br>• <strong>File transfer controls</strong>—separate approval workflow, AV scanning before release to OT
-
-                            <br><br>The workflow starts with a support ticket, OT manager approval, then the vendor receives temporary credentials. The firewall rule enabling access is time-based and auto-expires."
+                            "Vendor remote access is probably one of the most challenging aspects of OT security—because you absolutely need it, and it's absolutely a risk.
+                            <br><br>
+                            Think about a Coca-Cola bottling plant. You've got Krones filling equipment, Rockwell PLCs, maybe Siemens drives, packaging machines from another vendor. Each of these requires specialized expertise to maintain. When a filling machine throws an error code, you're not going to have in-house staff who know that proprietary system—you need the Krones engineer. And flying someone on-site for every issue is cost-prohibitive and slow.
+                            <br><br>
+                            So we need remote access. But traditional VPN is problematic. Give a vendor VPN credentials, and suddenly they have a persistent tunnel into your network. Those credentials get shared between their technicians. Someone leaves the company, and the credentials don't get rotated. One compromised vendor laptop becomes a direct path into your OT network. We've seen this in real incidents—the Target breach started with a compromised HVAC vendor, and while that was IT, the principle applies.
+                            <br><br>
+                            The modern approach uses <strong>purpose-built OT remote access solutions</strong>. I'm familiar with products like Claroty Secure Remote Access, Dispel, and CyberArk Alero. They work differently than VPN.
+                            <br><br>
+                            <strong>The workflow looks like this:</strong> Vendor submits a support ticket requesting access. They specify which asset they need to reach, why, and for how long. Our OT team reviews—is this a legitimate request? Is this person authorized? If approved, they get a time-limited credential. Maybe 4 hours. They log into a web portal—no VPN client to install, nothing persistent on their machine. The portal connects them through a jump host in our DMZ, and from there to the specific approved asset. Not the whole network—just that one PLC or HMI.
+                            <br><br>
+                            <strong>Every session is recorded.</strong> Full video capture of the screen, keystroke logging, file transfer logging. If that vendor makes a change that breaks something three days later, we have forensic evidence of exactly what they did. These recordings are retained for at least a year—longer if there's an incident.
+                            <br><br>
+                            <strong>For critical changes—like PLC logic modifications—we require live monitoring.</strong> A plant engineer watches the vendor's session in real-time. They're not just trusting the vendor; they're verifying that the changes match what was agreed upon. This sounds paranoid, but PLC logic is the core of how your process works. A mistake or malicious change could have safety implications.
+                            <br><br>
+                            <strong>File transfers are controlled separately.</strong> Vendor wants to upload new firmware? That file goes into a quarantine area, gets scanned by our AV tools, maybe even gets reviewed by our team before it's released to the OT network. We've seen malware hidden in vendor software updates—not necessarily from the vendor's malice, but because their development environment was compromised.
+                            <br><br>
+                            <strong>Access expires automatically.</strong> The 4-hour window ends, the session terminates, the firewall rule disabling external access to that asset gets removed. No 'temporary' access that lingers for months because someone forgot to clean it up.
+                            <br><br>
+                            On the policy side, we require vendors to sign security agreements before we grant any access. Background checks for personnel who'll have access. Security awareness training. Annual attestation that they've maintained their security controls. It's more overhead, but these are the people we're trusting with access to production systems.
+                            <br><br>
+                            The goal is enabling vendor support—because we genuinely need it—while maintaining control, visibility, and the ability to audit everything that happens. It's a balance, but it's achievable with the right technology and processes."
                         </p>
                     </div>
                 </div>
 
                 <!-- Q5 -->
-                <div class="interview-qa rounded-xl p-6 mb-4">
-                    <p class="text-purple-400 font-bold mb-3">Q5: What would you do if you detected suspicious activity in the OT network?</p>
+                <div class="interview-qa rounded-xl p-6 mb-6">
+                    <p class="text-purple-400 font-bold mb-4">Q5: What would you do if you detected suspicious activity in the OT network?</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "OT incident response requires balancing security with production continuity. Unlike IT where I might immediately isolate a compromised system, in OT, <strong class="text-yellow-400">I need to coordinate with operations</strong> before taking any action that could impact production.
-
-                            <br><br>My approach:
-                            <br><br>1. <strong>Assess the alert</strong>—what does Claroty/Nozomi tell us? Is it a new device, protocol anomaly, or known malware signature?
-                            <br>2. <strong>Determine criticality</strong>—is this affecting safety systems? Is production at risk?
-                            <br>3. <strong>Coordinate with OT</strong>—call the plant engineer. They know what's normal and what's scheduled.
-                            <br>4. <strong>Containment options</strong>—can we block at the firewall without stopping production? Can we isolate at the switch level?
-                            <br>5. <strong>Evidence preservation</strong>—capture network traffic, don't wipe the system yet
-                            <br>6. <strong>Escalation</strong>—if it's a confirmed intrusion, we may need to involve ICS-CERT, leadership, and potentially law enforcement
-
-                            <br><br>The key is <strong class="text-yellow-400">communication and caution</strong>. An overly aggressive response could cause more damage than the attacker. But we also can't ignore it—threats like TRITON/TRISIS have shown that OT attacks can target safety systems."
+                            "This is where OT incident response diverges most dramatically from IT. In IT, my first instinct might be to isolate the compromised system immediately—pull the network cable, contain the threat. In OT, that same action could shut down a production line and cost tens of thousands of dollars per hour. Or worse, if I isolate a system that's actively controlling a process, I could cause a safety incident.
+                            <br><br>
+                            So my approach is deliberate and coordinated.
+                            <br><br>
+                            <strong>First: understand the alert.</strong> What exactly is the monitoring platform telling me? There's a big difference between 'new device appeared on OT network' (could be an unauthorized laptop, could be a maintenance contractor's diagnostic tool) versus 'PLC logic changed from unauthorized source' (almost certainly malicious or at minimum a serious policy violation). I don't panic; I assess.
+                            <br><br>
+                            <strong>Second: determine production impact.</strong> What system is affected? Is it critical to an active process? Is there a safety dimension? An anomaly on an HMI displaying non-critical metrics is different from suspicious traffic to a Safety Instrumented System. I need this context to calibrate my response urgency and risk tolerance.
+                            <br><br>
+                            <strong>Third: get operations on the phone.</strong> Before I take any containment action, I'm calling the plant engineer or shift supervisor. 'Hey, I'm seeing unusual network traffic to PLC-47 in the packaging area. Is there any scheduled maintenance? Any vendor on-site?' They know what's normal for their environment better than I do. They might say 'Oh yeah, Rockwell is here doing an upgrade, that's expected.' Or they might say 'No, nothing should be touching that—and by the way, that PLC controls the palletizer.'
+                            <br><br>
+                            <strong>Fourth: containment options.</strong> Now I'm thinking about how to contain without killing production. Can I block the suspicious traffic at the firewall? If it's external traffic, absolutely—that's a no-brainer. If it's internal lateral movement, can I isolate the source without affecting the target? Can we switch to manual operation while we investigate? Can we block at the switch level, affecting just one network segment?
+                            <br><br>
+                            <strong>Fifth: evidence preservation.</strong> This runs in parallel. I'm capturing network traffic from the monitoring platform, taking screenshots of alerts, exporting logs. If this becomes a bigger incident—or if we need to involve law enforcement—we need forensic evidence. And critically, I'm not wiping anything yet. In IT, you might reimage a compromised workstation. In OT, that HMI might be the only evidence of what happened.
+                            <br><br>
+                            <strong>Sixth: escalation.</strong> Depending on severity, I might need to loop in leadership, legal, possibly external IR support, maybe ICS-CERT if it looks like a significant intrusion. Real OT attacks—TRITON, Industroyer—are rare but devastating. If there's any indication this is sophisticated or targeted, I'm not trying to handle it alone.
+                            <br><br>
+                            Throughout all of this, I'm <strong>communicating constantly</strong>. The plant manager knows what's happening. The OT team knows what I'm doing. Leadership is briefed. This isn't the time for heroics; it's the time for coordination.
+                            <br><br>
+                            The key mindset is: <em>an overly aggressive security response can cause more damage than the attack itself.</em> If I panic and isolate a system that's mid-batch, I've just cost the company real money. But I also can't ignore genuine threats—OT attacks have caused real-world damage. It's about finding the right balance, and you can only do that by understanding the operational context and working with the people who run the plant.
+                            <br><br>
+                            After containment, there's the investigation phase—root cause analysis, understanding the attack vector, implementing improvements. And eventually, lessons learned and updates to our detection and response capabilities. Every incident, even false alarms, is a chance to get better."
                         </p>
                     </div>
                 </div>
 
                 <!-- Q6 -->
-                <div class="interview-qa rounded-xl p-6 mb-4">
-                    <p class="text-purple-400 font-bold mb-3">Q6: What experience do you have with OT security?</p>
+                <div class="interview-qa rounded-xl p-6 mb-6">
+                    <p class="text-purple-400 font-bold mb-4">Q6: What experience do you have with OT security?</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "My hands-on experience is primarily on the IT security side—EDR/XDR, SIEM, DLP—but I've developed strong knowledge of OT security concepts because it's clearly the direction the industry is heading, especially for manufacturing environments like Coca-Cola.
-
-                            <br><br>At my current role at a Siemens subsidiary, I've been exposed to discussions about IT/OT convergence and understand the challenges of securing industrial environments. I'm familiar with the Purdue Model architecture, IEC 62443 framework requirements, and how tools like Claroty and Nozomi integrate with enterprise security stacks like Microsoft Sentinel.
-
-                            <br><br>What I bring is <strong class="text-yellow-400">strong fundamentals in network security, segmentation, SIEM integration, and access control</strong>—which are directly applicable to OT. I understand the mindset shift required: prioritizing availability over confidentiality, working with OT engineers rather than dictating to them, and accepting that compensating controls are often more practical than patching.
-
-                            <br><br>I'm genuinely interested in growing into OT security, and I believe my IT security engineering background provides a solid foundation. The security principles are the same—defense in depth, least privilege, monitoring—just applied differently."
+                            "I want to be upfront: my hands-on experience is primarily on the IT security side. I've spent years working with EDR/XDR platforms, SIEM systems, DLP solutions, and enterprise security architecture. But I've deliberately invested in understanding OT security because I see it as where the industry is heading—especially for organizations like Coca-Cola that have significant manufacturing operations.
+                            <br><br>
+                            At my current role at a Siemens subsidiary, I've been exposed to discussions about IT/OT convergence. We're an industrial company, so while my direct work has been IT-focused, I've had opportunities to understand the challenges of securing operational environments. I've participated in architecture reviews where OT considerations were on the table. I understand why our network team maintains strict separation between corporate IT and plant networks.
+                            <br><br>
+                            I've also invested in self-education. I've studied the Purdue Model thoroughly—I can draw it on a whiteboard and explain the security rationale for each level and boundary. I've read NIST SP 800-82 and understand how IEC 62443 structures security requirements. I've followed ICS-CERT advisories to understand the types of vulnerabilities that affect OT systems. I've studied real-world incidents—Stuxnet, the Ukraine power grid attacks, TRITON—to understand how OT attacks work and why they're so concerning.
+                            <br><br>
+                            I'm familiar with the leading OT security platforms, at least conceptually. I know that Claroty, Nozomi, and Dragos do passive asset discovery and anomaly detection. I understand how they integrate with enterprise SIEMs like Sentinel. I haven't deployed them hands-on, but I understand their architecture and capabilities.
+                            <br><br>
+                            What I <em>do</em> bring is <strong>directly transferable skills</strong>. Network security fundamentals—firewalls, segmentation, VLANs, access control—these apply to OT just as much as IT. SIEM integration and detection engineering—the correlation rules are different, but the methodology transfers. Incident response processes—the communication and coordination I've learned in IT incidents applies, even if the containment tactics differ. Change management discipline—understanding that you can't just push changes without testing and approval.
+                            <br><br>
+                            And critically, I understand the <strong>mindset shift</strong> required. I know that I can't approach OT with IT assumptions. I know that availability trumps confidentiality. I know that patching isn't always an option. I know that working with OT engineers as partners—not dictating to them—is essential for success. I've seen IT security people fail in OT environments because they couldn't adapt their approach, and I'm committed to not making that mistake.
+                            <br><br>
+                            I'm genuinely interested in this space. Manufacturing security, critical infrastructure protection—this is where cybersecurity has real-world physical consequences. I find that meaningful. I'm looking for a role where I can apply my IT security foundation while growing into OT expertise, and I'm prepared to learn from the experienced OT engineers I'd be working alongside."
                         </p>
                     </div>
                 </div>
 
                 <!-- Q7 -->
-                <div class="interview-qa rounded-xl p-6 mb-4">
-                    <p class="text-purple-400 font-bold mb-3">Q7: How would you approach securing a new manufacturing plant?</p>
+                <div class="interview-qa rounded-xl p-6 mb-6">
+                    <p class="text-purple-400 font-bold mb-4">Q7: How would you approach securing a new manufacturing plant that has minimal existing security controls?</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "I'd approach it in phases, starting with understanding before implementing controls:
-
-                            <br><br><strong class="text-yellow-400">Phase 1: Discovery & Assessment</strong>
-                            <br>• Deploy passive asset discovery (Claroty/Nozomi sensor via SPAN port)
-                            <br>• Build complete asset inventory: PLCs, HMIs, SCADA, network devices
-                            <br>• Map network topology and identify existing segmentation
-                            <br>• Interview OT engineers to understand critical processes and dependencies
-                            <br>• Review existing documentation and network diagrams
-
-                            <br><br><strong class="text-yellow-400">Phase 2: Architecture Review</strong>
-                            <br>• Evaluate against Purdue Model—is there proper IT/OT separation?
-                            <br>• Assess firewall rules between zones
-                            <br>• Review remote access methods (jump hosts, vendor access)
-                            <br>• Identify gaps compared to IEC 62443 requirements
-
-                            <br><br><strong class="text-yellow-400">Phase 3: Quick Wins</strong>
-                            <br>• Implement network segmentation where missing
-                            <br>• Deploy or tune OT monitoring platform
-                            <br>• Establish secure remote access solution
-                            <br>• Remove any unnecessary IT/OT connections
-
-                            <br><br><strong class="text-yellow-400">Phase 4: Ongoing Program</strong>
-                            <br>• Integrate OT alerts into SIEM (Sentinel)
-                            <br>• Establish vulnerability management process
-                            <br>• Develop OT-specific incident response playbooks
-                            <br>• Train SOC on OT alerts and escalation procedures
-
-                            <br><br>Throughout, I'd be collaborating closely with plant operations—they know the environment best, and security implementations need their buy-in to succeed."
+                            "This is a great question because it's both a technical challenge and a change management challenge. You can't just walk into a plant that's been running for years and start implementing controls without understanding the environment and building trust with the people who operate it.
+                            <br><br>
+                            <strong class="text-yellow-400">Phase 1: Listen and Learn</strong>
+                            <br><br>
+                            Before I touch anything technical, I'm spending time with the plant team. Who are the key engineers? What processes are most critical? What keeps them up at night? What's the production schedule—when are maintenance windows? What vendor relationships exist? I'm building relationships and gathering context.
+                            <br><br>
+                            Simultaneously, I'm reviewing whatever documentation exists. Network diagrams—even if they're outdated. Asset inventories. Previous audit findings. Incident history. Regulatory requirements specific to food and beverage manufacturing—like FDA 21 CFR Part 11.
+                            <br><br>
+                            <strong class="text-yellow-400">Phase 2: Passive Discovery</strong>
+                            <br><br>
+                            Now I deploy monitoring. I'd work with the network team to set up a SPAN port on the OT network switches and deploy a passive sensor—Claroty or Nozomi, for example. This runs for 2-4 weeks, just listening. No active scanning, no changes.
+                            <br><br>
+                            The output is an asset inventory: every PLC, HMI, SCADA server, network switch. The protocols in use—Modbus, EtherNet/IP, whatever. The communication patterns—which devices talk to which. Baseline normal behavior. And importantly, vulnerabilities—CVEs associated with the firmware versions we discover.
+                            <br><br>
+                            I'm also having the monitoring platform identify gaps: devices on unexpected subnets, flat network segments that should be separated, IT protocols showing up in OT zones where they shouldn't be.
+                            <br><br>
+                            <strong class="text-yellow-400">Phase 3: Architecture Assessment</strong>
+                            <br><br>
+                            With discovery data in hand, I assess against the Purdue Model and IEC 62443 requirements. Is there proper segmentation between IT and OT? Is there a DMZ? Are there dual firewalls, or is it one shared device? How are people accessing OT systems—jump hosts, or direct RDP from corporate laptops? How do vendors get remote access?
+                            <br><br>
+                            I document the gaps. This becomes my roadmap. Some gaps are quick fixes; others are major projects requiring budget and planning.
+                            <br><br>
+                            <strong class="text-yellow-400">Phase 4: Quick Wins</strong>
+                            <br><br>
+                            I look for impactful improvements that don't require production changes. Network segmentation at the firewall level—if there's a flat network, I work with networking to implement VLANs and firewall rules. Establishing the DMZ with proper jump hosts for administrative access. Removing any direct internet exposure—no OT system should be directly reachable from outside. Setting up secure remote access for vendors to replace whatever ad-hoc solution exists.
+                            <br><br>
+                            These are foundational controls that reduce risk significantly without touching production systems directly.
+                            <br><br>
+                            <strong class="text-yellow-400">Phase 5: Integration with Enterprise Security</strong>
+                            <br><br>
+                            I get OT alerts flowing into our SIEM—Microsoft Sentinel in this case. The SOC needs visibility into what's happening in the plant. I work with them to develop response procedures—when do they escalate OT alerts? Who do they call? What can they do versus what requires OT engineering involvement?
+                            <br><br>
+                            This also includes integrating vendor access with our PAM solution, making sure OT access is tracked in the same systems we use for IT privileged access.
+                            <br><br>
+                            <strong class="text-yellow-400">Phase 6: Ongoing Program</strong>
+                            <br><br>
+                            Security isn't a one-time project. I establish recurring activities: quarterly vulnerability reviews, annual penetration testing (passive and authorized), regular access reviews, patch management during maintenance windows, incident response tabletop exercises with plant personnel.
+                            <br><br>
+                            I also establish metrics and reporting. Asset coverage—what percentage of OT assets are inventoried and monitored? Vulnerability posture—open CVEs, compensating controls in place. Access hygiene—stale accounts, vendor access reviews. Incident response readiness—time to detect, time to respond.
+                            <br><br>
+                            Throughout all of this, my approach is <strong>collaborative, not dictatorial</strong>. I'm not walking in and telling 20-year plant veterans how to run their operation. I'm partnering with them to improve security while respecting their expertise about what can and can't be changed without disrupting production. That cultural approach is as important as the technical work."
                         </p>
                     </div>
                 </div>
