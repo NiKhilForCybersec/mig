@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firewalls & Load Balancers - Coca-Cola Azure</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); min-height: 100vh; }
+        .glass-card { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(249, 115, 22, 0.2); }
+        .diagram-box { background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(249, 115, 22, 0.3); font-family: 'Courier New', monospace; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body class="text-gray-100">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
+                        <i class="fas fa-shield-alt text-orange-400"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-semibold text-white">Part 2: Firewalls & Load Balancers</h1>
+                        <p class="text-xs text-gray-400">Coca-Cola Azure Network Security</p>
+                    </div>
+                </div>
+                <a href="coke-arch-index.html" class="text-gray-400 hover:text-orange-400 transition-colors">
+                    <i class="fas fa-th-large mr-2"></i>Architecture Index
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pt-24 pb-12 px-6">
+        <div class="max-w-6xl mx-auto space-y-8">
+
+            <!-- Overview -->
+            <div class="glass-card rounded-xl p-6">
+                <h2 class="text-2xl font-bold text-white mb-4">
+                    <i class="fas fa-shield-alt text-orange-400 mr-2"></i>Network Security Appliances in Azure
+                </h2>
+                <p class="text-gray-400 mb-4">
+                    Coca-Cola's Azure environment uses a layered network security approach with multiple firewall types 
+                    and load balancers. Azure Firewall handles east-west and basic north-south traffic, while Palo Alto NVAs 
+                    provide advanced inspection for sensitive workloads. Application Gateway with WAF protects web applications.
+                </p>
+                <div class="grid grid-cols-4 gap-4">
+                    <div class="bg-orange-500/10 border border-orange-500/30 rounded-lg p-3 text-center">
+                        <div class="text-2xl font-bold text-orange-400">2</div>
+                        <div class="text-xs text-gray-400">Azure FW (HA)</div>
+                    </div>
+                    <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-center">
+                        <div class="text-2xl font-bold text-red-400">2</div>
+                        <div class="text-xs text-gray-400">Palo Alto NVAs</div>
+                    </div>
+                    <div class="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3 text-center">
+                        <div class="text-2xl font-bold text-blue-400">3</div>
+                        <div class="text-xs text-gray-400">App Gateways</div>
+                    </div>
+                    <div class="bg-green-500/10 border border-green-500/30 rounded-lg p-3 text-center">
+                        <div class="text-2xl font-bold text-green-400">8+</div>
+                        <div class="text-xs text-gray-400">Load Balancers</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Firewall Pairs Diagram -->
+            <div class="diagram-box rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4">Azure Firewall High Availability Architecture</h3>
+                <pre class="text-gray-300 text-xs">
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                         AZURE FIREWALL PREMIUM - HIGH AVAILABILITY                                      │
+│                              (Zone-Redundant Deployment)                                                │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+                                    ┌─────────────────────────────────┐
+                                    │         INTERNET                │
+                                    └───────────────┬─────────────────┘
+                                                    │
+                                    ┌───────────────┴─────────────────┐
+                                    │      PUBLIC IP (Standard)       │
+                                    │      coke-azfw-pip              │
+                                    │      Zone-Redundant             │
+                                    └───────────────┬─────────────────┘
+                                                    │
+    ┌───────────────────────────────────────────────┴───────────────────────────────────────────────────┐
+    │                                                                                                   │
+    │                              AZURE FIREWALL PREMIUM                                               │
+    │                              "coke-azfw-eastus"                                                   │
+    │                                                                                                   │
+    │    ┌─────────────────────────────────────────────────────────────────────────────────────────┐   │
+    │    │                                                                                         │   │
+    │    │   ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐                  │   │
+    │    │   │  ZONE 1         │     │  ZONE 2         │     │  ZONE 3         │                  │   │
+    │    │   │  Instance       │     │  Instance       │     │  Instance       │                  │   │
+    │    │   │                 │     │                 │     │                 │                  │   │
+    │    │   │  ┌───────────┐  │     │  ┌───────────┐  │     │  ┌───────────┐  │                  │   │
+    │    │   │  │ FW Node   │  │     │  │ FW Node   │  │     │  │ FW Node   │  │                  │   │
+    │    │   │  │ (Active)  │  │     │  │ (Active)  │  │     │  │ (Active)  │  │                  │   │
+    │    │   │  └───────────┘  │     │  └───────────┘  │     │  └───────────┘  │                  │   │
+    │    │   │                 │     │                 │     │                 │                  │   │
+    │    │   └─────────────────┘     └─────────────────┘     └─────────────────┘                  │   │
+    │    │                                                                                         │   │
+    │    │                    ALL ZONES ACTIVE (Active/Active/Active)                             │   │
+    │    │                    Traffic distributed across all instances                            │   │
+    │    │                    If one zone fails, traffic shifts to others                        │   │
+    │    │                                                                                         │   │
+    │    └─────────────────────────────────────────────────────────────────────────────────────────┘   │
+    │                                                                                                   │
+    │    PREMIUM FEATURES ENABLED:                                                                     │
+    │    ┌─────────────────────────────────────────────────────────────────────────────────────────┐   │
+    │    │ ✅ TLS Inspection (SSL Decrypt for outbound)                                           │   │
+    │    │ ✅ IDPS (Intrusion Detection & Prevention - 60,000+ signatures)                        │   │
+    │    │ ✅ URL Filtering (Web Categories)                                                       │   │
+    │    │ ✅ Web Categories (Block gambling, malware, etc.)                                      │   │
+    │    │ ✅ Threat Intelligence Feed (Microsoft + 3rd party)                                   │   │
+    │    │ ✅ DNS Proxy (Custom DNS, FQDN filtering)                                              │   │
+    │    └─────────────────────────────────────────────────────────────────────────────────────────┘   │
+    │                                                                                                   │
+    │    PRIVATE IP: 10.0.1.4 (Used in UDRs as next hop)                                              │
+    │                                                                                                   │
+    └───────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+    FIREWALL POLICY:
+    ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │                                                                                                   │
+    │    "coke-firewall-policy" (Inherited hierarchy)                                                  │
+    │                                                                                                   │
+    │    ┌─────────────────────────────────────────────────────────────────────────────────────────┐   │
+    │    │ BASE POLICY (Parent)                                                                    │   │
+    │    │ • Corporate-wide rules                                                                  │   │
+    │    │ • Block known malicious IPs                                                            │   │
+    │    │ • Allow Microsoft 365 URLs                                                             │   │
+    │    │ • Allow Azure management                                                               │   │
+    │    └─────────────────────────────────────────────────────────────────────────────────────────┘   │
+    │                        │                                                                          │
+    │                        │ Inherits                                                                 │
+    │                        ▼                                                                          │
+    │    ┌─────────────────────────────────────────────────────────────────────────────────────────┐   │
+    │    │ REGIONAL POLICY (Child - East US)                                                       │   │
+    │    │ • Region-specific rules                                                                 │   │
+    │    │ • Application rules for East US workloads                                              │   │
+    │    │ • NAT rules for specific services                                                      │   │
+    │    └─────────────────────────────────────────────────────────────────────────────────────────┘   │
+    │                                                                                                   │
+    │    RULE PRIORITY ORDER:                                                                          │
+    │    1. DNAT Rules (Inbound NAT)                                                                  │
+    │    2. Network Rules (L3/L4 - IP, Port)                                                          │
+    │    3. Application Rules (L7 - FQDN, URL)                                                        │
+    └───────────────────────────────────────────────────────────────────────────────────────────────────┘
+                </pre>
+            </div>
+
+            <!-- Palo Alto NVA -->
+            <div class="diagram-box rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4">Palo Alto VM-Series NVA (Active/Passive)</h3>
+                <pre class="text-gray-300 text-xs">
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                         PALO ALTO VM-SERIES HIGH AVAILABILITY                                           │
+│                              (For Advanced Inspection - SAP, OT)                                        │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+    WHY PALO ALTO IN ADDITION TO AZURE FIREWALL?
+    ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │ • Advanced threat prevention (WildFire sandbox, DNS Security)                                    │
+    │ • Deeper application visibility (App-ID for SAP, OT protocols)                                   │
+    │ • Consistent policy with on-prem Palo Alto firewalls                                            │
+    │ • Compliance requirements for specific workloads                                                │
+    │ • Centralized management via Panorama                                                           │
+    └───────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+                    ┌─────────────────────────────────────────────────────────────────┐
+                    │                    NVA SUBNET (10.0.2.0/24)                      │
+                    │                                                                  │
+                    │  ┌─────────────────────────────────────────────────────────────┐│
+                    │  │                                                             ││
+                    │  │  ┌─────────────────────┐      ┌─────────────────────┐      ││
+                    │  │  │ PA-VM-50 (ACTIVE)   │      │ PA-VM-50 (PASSIVE)  │      ││
+                    │  │  │ coke-paloalto-1     │      │ coke-paloalto-2     │      ││
+                    │  │  │                     │      │                     │      ││
+                    │  │  │ Zone 1              │      │ Zone 2              │      ││
+                    │  │  │ Standard_D3_v2      │      │ Standard_D3_v2      │      ││
+                    │  │  │ (4 vCPU, 14 GB)     │      │ (4 vCPU, 14 GB)     │      ││
+                    │  │  │                     │      │                     │      ││
+                    │  │  │ Trust: 10.0.2.4     │◄────►│ Trust: 10.0.2.5     │      ││
+                    │  │  │ Untrust: 10.0.2.10  │  HA  │ Untrust: 10.0.2.11  │      ││
+                    │  │  │ Mgmt: 10.0.2.20     │ Link │ Mgmt: 10.0.2.21     │      ││
+                    │  │  │                     │      │                     │      ││
+                    │  │  └──────────┬──────────┘      └──────────┬──────────┘      ││
+                    │  │             │                            │                 ││
+                    │  │             │                            │                 ││
+                    │  │             └──────────┬─────────────────┘                 ││
+                    │  │                        │                                   ││
+                    │  │                        ▼                                   ││
+                    │  │         ┌──────────────────────────────┐                  ││
+                    │  │         │ INTERNAL LOAD BALANCER       │                  ││
+                    │  │         │ (Standard SKU)               │                  ││
+                    │  │         │                              │                  ││
+                    │  │         │ Frontend IP: 10.0.2.100      │                  ││
+                    │  │         │ Health Probe: TCP 443        │                  ││
+                    │  │         │ HA Ports: Enabled            │                  ││
+                    │  │         │                              │                  ││
+                    │  │         │ Detects active firewall      │                  ││
+                    │  │         │ Routes traffic accordingly   │                  ││
+                    │  │         └──────────────────────────────┘                  ││
+                    │  │                                                             ││
+                    │  └─────────────────────────────────────────────────────────────┘│
+                    └─────────────────────────────────────────────────────────────────┘
+
+
+    PANORAMA MANAGEMENT:
+    ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │                                                                                                   │
+    │    ┌───────────────────────────────────────────────────────────────────────────────────────────┐ │
+    │    │                              PANORAMA (On-Prem or Cloud)                                  │ │
+    │    │                                                                                           │ │
+    │    │    ┌───────────────┐  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐            │ │
+    │    │    │ Device Group  │  │ Device Group  │  │ Device Group  │  │ Device Group  │            │ │
+    │    │    │ "Azure-NVAs"  │  │ "Plants"      │  │ "DataCenters" │  │ "Distribution"│            │ │
+    │    │    │               │  │               │  │               │  │               │            │ │
+    │    │    │ PA-VM-50 x2   │  │ PA-220 x50    │  │ PA-3260 x4    │  │ PA-220 x200   │            │ │
+    │    │    └───────────────┘  └───────────────┘  └───────────────┘  └───────────────┘            │ │
+    │    │                                                                                           │ │
+    │    │    BENEFITS:                                                                             │ │
+    │    │    • Single pane of glass for all firewalls                                             │ │
+    │    │    • Consistent policy across Azure and on-prem                                         │ │
+    │    │    • Centralized logging and reporting                                                  │ │
+    │    │    • Template-based configuration                                                        │ │
+    │    └───────────────────────────────────────────────────────────────────────────────────────────┘ │
+    └───────────────────────────────────────────────────────────────────────────────────────────────────┘
+                </pre>
+            </div>
+
+            <!-- Application Gateway & Load Balancers -->
+            <div class="diagram-box rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4">Application Gateway, WAF & Load Balancers</h3>
+                <pre class="text-gray-300 text-xs">
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                         APPLICATION GATEWAY + WAF                                                       │
+│                              (Web Application Protection)                                               │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+                                    ┌─────────────────────────────────┐
+                                    │         INTERNET                │
+                                    └───────────────┬─────────────────┘
+                                                    │
+                                    ┌───────────────┴─────────────────┐
+                                    │      AZURE FRONT DOOR           │
+                                    │      (Global Load Balancer)     │
+                                    │                                 │
+                                    │  • Global anycast              │
+                                    │  • DDoS protection             │
+                                    │  • SSL offload                 │
+                                    │  • CDN caching                 │
+                                    └───────────────┬─────────────────┘
+                                                    │
+                    ┌───────────────────────────────┼───────────────────────────────┐
+                    │                               │                               │
+                    ▼                               ▼                               ▼
+    ┌───────────────────────────┐   ┌───────────────────────────┐   ┌───────────────────────────┐
+    │ APP GATEWAY 1             │   │ APP GATEWAY 2             │   │ APP GATEWAY 3             │
+    │ (DMZ Spoke - East US)     │   │ (DMZ Spoke - West US)     │   │ (DMZ Spoke - Europe)      │
+    │                           │   │                           │   │                           │
+    │ "coke-appgw-eastus"       │   │ "coke-appgw-westus"       │   │ "coke-appgw-europe"       │
+    │ SKU: WAF_v2               │   │ SKU: WAF_v2               │   │ SKU: WAF_v2               │
+    │                           │   │                           │   │                           │
+    │ WAF Policy:               │   │ WAF Policy:               │   │ WAF Policy:               │
+    │ • OWASP 3.2 ruleset      │   │ • OWASP 3.2 ruleset      │   │ • OWASP 3.2 ruleset      │
+    │ • Bot protection         │   │ • Bot protection         │   │ • Bot protection         │
+    │ • Custom rules           │   │ • Custom rules           │   │ • Custom rules           │
+    │ • Prevention mode        │   │ • Prevention mode        │   │ • Prevention mode        │
+    │                           │   │                           │   │                           │
+    │ Listeners:               │   │ Listeners:               │   │ Listeners:               │
+    │ • HTTPS/443 (TLS 1.2+)   │   │ • HTTPS/443              │   │ • HTTPS/443              │
+    │ • HTTP/80 → Redirect     │   │ • HTTP/80 → Redirect     │   │ • HTTP/80 → Redirect     │
+    │                           │   │                           │   │                           │
+    │ Backend Pools:           │   │ Backend Pools:           │   │ Backend Pools:           │
+    │ • AKS Ingress            │   │ • AKS Ingress            │   │ • AKS Ingress            │
+    │ • App Services           │   │ • App Services           │   │ • App Services           │
+    │ • VMs (legacy)           │   │ • VMs (legacy)           │   │ • VMs (legacy)           │
+    └───────────────────────────┘   └───────────────────────────┘   └───────────────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                         LOAD BALANCER INVENTORY                                                         │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │ TYPE         │ NAME                    │ PURPOSE                        │ SKU      │ REGION      │
+    ├──────────────┼─────────────────────────┼────────────────────────────────┼──────────┼─────────────┤
+    │ PUBLIC       │ coke-web-lb-eastus      │ Public web traffic             │ Standard │ East US     │
+    │ PUBLIC       │ coke-web-lb-westus      │ Public web traffic             │ Standard │ West US     │
+    │ INTERNAL     │ coke-paloalto-ilb       │ HA for Palo Alto NVAs         │ Standard │ East US     │
+    │ INTERNAL     │ coke-sap-ilb            │ SAP HANA HA cluster           │ Standard │ East US     │
+    │ INTERNAL     │ coke-sql-ilb            │ SQL Always On AG              │ Standard │ East US     │
+    │ INTERNAL     │ coke-aks-ilb            │ AKS Internal Services         │ Standard │ East US     │
+    │ INTERNAL     │ coke-api-ilb            │ Internal API Gateway          │ Standard │ East US     │
+    │ INTERNAL     │ coke-app-ilb            │ Internal App Services         │ Standard │ East US     │
+    └───────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+    LOAD BALANCER HA CONFIG (Example: SAP ILB):
+    ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │                                                                                                   │
+    │  ┌─────────────────────────────────────────────────────────────────────────────────────────────┐ │
+    │  │ coke-sap-ilb                                                                                │ │
+    │  │                                                                                             │ │
+    │  │ Frontend IP: 10.2.1.100 (SAP HANA VIP)                                                     │ │
+    │  │                                                                                             │ │
+    │  │ Backend Pool:                                                                               │ │
+    │  │   • sap-hana-node-1 (10.2.1.10)                                                            │ │
+    │  │   • sap-hana-node-2 (10.2.1.11)                                                            │ │
+    │  │                                                                                             │ │
+    │  │ Health Probe:                                                                               │ │
+    │  │   • Protocol: TCP                                                                          │ │
+    │  │   • Port: 62503 (HANA health port)                                                         │ │
+    │  │   • Interval: 5 seconds                                                                    │ │
+    │  │   • Unhealthy threshold: 2                                                                 │ │
+    │  │                                                                                             │ │
+    │  │ Load Balancing Rules:                                                                       │ │
+    │  │   • HA Ports: Enabled (all ports)                                                          │ │
+    │  │   • Floating IP: Enabled (for cluster)                                                     │ │
+    │  │   • Idle Timeout: 30 minutes                                                               │ │
+    │  └─────────────────────────────────────────────────────────────────────────────────────────────┘ │
+    │                                                                                                   │
+    └───────────────────────────────────────────────────────────────────────────────────────────────────┘
+                </pre>
+            </div>
+
+            <!-- Traffic Flow -->
+            <div class="diagram-box rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4">Complete Traffic Flow Diagram</h3>
+                <pre class="text-gray-300 text-xs">
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                         TRAFFIC FLOW - NORTH-SOUTH & EAST-WEST                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+    NORTH-SOUTH (Internet ↔ Azure):
+    ═══════════════════════════════════════════════════════════════════════════════════════════════════════
+
+    INBOUND (Internet → Web App):
+    ┌───────────────┐    ┌───────────────┐    ┌───────────────┐    ┌───────────────┐    ┌───────────────┐
+    │  Internet     │───▶│ Front Door    │───▶│ App Gateway   │───▶│ WAF           │───▶│ AKS/App       │
+    │  User         │    │ (CDN/DDoS)    │    │ (L7 LB)       │    │ (OWASP)       │    │ Service       │
+    └───────────────┘    └───────────────┘    └───────────────┘    └───────────────┘    └───────────────┘
+
+    OUTBOUND (VM → Internet):
+    ┌───────────────┐    ┌───────────────┐    ┌───────────────┐    ┌───────────────┐
+    │  VM in Spoke  │───▶│ UDR → Hub     │───▶│ Azure FW      │───▶│ Internet      │
+    │  10.1.0.10    │    │               │    │ (TLS Inspect) │    │               │
+    └───────────────┘    └───────────────┘    └───────────────┘    └───────────────┘
+                                                     │
+                                                     ▼ Logs to Sentinel
+
+    EAST-WEST (Spoke ↔ Spoke):
+    ═══════════════════════════════════════════════════════════════════════════════════════════════════════
+
+    STANDARD TRAFFIC (Spoke 1 → Spoke 3):
+    ┌───────────────┐    ┌───────────────┐    ┌───────────────┐    ┌───────────────┐
+    │  VM in Spoke1 │───▶│ UDR → Hub     │───▶│ Azure FW      │───▶│ VM in Spoke3  │
+    │  (Production) │    │               │    │ (Inspection)  │    │ (Data)        │
+    └───────────────┘    └───────────────┘    └───────────────┘    └───────────────┘
+
+    SENSITIVE TRAFFIC (Any → SAP Spoke):
+    ┌───────────────┐    ┌───────────────┐    ┌───────────────┐    ┌───────────────┐
+    │  Any Source   │───▶│ UDR → Hub     │───▶│ PALO ALTO     │───▶│ SAP HANA      │
+    │               │    │               │    │ (Deep Inspect)│    │ (Spoke 2)     │
+    └───────────────┘    └───────────────┘    └───────────────┘    └───────────────┘
+                                                     │
+                                                     ▼ Logs to Panorama + Sentinel
+
+    HYBRID (Azure ↔ On-Prem):
+    ═══════════════════════════════════════════════════════════════════════════════════════════════════════
+
+    ┌───────────────┐    ┌───────────────┐    ┌───────────────┐    ┌───────────────┐    ┌───────────────┐
+    │  Azure VM     │───▶│ UDR → Hub     │───▶│ Azure FW      │───▶│ ExpressRoute  │───▶│ On-Prem       │
+    │               │    │               │    │               │    │ Gateway       │    │ Plant/DC      │
+    └───────────────┘    └───────────────┘    └───────────────┘    └───────────────┘    └───────────────┘
+                </pre>
+            </div>
+
+            <!-- Summary Box -->
+            <div class="glass-card rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4"><i class="fas fa-key text-orange-400 mr-2"></i>Key Interview Points</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                    <div>
+                        <p class="text-orange-400 font-semibold mb-2">Firewall Strategy:</p>
+                        <ul class="text-gray-400 space-y-1">
+                            <li>• Azure FW: General traffic, TLS inspection</li>
+                            <li>• Palo Alto: SAP/sensitive workloads</li>
+                            <li>• Both zone-redundant for HA</li>
+                            <li>• Centralized policy (FW Policy, Panorama)</li>
+                            <li>• All traffic logged to Sentinel</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-green-400 font-semibold mb-2">Load Balancer Design:</p>
+                        <ul class="text-gray-400 space-y-1">
+                            <li>• Front Door: Global, DDoS, CDN</li>
+                            <li>• App Gateway: Regional L7, WAF</li>
+                            <li>• Standard LB: HA for VMs/NVAs</li>
+                            <li>• ILB for internal services (SAP, SQL)</li>
+                            <li>• HA Ports for cluster failover</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex justify-between mt-8">
+                <a href="coke-arch-azure.html" class="px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Part 1: Hub & Spoke
+                </a>
+                <a href="coke-arch-plants.html" class="px-6 py-3 bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/50 rounded-lg text-orange-400 transition-colors">
+                    Part 3: Plants & Distribution<i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

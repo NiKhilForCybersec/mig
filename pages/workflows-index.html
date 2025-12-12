@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Workflows | Visual Reference</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); min-height: 100vh; }
+        .glass-card { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(139, 92, 246, 0.2); }
+        .workflow-card { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(139, 92, 246, 0.3); transition: all 0.3s ease; }
+        .workflow-card:hover { border-color: rgba(139, 92, 246, 0.6); transform: translateY(-4px); box-shadow: 0 10px 40px rgba(139, 92, 246, 0.2); }
+        .glow-text { text-shadow: 0 0 20px rgba(139, 92, 246, 0.5); }
+    </style>
+</head>
+<body class="text-gray-100">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                        <i class="fas fa-project-diagram text-purple-400"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-semibold text-white">Security Workflows</h1>
+                        <p class="text-xs text-gray-400">Visual Process Reference</p>
+                    </div>
+                </div>
+                <a href="linkedin-interview.html" class="text-gray-400 hover:text-purple-400 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Interview Prep
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pt-24 pb-12 px-6">
+        <div class="max-w-6xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-white mb-4 glow-text">
+                    <i class="fas fa-project-diagram mr-3 text-purple-400"></i>Security Workflow Diagrams
+                </h1>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+                    Visual end-to-end workflows for every major security process. Use these to understand, explain, and remember complex procedures.
+                </p>
+            </div>
+
+            <!-- Workflow Categories -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Vulnerability Management -->
+                <a href="workflows-vuln.html" class="workflow-card rounded-xl p-6">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-14 h-14 rounded-xl bg-red-500/20 flex items-center justify-center">
+                            <i class="fas fa-bug text-2xl text-red-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Vulnerability Management</h3>
+                            <p class="text-red-400 text-sm">5 Workflows</p>
+                        </div>
+                    </div>
+                    <ul class="text-gray-400 text-sm space-y-2">
+                        <li><i class="fas fa-check text-red-400 mr-2"></i>End-to-End Vuln Management</li>
+                        <li><i class="fas fa-check text-red-400 mr-2"></i>Risk-Based Prioritization</li>
+                        <li><i class="fas fa-check text-red-400 mr-2"></i>Exception Management</li>
+                        <li><i class="fas fa-check text-red-400 mr-2"></i>Patch Coordination</li>
+                        <li><i class="fas fa-check text-red-400 mr-2"></i>Verification & Closure</li>
+                    </ul>
+                </a>
+
+                <!-- NGFW & Firewall -->
+                <a href="workflows-ngfw.html" class="workflow-card rounded-xl p-6">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-14 h-14 rounded-xl bg-emerald-500/20 flex items-center justify-center">
+                            <i class="fas fa-shield-alt text-2xl text-emerald-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">NGFW & Firewall</h3>
+                            <p class="text-emerald-400 text-sm">4 Workflows</p>
+                        </div>
+                    </div>
+                    <ul class="text-gray-400 text-sm space-y-2">
+                        <li><i class="fas fa-check text-emerald-400 mr-2"></i>Multi-Site NGFW Deployment</li>
+                        <li><i class="fas fa-check text-emerald-400 mr-2"></i>Security Profile Standardization</li>
+                        <li><i class="fas fa-check text-emerald-400 mr-2"></i>OT Incident Troubleshooting</li>
+                        <li><i class="fas fa-check text-emerald-400 mr-2"></i>Quarterly Firewall Review</li>
+                    </ul>
+                </a>
+
+                <!-- EDR & Endpoint -->
+                <a href="workflows-edr.html" class="workflow-card rounded-xl p-6">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-14 h-14 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                            <i class="fas fa-laptop-medical text-2xl text-blue-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">EDR & Endpoint</h3>
+                            <p class="text-blue-400 text-sm">4 Workflows</p>
+                        </div>
+                    </div>
+                    <ul class="text-gray-400 text-sm space-y-2">
+                        <li><i class="fas fa-check text-blue-400 mr-2"></i>EDR Deployment & Onboarding</li>
+                        <li><i class="fas fa-check text-blue-400 mr-2"></i>Coverage Gap Detection</li>
+                        <li><i class="fas fa-check text-blue-400 mr-2"></i>Agent Health Monitoring</li>
+                        <li><i class="fas fa-check text-blue-400 mr-2"></i>Telemetry Validation</li>
+                    </ul>
+                </a>
+
+                <!-- DLP -->
+                <a href="workflows-dlp.html" class="workflow-card rounded-xl p-6">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-14 h-14 rounded-xl bg-yellow-500/20 flex items-center justify-center">
+                            <i class="fas fa-file-shield text-2xl text-yellow-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">DLP & Data Protection</h3>
+                            <p class="text-yellow-400 text-sm">4 Workflows</p>
+                        </div>
+                    </div>
+                    <ul class="text-gray-400 text-sm space-y-2">
+                        <li><i class="fas fa-check text-yellow-400 mr-2"></i>DLP Policy Lifecycle</li>
+                        <li><i class="fas fa-check text-yellow-400 mr-2"></i>False Positive Reduction</li>
+                        <li><i class="fas fa-check text-yellow-400 mr-2"></i>Migration (Symantec → Purview)</li>
+                        <li><i class="fas fa-check text-yellow-400 mr-2"></i>Incident Response Flow</li>
+                    </ul>
+                </a>
+
+                <!-- PAM & Identity -->
+                <a href="workflows-pam.html" class="workflow-card rounded-xl p-6">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-14 h-14 rounded-xl bg-pink-500/20 flex items-center justify-center">
+                            <i class="fas fa-key text-2xl text-pink-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">PAM & Identity</h3>
+                            <p class="text-pink-400 text-sm">4 Workflows</p>
+                        </div>
+                    </div>
+                    <ul class="text-gray-400 text-sm space-y-2">
+                        <li><i class="fas fa-check text-pink-400 mr-2"></i>Privileged Access Request</li>
+                        <li><i class="fas fa-check text-pink-400 mr-2"></i>Break-Glass Procedure</li>
+                        <li><i class="fas fa-check text-pink-400 mr-2"></i>Credential Rotation</li>
+                        <li><i class="fas fa-check text-pink-400 mr-2"></i>Session Monitoring & Detection</li>
+                    </ul>
+                </a>
+
+                <!-- CI/CD & DevSecOps -->
+                <a href="workflows-cicd.html" class="workflow-card rounded-xl p-6">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-14 h-14 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                            <i class="fas fa-code-branch text-2xl text-purple-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">CI/CD & DevSecOps</h3>
+                            <p class="text-purple-400 text-sm">4 Workflows</p>
+                        </div>
+                    </div>
+                    <ul class="text-gray-400 text-sm space-y-2">
+                        <li><i class="fas fa-check text-purple-400 mr-2"></i>Secure Pipeline Architecture</li>
+                        <li><i class="fas fa-check text-purple-400 mr-2"></i>Shift-Left Security Flow</li>
+                        <li><i class="fas fa-check text-purple-400 mr-2"></i>Secrets Management</li>
+                        <li><i class="fas fa-check text-purple-400 mr-2"></i>Security Gate Decision Tree</li>
+                    </ul>
+                </a>
+
+                <!-- Incident Response -->
+                <a href="workflows-incident.html" class="workflow-card rounded-xl p-6">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-14 h-14 rounded-xl bg-orange-500/20 flex items-center justify-center">
+                            <i class="fas fa-exclamation-triangle text-2xl text-orange-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Incident Response</h3>
+                            <p class="text-orange-400 text-sm">4 Workflows</p>
+                        </div>
+                    </div>
+                    <ul class="text-gray-400 text-sm space-y-2">
+                        <li><i class="fas fa-check text-orange-400 mr-2"></i>Alert Triage Decision Tree</li>
+                        <li><i class="fas fa-check text-orange-400 mr-2"></i>Investigation Workflow</li>
+                        <li><i class="fas fa-check text-orange-400 mr-2"></i>False Positive Analysis</li>
+                        <li><i class="fas fa-check text-orange-400 mr-2"></i>Escalation & Communication</li>
+                    </ul>
+                </a>
+
+                <!-- Cloud & SIEM -->
+                <a href="workflows-cloud.html" class="workflow-card rounded-xl p-6">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center">
+                            <i class="fas fa-cloud text-2xl text-cyan-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Cloud & SIEM</h3>
+                            <p class="text-cyan-400 text-sm">4 Workflows</p>
+                        </div>
+                    </div>
+                    <ul class="text-gray-400 text-sm space-y-2">
+                        <li><i class="fas fa-check text-cyan-400 mr-2"></i>Azure Workload Security</li>
+                        <li><i class="fas fa-check text-cyan-400 mr-2"></i>Sentinel Detection Pipeline</li>
+                        <li><i class="fas fa-check text-cyan-400 mr-2"></i>SIEM Migration (RSA → Sentinel)</li>
+                        <li><i class="fas fa-check text-cyan-400 mr-2"></i>Log Ingestion & Validation</li>
+                    </ul>
+                </a>
+
+                <!-- OT/ICS -->
+                <a href="workflows-ot.html" class="workflow-card rounded-xl p-6">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-14 h-14 rounded-xl bg-amber-500/20 flex items-center justify-center">
+                            <i class="fas fa-industry text-2xl text-amber-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">OT/ICS Security</h3>
+                            <p class="text-amber-400 text-sm">3 Workflows</p>
+                        </div>
+                    </div>
+                    <ul class="text-gray-400 text-sm space-y-2">
+                        <li><i class="fas fa-check text-amber-400 mr-2"></i>IT-OT Segmentation (Purdue)</li>
+                        <li><i class="fas fa-check text-amber-400 mr-2"></i>SCADA to Cloud Data Flow</li>
+                        <li><i class="fas fa-check text-amber-400 mr-2"></i>OT Change Management</li>
+                    </ul>
+                </a>
+
+            </div>
+
+            <!-- Coca-Cola Enterprise Architecture - Featured -->
+            <div class="mt-8">
+                <a href="coke-arch-index.html" class="block workflow-card rounded-xl p-6 border-2 border-red-500/50 bg-gradient-to-r from-red-500/10 to-transparent">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-16 h-16 rounded-xl bg-red-500/20 flex items-center justify-center">
+                                <i class="fas fa-building text-3xl text-red-400"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs text-red-400 font-semibold uppercase">Enterprise Architecture</span>
+                                <h3 class="text-2xl font-bold text-white">Coca-Cola Bottling Architecture</h3>
+                                <p class="text-gray-400 text-sm mt-1">Complete infrastructure documentation: Azure Hub-Spoke, Firewalls, Plants, Distribution Centers, Sentinel</p>
+                            </div>
+                        </div>
+                        <div class="hidden md:flex items-center space-x-4">
+                            <div class="text-center px-4">
+                                <div class="text-2xl font-bold text-blue-400">Hub-Spoke</div>
+                                <div class="text-xs text-gray-500">Azure Cloud</div>
+                            </div>
+                            <div class="text-center px-4">
+                                <div class="text-2xl font-bold text-orange-400">50+</div>
+                                <div class="text-xs text-gray-500">Plants</div>
+                            </div>
+                            <div class="text-center px-4">
+                                <div class="text-2xl font-bold text-green-400">200+</div>
+                                <div class="text-xs text-gray-500">Distribution Ctrs</div>
+                            </div>
+                            <div class="text-red-400 text-xl">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Quick Tips -->
+            <div class="mt-12 glass-card rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4"><i class="fas fa-lightbulb text-yellow-400 mr-2"></i>How to Use These Workflows</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+                    <div class="space-y-2">
+                        <p class="text-purple-400 font-semibold">📚 Study & Memorize</p>
+                        <p class="text-gray-400">Understand the logical flow of each process. In interviews, you can describe these step-by-step with confidence.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="text-purple-400 font-semibold">🎯 Identify Your Role</p>
+                        <p class="text-gray-400">Each workflow shows what's automated vs manual. Know where YOU add value in each process.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="text-purple-400 font-semibold">💡 Whiteboard Practice</p>
+                        <p class="text-gray-400">Practice drawing simplified versions. Being able to sketch a workflow shows deep understanding.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

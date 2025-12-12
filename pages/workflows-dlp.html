@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DLP & Data Protection Workflows</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); min-height: 100vh; }
+        .glass-card { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(234, 179, 8, 0.2); }
+        .workflow-box { background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(234, 179, 8, 0.3); font-family: 'Courier New', monospace; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body class="text-gray-100">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center">
+                        <i class="fas fa-file-shield text-yellow-400"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-semibold text-white">DLP & Data Protection Workflows</h1>
+                        <p class="text-xs text-gray-400">Policy Lifecycle & Migration</p>
+                    </div>
+                </div>
+                <a href="workflows-index.html" class="text-gray-400 hover:text-yellow-400 transition-colors">
+                    <i class="fas fa-th-large mr-2"></i>All Workflows
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pt-24 pb-12 px-6">
+        <div class="max-w-6xl mx-auto space-y-12">
+
+            <!-- ============================================ -->
+            <!-- WORKFLOW 1: DLP Policy Lifecycle -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-yellow-400">1.</span> DLP Policy Lifecycle (Audit → Warn → Block)
+                </h2>
+
+                <div class="workflow-box rounded-xl p-6">
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                          DLP POLICY LIFECYCLE                                       │
+│                    (The Golden Rule: Never start with Block)                        │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 1: AUDIT MODE (2-4 weeks)                                                     │
+│ "See everything, block nothing"                                                     │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ POLICY SETTINGS:                                                                │
+    │ • Action: Audit (log only, no user impact)                                     │
+    │ • Notifications: None to users                                                 │
+    │ • Alerts: Security team only                                                   │
+    │                                                                                 │
+    │ WHAT YOU'RE LEARNING:                                                          │
+    │ • What data is actually being shared?                                          │
+    │ • Which users trigger the most alerts?                                         │
+    │ • Are there legitimate business workflows we didn't know about?                │
+    │ • What's the false positive rate?                                              │
+    │                                                                                 │
+    │ WEEKLY REVIEW:                                                                  │
+    │ ┌─────────────────────────────────────────────────────────────────────────────┐│
+    │ │ Alert Volume: 1,245 this week                                               ││
+    │ │ Top Triggers:                                                                ││
+    │ │ • Credit Card Numbers: 520 (42%)                                            ││
+    │ │ • SIN/SSN: 312 (25%)                                                        ││
+    │ │ • "Confidential" keyword: 413 (33%)                                         ││
+    │ │                                                                              ││
+    │ │ Analysis: 60% appear legitimate business (HR, Finance)                      ││
+    │ │ Action: Need to tune or add exceptions                                      ││
+    │ └─────────────────────────────────────────────────────────────────────────────┘│
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼ (When FP rate < 20%)
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 2: WARN/NOTIFY MODE (2-4 weeks)                                               │
+│ "Educate users, still don't block"                                                  │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ POLICY SETTINGS:                                                                │
+    │ • Action: Warn (user sees notification, can override)                          │
+    │ • Notifications: Policy tip shown to user                                      │
+    │ • Override: Allowed with business justification                                │
+    │                                                                                 │
+    │ USER EXPERIENCE:                                                               │
+    │ ┌─────────────────────────────────────────────────────────────────────────────┐│
+    │ │ ⚠️ This file contains sensitive information (Credit Card Numbers)           ││
+    │ │                                                                              ││
+    │ │ Sharing this externally may violate company policy.                         ││
+    │ │                                                                              ││
+    │ │ [Override - I have business need] [Cancel]                                  ││
+    │ └─────────────────────────────────────────────────────────────────────────────┘│
+    │                                                                                 │
+    │ WHAT YOU'RE LEARNING:                                                          │
+    │ • Do users understand why they're being warned?                                │
+    │ • What percentage override vs cancel?                                          │
+    │ • Are the override justifications legitimate?                                  │
+    │ • Do we need more user training?                                               │
+    │                                                                                 │
+    │ SUCCESS CRITERIA:                                                              │
+    │ • Override rate stabilizes (users learn)                                       │
+    │ • No major business process complaints                                         │
+    │ • False positive rate < 10%                                                    │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼ (When FP rate < 10% and stable)
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 3: BLOCK MODE (Enforcement)                                                   │
+│ "Now we protect, but with escape valves"                                            │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ POLICY SETTINGS:                                                                │
+    │ • Action: Block (with override for some policies)                              │
+    │ • Notifications: User notified of block                                        │
+    │ • Override: Manager approval for some, no override for others                  │
+    │                                                                                 │
+    │ TIERED APPROACH:                                                               │
+    │                                                                                 │
+    │ HIGH SENSITIVITY (No override):                                                │
+    │ • PCI data to unauthorized external recipients                                 │
+    │ • Healthcare records (PHI) to personal email                                   │
+    │ • Source code to competitors                                                   │
+    │                                                                                 │
+    │ MEDIUM SENSITIVITY (Manager override):                                         │
+    │ • Internal-only documents shared externally                                    │
+    │ • Customer lists to non-approved vendors                                       │
+    │                                                                                 │
+    │ LOW SENSITIVITY (User override with justification):                            │
+    │ • "Confidential" marked documents                                              │
+    │ • Internal project information                                                 │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- WORKFLOW 2: DLP Migration (Symantec to Purview) -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-yellow-400">2.</span> DLP Migration: Symantec → Microsoft Purview
+                </h2>
+
+                <div class="workflow-box rounded-xl p-6">
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                    SYMANTEC DLP → MICROSOFT PURVIEW MIGRATION                       │
+│                          (Your Current Project!)                                    │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 1: DISCOVERY & PLANNING                                                       │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ SYMANTEC DLP AUDIT:                                                             │
+    │                                                                                 │
+    │ □ Inventory existing policies                                                  │
+    │   ├── How many policies?                                                       │
+    │   ├── What data types detected?                                                │
+    │   ├── What channels monitored? (Email, Endpoint, Network)                      │
+    │   └── What actions configured? (Block, Quarantine, Encrypt)                    │
+    │                                                                                 │
+    │ □ Review detection accuracy                                                    │
+    │   ├── False positive rates                                                     │
+    │   ├── Policies that trigger most                                               │
+    │   └── Known issues/limitations                                                 │
+    │                                                                                 │
+    │ □ Identify coverage gaps to address in new platform                            │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 2: POLICY MAPPING                                                             │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ SYMANTEC → PURVIEW MAPPING:                                                     │
+    │                                                                                 │
+    │ ┌───────────────────────────┐    ┌───────────────────────────┐                 │
+    │ │ SYMANTEC                  │    │ PURVIEW                   │                 │
+    │ ├───────────────────────────┤    ├───────────────────────────┤                 │
+    │ │ Content Fingerprinting    │───▶│ Exact Data Match (EDM)    │                 │
+    │ │ Pattern Matching          │───▶│ Sensitive Info Types (SIT)│                 │
+    │ │ Keyword Rules             │───▶│ Keyword Lists             │                 │
+    │ │ Document Properties       │───▶│ Sensitivity Labels        │                 │
+    │ │ Custom Dictionaries       │───▶│ Custom SITs               │                 │
+    │ └───────────────────────────┘    └───────────────────────────┘                 │
+    │                                                                                 │
+    │ NOTE: Not all policies map 1:1. Some need redesign.                            │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 3: PILOT (Where you joined!)                                                  │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ PILOT GROUP SELECTION:                                                          │
+    │ • IT Department (tech-savvy, can provide good feedback)                        │
+    │ • HR (handles sensitive data, good test case)                                  │
+    │ • Finance (PCI data, high risk)                                                │
+    │ • ~500 users total                                                             │
+    │                                                                                 │
+    │ PARALLEL RUNNING:                                                              │
+    │ ┌────────────────────┐    ┌────────────────────┐                               │
+    │ │ SYMANTEC DLP       │    │ PURVIEW            │                               │
+    │ │ (Enforcement)      │    │ (Audit mode only)  │                               │
+    │ │                    │    │                    │                               │
+    │ │ Still protecting   │    │ Learning what it   │                               │
+    │ │ the environment    │    │ would detect       │                               │
+    │ └────────────────────┘    └────────────────────┘                               │
+    │                                                                                 │
+    │ COMPARISON ANALYSIS:                                                           │
+    │ □ Does Purview detect what Symantec detects?                                   │
+    │ □ What does Purview catch that Symantec missed?                                │
+    │ □ What does Purview miss that Symantec caught?                                 │
+    │ □ False positive comparison                                                    │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 4: TUNING & FALSE POSITIVE REDUCTION                                          │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ COMMON FALSE POSITIVES & FIXES:                                                 │
+    │                                                                                 │
+    │ Issue: Test credit card numbers triggering                                     │
+    │ Fix: Add "test", "example", "sample" as context exclusions                     │
+    │                                                                                 │
+    │ Issue: Internal reference numbers matching SSN pattern                         │
+    │ Fix: Create custom SIT with context requirements                               │
+    │                                                                                 │
+    │ Issue: HR legitimately sharing employee data                                   │
+    │ Fix: Add HR group to exception list for specific destinations                  │
+    │                                                                                 │
+    │ Issue: Finance reports triggering on every export                              │
+    │ Fix: Use EDM with actual customer database for precision                       │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 5: PHASED ENFORCEMENT ROLLOUT (Current Phase!)                                │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ ROLLOUT WAVES:                                                                  │
+    │                                                                                 │
+    │ Wave 1: IT & Security (Week 1-2)                                               │
+    │ ├── Enable Warn mode                                                           │
+    │ ├── Collect feedback                                                           │
+    │ └── Quick iteration if issues                                                  │
+    │                                                                                 │
+    │ Wave 2: Corporate Functions (Week 3-4)                                         │
+    │ ├── HR, Finance, Legal                                                         │
+    │ ├── High sensitivity data handlers                                             │
+    │ └── Warn → Block for critical policies                                         │
+    │                                                                                 │
+    │ Wave 3: General Population (Week 5-8)                                          │
+    │ ├── All remaining users                                                        │
+    │ ├── Full block enforcement                                                     │
+    │ └── Symantec agent removal begins                                              │
+    │                                                                                 │
+    │ Wave 4: Symantec Decommission (Week 9-12)                                      │
+    │ ├── Remove Symantec agents                                                     │
+    │ ├── Shut down Symantec infrastructure                                          │
+    │ └── Archive historical data                                                    │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 6: STABILIZATION & OPTIMIZATION                                               │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ ONGOING:                                                                        │
+    │ □ Weekly false positive review                                                 │
+    │ □ Monthly policy effectiveness report                                          │
+    │ □ Quarterly policy review with stakeholders                                    │
+    │ □ Continuous tuning based on new data patterns                                 │
+    │ □ User feedback incorporation                                                  │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- WORKFLOW 3: DLP Classifier Strategy -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-yellow-400">3.</span> DLP Classifier Layering Strategy
+                </h2>
+
+                <div class="workflow-box rounded-xl p-6">
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                         DLP CLASSIFIER LAYERING                                     │
+│                  (Maximize detection, minimize false positives)                     │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ LAYER 1: BUILT-IN SENSITIVE INFORMATION TYPES (SITs)                            │
+    │                                                                                 │
+    │ Use for: Standard patterns (credit cards, SSN, passport numbers)               │
+    │                                                                                 │
+    │ ┌─────────────────────────────────────────────────────────────────────────────┐│
+    │ │ Examples:                                                                    ││
+    │ │ • Credit Card Number (Luhn checksum validated)                              ││
+    │ │ • U.S. Social Security Number                                               ││
+    │ │ • Canada Social Insurance Number                                            ││
+    │ │ • Passport Numbers (various countries)                                      ││
+    │ │ • Bank Account Numbers                                                       ││
+    │ └─────────────────────────────────────────────────────────────────────────────┘│
+    │                                                                                 │
+    │ Pros: Ready to use, Microsoft maintained, checksum validated                   │
+    │ Cons: Generic patterns, may need context tuning                                │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                              +
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ LAYER 2: CUSTOM SENSITIVE INFORMATION TYPES                                     │
+    │                                                                                 │
+    │ Use for: Company-specific patterns                                             │
+    │                                                                                 │
+    │ ┌─────────────────────────────────────────────────────────────────────────────┐│
+    │ │ Examples:                                                                    ││
+    │ │ • Internal project codes: "PRJ-[A-Z]{3}-[0-9]{4}"                           ││
+    │ │ • Customer account numbers: "CUST[0-9]{8}"                                  ││
+    │ │ • Employee IDs: "EMP-[0-9]{6}"                                              ││
+    │ │ • Product formulas: "FORMULA-[A-Z]{2}[0-9]{3}"                              ││
+    │ └─────────────────────────────────────────────────────────────────────────────┘│
+    │                                                                                 │
+    │ Pros: Tailored to your organization, reduces false positives                   │
+    │ Cons: Requires creation and maintenance                                        │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                              +
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ LAYER 3: EXACT DATA MATCH (EDM)                                                 │
+    │                                                                                 │
+    │ Use for: Specific known values (actual customer names, account numbers)        │
+    │                                                                                 │
+    │ ┌─────────────────────────────────────────────────────────────────────────────┐│
+    │ │ How it works:                                                                ││
+    │ │ 1. Upload database of actual sensitive values (hashed)                      ││
+    │ │ 2. DLP matches exact values, not patterns                                   ││
+    │ │                                                                              ││
+    │ │ Example: Upload customer database                                           ││
+    │ │ • "John Smith" + "123-45-6789" + "john.smith@email.com"                     ││
+    │ │ • Only triggers when actual customer data is found                          ││
+    │ │ • Not random SSN patterns                                                    ││
+    │ └─────────────────────────────────────────────────────────────────────────────┘│
+    │                                                                                 │
+    │ Pros: Lowest false positive rate, detects actual sensitive data               │
+    │ Cons: Requires data upload and refresh, more complex setup                     │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                              +
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ LAYER 4: KEYWORD CONTEXT                                                        │
+    │                                                                                 │
+    │ Use for: Increasing confidence of detection                                    │
+    │                                                                                 │
+    │ ┌─────────────────────────────────────────────────────────────────────────────┐│
+    │ │ Require pattern + context keywords:                                         ││
+    │ │                                                                              ││
+    │ │ Credit Card + ("payment", "billing", "card number", "CVV")                  ││
+    │ │ SSN + ("social security", "SSN", "tax ID", "employee")                      ││
+    │ │                                                                              ││
+    │ │ This filters out:                                                           ││
+    │ │ • Random 16-digit numbers that aren't credit cards                          ││
+    │ │ • Phone numbers that match SSN pattern                                      ││
+    │ └─────────────────────────────────────────────────────────────────────────────┘│
+    │                                                                                 │
+    │ Pros: Significantly reduces false positives                                    │
+    │ Cons: May miss data without context (but usually want context anyway)          │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                              =
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ COMBINED: HIGH-CONFIDENCE DETECTION                                             │
+    │                                                                                 │
+    │ Example Policy: "Protect Customer PII"                                         │
+    │                                                                                 │
+    │ DETECT when ANY of:                                                            │
+    │ ├── Credit Card (built-in) + payment keywords                                  │
+    │ ├── SSN (built-in) + employee/customer keywords                                │
+    │ ├── Customer Account Number (custom SIT)                                       │
+    │ └── EDM match against customer database                                        │
+    │                                                                                 │
+    │ CONFIDENCE: High (85%+) → Block                                                │
+    │ CONFIDENCE: Medium (65-84%) → Warn                                             │
+    │ CONFIDENCE: Low (<65%) → Audit only                                            │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- Summary Box -->
+            <div class="glass-card rounded-xl p-6 mt-8">
+                <h3 class="text-xl font-bold text-white mb-4"><i class="fas fa-key text-yellow-400 mr-2"></i>Key Interview Points</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                    <div>
+                        <p class="text-yellow-400 font-semibold mb-2">Your DLP Experience:</p>
+                        <ul class="text-gray-400 space-y-1">
+                            <li>• Leading Symantec → Purview migration</li>
+                            <li>• Full lifecycle: Pilot to Enforcement</li>
+                            <li>• False positive reduction</li>
+                            <li>• Business unit coordination</li>
+                            <li>• Currently in enforcement phase</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-green-400 font-semibold mb-2">Key Principles:</p>
+                        <ul class="text-gray-400 space-y-1">
+                            <li>• Never start with Block (Audit → Warn → Block)</li>
+                            <li>• FP rate < 10% before enforcement</li>
+                            <li>• Layer classifiers for accuracy</li>
+                            <li>• EDM for lowest false positives</li>
+                            <li>• Phased rollout by business unit</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex justify-between mt-8">
+                <a href="workflows-edr.html" class="px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>EDR Workflows
+                </a>
+                <a href="workflows-pam.html" class="px-6 py-3 bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/50 rounded-lg text-yellow-400 transition-colors">
+                    Next: PAM Workflows<i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

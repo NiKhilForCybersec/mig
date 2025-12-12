@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud & SIEM Workflows</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); min-height: 100vh; }
+        .glass-card { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(6, 182, 212, 0.2); }
+        .workflow-box { background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(6, 182, 212, 0.3); font-family: 'Courier New', monospace; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body class="text-gray-100">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center">
+                        <i class="fas fa-cloud text-cyan-400"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-semibold text-white">Cloud & SIEM Workflows</h1>
+                        <p class="text-xs text-gray-400">Sentinel, Azure Security & SIEM Migration</p>
+                    </div>
+                </div>
+                <a href="workflows-index.html" class="text-gray-400 hover:text-cyan-400 transition-colors">
+                    <i class="fas fa-th-large mr-2"></i>All Workflows
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pt-24 pb-12 px-6">
+        <div class="max-w-6xl mx-auto space-y-12">
+
+            <!-- ============================================ -->
+            <!-- WORKFLOW 1: SIEM Migration (RSA to Sentinel) -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-cyan-400">1.</span> SIEM Migration: RSA NetWitness → Microsoft Sentinel
+                </h2>
+
+                <div class="workflow-box rounded-xl p-6">
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                    RSA NETWITNESS → MICROSOFT SENTINEL MIGRATION                    │
+│                          (Your Siemens Experience!)                                 │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 1: DISCOVERY & PLANNING (Weeks 1-4)                                           │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ RSA NETWITNESS AUDIT:                                                         │
+    │                                                                               │
+    │ □ Log Sources Inventory                                                      │
+    │   ├── How many log sources?                                                  │
+    │   ├── What types? (Windows, Linux, Network, Cloud, Applications)            │
+    │   ├── Volume per source (GB/day)                                            │
+    │   └── Criticality of each source                                            │
+    │                                                                               │
+    │ □ Correlation Rules Inventory                                                │
+    │   ├── How many active rules?                                                 │
+    │   ├── Which rules generate most alerts?                                      │
+    │   ├── Which rules have highest fidelity?                                     │
+    │   └── Custom vs out-of-box rules                                             │
+    │                                                                               │
+    │ □ Parsers & Normalizations                                                   │
+    │   ├── Custom parsers developed?                                              │
+    │   ├── Field mappings                                                         │
+    │   └── Enrichment sources                                                     │
+    │                                                                               │
+    │ □ Dashboards & Reports                                                       │
+    │   ├── Operational dashboards                                                 │
+    │   ├── Executive reports                                                      │
+    │   └── Compliance reports                                                     │
+    └───────────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 2: SENTINEL SETUP (Weeks 5-8)                                                 │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ ARCHITECTURE:                                                                 │
+    │                                                                               │
+    │ ┌─────────────────────────────────────────────────────────────────────────┐  │
+    │ │                                                                          │  │
+    │ │  ┌─────────────┐                      ┌─────────────────────────────┐   │  │
+    │ │  │ Azure       │                      │ LOG ANALYTICS WORKSPACE      │   │  │
+    │ │  │ Subscription│─────────────────────▶│                              │   │  │
+    │ │  └─────────────┘                      │ • Primary: Sentinel logs     │   │  │
+    │ │                                        │ • Retention: 90 days hot    │   │  │
+    │ │                                        │ • Archive: 2 years cold     │   │  │
+    │ │                                        └─────────────────────────────┘   │  │
+    │ │                                                      │                    │  │
+    │ │                                                      ▼                    │  │
+    │ │                                        ┌─────────────────────────────┐   │  │
+    │ │                                        │ MICROSOFT SENTINEL          │   │  │
+    │ │                                        │                              │   │  │
+    │ │                                        │ • Analytics Rules            │   │  │
+    │ │                                        │ • Workbooks                  │   │  │
+    │ │                                        │ • Playbooks (Logic Apps)     │   │  │
+    │ │                                        │ • Hunting Queries            │   │  │
+    │ │                                        └─────────────────────────────┘   │  │
+    │ └─────────────────────────────────────────────────────────────────────────┘  │
+    └───────────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 3: LOG SOURCE ONBOARDING (Weeks 9-16)                                         │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ CONNECTOR MAPPING:                                                            │
+    │                                                                               │
+    │ ┌─────────────────────────┐    ┌─────────────────────────┐                   │
+    │ │ RSA SOURCE              │    │ SENTINEL CONNECTOR      │                   │
+    │ ├─────────────────────────┤    ├─────────────────────────┤                   │
+    │ │ Windows Event Logs      │───▶│ Azure Monitor Agent     │                   │
+    │ │ Linux Syslog            │───▶│ Syslog via AMA          │                   │
+    │ │ Palo Alto Firewall      │───▶│ Native connector        │                   │
+    │ │ Cisco ASA               │───▶│ CEF via AMA             │                   │
+    │ │ Azure AD                │───▶│ Native connector (free) │                   │
+    │ │ O365                    │───▶│ Native connector        │                   │
+    │ │ AWS CloudTrail          │───▶│ AWS S3 connector        │                   │
+    │ │ Custom Application      │───▶│ Custom logs via API     │                   │
+    │ └─────────────────────────┘    └─────────────────────────┘                   │
+    │                                                                               │
+    │ PARALLEL INGESTION:                                                          │
+    │ Keep RSA running while onboarding to Sentinel (coexistence period)           │
+    └───────────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 4: RULE CONVERSION (Weeks 12-20) - Your Key Contribution!                     │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ RSA CORRELATION RULE → KQL ANALYTICS RULE                                     │
+    │                                                                               │
+    │ EXAMPLE CONVERSION:                                                           │
+    │                                                                               │
+    │ RSA NetWitness Rule:                                                          │
+    │ ┌─────────────────────────────────────────────────────────────────────────┐  │
+    │ │ Name: "Multiple Failed Logins Followed by Success"                      │  │
+    │ │ Condition:                                                               │  │
+    │ │   event.type = 'authentication' AND                                     │  │
+    │ │   result = 'failure' COUNT > 5 WITHIN 10 minutes                        │  │
+    │ │   FOLLOWED BY result = 'success' FROM same user                        │  │
+    │ └─────────────────────────────────────────────────────────────────────────┘  │
+    │                              │                                                │
+    │                              ▼                                                │
+    │ Sentinel KQL Rule:                                                            │
+    │ ┌─────────────────────────────────────────────────────────────────────────┐  │
+    │ │ let failedLogins = SigninLogs                                          │  │
+    │ │ | where TimeGenerated > ago(10m)                                       │  │
+    │ │ | where ResultType != 0  // Failed                                     │  │
+    │ │ | summarize FailCount = count() by UserPrincipalName                   │  │
+    │ │ | where FailCount > 5;                                                 │  │
+    │ │                                                                         │  │
+    │ │ let successLogins = SigninLogs                                         │  │
+    │ │ | where TimeGenerated > ago(10m)                                       │  │
+    │ │ | where ResultType == 0  // Success                                    │  │
+    │ │ | project UserPrincipalName, SuccessTime = TimeGenerated;              │  │
+    │ │                                                                         │  │
+    │ │ failedLogins                                                           │  │
+    │ │ | join successLogins on UserPrincipalName                              │  │
+    │ │ | project UserPrincipalName, FailCount, SuccessTime                    │  │
+    │ └─────────────────────────────────────────────────────────────────────────┘  │
+    └───────────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 5: VALIDATION & TUNING (Weeks 18-24)                                          │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ VALIDATION CHECKLIST:                                                         │
+    │                                                                               │
+    │ □ Log volume matches RSA (±10%)                                              │
+    │ □ All expected sources reporting                                              │
+    │ □ Rules firing as expected                                                    │
+    │ □ False positive rate acceptable                                              │
+    │ □ Performance acceptable (query times)                                        │
+    │ □ ASIM normalization working                                                  │
+    │ □ Workbooks showing correct data                                              │
+    │ □ Playbooks triggering correctly                                              │
+    └───────────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 6: CUTOVER & RSA DECOMMISSION (Weeks 24-28)                                   │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ CUTOVER STEPS:                                                                │
+    │                                                                               │
+    │ 1. Disable RSA alerting (Sentinel now primary)                               │
+    │ 2. Redirect log sources to Sentinel only                                     │
+    │ 3. Archive RSA historical data                                               │
+    │ 4. Decommission RSA infrastructure                                           │
+    │ 5. Update runbooks and procedures                                            │
+    │ 6. Train SOC team on Sentinel                                                │
+    │                                                                               │
+    │ ROLLBACK PLAN:                                                                │
+    │ Keep RSA available (powered down) for 90 days post-cutover                   │
+    └───────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- WORKFLOW 2: Detection Pipeline -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-cyan-400">2.</span> Sentinel Detection Engineering Pipeline
+                </h2>
+
+                <div class="workflow-box rounded-xl p-6">
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                    DETECTION ENGINEERING PIPELINE                                   │
+│                (From threat intel to production rule)                               │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────┐
+    │ TRIGGER:        │
+    │ • New threat    │
+    │ • Incident      │
+    │ • Gap analysis  │
+    │ • MITRE coverage│
+    └────────┬────────┘
+             │
+             ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ STEP 1: REQUIREMENTS                                                                │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ DEFINE:                                                                       │
+    │ □ What behavior are we detecting?                                            │
+    │ □ What MITRE ATT&CK technique(s)?                                            │
+    │ □ What data sources needed?                                                  │
+    │ □ What's the expected false positive rate?                                   │
+    │ □ What's the business impact of this detection?                              │
+    └───────────────────────────────────────────────────────────────────────────────┘
+             │
+             ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ STEP 2: DATA VALIDATION                                                             │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ VERIFY DATA EXISTS:                                                           │
+    │                                                                               │
+    │ // Check if data source is ingesting                                         │
+    │ SecurityEvent                                                                │
+    │ | where TimeGenerated > ago(1d)                                              │
+    │ | summarize count() by bin(TimeGenerated, 1h)                                │
+    │ | render timechart                                                           │
+    │                                                                               │
+    │ // Check required fields are populated                                       │
+    │ SecurityEvent                                                                │
+    │ | where TimeGenerated > ago(1h)                                              │
+    │ | summarize count() by isempty(TargetUserName)                               │
+    │                                                                               │
+    │ If data missing → Fix connector before writing rule!                         │
+    └───────────────────────────────────────────────────────────────────────────────┘
+             │
+             ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ STEP 3: RULE DEVELOPMENT                                                            │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ DEVELOP IN LOG ANALYTICS (Not directly in Sentinel):                          │
+    │                                                                               │
+    │ // Start broad, then narrow                                                  │
+    │ SecurityEvent                                                                │
+    │ | where EventID == 4625  // Failed login                                     │
+    │ | take 100               // Sample first                                     │
+    │                                                                               │
+    │ // Add conditions iteratively                                                │
+    │ SecurityEvent                                                                │
+    │ | where EventID == 4625                                                      │
+    │ | where TimeGenerated > ago(1h)                                              │
+    │ | summarize FailCount = count() by TargetUserName, IpAddress                │
+    │ | where FailCount > 10                                                       │
+    │                                                                               │
+    │ // Validate against known-good (reduce false positives)                      │
+    │ | where IpAddress !in ("10.0.0.1", "10.0.0.2")  // Known service accounts   │
+    └───────────────────────────────────────────────────────────────────────────────┘
+             │
+             ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ STEP 4: TESTING (Staging Environment)                                               │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ TEST METHODS:                                                                 │
+    │                                                                               │
+    │ 1. HISTORICAL VALIDATION                                                     │
+    │    Run query against 30 days of data                                         │
+    │    • How many alerts would have fired?                                       │
+    │    • Are they true positives or false positives?                             │
+    │                                                                               │
+    │ 2. SIMULATED ATTACK                                                          │
+    │    Generate test events matching detection                                   │
+    │    • Does rule trigger?                                                      │
+    │    • Are all fields populated in alert?                                      │
+    │                                                                               │
+    │ 3. RED TEAM VALIDATION (if available)                                        │
+    │    Ask red team to perform technique                                         │
+    │    • Detection successful?                                                   │
+    └───────────────────────────────────────────────────────────────────────────────┘
+             │
+             ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ STEP 5: PRODUCTION DEPLOYMENT                                                       │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ DEPLOYMENT CHECKLIST:                                                         │
+    │                                                                               │
+    │ □ Rule name follows naming convention                                        │
+    │ □ Description explains what it detects and why                               │
+    │ □ MITRE ATT&CK tactics/techniques mapped                                     │
+    │ □ Severity set appropriately                                                 │
+    │ □ Entity mapping configured (Account, Host, IP)                              │
+    │ □ Playbook attached (if automated response)                                  │
+    │ □ Alert grouping configured                                                  │
+    │ □ Suppression/tuning applied                                                 │
+    │ □ Documentation created for SOC                                              │
+    └───────────────────────────────────────────────────────────────────────────────┘
+             │
+             ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ STEP 6: MONITORING & REFINEMENT                                                     │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ TRACK:                                                                        │
+    │                                                                               │
+    │ • Alert volume (is it noisy?)                                                │
+    │ • True positive rate (>80% target)                                           │
+    │ • Time to triage (easy for analysts?)                                        │
+    │ • Detection gaps (what's it missing?)                                        │
+    │                                                                               │
+    │ ITERATE:                                                                      │
+    │ • Tune thresholds based on feedback                                          │
+    │ • Add exclusions for known-good                                              │
+    │ • Improve entity extraction                                                  │
+    │ • Add enrichment from threat intel                                           │
+    └───────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- WORKFLOW 3: Log Ingestion Validation -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-cyan-400">3.</span> Log Ingestion Validation
+                </h2>
+
+                <div class="workflow-box rounded-xl p-6">
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                        LOG INGESTION VALIDATION                                     │
+│                  (Ensuring data quality for detection)                              │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ DAILY HEALTH CHECKS:                                                          │
+    │                                                                               │
+    │ // 1. Volume Trending (catch sudden drops)                                   │
+    │ Usage                                                                        │
+    │ | where TimeGenerated > ago(7d)                                              │
+    │ | where DataType == "SecurityEvent"                                          │
+    │ | summarize DailyGB = sum(Quantity)/1000 by bin(TimeGenerated, 1d)          │
+    │ | render timechart                                                           │
+    │                                                                               │
+    │ // 2. Source Health (which devices stopped reporting?)                       │
+    │ Heartbeat                                                                    │
+    │ | summarize LastHeartbeat = max(TimeGenerated) by Computer                   │
+    │ | where LastHeartbeat < ago(24h)                                             │
+    │ | project Computer, LastHeartbeat, HoursAgo = datetime_diff('hour', now(),   │
+    │                                                            LastHeartbeat)    │
+    │                                                                               │
+    │ // 3. Ingestion Latency (how fresh is data?)                                 │
+    │ SecurityEvent                                                                │
+    │ | where TimeGenerated > ago(1h)                                              │
+    │ | extend IngestionDelay = datetime_diff('minute', ingestion_time(),         │
+    │                                         TimeGenerated)                       │
+    │ | summarize AvgDelay = avg(IngestionDelay), MaxDelay = max(IngestionDelay)  │
+    │                                                                               │
+    │ // 4. Schema Validation (required fields populated?)                         │
+    │ SigninLogs                                                                   │
+    │ | where TimeGenerated > ago(1h)                                              │
+    │ | summarize                                                                  │
+    │     MissingUser = countif(isempty(UserPrincipalName)),                       │
+    │     MissingIP = countif(isempty(IPAddress)),                                 │
+    │     TotalEvents = count()                                                    │
+    │ | extend UserCompleteness = (TotalEvents - MissingUser) * 100 / TotalEvents │
+    └───────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ AUTOMATED ALERTING:                                                           │
+    │                                                                               │
+    │ Create Analytics Rules for:                                                  │
+    │                                                                               │
+    │ • Log volume drops >50% from baseline                                        │
+    │ • Critical sources stop reporting                                            │
+    │ • Ingestion latency >30 minutes                                              │
+    │ • Field population drops below threshold                                     │
+    │                                                                               │
+    │ Alert → Security Engineering (not SOC) for triage                            │
+    └───────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- Summary Box -->
+            <div class="glass-card rounded-xl p-6 mt-8">
+                <h3 class="text-xl font-bold text-white mb-4"><i class="fas fa-key text-cyan-400 mr-2"></i>Key Interview Points</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                    <div>
+                        <p class="text-cyan-400 font-semibold mb-2">Your SIEM Experience:</p>
+                        <ul class="text-gray-400 space-y-1">
+                            <li>• RSA NetWitness → Sentinel migration</li>
+                            <li>• Correlation rule → KQL conversion</li>
+                            <li>• Log source onboarding</li>
+                            <li>• Detection engineering pipeline</li>
+                            <li>• Data quality validation</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-green-400 font-semibold mb-2">Key Skills Demonstrated:</p>
+                        <ul class="text-gray-400 space-y-1">
+                            <li>• KQL query development</li>
+                            <li>• ASIM normalization</li>
+                            <li>• Logic Apps automation</li>
+                            <li>• Workbook creation</li>
+                            <li>• Parallel operations (coexistence)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex justify-between mt-8">
+                <a href="workflows-incident.html" class="px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Incident Response
+                </a>
+                <a href="workflows-ot.html" class="px-6 py-3 bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/50 rounded-lg text-cyan-400 transition-colors">
+                    Next: OT/ICS Security<i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

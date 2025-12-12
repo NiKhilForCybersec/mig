@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Workflow Diagrams | Interview Visual Reference</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            min-height: 100vh;
+        }
+        
+        .glass-card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .workflow-box {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .workflow-phase {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .workflow-manual {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+        
+        .workflow-stop {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.2) 100%);
+            border: 2px solid rgba(239, 68, 68, 0.5);
+        }
+        
+        .arrow-down {
+            color: #10b981;
+        }
+        
+        .code-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .nav-link {
+            transition: all 0.2s ease;
+        }
+        
+        .nav-link:hover {
+            background: rgba(16, 185, 129, 0.1);
+            border-left-color: #10b981;
+        }
+        
+        .section-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(16, 185, 129, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(16, 185, 129, 0.5);
+        }
+    </style>
+</head>
+<body class="text-gray-100">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-gray-800">
+        <div class="max-w-full mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button id="sidebar-toggle" class="text-gray-400 hover:text-emerald-400 transition-colors lg:hidden">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-emerald-500 to-cyan-500 flex items-center justify-center">
+                            <i class="fas fa-project-diagram text-white"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-lg font-semibold text-white">Security Workflow Diagrams</h1>
+                            <p class="text-xs text-gray-400">Visual Reference for Interview Questions</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-medium border border-emerald-500/20">
+                        <i class="fas fa-stream mr-1"></i> 15+ Workflows
+                    </span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex pt-16">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 glass-card border-r border-gray-800 overflow-y-auto transform -translate-x-full lg:translate-x-0 transition-transform duration-300 z-40">
+            <div class="p-4">
+                <div class="mb-6">
+                    <a href="../index.html" class="flex items-center space-x-2 text-gray-400 hover:text-emerald-400 transition-colors mb-4">
+                        <i class="fas fa-arrow-left"></i>
+                        <span class="text-sm">Back to Portfolio</span>
+                    </a>
+                    <a href="linkedin-interview.html" class="flex items-center space-x-2 text-emerald-400 hover:text-emerald-300 transition-colors">
+                        <i class="fab fa-linkedin"></i>
+                        <span class="text-sm">Interview Questions</span>
+                    </a>
+                </div>
+
+                <div class="space-y-2">
+                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Workflow Sections</p>
+                    
+                    <a href="#vuln-mgmt" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-red-400 hover:text-white border-l-2 border-red-500 bg-red-500/10">
+                        <i class="fas fa-bug text-xs"></i>
+                        <span class="text-sm font-medium">Vulnerability Management</span>
+                    </a>
+                    
+                    <a href="#ngfw" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-shield-alt text-xs text-emerald-500"></i>
+                        <span class="text-sm">NGFW Deployment</span>
+                    </a>
+                    
+                    <a href="#ot-incident" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-industry text-xs text-orange-500"></i>
+                        <span class="text-sm">OT Incident Response</span>
+                    </a>
+                    
+                    <a href="#edr" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-desktop text-xs text-blue-500"></i>
+                        <span class="text-sm">EDR Telemetry</span>
+                    </a>
+                    
+                    <a href="#dlp" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-lock text-xs text-purple-500"></i>
+                        <span class="text-sm">DLP Migration</span>
+                    </a>
+                    
+                    <a href="#pam" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-key text-xs text-yellow-500"></i>
+                        <span class="text-sm">PAM Workflow</span>
+                    </a>
+                    
+                    <a href="#cicd" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-code-branch text-xs text-cyan-500"></i>
+                        <span class="text-sm">CI/CD Security</span>
+                    </a>
+                    
+                    <a href="#sentinel" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-satellite-dish text-xs text-blue-500"></i>
+                        <span class="text-sm">Sentinel Workflow</span>
+                    </a>
+                    
+                    <a href="#azure-workload" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fab fa-microsoft text-xs text-cyan-500"></i>
+                        <span class="text-sm">Azure Workload Security</span>
+                    </a>
+                    
+                    <a href="#incident-zscaler" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-search text-xs text-pink-500"></i>
+                        <span class="text-sm">Incident Investigation</span>
+                    </a>
+                    
+                    <a href="#arch-review" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-drafting-compass text-xs text-indigo-500"></i>
+                        <span class="text-sm">Architecture Review</span>
+                    </a>
+                    
+                    <a href="#automation" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-robot text-xs text-green-500"></i>
+                        <span class="text-sm">Security Automation</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 lg:ml-64 p-6">
+            <div class="max-w-6xl mx-auto">
+                
+                <!-- Header -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-white mb-2">Security Workflow Diagrams</h1>
+                    <p class="text-gray-400">Visual reference for interview answers — memorize the flows, not just the words</p>
+                    <div class="flex items-center space-x-4 mt-4">
+                        <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs border border-emerald-500/20">
+                            <i class="fas fa-check-circle mr-1"></i> Automated
+                        </span>
+                        <span class="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-400 text-xs border border-yellow-500/20">
+                            <i class="fas fa-user mr-1"></i> Manual
+                        </span>
+                        <span class="px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-xs border border-red-500/20">
+                            <i class="fas fa-stop-circle mr-1"></i> Automation Boundary
+                        </span>
+                    </div>
+                </div>
+
+                <!-- ============================================ -->
+                <!-- VULNERABILITY MANAGEMENT WORKFLOW -->
+                <!-- ============================================ -->
+                <section id="vuln-mgmt" class="mb-16">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center">
+                            <i class="fas fa-bug text-red-400"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white">Vulnerability Management Workflow</h2>
+                            <p class="text-gray-500 text-sm">Q15B: End-to-end prioritization and remediation</p>
+                        </div>
+                    </div>
+
+                    <div class="workflow-box rounded-xl p-6 text-sm overflow-x-auto">
+                        <pre class="text-gray-300 whitespace-pre">
+<span class="text-emerald-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-emerald-400 font-bold">                         PHASE 1: DATA COLLECTION (Automated)</span>
+<span class="text-emerald-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+        ┌─────────────────┐      ┌─────────────────┐      ┌─────────────────┐
+        │   QUALYS VMDR   │      │    MDE TVM      │      │  DEFENDER FOR   │
+        │                 │      │                 │      │     CLOUD       │
+        │ • Auth scans    │      │ • Continuous    │      │ • Cloud misconfig│
+        │ • Infrastructure│      │ • Endpoints     │      │ • Azure/AWS/GCP │
+        └────────┬────────┘      └────────┬────────┘      └────────┬────────┘
+                 │                        │                        │
+                 └────────────────────────┼────────────────────────┘
+                                          ▼
+<span class="text-emerald-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-emerald-400 font-bold">                         PHASE 2: SENTINEL INGESTION (Automated)</span>
+<span class="text-emerald-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+                    ┌─────────────────────────────────────────┐
+                    │         LOG ANALYTICS WORKSPACE          │
+                    │                                          │
+                    │  DeviceTvmSoftwareVulnerabilities       │
+                    │  SecurityRecommendation                  │
+                    │  DeviceTvmSecureConfigurationAssessment │
+                    └─────────────────────┬───────────────────┘
+                                          │
+                                          ▼
+<span class="text-emerald-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-emerald-400 font-bold">                         PHASE 3: ENRICHMENT & SCORING (Automated)</span>
+<span class="text-emerald-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+                    ┌─────────────────────────────────────────┐
+                    │              KQL ENRICHMENT              │
+                    │                                          │
+                    │  JOIN with:                              │
+                    │  ├── <span class="text-cyan-400">EPSS Watchlist</span> (Exploit Prediction) │
+                    │  ├── <span class="text-red-400">CISA KEV Watchlist</span> (Known Exploited)│
+                    │  ├── <span class="text-yellow-400">CMDB Watchlist</span> (Asset Criticality) │
+                    │  └── <span class="text-purple-400">Azure Tags</span> (Owner, Environment)    │
+                    │                                          │
+                    │  CALCULATE:                              │
+                    │  <span class="text-emerald-400">RiskScore = CVSS × Exploit × Criticality × Exposure</span>
+                    │                                          │
+                    │  OUTPUT → Priority Tier:                 │
+                    │  <span class="text-red-400">■ Critical (80-100): 24-48 hours</span>        │
+                    │  <span class="text-orange-400">■ High (60-79): 7 days</span>                  │
+                    │  <span class="text-yellow-400">■ Medium (40-59): 30 days</span>               │
+                    │  <span class="text-green-400">■ Low (0-39): 90 days</span>                   │
+                    └─────────────────────┬───────────────────┘
+                                          │
+                                          ▼
+<span class="text-emerald-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-emerald-400 font-bold">                         PHASE 4: AUTO-TAGGING (Logic App)</span>
+<span class="text-emerald-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+                    ┌─────────────────────────────────────────┐
+                    │            LOGIC APP ACTIONS             │
+                    │                                          │
+                    │  IF RiskScore >= 80:                     │
+                    │  ├── Tag MDE: <span class="text-red-400">"VulnCritical-YYYY-MM-DD"</span>  │
+                    │  ├── Tag Azure: <span class="text-red-400">"SecurityPriority:Crit"</span> │
+                    │  └── Add to Watchlist: <span class="text-red-400">"CriticalVulns"</span>  │
+                    │                                          │
+                    │  IF RiskScore 60-79:                     │
+                    │  ├── Tag MDE: <span class="text-orange-400">"VulnHigh-YYYY-MM-DD"</span>     │
+                    │  └── Tag Azure: <span class="text-orange-400">"SecurityPriority:High"</span> │
+                    └─────────────────────┬───────────────────┘
+                                          │
+                                          ▼
+<span class="text-emerald-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-emerald-400 font-bold">                         PHASE 5: REVIEW QUEUE (Logic App - Daily 6AM)</span>
+<span class="text-emerald-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+                    ┌─────────────────────────────────────────┐
+                    │           DAILY OUTPUTS                  │
+                    │                                          │
+                    │  1. <span class="text-cyan-400">CSV → SharePoint</span>                      │
+                    │     /Security/VulnMgmt/DailyReview/      │
+                    │                                          │
+                    │  2. <span class="text-purple-400">Teams Adaptive Card</span>                   │
+                    │     "🔴 12 Critical | 🟠 34 High"         │
+                    │                                          │
+                    │  3. <span class="text-blue-400">Email to Security Engineer</span>            │
+                    │     Subject: "Daily Vuln Review Queue"   │
+                    └─────────────────────┬───────────────────┘
+                                          │
+                                          ▼
+<span class="text-red-400 font-bold">╔═════════════════════════════════════════════════════════════════════════════╗
+║                                                                             ║
+║                      🛑 AUTOMATION STOPS HERE 🛑                            ║
+║                                                                             ║
+╚═════════════════════════════════════════════════════════════════════════════╝</span>
+                                          │
+                                          ▼
+<span class="text-yellow-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-yellow-400 font-bold">                         PHASE 6: HUMAN VALIDATION (Manual - Daily)</span>
+<span class="text-yellow-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+                    ┌─────────────────────────────────────────┐
+                    │      <span class="text-yellow-400">👤 SECURITY ENGINEER REVIEW</span>          │
+                    │                                          │
+                    │  For each finding in CSV:                │
+                    │                                          │
+                    │  □ <span class="text-white">FALSE POSITIVE CHECK</span>                   │
+                    │    └── Scanner error? Config mismatch?   │
+                    │                                          │
+                    │  □ <span class="text-white">COMPENSATING CONTROLS CHECK</span>           │
+                    │    └── WAF? Segmentation? EDR?           │
+                    │                                          │
+                    │  □ <span class="text-white">PATCH IMPACT ASSESSMENT</span>               │
+                    │    └── OT? Legacy? Production critical?  │
+                    │                                          │
+                    │  □ <span class="text-white">ASSET CRITICALITY VERIFICATION</span>        │
+                    │    └── CMDB accurate?                    │
+                    │                                          │
+                    │  □ <span class="text-white">EXCEPTION ELIGIBILITY</span>                 │
+                    │    └── Cannot patch? Document why        │
+                    └─────────────────────┬───────────────────┘
+                                          │
+                    ┌─────────────────────┼─────────────────────┐
+                    ▼                     ▼                     ▼
+           ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
+           │  <span class="text-green-400">REMEDIATE</span>   │      │  <span class="text-orange-400">EXCEPTION</span>   │      │  <span class="text-gray-400">FALSE POS</span>    │
+           └──────┬───────┘      └──────┬───────┘      └──────┬───────┘
+                  │                     │                     │
+                  ▼                     ▼                     ▼
+<span class="text-yellow-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-yellow-400 font-bold">                         PHASE 7: ACTION EXECUTION (Manual)</span>
+<span class="text-yellow-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+  ┌───────────────────┐   ┌───────────────────┐   ┌───────────────────┐
+  │    <span class="text-green-400">REMEDIATE</span>       │   │    <span class="text-orange-400">EXCEPTION</span>       │   │   <span class="text-gray-400">FALSE POSITIVE</span>   │
+  │                   │   │                   │   │                   │
+  │ • Create SNOW     │   │ • Submit form     │   │ • Mark in scanner │
+  │   ticket          │   │ • Document:       │   │ • Add exclusion   │
+  │ • Assign owner    │   │   - Reason        │   │ • Update KQL      │
+  │ • Set SLA         │   │   - Controls      │   │                   │
+  │ • Schedule patch  │   │   - Target date   │   │                   │
+  │                   │   │ • Get approval    │   │                   │
+  │ • If KEV:         │   │ • Track in        │   │                   │
+  │   Create Sentinel │   │   register        │   │                   │
+  │   Incident        │   │                   │   │                   │
+  └─────────┬─────────┘   └─────────┬─────────┘   └───────────────────┘
+            │                       │
+            └───────────┬───────────┘
+                        ▼
+<span class="text-yellow-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-yellow-400 font-bold">                         PHASE 8: REMEDIATION TRACKING (ServiceNow)</span>
+<span class="text-yellow-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+                    ┌─────────────────────────────────────────┐
+                    │           TICKET WORKFLOW                │
+                    │                                          │
+                    │  NEW → ASSIGNED → IN PROGRESS →          │
+                    │  PENDING CHANGE → RESOLVED               │
+                    │                                          │
+                    │  SLA Tracking:                           │
+                    │  <span class="text-red-400">• Critical: 24-48 hours</span>                 │
+                    │  <span class="text-orange-400">• High: 7 days</span>                          │
+                    │  <span class="text-yellow-400">• Medium: 30 days</span>                       │
+                    │  <span class="text-green-400">• Low: 90 days</span>                          │
+                    │                                          │
+                    │  Escalation:                             │
+                    │  SLA Breach → Manager → Director → CISO  │
+                    └─────────────────────┬───────────────────┘
+                                          │
+                                          ▼
+<span class="text-yellow-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-yellow-400 font-bold">                         PHASE 9: VERIFICATION & CLOSURE (Manual)</span>
+<span class="text-yellow-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+                    ┌─────────────────────────────────────────┐
+                    │      <span class="text-yellow-400">👤 VERIFICATION STEPS</span>                 │
+                    │                                          │
+                    │  □ Trigger rescan on affected asset      │
+                    │  □ Confirm CVE no longer detected        │
+                    │  □ Check for regression                  │
+                    │  □ Remove tags from MDE/Azure            │
+                    │  □ Remove from watchlist                 │
+                    │  □ Document remediation method           │
+                    │  □ Close ticket as "Verified Closed"     │
+                    └─────────────────────┬───────────────────┘
+                                          │
+                                          ▼
+<span class="text-emerald-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-emerald-400 font-bold">                         PHASE 10: REPORTING (Power BI + Manual)</span>
+<span class="text-emerald-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+                    ┌─────────────────────────────────────────┐
+                    │           METRICS DASHBOARD              │
+                    │                                          │
+                    │  ┌────────┐ ┌────────┐ ┌────────┐       │
+                    │  │Open    │ │MTTR    │ │SLA %   │       │
+                    │  │Vulns   │ │        │ │        │       │
+                    │  │<span class="text-red-400">🔴 12</span>   │ │Crit:36h│ │Crit:92%│       │
+                    │  │<span class="text-orange-400">🟠 34</span>   │ │High:5d │ │High:87%│       │
+                    │  │<span class="text-yellow-400">🟡 156</span>  │ │Med:22d │ │Med:78% │       │
+                    │  └────────┘ └────────┘ └────────┘       │
+                    │                                          │
+                    │  Reports:                                │
+                    │  • Weekly: Detailed CSV to Security Team │
+                    │  • Monthly: Executive PDF to Leadership  │
+                    │  • Quarterly: Exception review           │
+                    └─────────────────────────────────────────┘
+                        </pre>
+                    </div>
+                </section>
+
+                <!-- ============================================ -->
+                <!-- NGFW DEPLOYMENT WORKFLOW -->
+                <!-- ============================================ -->
+                <section id="ngfw" class="mb-16">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                            <i class="fas fa-shield-alt text-emerald-400"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white">NGFW Multi-Site Deployment</h2>
+                            <p class="text-gray-500 text-sm">Q1: Security engineering approach to firewall deployment</p>
+                        </div>
+                    </div>
+
+                    <div class="workflow-box rounded-xl p-6 text-sm overflow-x-auto">
+                        <pre class="text-gray-300 whitespace-pre">
+<span class="text-emerald-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-emerald-400 font-bold">                         NGFW DEPLOYMENT - SHARED RESPONSIBILITY</span>
+<span class="text-emerald-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           NETWORK ENGINEERING                                │
+│                         (Infrastructure Layer)                               │
+│                                                                              │
+│  • Physical deployment        • HA clustering         • Panorama/FMG admin  │
+│  • Routing tables             • NAT (SNAT/DNAT)       • VPN tunnels         │
+│  • Zone creation              • Interface config      • Failover testing    │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      │ Collaboration
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          <span class="text-emerald-400">SECURITY ENGINEERING (ME)</span>                         │
+│                            (Security Layer)                                  │
+│                                                                              │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐             │
+│  │ SECURITY        │  │ POLICY          │  │ OPERATIONAL     │             │
+│  │ PROFILES        │  │ GOVERNANCE      │  │ INTEGRATION     │             │
+│  │                 │  │                 │  │                 │             │
+│  │ • Threat Prev   │  │ • Quarterly     │  │ • SIEM logging  │             │
+│  │ • IPS signatures│  │   rule reviews  │  │ • Detection     │             │
+│  │ • URL filtering │  │ • Stale rules   │  │   rules         │             │
+│  │ • App Control   │  │ • Shadow rules  │  │ • Threat intel  │             │
+│  │ • SSL decrypt   │  │ • Any-any audit │  │   feeds         │             │
+│  │ • DNS security  │  │ • Documentation │  │ • Alerting      │             │
+│  │ • File blocking │  │ • Change mgmt   │  │ • Dashboards    │             │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+<span class="text-cyan-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-cyan-400 font-bold">                         MULTI-SITE STANDARDIZATION</span>
+<span class="text-cyan-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+                    ┌─────────────────────────────────────────┐
+                    │      SECURITY BASELINE TEMPLATES         │
+                    │                                          │
+                    │  ┌─────────────────────────────────────┐│
+                    │  │ THREAT PREVENTION PROFILE            ││
+                    │  │ • IPS: Critical + High signatures    ││
+                    │  │ • Anti-malware: Enabled              ││
+                    │  │ • Vuln protection: Block exploits    ││
+                    │  └─────────────────────────────────────┘│
+                    │  ┌─────────────────────────────────────┐│
+                    │  │ URL FILTERING PROFILE                ││
+                    │  │ • Block: Malware, Phishing, C2       ││
+                    │  │ • Log: All categories                ││
+                    │  └─────────────────────────────────────┘│
+                    │  ┌─────────────────────────────────────┐│
+                    │  │ APP CONTROL PROFILE                  ││
+                    │  │ • Block: High-risk apps              ││
+                    │  │ • Alert: Unknown apps                ││
+                    │  │ • Use App-ID not port-based rules    ││
+                    │  └─────────────────────────────────────┘│
+                    └─────────────────────────────────────────┘
+                                      │
+              ┌───────────────────────┼───────────────────────┐
+              ▼                       ▼                       ▼
+       ┌────────────┐          ┌────────────┐          ┌────────────┐
+       │ Toronto HQ │          │ Calgary    │          │ Vancouver  │
+       │ Site       │          │ Plant      │          │ DC         │
+       │            │          │            │          │            │
+       │ Same       │          │ Same       │          │ Same       │
+       │ Security   │          │ Security   │          │ Security   │
+       │ Baseline   │          │ Baseline   │          │ Baseline   │
+       └────────────┘          └────────────┘          └────────────┘
+
+<span class="text-orange-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-orange-400 font-bold">                         QUARTERLY FIREWALL REVIEW</span>
+<span class="text-orange-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+                    ┌─────────────────────────────────────────┐
+                    │         AUDIT CHECKLIST                  │
+                    │                                          │
+                    │  □ Overly permissive rules (any-any)    │
+                    │  □ Stale rules (0 hits in 90 days)      │
+                    │  □ Shadow rules (never match)           │
+                    │  □ Rules missing security profiles      │
+                    │  □ Logging disabled                     │
+                    │  □ SSL decryption gaps                  │
+                    │  □ Rule owner verification              │
+                    │  □ Business justification valid         │
+                    └─────────────────────────────────────────┘
+                        </pre>
+                    </div>
+                </section>
+
+                <!-- ============================================ -->
+                <!-- OT INCIDENT RESPONSE -->
+                <!-- ============================================ -->
+                <section id="ot-incident" class="mb-16">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
+                            <i class="fas fa-industry text-orange-400"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white">OT Incident Response Workflow</h2>
+                            <p class="text-gray-500 text-sm">Q3: Firewall change causes production downtime</p>
+                        </div>
+                    </div>
+
+                    <div class="workflow-box rounded-xl p-6 text-sm overflow-x-auto">
+                        <pre class="text-gray-300 whitespace-pre">
+<span class="text-red-400 font-bold">╔═════════════════════════════════════════════════════════════════════════════╗
+║                     🚨 OT PRODUCTION DOWNTIME DETECTED 🚨                    ║
+╚═════════════════════════════════════════════════════════════════════════════╝</span>
+                                      │
+                                      ▼
+<span class="text-yellow-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-yellow-400 font-bold">              STEP 1: IMMEDIATE COORDINATION (First 2 Minutes)</span>
+<span class="text-yellow-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+              ┌─────────────────────────────────────────────────────┐
+              │                                                     │
+              │   📞 CALL PLANT ENGINEER / OT OPERATIONS           │
+              │                                                     │
+              │   "We have a potential firewall-related outage.    │
+              │    What exactly is broken from production side?"    │
+              │                                                     │
+              └─────────────────────────────────────────────────────┘
+                                      │
+                         (Parallel)   │
+                                      ▼
+<span class="text-yellow-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-yellow-400 font-bold">              STEP 2: IDENTIFY THE CHANGE (Minutes 2-5)</span>
+<span class="text-yellow-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+              ┌─────────────────────────────────────────────────────┐
+              │              PULL RECENT CHANGE LOG                 │
+              │                                                     │
+              │   What was modified in last maintenance window?     │
+              └─────────────────────────────────────────────────────┘
+                                      │
+                    ┌─────────────────┴─────────────────┐
+                    ▼                                   ▼
+           ┌────────────────┐                 ┌────────────────┐
+           │ <span class="text-emerald-400">SECURITY CHANGE</span> │                 │ <span class="text-blue-400">NETWORK CHANGE</span>  │
+           │ (My domain)    │                 │ (Network team) │
+           │                │                 │                │
+           │ • Policy       │                 │ • Routing      │
+           │ • Security     │                 │ • NAT          │
+           │   profile      │                 │ • Zone config  │
+           │ • Threat prev  │                 │                │
+           └───────┬────────┘                 └────────────────┘
+                   │
+                   ▼
+<span class="text-yellow-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-yellow-400 font-bold">              STEP 3: LOG ANALYSIS</span>
+<span class="text-yellow-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+              ┌─────────────────────────────────────────────────────┐
+              │         FILTER LOGS BY AFFECTED SRC/DST             │
+              │                                                     │
+              │   □ <span class="text-red-400">Deny actions</span> - Traffic being blocked?         │
+              │   □ <span class="text-orange-400">Rule matching</span> - Hitting new policy?          │
+              │   □ <span class="text-yellow-400">Security profile blocks</span> - IPS/AV trigger?   │
+              │   □ <span class="text-cyan-400">App-ID classification</span> - Misidentified?       │
+              │   □ <span class="text-purple-400">SSL decryption issues</span> - Cert errors?        │
+              └─────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+<span class="text-yellow-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-yellow-400 font-bold">              STEP 4: SURGICAL ROLLBACK</span>
+<span class="text-yellow-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+              ┌─────────────────────────────────────────────────────┐
+              │                                                     │
+              │   📢 "Disabling rule X in 30 seconds.              │
+              │       Confirm when production resumes."             │
+              │                                                     │
+              │   OPTIONS:                                          │
+              │   ├── Disable specific rule                        │
+              │   ├── Revert security profile                      │
+              │   └── Set profile to "alert only" mode             │
+              │                                                     │
+              │   <span class="text-red-400">⚠ SURGICAL ROLLBACK - NOT WHOLESALE REVERT</span>       │
+              └─────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+<span class="text-emerald-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-emerald-400 font-bold">              STEP 5: POST-INCIDENT ANALYSIS</span>
+<span class="text-emerald-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+              ┌─────────────────────────────────────────────────────┐
+              │            ROOT CAUSE & PROCESS IMPROVEMENT         │
+              │                                                     │
+              │   □ Why did change cause impact?                   │
+              │   □ Testing gaps identified?                       │
+              │   □ Change windows for OT defined?                 │
+              │   □ OT engineer sign-off process?                  │
+              │   □ Documentation updated?                         │
+              └─────────────────────────────────────────────────────┘
+                        </pre>
+                    </div>
+                </section>
+
+                <!-- ============================================ -->
+                <!-- EDR TELEMETRY WORKFLOW -->
+                <!-- ============================================ -->
+                <section id="edr" class="mb-16">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                            <i class="fas fa-desktop text-blue-400"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white">EDR Telemetry Management</h2>
+                            <p class="text-gray-500 text-sm">Q4: Ensuring high-quality endpoint telemetry</p>
+                        </div>
+                    </div>
+
+                    <div class="workflow-box rounded-xl p-6 text-sm overflow-x-auto">
+                        <pre class="text-gray-300 whitespace-pre">
+<span class="text-blue-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-blue-400 font-bold">                         EDR COVERAGE & HEALTH MONITORING</span>
+<span class="text-blue-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+       ┌─────────────────┐      ┌─────────────────┐      ┌─────────────────┐
+       │  CMDB / ASSET   │      │   EDR CONSOLE   │      │    SENTINEL     │
+       │   INVENTORY     │      │   (MDE/HX)      │      │                 │
+       │                 │      │                 │      │                 │
+       │ Total: 500      │      │ Reporting: 450  │      │ Watchlist:      │
+       │ devices         │      │ devices         │      │ Expected assets │
+       └────────┬────────┘      └────────┬────────┘      └────────┬────────┘
+                │                        │                        │
+                └────────────────────────┼────────────────────────┘
+                                         │
+                                         ▼
+              ┌─────────────────────────────────────────────────────┐
+              │                 KQL COVERAGE QUERY                  │
+              │                                                     │
+              │  <span class="text-cyan-400">Watchlist_ExpectedAssets</span>                          │
+              │  | join kind=leftanti (DeviceInfo)                 │
+              │  | project DeviceName, LastSeen, Status            │
+              │                                                     │
+              │  OUTPUT: <span class="text-red-400">50 devices NOT in EDR</span>                    │
+              └─────────────────────────────────────────────────────┘
+                                         │
+                                         ▼
+<span class="text-emerald-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-emerald-400 font-bold">                         HEALTH MONITORING (Automated)</span>
+<span class="text-emerald-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+              ┌─────────────────────────────────────────────────────┐
+              │              SENTINEL ANALYTICS RULES               │
+              │                                                     │
+              │  RULE 1: Device Stopped Reporting (24hr)           │
+              │  ┌─────────────────────────────────────────────┐   │
+              │  │ DeviceInfo                                  │   │
+              │  │ | summarize LastSeen = max(Timestamp)       │   │
+              │  │ | where LastSeen < ago(24h)                 │   │
+              │  │ → <span class="text-yellow-400">Alert: "EDR Agent Not Reporting"</span>          │   │
+              │  └─────────────────────────────────────────────┘   │
+              │                                                     │
+              │  RULE 2: Unhealthy Agent Status                    │
+              │  ┌─────────────────────────────────────────────┐   │
+              │  │ DeviceInfo                                  │   │
+              │  │ | where SensorHealthState != "Active"       │   │
+              │  │ → <span class="text-orange-400">Alert: "EDR Agent Unhealthy"</span>             │   │
+              │  └─────────────────────────────────────────────┘   │
+              └─────────────────────────────────────────────────────┘
+                                         │
+                                         ▼
+<span class="text-yellow-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-yellow-400 font-bold">                         TROUBLESHOOTING (Manual)</span>
+<span class="text-yellow-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+              ┌─────────────────────────────────────────────────────┐
+              │         👤 UNHEALTHY AGENT INVESTIGATION            │
+              │                                                     │
+              │  1. Is device online? (Ping / Intune status)       │
+              │  2. RDP and check SENSE service status             │
+              │  3. Check diagnostic logs for errors               │
+              │  4. Verify connectivity to Microsoft endpoints     │
+              │  5. Check for AV conflicts (ESET, etc.)            │
+              │  6. Service restart or re-onboard if needed        │
+              └─────────────────────────────────────────────────────┘
+
+<span class="text-purple-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-purple-400 font-bold">                         14 HX CONSOLES AUTOMATION (Python)</span>
+<span class="text-purple-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+  ┌────────────┐                                           ┌────────────────┐
+  │   HX01     │──┐                                        │                │
+  ├────────────┤  │                                        │  PYTHON SCRIPT │
+  │   HX02     │──┤                                        │                │
+  ├────────────┤  │   ┌──────────────────────────────┐     │  • API calls   │
+  │   HX03     │──┼──▶│  Pull device lists from all  │────▶│  • Merge data  │
+  ├────────────┤  │   │  14 consoles via API         │     │  • VLOOKUP     │
+  │   ...      │──┤   └──────────────────────────────┘     │  • Report      │
+  ├────────────┤  │                                        │                │
+  │   HX14     │──┘                                        │  <span class="text-emerald-400">Still in use!</span> │
+  └────────────┘                                           └────────────────┘
+                        </pre>
+                    </div>
+                </section>
+
+                <!-- ============================================ -->
+                <!-- DLP MIGRATION WORKFLOW -->
+                <!-- ============================================ -->
+                <section id="dlp" class="mb-16">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                            <i class="fas fa-lock text-purple-400"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white">DLP Migration & Tuning Workflow</h2>
+                            <p class="text-gray-500 text-sm">Q5: Symantec to Microsoft Purview migration</p>
+                        </div>
+                    </div>
+
+                    <div class="workflow-box rounded-xl p-6 text-sm overflow-x-auto">
+                        <pre class="text-gray-300 whitespace-pre">
+<span class="text-purple-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+<span class="text-purple-400 font-bold">                         DLP MIGRATION LIFECYCLE</span>
+<span class="text-purple-400 font-bold">═══════════════════════════════════════════════════════════════════════════════</span>
+
+  <span class="text-gray-500">PHASE 1</span>         <span class="text-gray-500">PHASE 2</span>         <span class="text-gray-500">PHASE 3</span>         <span class="text-gray-500">PHASE 4</span>         <span class="text-emerald-400">PHASE 5</span>
+  ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐
+  │  AUDIT  │───▶│SIMULATE │───▶│  WARN   │───▶│  BLOCK  │───▶│ STABLE  │
+  │  MODE   │    │  MODE   │    │  MODE   │    │  MODE   │    │         │
+  └─────────┘    └─────────┘    └─────────┘    └─────────┘    └─────────┘
+       │              

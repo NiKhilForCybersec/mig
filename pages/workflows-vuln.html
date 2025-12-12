@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vulnerability Management Workflows</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); min-height: 100vh; }
+        .glass-card { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(239, 68, 68, 0.2); }
+        .workflow-box { background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(239, 68, 68, 0.3); font-family: 'Courier New', monospace; }
+        .phase-automated { border-left: 4px solid #22c55e; }
+        .phase-manual { border-left: 4px solid #f59e0b; }
+        .phase-stop { border-left: 4px solid #ef4444; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body class="text-gray-100">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center">
+                        <i class="fas fa-bug text-red-400"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-semibold text-white">Vulnerability Management Workflows</h1>
+                        <p class="text-xs text-gray-400">End-to-End Process Diagrams</p>
+                    </div>
+                </div>
+                <a href="workflows-index.html" class="text-gray-400 hover:text-red-400 transition-colors">
+                    <i class="fas fa-th-large mr-2"></i>All Workflows
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pt-24 pb-12 px-6">
+        <div class="max-w-6xl mx-auto space-y-12">
+
+            <!-- Legend -->
+            <div class="glass-card rounded-xl p-4">
+                <h3 class="text-white font-bold mb-3"><i class="fas fa-info-circle text-red-400 mr-2"></i>Legend</h3>
+                <div class="flex flex-wrap gap-6 text-sm">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 bg-green-500 rounded"></div>
+                        <span class="text-gray-300">Automated</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 bg-yellow-500 rounded"></div>
+                        <span class="text-gray-300">Manual (Human)</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 bg-red-500 rounded"></div>
+                        <span class="text-gray-300">Stop Point / Decision</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- WORKFLOW 1: End-to-End Vuln Management -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-red-400">1.</span> End-to-End Vulnerability Management
+                </h2>
+
+                <!-- Phase 1 -->
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-automated">
+                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-robot mr-2"></i>PHASE 1: DATA COLLECTION (Automated)</h3>
+                    <pre class="text-gray-300 text-sm">
+        ┌───────────────────┐     ┌───────────────────┐     ┌───────────────────┐
+        │   QUALYS VMDR     │     │    MDE TVM        │     │  DEFENDER FOR     │
+        │                   │     │                   │     │  CLOUD (CSPM)     │
+        │ • Authenticated   │     │ • Continuous      │     │                   │
+        │   scans           │     │   assessment      │     │ • Cloud misconfig │
+        │ • Infrastructure  │     │ • Endpoints       │     │ • Azure/AWS/GCP   │
+        │ • Servers         │     │ • Exposure score  │     │                   │
+        └─────────┬─────────┘     └─────────┬─────────┘     └─────────┬─────────┘
+                  │                         │                         │
+                  └─────────────────────────┼─────────────────────────┘
+                                            │
+                                            ▼
+                            ┌───────────────────────────────┐
+                            │    LOG ANALYTICS WORKSPACE    │
+                            │      (Microsoft Sentinel)     │
+                            └───────────────────────────────┘
+                    </pre>
+                </div>
+
+                <!-- Phase 2 -->
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-automated">
+                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-robot mr-2"></i>PHASE 2: ENRICHMENT & SCORING (Automated)</h3>
+                    <pre class="text-gray-300 text-sm">
+                            ┌───────────────────────────────────────────────────┐
+                            │                   KQL QUERY                       │
+                            │                                                   │
+                            │  JOIN with:                                       │
+                            │  ├── EPSS Watchlist (Exploit Prediction)         │
+                            │  ├── CISA KEV Watchlist (Known Exploited)        │
+                            │  ├── CMDB Watchlist (Asset Criticality)          │
+                            │  └── Azure Tags (Owner, Environment)             │
+                            │                                                   │
+                            │  CALCULATE:                                       │
+                            │  RiskScore = CVSS × ExploitMult × CriticalityMult│
+                            │                                                   │
+                            │  MULTIPLIERS:                                     │
+                            │  • CISA KEV = 2.0x                               │
+                            │  • EPSS > 0.5 = 1.5x                             │
+                            │  • Tier 1 Asset = 2.0x                           │
+                            │  • Internet-facing = 1.5x                        │
+                            └───────────────────────────────────────────────────┘
+                                                    │
+                                                    ▼
+                            ┌───────────────────────────────────────────────────┐
+                            │              PRIORITY TIERS                       │
+                            │                                                   │
+                            │  Critical (80-100): Remediate 24-48 hours        │
+                            │  High (60-79):      Remediate 7 days             │
+                            │  Medium (40-59):    Remediate 30 days            │
+                            │  Low (0-39):        Remediate 90 days            │
+                            └───────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <!-- Phase 3 -->
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-automated">
+                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-robot mr-2"></i>PHASE 3: AUTO-TAGGING (Logic App)</h3>
+                    <pre class="text-gray-300 text-sm">
+                            ┌───────────────────────────────────────────────────┐
+                            │                  LOGIC APP                        │
+                            │                                                   │
+                            │  IF RiskScore >= 80 (Critical):                  │
+                            │  ├── Tag MDE Device: "VulnCritical-YYYY-MM-DD"   │
+                            │  ├── Tag Azure Resource: "SecurityPriority:Crit" │
+                            │  └── Add to Watchlist: "CriticalVulnAssets"      │
+                            │                                                   │
+                            │  IF RiskScore 60-79 (High):                      │
+                            │  ├── Tag MDE Device: "VulnHigh-YYYY-MM-DD"       │
+                            │  └── Tag Azure Resource: "SecurityPriority:High" │
+                            └───────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <!-- Phase 4 -->
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-automated">
+                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-robot mr-2"></i>PHASE 4: GENERATE REVIEW QUEUE (Logic App)</h3>
+                    <pre class="text-gray-300 text-sm">
+                            ┌───────────────────────────────────────────────────┐
+                            │             DAILY OUTPUTS (6:00 AM)               │
+                            │                                                   │
+                            │  1. CSV Report → SharePoint                       │
+                            │     /Security/VulnMgmt/DailyReview/YYYY-MM-DD.csv│
+                            │                                                   │
+                            │     Columns: DeviceName, CVE, CVSS, RiskScore,   │
+                            │     PriorityTier, EPSS, InKEV, AssetCriticality, │
+                            │     Owner, ExposureLevel, RecommendedAction      │
+                            │                                                   │
+                            │  2. Teams Notification (Adaptive Card):          │
+                            │     "🔴 12 Critical | 🟠 34 High awaiting review" │
+                            │     [View CSV] [Open Dashboard]                   │
+                            │                                                   │
+                            │  3. Email to Security Engineer:                  │
+                            │     Subject: "Daily Vuln Review Queue"           │
+                            │     Attachment: CSV                               │
+                            └───────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <!-- STOP -->
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-stop bg-red-500/10">
+                    <h3 class="text-red-400 font-bold text-center text-xl">
+                        <i class="fas fa-hand-paper mr-2"></i>🛑 AUTOMATION STOPS HERE
+                    </h3>
+                    <p class="text-center text-gray-400 mt-2">Human validation required before any remediation actions</p>
+                </div>
+
+                <!-- Phase 5 -->
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-manual">
+                    <h3 class="text-yellow-400 font-bold mb-4"><i class="fas fa-user mr-2"></i>PHASE 5: HUMAN VALIDATION (Manual - Daily)</h3>
+                    <pre class="text-gray-300 text-sm">
+                            ┌───────────────────────────────────────────────────┐
+                            │         👤 SECURITY ENGINEER REVIEW               │
+                            │                                                   │
+                            │  For each Critical/High finding in CSV:          │
+                            │                                                   │
+                            │  □ FALSE POSITIVE CHECK                          │
+                            │    ├── Is scanner correct?                       │
+                            │    ├── Does CVE apply to our config?             │
+                            │    └── Mark as FP if confirmed                   │
+                            │                                                   │
+                            │  □ COMPENSATING CONTROLS CHECK                   │
+                            │    ├── Already mitigated by WAF?                 │
+                            │    ├── Network segmentation blocking path?       │
+                            │    └── Document controls if risk reduced         │
+                            │                                                   │
+                            │  □ PATCH IMPACT ASSESSMENT                       │
+                            │    ├── OT/ICS system? (vendor approval needed)   │
+                            │    ├── Legacy system? (may break app)            │
+                            │    └── Critical workload? (needs change window)  │
+                            │                                                   │
+                            │  □ EXCEPTION ELIGIBILITY                         │
+                            │    ├── Cannot patch? Document why                │
+                            │    └── Route to exception process if needed      │
+                            └───────────────────────────────────────────────────┘
+                                                    │
+                                                    ▼
+                            ┌───────────────────────────────────────────────────┐
+                            │              OUTPUT: DISPOSITION                  │
+                            │                                                   │
+                            │  • REMEDIATE → Open ticket                       │
+                            │  • MITIGATED → Document compensating control     │
+                            │  • FALSE POSITIVE → Mark and exclude             │
+                            │  • EXCEPTION → Route to risk governance          │
+                            └───────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <!-- Phase 6 -->
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-manual">
+                    <h3 class="text-yellow-400 font-bold mb-4"><i class="fas fa-user mr-2"></i>PHASE 6: ACTION EXECUTION (Manual)</h3>
+                    <pre class="text-gray-300 text-sm">
+        ┌─────────────────────┐   ┌─────────────────────┐   ┌─────────────────────┐
+        │     REMEDIATE       │   │     EXCEPTION       │   │   FALSE POSITIVE    │
+        │                     │   │                     │   │                     │
+        │ • Create ServiceNow │   │ • Submit exception  │   │ • Mark in scanner   │
+        │   ticket with:      │   │   request form      │   │ • Add to exclusion  │
+        │   - CVE details     │   │ • Document:         │   │   list              │
+        │   - Risk score      │   │   - Business reason │   │ • Update KQL query  │
+        │   - Asset owner     │   │   - Compensating    │   │   to filter         │
+        │   - SLA deadline    │   │     controls        │   │                     │
+        │   - Remediation     │   │   - Target date     │   │                     │
+        │     steps           │   │   - Risk accepted   │   │                     │
+        │                     │   │     by (name)       │   │                     │
+        │ • Assign to system  │   │                     │   │                     │
+        │   owner             │   │ • Route to risk     │   │                     │
+        │                     │   │   governance        │   │                     │
+        │ • For CISA KEV:     │   │                     │   │                     │
+        │   Create Sentinel   │   │ • Track in register │   │                     │
+        │   Incident for SOC  │   │                     │   │                     │
+        └─────────────────────┘   └─────────────────────┘   └─────────────────────┘
+                    </pre>
+                </div>
+
+                <!-- Phase 7 -->
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-automated">
+                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-robot mr-2"></i>PHASE 7: REMEDIATION TRACKING (ServiceNow - Automated SLAs)</h3>
+                    <pre class="text-gray-300 text-sm">
+                            ┌───────────────────────────────────────────────────┐
+                            │              SERVICENOW WORKFLOW                  │
+                            │                                                   │
+                            │  Ticket Status Flow:                             │
+                            │  NEW → ASSIGNED → IN PROGRESS → PENDING → RESOLVED│
+                            │                                                   │
+                            │  SLA Tracking (Auto-Escalation):                 │
+                            │  • Critical: 24-48 hours                         │
+                            │  • High: 7 days                                  │
+                            │  • Medium: 30 days                               │
+                            │  • Low: 90 days                                  │
+                            │                                                   │
+                            │  Escalation Path:                                │
+                            │  SLA Breach → Manager → 24hr → Director → CISO  │
+                            └───────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <!-- Phase 8 -->
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-manual">
+                    <h3 class="text-yellow-400 font-bold mb-4"><i class="fas fa-user mr-2"></i>PHASE 8: VERIFICATION & CLOSURE (Manual)</h3>
+                    <pre class="text-gray-300 text-sm">
+                            ┌───────────────────────────────────────────────────┐
+                            │      👤 SECURITY ENGINEER VERIFICATION            │
+                            │                                                   │
+                            │  After system owner marks ticket "Resolved":     │
+                            │                                                   │
+                            │  □ RESCAN VERIFICATION                           │
+                            │    ├── Trigger targeted scan on asset            │
+                            │    ├── Confirm CVE no longer detected            │
+                            │    └── Check for regression (new vulns?)         │
+                            │                                                   │
+                            │  □ TAG REMOVAL                                   │
+                            │    ├── Remove "VulnCritical" tag                 │
+                            │    ├── Remove from Sentinel watchlist            │
+                            │    └── Update Azure resource tags                │
+                            │                                                   │
+                            │  □ DOCUMENTATION                                 │
+                            │    ├── Record remediation date                   │
+                            │    ├── Note actual remediation method            │
+                            │    └── Calculate time-to-remediate               │
+                            │                                                   │
+                            │  □ CLOSE TICKET                                  │
+                            │    └── Mark as "Verified Closed" in ServiceNow   │
+                            └───────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <!-- Phase 9 -->
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-automated">
+                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-robot mr-2"></i>PHASE 9: REPORTING & METRICS (Power BI - Automated)</h3>
+                    <pre class="text-gray-300 text-sm">
+                            ┌───────────────────────────────────────────────────┐
+                            │              POWER BI DASHBOARD                   │
+                            │                                                   │
+                            │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ │
+                            │  │ Open Vulns  │ │ MTTR        │ │ SLA         │ │
+                            │  │ by Severity │ │ (Mean Time  │ │ Compliance  │ │
+                            │  │             │ │ to Remediate│ │     %       │ │
+                            │  │ 🔴 12 Crit  │ │             │ │             │ │
+                            │  │ 🟠 34 High  │ │ Crit: 36hr  │ │ Crit: 92%   │ │
+                            │  │ 🟡 156 Med  │ │ High: 5.2d  │ │ High: 87%   │ │
+                            │  │ 🟢 412 Low  │ │ Med: 22d    │ │ Med: 78%    │ │
+                            │  └─────────────┘ └─────────────┘ └─────────────┘ │
+                            │                                                   │
+                            │  STAKEHOLDER REPORTS:                            │
+                            │  • Weekly: Detailed CSV to Security Team         │
+                            │  • Monthly: Executive PDF to Leadership          │
+                            │  • Quarterly: Exception review to Risk Committee │
+                            └───────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- WORKFLOW 2: Risk Scoring Formula -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-red-400">2.</span> Risk-Based Prioritization Formula
+                </h2>
+
+                <div class="workflow-box rounded-xl p-6">
+                    <pre class="text-gray-300 text-sm">
+                    ┌─────────────────────────────────────────────────────────────────┐
+                    │                    RISK SCORE CALCULATION                       │
+                    └─────────────────────────────────────────────────────────────────┘
+
+                    RiskScore = BaseScore × ExploitMult × CriticalityMult × ExposureMult
+
+                    ┌─────────────────────────────────────────────────────────────────┐
+                    │ BASE SCORE (from CVSS)                                          │
+                    │                                                                 │
+                    │   CVSS 9.0-10.0  →  Base = 90-100                              │
+                    │   CVSS 7.0-8.9   →  Base = 70-89                               │
+                    │   CVSS 4.0-6.9   →  Base = 40-69                               │
+                    │   CVSS 0.1-3.9   →  Base = 10-39                               │
+                    └─────────────────────────────────────────────────────────────────┘
+                                                    │
+                                                    ▼
+                    ┌─────────────────────────────────────────────────────────────────┐
+                    │ EXPLOIT MULTIPLIER                                              │
+                    │                                                                 │
+                    │   In CISA KEV (actively exploited)    →  × 2.0                 │
+                    │   EPSS > 0.7 (high exploit prob)      →  × 1.75                │
+                    │   EPSS 0.5-0.7 (medium exploit prob)  →  × 1.5                 │
+                    │   EPSS 0.3-0.5 (some exploit prob)    →  × 1.25                │
+                    │   EPSS < 0.3 (low exploit prob)       →  × 1.0                 │
+                    └─────────────────────────────────────────────────────────────────┘
+                                                    │
+                                                    ▼
+                    ┌─────────────────────────────────────────────────────────────────┐
+                    │ CRITICALITY MULTIPLIER (from CMDB/Azure Tags)                   │
+                    │                                                                 │
+                    │   Tier 1 (Mission Critical)           →  × 2.0                 │
+                    │   Tier 2 (Business Critical)          →  × 1.5                 │
+                    │   Tier 3 (Standard)                   →  × 1.0                 │
+                    │   Tier 4 (Development/Test)           →  × 0.75                │
+                    └─────────────────────────────────────────────────────────────────┘
+                                                    │
+                                                    ▼
+                    ┌─────────────────────────────────────────────────────────────────┐
+                    │ EXPOSURE MULTIPLIER                                             │
+                    │                                                                 │
+                    │   Internet-facing (public IP/DMZ)     →  × 1.5                 │
+                    │   Partner-accessible                  →  × 1.25                │
+                    │   Internal-only                       →  × 1.0                 │
+                    │   Isolated/Air-gapped                 →  × 0.75                │
+                    └─────────────────────────────────────────────────────────────────┘
+                                                    │
+                                                    ▼
+                    ┌─────────────────────────────────────────────────────────────────┐
+                    │ EXAMPLE CALCULATION                                             │
+                    │                                                                 │
+                    │   CVE-2024-1234 on Production SQL Server                       │
+                    │                                                                 │
+                    │   • CVSS: 9.8 (Critical)           → Base = 98                 │
+                    │   • In CISA KEV                    → × 2.0                     │
+                    │   • Tier 1 Asset (Database)        → × 2.0                     │
+                    │   • Internal-only                  → × 1.0                     │
+                    │                                                                 │
+                    │   RiskScore = 98 × 2.0 × 2.0 × 1.0 = 392 (capped at 100)      │
+                    │   Priority: CRITICAL (24-48 hour SLA)                          │
+                    └─────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- WORKFLOW 3: Exception Management -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-red-400">3.</span> Exception Management Process
+                </h2>
+
+                <div class="workflow-box rounded-xl p-6 phase-manual">
+                    <pre class="text-gray-300 text-sm">
+                    ┌─────────────────────────────────────────────────────────────────┐
+                    │              EXCEPTION REQUEST WORKFLOW                         │
+                    └─────────────────────────────────────────────────────────────────┘
+
+        ┌───────────────────┐
+        │ Vulnerability     │
+        │ Cannot Be Patched │
+        └─────────┬─────────┘
+                  │
+                  ▼
+        ┌───────────────────────────────────────────────────────────────────────────┐
+        │                    EXCEPTION REQUEST FORM                                 │
+        │                                                                           │
+        │  Required Fields:                                                         │
+        │  ├── CVE ID and affected asset(s)                                        │
+        │  ├── Business justification (why can't patch?)                           │
+        │  │   • Vendor doesn't support patched version                            │
+        │  │   • Application breaks with patch                                     │
+        │  │   • No maintenance window available                                   │
+        │  │   • OT system requires vendor approval                                │
+        │  ├── Compensating controls in place                                      │
+        │  │   • Network segmentation                                              │
+        │  │   • WAF rules                                                         │
+        │  │   • Enhanced monitoring/detection                                     │
+        │  │   • Disabled vulnerable service                                       │
+        │  ├── Target remediation date (cannot be indefinite)                      │
+        │  └── Business owner name (who accepts risk)                              │
+        └───────────────────────────────────────────────────────────────────────────┘
+                  │
+                  ▼
+        ┌───────────────────────────────────────────────────────────────────────────┐
+        │              👤 SECURITY ENGINEER REVIEW                                  │
+        │                                                                           │
+        │  Validate:                                                               │
+        │  □ Are compensating controls adequate?                                   │
+        │  □ Is residual risk acceptable?                                          │
+        │  □ Is target date reasonable?                                            │
+        │  □ Are there alternative mitigations?                                    │
+        └───────────────────────────────────────────────────────────────────────────┘
+                  │
+          ┌───────┴───────┐
+          ▼               ▼
+    ┌───────────┐   ┌───────────┐
+    │ APPROVED  │   │ REJECTED  │
+    └─────┬─────┘   └─────┬─────┘
+          │               │
+          ▼               ▼
+    ┌───────────────┐   ┌───────────────────────────────┐
+    │ Add to        │   │ Return to requestor with:     │
+    │ Exception     │   │ • Reason for rejection        │
+    │ Register      │   │ • Required additional controls│
+    │               │   │ • Alternative solutions       │
+    │ • Track in    │   └───────────────────────────────┘
+    │   ServiceNow  │
+    │ • Set review  │
+    │   date (90d)  │
+    │ • Document    │
+    │   risk owner  │
+    └───────┬───────┘
+            │
+            ▼
+    ┌───────────────────────────────────────────────────────────────────────────┐
+    │                    QUARTERLY EXCEPTION REVIEW                             │
+    │                                                                           │
+    │  For each exception in register:                                         │
+    │  □ Is exception still valid? (circumstances changed?)                    │
+    │  □ Is target date approaching? (push for remediation)                    │
+    │  □ Are compensating controls still effective?                            │
+    │  □ Has risk profile changed? (new exploits?)                             │
+    │  □ Renew or close exception                                              │
+    │                                                                           │
+    │  Report to Risk Committee:                                               │
+    │  • Total active exceptions                                               │
+    │  • Aging exceptions (>6 months)                                          │
+    │  • Risk exposure from exceptions                                         │
+    └───────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- WORKFLOW 4: Tools Comparison -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-red-400">4.</span> Qualys VMDR vs MDE TVM Integration
+                </h2>
+
+                <div class="workflow-box rounded-xl p-6">
+                    <pre class="text-gray-300 text-sm">
+        ┌─────────────────────────────────────────────────────────────────────────────┐
+        │                        DUAL-TOOL ARCHITECTURE                               │
+        └─────────────────────────────────────────────────────────────────────────────┘
+
+        ┌───────────────────────────────┐     ┌───────────────────────────────┐
+        │         QUALYS VMDR           │     │          MDE TVM              │
+        │                               │     │                               │
+        │  BEST FOR:                    │     │  BEST FOR:                    │
+        │  • Infrastructure (servers)   │     │  • Endpoints (workstations)   │
+        │  • Network devices            │     │  • Continuous assessment      │
+        │  • Compliance reporting       │     │  • Configuration weaknesses   │
+        │  • Authenticated scans        │     │  • Exposure scoring           │
+        │  • Audit evidence             │     │  • Tight MDE integration      │
+        │                               │     │                               │
+        │  SCAN TYPE:                   │     │  SCAN TYPE:                   │
+        │  Scheduled (weekly/monthly)   │     │  Continuous (real-time)       │
+        │                               │     │                               │
+        │  OUTPUT:                      │     │  OUTPUT:                      │
+        │  QID-based findings           │     │  Exposure score + CVEs        │
+        │  Detailed CVE mapping         │     │  Security recommendations     │
+        └───────────────┬───────────────┘     └───────────────┬───────────────┘
+                        │                                     │
+                        │      ┌─────────────────────┐        │
+                        └─────▶│  MICROSOFT SENTINEL │◀───────┘
+                               │                     │
+                               │  • Unified view     │
+                               │  • Enrichment       │
+                               │  • Correlation      │
+                               │  • Risk scoring     │
+                               │  • Alerting         │
+                               └──────────┬──────────┘
+                                          │
+                                          ▼
+                               ┌─────────────────────┐
+                               │    LOGIC APPS       │
+                               │                     │
+                               │  • Auto-tagging     │
+                               │  • CSV generation   │
+                               │  • Notifications    │
+                               └──────────┬──────────┘
+                                          │
+                                          ▼
+                               ┌─────────────────────┐
+                               │  👤 HUMAN VALIDATION │
+                               └─────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- Summary Box -->
+            <div class="glass-card rounded-xl p-6 mt-8">
+                <h3 class="text-xl font-bold text-white mb-4"><i class="fas fa-key text-red-400 mr-2"></i>Key Takeaways for Interviews</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                    <div>
+                        <p class="text-red-400 font-semibold mb-2">What's Automated:</p>
+                        <ul class="text-gray-400 space-y-1">
+                            <li>• Data collection (Qualys, TVM)</li>
+                            <li>• Enrichment & scoring (KQL)</li>
+                            <li>• Tagging high-risk assets (Logic Apps)</li>
+                            <li>• CSV/report generation</li>
+                            <li>• SLA tracking & escalation</li>
+                            <li>• Dashboards & metrics</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-yellow-400 font-semibold mb-2">What's Manual (Human Judgment):</p>
+                        <ul class="text-gray-400 space-y-1">
+                            <li>• False positive validation</li>
+                            <li>• Compensating control assessment</li>
+                            <li>• Patch impact analysis</li>
+                            <li>• Ticket creation & assignment</li>
+                            <li>• Exception decisions</li>
+                            <li>• Verification & closure</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex justify-between mt-8">
+                <a href="workflows-index.html" class="px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 transition-colors">
+                    <i class="fas fa-th-large mr-2"></i>All Workflows
+                </a>
+                <a href="workflows-ngfw.html" class="px-6 py-3 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 rounded-lg text-red-400 transition-colors">
+                    Next: NGFW Workflows<i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

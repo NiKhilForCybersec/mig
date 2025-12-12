@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plants & Distribution Centers - Coca-Cola</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); min-height: 100vh; }
+        .glass-card { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(34, 197, 94, 0.2); }
+        .diagram-box { background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(34, 197, 94, 0.3); font-family: 'Courier New', monospace; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body class="text-gray-100">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
+                        <i class="fas fa-industry text-green-400"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-semibold text-white">Part 3: Plants & Distribution</h1>
+                        <p class="text-xs text-gray-400">Manufacturing & Edge Infrastructure</p>
+                    </div>
+                </div>
+                <a href="coke-arch-index.html" class="text-gray-400 hover:text-green-400 transition-colors">
+                    <i class="fas fa-th-large mr-2"></i>Architecture Index
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pt-24 pb-12 px-6">
+        <div class="max-w-6xl mx-auto space-y-8">
+
+            <!-- Overview -->
+            <div class="glass-card rounded-xl p-6">
+                <h2 class="text-2xl font-bold text-white mb-4">
+                    <i class="fas fa-industry text-green-400 mr-2"></i>Manufacturing & Distribution Infrastructure
+                </h2>
+                <p class="text-gray-400 mb-4">
+                    Coca-Cola Bottling operates 50+ manufacturing plants and 200+ distribution centers across North America. 
+                    Each plant has OT (Operational Technology) networks running bottling lines, while distribution centers 
+                    focus on warehouse management and logistics. All locations connect to Azure via SD-WAN or MPLS.
+                </p>
+                <div class="grid grid-cols-4 gap-4">
+                    <div class="bg-green-500/10 border border-green-500/30 rounded-lg p-3 text-center">
+                        <div class="text-2xl font-bold text-green-400">50+</div>
+                        <div class="text-xs text-gray-400">Plants</div>
+                    </div>
+                    <div class="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3 text-center">
+                        <div class="text-2xl font-bold text-blue-400">200+</div>
+                        <div class="text-xs text-gray-400">Distribution Ctrs</div>
+                    </div>
+                    <div class="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3 text-center">
+                        <div class="text-2xl font-bold text-purple-400">1000+</div>
+                        <div class="text-xs text-gray-400">Bottling Lines</div>
+                    </div>
+                    <div class="bg-orange-500/10 border border-orange-500/30 rounded-lg p-3 text-center">
+                        <div class="text-2xl font-bold text-orange-400">5000+</div>
+                        <div class="text-xs text-gray-400">OT Devices</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plant Architecture -->
+            <div class="diagram-box rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4">Manufacturing Plant Architecture (Purdue Model)</h3>
+                <pre class="text-gray-300 text-xs">
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                         COCA-COLA MANUFACTURING PLANT ARCHITECTURE                                      │
+│                              (Example: Atlanta Bottling Plant)                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ LEVEL 5: ENTERPRISE NETWORK (IT Domain)                                                                 │
+│═════════════════════════════════════════════════════════════════════════════════════════════════════════│
+│                                                                                                         │
+│    ┌───────────────┐  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐                          │
+│    │ Office PCs    │  │ Printers      │  │ WiFi          │  │ VoIP Phones   │                          │
+│    │ (MDE Agent)   │  │               │  │ (WPA3-Ent)    │  │               │                          │
+│    └───────────────┘  └───────────────┘  └───────────────┘  └───────────────┘                          │
+│                                                                                                         │
+│    Network: 10.50.1.0/24                                                                               │
+│    Security: Full IT stack (MDE, Purview DLP, Conditional Access)                                      │
+│                                                                                                         │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                              │
+                                              │ 🔥 PALO ALTO PA-220
+                                              │    (IT Firewall)
+                                              ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ LEVEL 4: SITE BUSINESS PLANNING                                                                         │
+│═════════════════════════════════════════════════════════════════════════════════════════════════════════│
+│                                                                                                         │
+│    ┌───────────────┐  ┌───────────────┐  ┌───────────────┐                                             │
+│    │ SAP Client    │  │ Production    │  │ Quality       │                                             │
+│    │ (ERP Access)  │  │ Scheduling    │  │ Management    │                                             │
+│    └───────────────┘  └───────────────┘  └───────────────┘                                             │
+│                                                                                                         │
+│    Network: 10.50.2.0/24                                                                               │
+│    Security: IT + OT awareness                                                                          │
+│                                                                                                         │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                              │
+                                              │ 🔥 PALO ALTO PA-220
+                                              │    (IT-OT Boundary)
+                                              ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ LEVEL 3.5: INDUSTRIAL DMZ (iDMZ) - CRITICAL SECURITY ZONE                                               │
+│═════════════════════════════════════════════════════════════════════════════════════════════════════════│
+│                                                                                                         │
+│    ┌─────────────────────────────────────────────────────────────────────────────────────────────────┐ │
+│    │                           DUAL-HOMED SYSTEMS (ONE NIC IN EACH ZONE)                             │ │
+│    │                                                                                                 │ │
+│    │  ┌───────────────────┐  ┌───────────────────┐  ┌───────────────────┐  ┌───────────────────┐    │ │
+│    │  │ HISTORIAN         │  │ JUMP SERVER       │  │ PATCH SERVER      │  │ CLAROTY           │    │ │
+│    │  │ (OSIsoft PI)      │  │ (Remote Access)   │  │ (WSUS for OT)     │  │ (OT Security)     │    │ │
+│    │  │                   │  │                   │  │                   │  │                   │    │ │
+│    │  │ IT NIC: 10.50.3.x │  │ IT NIC: 10.50.3.x │  │ IT NIC: 10.50.3.x │  │ IT NIC: 10.50.3.x │    │ │
+│    │  │ OT NIC: 10.50.10.x│  │ OT NIC: 10.50.10.x│  │ OT NIC: 10.50.10.x│  │ OT NIC: 10.50.10.x│    │ │
+│    │  │                   │  │                   │  │                   │  │                   │    │ │
+│    │  │ Pulls data from   │  │ MFA required      │  │ Monthly patch     │  │ Passive sensor    │    │ │
+│    │  │ OT, pushes to     │  │ Session recorded  │  │ windows           │  │ on OT network     │    │ │
+│    │  │ enterprise        │  │ PAM integration   │  │                   │  │ Alerts to Sentinel│    │ │
+│    │  └───────────────────┘  └───────────────────┘  └───────────────────┘  └───────────────────┘    │ │
+│    └─────────────────────────────────────────────────────────────────────────────────────────────────┘ │
+│                                                                                                         │
+│    Network: 10.50.3.0/24 (IT side) + 10.50.10.0/24 (OT side)                                           │
+│    Security: Strict ACLs, session recording, no direct IT↔OT traffic                                   │
+│                                                                                                         │
+│    ⚠️  NO DIRECT ROUTING BETWEEN IT (L4/5) AND OT (L0-3)!                                               │
+│                                                                                                         │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                              │
+                                              │ 🔥 PALO ALTO PA-220
+                                              │    (OT Firewall)
+                                              │    OT-Safe Profile
+                                              ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ LEVEL 3: SITE MANUFACTURING OPERATIONS                                                                  │
+│═════════════════════════════════════════════════════════════════════════════════════════════════════════│
+│                                                                                                         │
+│    ┌───────────────────┐  ┌───────────────────┐  ┌───────────────────┐                                 │
+│    │ LOCAL SCADA       │  │ MES SERVER        │  │ ENGINEERING       │                                 │
+│    │ SERVER            │  │ (Manufacturing    │  │ WORKSTATION       │                                 │
+│    │                   │  │  Execution)       │  │ (Siemens TIA)     │                                 │
+│    │ Rockwell FTView   │  │                   │  │                   │                                 │
+│    └───────────────────┘  └───────────────────┘  └───────────────────┘                                 │
+│                                                                                                         │
+│    Network: 10.50.11.0/24                                                                              │
+│    Security: OT-focused, minimal changes, vendor coordination required                                 │
+│                                                                                                         │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                              │
+                                              │ Industrial Switch
+                                              │ (Cisco IE series)
+                                              ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ LEVEL 2: AREA SUPERVISORY CONTROL                                                                       │
+│═════════════════════════════════════════════════════════════════════════════════════════════════════════│
+│                                                                                                         │
+│    ┌─────────────────────────────────────────────────────────────────────────────────────────────────┐ │
+│    │                              BOTTLING LINE CELLS                                                │ │
+│    │                                                                                                 │ │
+│    │  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐                    │ │
+│    │  │ LINE 1 HMI    │  │ LINE 2 HMI    │  │ LINE 3 HMI    │  │ LINE N HMI    │                    │ │
+│    │  │ (Operator     │  │               │  │               │  │               │                    │ │
+│    │  │  Interface)   │  │ 2L Bottles    │  │ Cans          │  │ Fountain      │                    │ │
+│    │  │ 500ml Bottles │  │               │  │               │  │ Syrup         │                    │ │
+│    │  └───────────────┘  └───────────────┘  └───────────────┘  └───────────────┘                    │ │
+│    │                                                                                                 │ │
+│    └─────────────────────────────────────────────────────────────────────────────────────────────────┘ │
+│                                                                                                         │
+│    Network: 10.50.12.0/24 (per cell isolation via VLANs)                                               │
+│    Protocols: EtherNet/IP, Modbus TCP                                                                  │
+│                                                                                                         │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                              │
+                                              ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ LEVEL 1: BASIC CONTROL                                                                                  │
+│═════════════════════════════════════════════════════════════════════════════════════════════════════════│
+│                                                                                                         │
+│    ┌─────────────────────────────────────────────────────────────────────────────────────────────────┐ │
+│    │                              PLC / CONTROLLER LAYER                                             │ │
+│    │                                                                                                 │ │
+│    │  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐                    │ │
+│    │  │ Allen-Bradley │  │ Siemens       │  │ Allen-Bradley │  │ Safety PLC    │                    │ │
+│    │  │ ControlLogix  │  │ S7-1500       │  │ CompactLogix  │  │ (GuardLogix)  │                    │ │
+│    │  │               │  │               │  │               │  │               │                    │ │
+│    │  │ Filling       │  │ Mixing        │  │ Packaging     │  │ E-Stop, Light │                    │ │
+│    │  │ Control       │  │ Control       │  │ Control       │  │ Curtains      │                    │ │
+│    │  └───────────────┘  └───────────────┘  └───────────────┘  └───────────────┘                    │ │
+│    │                                                                                                 │ │
+│    └─────────────────────────────────────────────────────────────────────────────────────────────────┘ │
+│                                                                                                         │
+│    Network: 10.50.13.0/24 (isolated per machine cell)                                                  │
+│    Security: Physical access control, vendor-managed firmware                                          │
+│                                                                                                         │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                              │
+                                              ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ LEVEL 0: PROCESS (Physical Equipment)                                                                   │
+│═════════════════════════════════════════════════════════════════════════════════════════════════════════│
+│                                                                                                         │
+│    ┌─────────────────────────────────────────────────────────────────────────────────────────────────┐ │
+│    │                                                                                                 │ │
+│    │  🌡️ Temp Sensors    💧 Flow Meters    ⚙️ Motors/Drives    🔧 Valves/Actuators                    │ │
+│    │                                                                                                 │ │
+│    │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐                  │ │
+│    │  │ Filler  │  │ Capper  │  │ Labeler │  │ Palletizer│ │ Conveyor│  │ CIP     │                  │ │
+│    │  │ Machine │  │ Machine │  │ Machine │  │         │  │         │  │ System  │                  │ │
+│    │  └─────────┘  └─────────┘  └─────────┘  └─────────┘  └─────────┘  └─────────┘                  │ │
+│    │                                                                                                 │ │
+│    └─────────────────────────────────────────────────────────────────────────────────────────────────┘ │
+│                                                                                                         │
+│    Security: Physical safety systems (independent of network)                                          │
+│                                                                                                         │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                </pre>
+            </div>
+
+            <!-- Distribution Center -->
+            <div class="diagram-box rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4">Distribution Center Architecture</h3>
+                <pre class="text-gray-300 text-xs">
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                         COCA-COLA DISTRIBUTION CENTER ARCHITECTURE                                      │
+│                              (Simpler than Plant - No OT Manufacturing)                                 │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+                                    ┌─────────────────────────────────┐
+                                    │        SD-WAN / MPLS            │
+                                    │     (To Azure Hub VNet)         │
+                                    └───────────────┬─────────────────┘
+                                                    │
+                                    ┌───────────────┴─────────────────┐
+                                    │      EDGE FIREWALL              │
+                                    │      Palo Alto PA-220           │
+                                    │      or Fortinet 60F            │
+                                    │                                 │
+                                    │  Zones:                         │
+                                    │  • Untrust (WAN)                │
+                                    │  • Corporate (IT)               │
+                                    │  • Warehouse (WMS)              │
+                                    │  • Guest (WiFi)                 │
+                                    └───────────────┬─────────────────┘
+                                                    │
+                    ┌───────────────────────────────┼───────────────────────────────┐
+                    │                               │                               │
+                    ▼                               ▼                               ▼
+    ┌───────────────────────────┐   ┌───────────────────────────┐   ┌───────────────────────────┐
+    │ CORPORATE VLAN            │   │ WAREHOUSE VLAN            │   │ GUEST VLAN                │
+    │ 10.60.1.0/24              │   │ 10.60.2.0/24              │   │ 10.60.100.0/24            │
+    │                           │   │                           │   │                           │
+    │ ┌─────────────────────┐   │   │ ┌─────────────────────┐   │   │ ┌─────────────────────┐   │
+    │ │ Office PCs          │   │   │ │ WMS Server          │   │   │ │ Visitor WiFi        │   │
+    │ │ (MDE, Intune)       │   │   │ │ (Warehouse Mgmt)    │   │   │ │ (Internet only)     │   │
+    │ └─────────────────────┘   │   │ └─────────────────────┘   │   │ └─────────────────────┘   │
+    │                           │   │                           │   │                           │
+    │ ┌─────────────────────┐   │   │ ┌─────────────────────┐   │   │ No access to corp        │
+    │ │ Printers            │   │   │ │ Handheld Scanners   │   │   │ network                  │
+    │ │                     │   │   │ │ (Zebra, Honeywell)  │   │   │                           │
+    │ └─────────────────────┘   │   │ └─────────────────────┘   │   │                           │
+    │                           │   │                           │   │                           │
+    │ ┌─────────────────────┐   │   │ ┌─────────────────────┐   │   │                           │
+    │ │ VoIP Phones         │   │   │ │ Forklift Terminals  │   │   │                           │
+    │ │                     │   │   │ │                     │   │   │                           │
+    │ └─────────────────────┘   │   │ └─────────────────────┘   │   │                           │
+    │                           │   │                           │   │                           │
+    │                           │   │ ┌─────────────────────┐   │   │                           │
+    │                           │   │ │ Label Printers      │   │   │                           │
+    │                           │   │ │ (Shipping labels)   │   │   │                           │
+    │                           │   │ └─────────────────────┘   │   │                           │
+    └───────────────────────────┘   └───────────────────────────┘   └───────────────────────────┘
+
+
+    SECURITY STACK AT DISTRIBUTION CENTER:
+    ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │                                                                                                   │
+    │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐              │
+    │  │ Edge Firewall   │  │ MDE on PCs      │  │ Intune MDM      │  │ Azure AD Join   │              │
+    │  │ (PA-220/FG-60F) │  │ (Endpoint       │  │ (Device Mgmt)   │  │ (Identity)      │              │
+    │  │                 │  │  Protection)    │  │                 │  │                 │              │
+    │  │ • URL Filter    │  │ • AV/EDR        │  │ • Compliance    │  │ • MFA           │              │
+    │  │ • IPS           │  │ • XDR           │  │ • App Control   │  │ • Cond Access   │              │
+    │  │ • App-ID        │  │ • Telemetry     │  │ • Updates       │  │ • SSO           │              │
+    │  └─────────────────┘  └─────────────────┘  └─────────────────┘  └─────────────────┘              │
+    │                                                                                                   │
+    │  Logs → SD-WAN → Azure Hub → Log Analytics → Sentinel                                           │
+    │                                                                                                   │
+    └───────────────────────────────────────────────────────────────────────────────────────────────────┘
+                </pre>
+            </div>
+
+            <!-- Connectivity -->
+            <div class="diagram-box rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4">Site-to-Cloud Connectivity (SD-WAN Architecture)</h3>
+                <pre class="text-gray-300 text-xs">
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                         SD-WAN CONNECTIVITY ARCHITECTURE                                                │
+│                         (Connecting 250+ Sites to Azure)                                                │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+                                    ┌─────────────────────────────────────────────────────────────┐
+                                    │                     AZURE HUB VNET                          │
+                                    │                                                             │
+                                    │  ┌─────────────────┐      ┌─────────────────┐              │
+                                    │  │ ExpressRoute    │      │ VPN Gateway     │              │
+                                    │  │ Gateway         │      │ (Backup)        │              │
+                                    │  └────────┬────────┘      └────────┬────────┘              │
+                                    │           │                        │                        │
+                                    └───────────┼────────────────────────┼────────────────────────┘
+                                                │                        │
+                ┌───────────────────────────────┼────────────────────────┼───────────────────────────────┐
+                │                               │                        │                               │
+                │                    ┌──────────┴────────────────────────┴──────────┐                   │
+                │                    │            SD-WAN FABRIC                      │                   │
+                │                    │         (Prisma SD-WAN / Viptela)            │                   │
+                │                    │                                               │                   │
+                │                    │  ┌─────────────────────────────────────────┐ │                   │
+                │                    │  │ SD-WAN Controllers (Azure-hosted)       │ │                   │
+                │                    │  │ • Centralized policy                    │ │                   │
+                │                    │  │ • Application-aware routing             │ │                   │
+                │                    │  │ • Zero-touch provisioning               │ │                   │
+                │                    │  └─────────────────────────────────────────┘ │                   │
+                │                    └──────────────────────────────────────────────┘                   │
+                │                                        │                                               │
+                │              ┌──────────────────────────┼──────────────────────────┐                   │
+                │              │                          │                          │                   │
+                │              ▼                          ▼                          ▼                   │
+                │  ┌───────────────────────┐  ┌───────────────────────┐  ┌───────────────────────┐      │
+                │  │ REGIONAL HUB          │  │ REGIONAL HUB          │  │ REGIONAL HUB          │      │
+                │  │ (East - Atlanta DC)   │  │ (Central - Dallas DC) │  │ (West - Phoenix DC)   │      │
+                │  │                       │  │                       │  │                       │      │
+                │  │ ExpressRoute to Azure │  │ ExpressRoute to Azure │  │ ExpressRoute to Azure │      │
+                │  │ PA-3260 Firewall Pair │  │ PA-3260 Firewall Pair │  │ PA-3260 Firewall Pair │      │
+                │  └───────────┬───────────┘  └───────────┬───────────┘  └───────────┬───────────┘      │
+                │              │                          │                          │                   │
+                │    ┌─────────┴─────────┐      ┌─────────┴─────────┐      ┌─────────┴─────────┐        │
+                │    │                   │      │                   │      │                   │        │
+                │    ▼                   ▼      ▼                   ▼      ▼                   ▼        │
+                │ ┌──────┐  ┌──────┐  ┌──────┐  ┌──────┐  ┌──────┐  ┌──────┐  ┌──────┐  ┌──────┐       │
+                │ │Plant1│  │DC 1 │  │DC 2 │  │Plant2│  │DC 3 │  │DC 4 │  │Plant3│  │DC 5 │       │
+                │ │      │  │     │  │     │  │      │  │     │  │     │  │      │  │     │       │
+                │ │SD-WAN│  │SD-WAN│ │SD-WAN│  │SD-WAN│  │SD-WAN│ │SD-WAN│  │SD-WAN│  │SD-WAN│      │
+                │ │Edge  │  │Edge │  │Edge │  │Edge  │  │Edge │  │Edge │  │Edge  │  │Edge │       │
+                │ └──────┘  └──────┘  └──────┘  └──────┘  └──────┘  └──────┘  └──────┘  └──────┘       │
+                │                                                                                       │
+                └───────────────────────────────────────────────────────────────────────────────────────┘
+
+
+    SD-WAN TRANSPORT OPTIONS:
+    ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │                                                                                                   │
+    │  LARGE SITES (Plants, Large DCs):                                                                │
+    │  ┌─────────────────────────────────────────────────────────────────────────────────────────────┐ │
+    │  │ Primary:   MPLS (Dedicated, SLA-backed, 100Mbps - 1Gbps)                                    │ │
+    │  │ Secondary: Broadband Internet (Failover, DIA)                                               │ │
+    │  │ Tertiary:  LTE/5G (Emergency backup)                                                        │ │
+    │  └─────────────────────────────────────────────────────────────────────────────────────────────┘ │
+    │                                                                                                   │
+    │  SMALL SITES (Small DCs, Sales Offices):                                                         │
+    │  ┌─────────────────────────────────────────────────────────────────────────────────────────────┐ │
+    │  │ Primary:   Business Broadband (50-200 Mbps)                                                 │ │
+    │  │ Secondary: LTE/5G (Failover)                                                                │ │
+    │  └─────────────────────────────────────────────────────────────────────────────────────────────┘ │
+    │                                                                                                   │
+    │  APPLICATION STEERING:                                                                           │
+    │  ┌─────────────────────────────────────────────────────────────────────────────────────────────┐ │
+    │  │ • SAP/ERP: MPLS only (Critical)                                                             │ │
+    │  │ • Microsoft 365: Direct Internet breakout (Performance)                                     │ │
+    │  │ • General Web: Broadband preferred (Cost)                                                   │ │
+    │  │ • Voice/Video: MPLS preferred, QoS marking                                                  │ │
+    │  └─────────────────────────────────────────────────────────────────────────────────────────────┘ │
+    └───────────────────────────────────────────────────────────────────────────────────────────────────┘
+                </pre>
+            </div>
+
+            <!-- Summary Box -->
+            <div class="glass-card rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4"><i class="fas fa-key text-green-400 mr-2"></i>Key Interview Points</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                    <div>
+                        <p class="text-green-400 font-semibold mb-2">Plant Architecture:</p>
+                        <ul class="text-gray-400 space-y-1">
+                            <li>• Full Purdue Model implementation</li>
+                            <li>• 3 firewall pairs per plant (IT, iDMZ, OT)</li>
+                            <li>• Claroty for OT visibility</li>
+                            <li>• Historian in iDMZ for data transfer</li>
+                            <li>• Jump server for remote access</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-blue-400 font-semibold mb-2">Distribution Center:</p>
+                        <ul class="text-gray-400 space-y-1">
+                            <li>• Simpler architecture (no OT)</li>
+                            <li>• Single edge firewall</li>
+                            <li>• Full IT security stack (MDE, Intune)</li>
+                            <li>• SD-WAN with dual transport</li>
+                            <li>• WMS system on isolated VLAN</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex justify-between mt-8">
+                <a href="coke-arch-network.html" class="px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Part 2: Firewalls & LBs
+                </a>
+                <a href="coke-arch-security.html" class="px-6 py-3 bg-green-500/20 hover:bg-green-500/30 border border-green-500/50 rounded-lg text-green-400 transition-colors">
+                    Centralized Security<i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

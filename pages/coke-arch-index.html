@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coca-Cola Enterprise Architecture</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); min-height: 100vh; }
+        .glass-card { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(220, 38, 38, 0.2); }
+        .coke-gradient { background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); }
+        .arch-card { background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(220, 38, 38, 0.3); transition: all 0.3s ease; }
+        .arch-card:hover { border-color: rgba(220, 38, 38, 0.6); transform: translateY(-4px); }
+    </style>
+</head>
+<body class="text-gray-100">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg coke-gradient flex items-center justify-center">
+                        <i class="fas fa-building text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-semibold text-white">Coca-Cola Enterprise Architecture</h1>
+                        <p class="text-xs text-gray-400">Global Bottling Company Infrastructure</p>
+                    </div>
+                </div>
+                <a href="workflows-index.html" class="text-gray-400 hover:text-red-400 transition-colors">
+                    <i class="fas fa-project-diagram mr-2"></i>Workflows
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pt-24 pb-12 px-6">
+        <div class="max-w-6xl mx-auto">
+
+            <!-- Hero Section -->
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center space-x-3 mb-6">
+                    <div class="w-16 h-16 rounded-2xl coke-gradient flex items-center justify-center">
+                        <i class="fas fa-network-wired text-3xl text-white"></i>
+                    </div>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Coca-Cola Bottling Company</h1>
+                <h2 class="text-2xl text-red-400 mb-4">Enterprise Security Architecture</h2>
+                <p class="text-gray-400 max-w-3xl mx-auto">
+                    Comprehensive architecture documentation covering Azure cloud infrastructure, 
+                    manufacturing plants, distribution centers, and centralized security operations.
+                </p>
+            </div>
+
+            <!-- Architecture Overview Diagram -->
+            <div class="glass-card rounded-xl p-6 mb-8">
+                <h3 class="text-xl font-bold text-white mb-4 text-center">
+                    <i class="fas fa-sitemap text-red-400 mr-2"></i>High-Level Architecture Overview
+                </h3>
+                <div class="bg-black/40 rounded-lg p-4 font-mono text-xs overflow-x-auto">
+                    <pre class="text-gray-300">
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                         COCA-COLA BOTTLING COMPANY - ENTERPRISE ARCHITECTURE                        │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+    │                                    ☁️  AZURE CLOUD                                          │
+    │  ┌────────────────────────────────────────────────────────────────────────────────────────┐ │
+    │  │                              HUB VNET (Centralized Security)                           │ │
+    │  │   ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐                  │ │
+    │  │   │ Azure       │  │ Palo Alto   │  │ Microsoft   │  │ Defender    │                  │ │
+    │  │   │ Firewall    │  │ NVA Pair    │  │ Sentinel    │  │ for Cloud   │                  │ │
+    │  │   │ (HA Pair)   │  │ (Active/    │  │ (SIEM)      │  │ (CSPM)      │                  │ │
+    │  │   │             │  │  Passive)   │  │             │  │             │                  │ │
+    │  │   └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘                  │ │
+    │  └────────────────────────────────────────────────────────────────────────────────────────┘ │
+    │                    │                          │                          │                  │
+    │         ┌──────────┴──────────┐    ┌─────────┴─────────┐    ┌──────────┴──────────┐       │
+    │         ▼                     ▼    ▼                   ▼    ▼                     ▼       │
+    │  ┌─────────────┐       ┌─────────────┐          ┌─────────────┐       ┌─────────────┐    │
+    │  │ SPOKE:      │       │ SPOKE:      │          │ SPOKE:      │       │ SPOKE:      │    │
+    │  │ Production  │       │ SAP/ERP     │          │ Data &      │       │ DevTest     │    │
+    │  │ Workloads   │       │ Systems     │          │ Analytics   │       │ Environment │    │
+    │  └─────────────┘       └─────────────┘          └─────────────┘       └─────────────┘    │
+    └─────────────────────────────────────────────────────────────────────────────────────────────┘
+                                              │
+                                              │ ExpressRoute / VPN
+                                              ▼
+    ┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+    │                              🏭 MANUFACTURING & DISTRIBUTION                                │
+    │                                                                                             │
+    │   ┌───────────────────┐   ┌───────────────────┐   ┌───────────────────┐                    │
+    │   │ PLANT 1           │   │ PLANT 2           │   │ PLANT N...        │                    │
+    │   │ (Atlanta)         │   │ (Dallas)          │   │ (50+ Plants)      │                    │
+    │   │ ┌───────────────┐ │   │ ┌───────────────┐ │   │ ┌───────────────┐ │                    │
+    │   │ │ OT Network    │ │   │ │ OT Network    │ │   │ │ OT Network    │ │                    │
+    │   │ │ (Purdue L0-3) │ │   │ │ (Purdue L0-3) │ │   │ │ (Purdue L0-3) │ │                    │
+    │   │ └───────────────┘ │   │ └───────────────┘ │   │ └───────────────┘ │                    │
+    │   └───────────────────┘   └───────────────────┘   └───────────────────┘                    │
+    │                                                                                             │
+    │   ┌───────────────────┐   ┌───────────────────┐   ┌───────────────────┐                    │
+    │   │ DISTRIBUTION 1    │   │ DISTRIBUTION 2    │   │ DISTRIBUTION N... │                    │
+    │   │ (Warehouse)       │   │ (Warehouse)       │   │ (200+ Centers)    │                    │
+    │   └───────────────────┘   └───────────────────┘   └───────────────────┘                    │
+    └─────────────────────────────────────────────────────────────────────────────────────────────┘
+                                              │
+                                              │ All Logs & Telemetry
+                                              ▼
+    ┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+    │                           🛡️ CENTRALIZED SECURITY OPERATIONS                               │
+    │                                                                                             │
+    │   ┌─────────────────────────────────────────────────────────────────────────────────────┐  │
+    │   │                          MICROSOFT SENTINEL (Global SIEM)                           │  │
+    │   │   • Cloud logs (Azure, M365, AWS)                                                   │  │
+    │   │   • On-prem logs (AD, Firewalls, Servers)                                          │  │
+    │   │   • OT/ICS logs (via Claroty/iDMZ)                                                 │  │
+    │   │   • EDR telemetry (MDE from all endpoints)                                         │  │
+    │   └─────────────────────────────────────────────────────────────────────────────────────┘  │
+    │                                          │                                                  │
+    │                              ┌───────────┴───────────┐                                     │
+    │                              ▼                       ▼                                     │
+    │                       ┌─────────────┐         ┌─────────────┐                              │
+    │                       │ Global SOC  │         │ Regional    │                              │
+    │                       │ (24/7)      │         │ SOC Teams   │                              │
+    │                       └─────────────┘         └─────────────┘                              │
+    └─────────────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </div>
+
+            <!-- Three Parts Navigation -->
+            <h2 class="text-2xl font-bold text-white mb-6 text-center">Architecture Deep Dives</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                
+                <!-- Part 1: Azure Hub-Spoke -->
+                <a href="coke-arch-azure.html" class="arch-card rounded-xl p-6 block">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                            <i class="fas fa-cloud text-blue-400 text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-blue-400 font-semibold">PART 1</span>
+                            <h3 class="text-lg font-bold text-white">Azure Hub & Spoke</h3>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Detailed Azure architecture with hub VNet, spoke workloads, VNet peering, and shared services.
+                    </p>
+                    <ul class="text-xs text-gray-500 space-y-1">
+                        <li><i class="fas fa-check text-blue-400 mr-2"></i>Hub VNet Architecture</li>
+                        <li><i class="fas fa-check text-blue-400 mr-2"></i>Spoke VNet Design</li>
+                        <li><i class="fas fa-check text-blue-400 mr-2"></i>VNet Peering & Routing</li>
+                        <li><i class="fas fa-check text-blue-400 mr-2"></i>ExpressRoute Connectivity</li>
+                    </ul>
+                    <div class="mt-4 text-blue-400 text-sm font-medium">
+                        View Details <i class="fas fa-arrow-right ml-1"></i>
+                    </div>
+                </a>
+
+                <!-- Part 2: Firewalls & Load Balancers -->
+                <a href="coke-arch-network.html" class="arch-card rounded-xl p-6 block">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-12 h-12 rounded-lg bg-orange-500/20 flex items-center justify-center">
+                            <i class="fas fa-shield-alt text-orange-400 text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-orange-400 font-semibold">PART 2</span>
+                            <h3 class="text-lg font-bold text-white">Firewalls & Load Balancers</h3>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Network security appliances, firewall pairs, WAF, and load balancer architecture in Azure.
+                    </p>
+                    <ul class="text-xs text-gray-500 space-y-1">
+                        <li><i class="fas fa-check text-orange-400 mr-2"></i>Azure Firewall HA Pair</li>
+                        <li><i class="fas fa-check text-orange-400 mr-2"></i>Palo Alto NVA Deployment</li>
+                        <li><i class="fas fa-check text-orange-400 mr-2"></i>Application Gateway + WAF</li>
+                        <li><i class="fas fa-check text-orange-400 mr-2"></i>Internal/External Load Balancers</li>
+                    </ul>
+                    <div class="mt-4 text-orange-400 text-sm font-medium">
+                        View Details <i class="fas fa-arrow-right ml-1"></i>
+                    </div>
+                </a>
+
+                <!-- Part 3: Plants & Distribution -->
+                <a href="coke-arch-plants.html" class="arch-card rounded-xl p-6 block">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center">
+                            <i class="fas fa-industry text-green-400 text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-green-400 font-semibold">PART 3</span>
+                            <h3 class="text-lg font-bold text-white">Plants & Distribution</h3>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Manufacturing plants, distribution centers, OT networks, and edge connectivity.
+                    </p>
+                    <ul class="text-xs text-gray-500 space-y-1">
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>Plant OT Architecture</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>Distribution Center Design</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>SD-WAN Connectivity</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>Edge Security Stack</li>
+                    </ul>
+                    <div class="mt-4 text-green-400 text-sm font-medium">
+                        View Details <i class="fas fa-arrow-right ml-1"></i>
+                    </div>
+                </a>
+
+            </div>
+
+            <!-- Centralized Security Section -->
+            <a href="coke-arch-security.html" class="arch-card rounded-xl p-6 block mb-8">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-14 h-14 rounded-lg bg-red-500/20 flex items-center justify-center">
+                            <i class="fas fa-lock text-red-400 text-2xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-red-400 font-semibold">CENTRALIZED SECURITY</span>
+                            <h3 class="text-xl font-bold text-white">Unified Security Operations</h3>
+                            <p class="text-gray-400 text-sm mt-1">
+                                How all components connect to Microsoft Sentinel for centralized visibility, detection, and response.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="text-red-400 text-lg">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+                <div class="grid grid-cols-4 gap-4 mt-6">
+                    <div class="text-center p-3 bg-black/20 rounded-lg">
+                        <div class="text-2xl font-bold text-cyan-400">500K+</div>
+                        <div class="text-xs text-gray-500">EPS Ingestion</div>
+                    </div>
+                    <div class="text-center p-3 bg-black/20 rounded-lg">
+                        <div class="text-2xl font-bold text-green-400">250+</div>
+                        <div class="text-xs text-gray-500">Locations</div>
+                    </div>
+                    <div class="text-center p-3 bg-black/20 rounded-lg">
+                        <div class="text-2xl font-bold text-purple-400">50K+</div>
+                        <div class="text-xs text-gray-500">Endpoints</div>
+                    </div>
+                    <div class="text-center p-3 bg-black/20 rounded-lg">
+                        <div class="text-2xl font-bold text-yellow-400">24/7</div>
+                        <div class="text-xs text-gray-500">SOC Coverage</div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Scale Information -->
+            <div class="glass-card rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4">
+                    <i class="fas fa-chart-bar text-red-400 mr-2"></i>Coca-Cola Bottling Scale
+                </h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-black/20 rounded-lg p-4 text-center">
+                        <i class="fas fa-industry text-green-400 text-2xl mb-2"></i>
+                        <div class="text-2xl font-bold text-white">50+</div>
+                        <div class="text-xs text-gray-400">Manufacturing Plants</div>
+                    </div>
+                    <div class="bg-black/20 rounded-lg p-4 text-center">
+                        <i class="fas fa-warehouse text-blue-400 text-2xl mb-2"></i>
+                        <div class="text-2xl font-bold text-white">200+</div>
+                        <div class="text-xs text-gray-400">Distribution Centers</div>
+                    </div>
+                    <div class="bg-black/20 rounded-lg p-4 text-center">
+                        <i class="fas fa-users text-purple-400 text-2xl mb-2"></i>
+                        <div class="text-2xl font-bold text-white">80K+</div>
+                        <div class="text-xs text-gray-400">Employees</div>
+                    </div>
+                    <div class="bg-black/20 rounded-lg p-4 text-center">
+                        <i class="fas fa-globe-americas text-cyan-400 text-2xl mb-2"></i>
+                        <div class="text-2xl font-bold text-white">14</div>
+                        <div class="text-xs text-gray-400">Countries/Territories</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Back Navigation -->
+            <div class="flex justify-center mt-8">
+                <a href="linkedin-interview.html" class="px-6 py-3 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 rounded-lg text-red-400 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Interview Prep
+                </a>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

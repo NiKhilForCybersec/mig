@@ -20,8 +20,14 @@ const sidebarHTML = `
         <a href="{{BASE}}pages/linkedin-interview.html" class="flex items-center gap-2 px-3 py-2 mb-2 text-sm text-blue-400 rounded-lg bg-blue-500/10 border border-blue-500/30 hover:bg-blue-500/20">
             <span>💼</span><span class="font-medium">LinkedIn AI Sim</span>
         </a>
-        <a href="{{BASE}}pages/coca-cola-interview.html" class="flex items-center gap-2 px-3 py-2 mb-4 text-sm text-red-400 rounded-lg bg-red-500/10 border border-red-500/30 hover:bg-red-500/20">
+        <a href="{{BASE}}pages/coca-cola-interview.html" class="flex items-center gap-2 px-3 py-2 mb-2 text-sm text-red-400 rounded-lg bg-red-500/10 border border-red-500/30 hover:bg-red-500/20">
             <span>🥤</span><span class="font-medium">Coca-Cola Prep</span>
+        </a>
+        <a href="{{BASE}}pages/workflows-index.html" class="flex items-center gap-2 px-3 py-2 mb-2 text-sm text-green-400 rounded-lg bg-green-500/10 border border-green-500/30 hover:bg-green-500/20">
+            <span>📊</span><span class="font-medium">Visual Workflows</span>
+        </a>
+        <a href="{{BASE}}pages/coke-arch-index.html" class="flex items-center gap-2 px-3 py-2 mb-4 text-sm text-orange-400 rounded-lg bg-orange-500/10 border border-orange-500/30 hover:bg-orange-500/20">
+            <span>🏢</span><span class="font-medium">Coke Architecture</span>
         </a>
         <nav class="space-y-1" id="sidebar-nav">
             <div class="nav-section">

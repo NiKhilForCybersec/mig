@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDR & Endpoint Workflows</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); min-height: 100vh; }
+        .glass-card { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(59, 130, 246, 0.2); }
+        .workflow-box { background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(59, 130, 246, 0.3); font-family: 'Courier New', monospace; }
+        .phase-automated { border-left: 4px solid #22c55e; }
+        .phase-manual { border-left: 4px solid #f59e0b; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body class="text-gray-100">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                        <i class="fas fa-laptop-medical text-blue-400"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-semibold text-white">EDR & Endpoint Workflows</h1>
+                        <p class="text-xs text-gray-400">Deployment, Monitoring & Telemetry</p>
+                    </div>
+                </div>
+                <a href="workflows-index.html" class="text-gray-400 hover:text-blue-400 transition-colors">
+                    <i class="fas fa-th-large mr-2"></i>All Workflows
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pt-24 pb-12 px-6">
+        <div class="max-w-6xl mx-auto space-y-12">
+
+            <!-- ============================================ -->
+            <!-- WORKFLOW 1: EDR Deployment & Onboarding -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-blue-400">1.</span> EDR Deployment & Onboarding (MDE)
+                </h2>
+
+                <div class="workflow-box rounded-xl p-6">
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                        MDE ENDPOINT ONBOARDING WORKFLOW                             │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 1: PREREQUISITES CHECK                                                        │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    □ Licensing verified (M365 E5 / Defender for Endpoint P2)
+    □ Azure AD / Entra ID connectivity confirmed
+    □ Network URLs whitelisted:
+      • *.securitycenter.windows.com
+      • *.blob.core.windows.net
+      • *.ods.opinsights.azure.com
+    □ Conflicting AV identified and removal planned (e.g., ESET, Symantec)
+    □ Device groups created in MDE portal
+    □ Policies configured (ASR rules, Network protection, etc.)
+
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 2: ONBOARDING EXECUTION                                                       │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ ONBOARDING METHODS:                                                             │
+    │                                                                                 │
+    │ ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐               │
+    │ │ INTUNE (Preferred)│  │ GPO (Domain)     │  │ Script (Manual)  │               │
+    │ │                   │  │                  │  │                  │               │
+    │ │ • Push to device  │  │ • Deploy via     │  │ • Download       │               │
+    │ │   groups          │  │   Computer Policy│  │   package        │               │
+    │ │ • Auto-compliance │  │ • Startup script │  │ • Run locally    │               │
+    │ │ • Cloud-native    │  │ • On-prem heavy  │  │ • For exceptions │               │
+    │ └──────────────────┘  └──────────────────┘  └──────────────────┘               │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ CONFLICT RESOLUTION (If legacy AV present):                                     │
+    │                                                                                 │
+    │ ┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐    │
+    │ │ Uninstall   │────▶│ Reboot      │────▶│ Verify      │────▶│ Onboard MDE │    │
+    │ │ Legacy AV   │     │ Device      │     │ Removed     │     │             │    │
+    │ │ (ESET, etc) │     │             │     │             │     │             │    │
+    │ └─────────────┘     └─────────────┘     └─────────────┘     └─────────────┘    │
+    │                                                                                 │
+    │ ⚠️  Real Experience: MDE + ESET conflict caused driver crashes                  │
+    │    Solution: Complete ESET removal before MDE onboarding                       │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 3: VALIDATION (Within 1 hour of onboarding)                                   │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    □ Device appears in MDE portal
+    □ Health status = "Active"
+    □ Telemetry flowing (check for recent events)
+    □ Correct device group assigned
+    □ Policies applied (ASR, Network Protection)
+    □ AV definitions current
+    □ Test detection: Download EICAR test file
+                              │
+                              ▼
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ TROUBLESHOOTING (If device doesn't appear):                                     │
+    │                                                                                 │
+    │ 1. Check SENSE service running: sc query sense                                 │
+    │ 2. Check connectivity: Test-NetConnection to MDE URLs                          │
+    │ 3. Review onboarding log: %ProgramData%\Microsoft\Windows Defender\...         │
+    │ 4. Check for AV conflict: services.msc for other AV services                   │
+    │ 5. Re-run onboarding script if needed                                          │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- WORKFLOW 2: Coverage Gap Detection -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-blue-400">2.</span> EDR Coverage Gap Detection
+                </h2>
+
+                <div class="workflow-box rounded-xl p-6 phase-automated">
+                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-robot mr-2"></i>Automated Coverage Monitoring</h3>
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                    EDR COVERAGE GAP DETECTION (14 HX Consoles Example)              │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ THE PROBLEM (Before Automation):                                                │
+    │                                                                                 │
+    │ • 14 FireEye HX consoles across environment                                    │
+    │ • Manual process: Login → Export → Excel → VLOOKUP → Report                    │
+    │ • Hours of work, prone to errors                                               │
+    │ • Coverage gaps went unnoticed for weeks                                       │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ THE SOLUTION (Python Automation):                                               │
+    │                                                                                 │
+    │  ┌───────────┐  ┌───────────┐  ┌───────────┐       ┌───────────┐               │
+    │  │ HX API 1  │  │ HX API 2  │  │ HX API... │  ...  │ HX API 14 │               │
+    │  └─────┬─────┘  └─────┬─────┘  └─────┬─────┘       └─────┬─────┘               │
+    │        │              │              │                   │                      │
+    │        └──────────────┴──────────────┴───────────────────┘                      │
+    │                              │                                                   │
+    │                              ▼                                                   │
+    │                    ┌─────────────────────┐                                       │
+    │                    │   PYTHON SCRIPT     │                                       │
+    │                    │                     │                                       │
+    │                    │ • Connect to all 14 │                                       │
+    │                    │ • Pull device lists │                                       │
+    │                    │ • Merge with pandas │                                       │
+    │                    │ • VLOOKUP vs CMDB   │                                       │
+    │                    └──────────┬──────────┘                                       │
+    │                               │                                                  │
+    │                               ▼                                                  │
+    │                    ┌─────────────────────┐                                       │
+    │                    │   OUTPUT REPORT     │                                       │
+    │                    │                     │                                       │
+    │                    │ ✅ Compliant: 2,450 │                                       │
+    │                    │ ❌ Missing: 50      │                                       │
+    │                    │ ⚠️  Not in CMDB: 12 │                                       │
+    │                    └─────────────────────┘                                       │
+    │                                                                                  │
+    │  Result: Hours → Minutes | Still in use today!                                 │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                    SENTINEL-BASED COVERAGE MONITORING (MDE)                         │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ KQL: Coverage Gap Query                                                         │
+    │                                                                                 │
+    │ // Get all devices from CMDB watchlist                                         │
+    │ let CMDB_Devices = _GetWatchlist('CMDB_Assets')                                │
+    │     | project DeviceName, AssetType, Criticality;                              │
+    │                                                                                 │
+    │ // Get devices reporting to MDE in last 24 hours                               │
+    │ let MDE_Devices = DeviceInfo                                                   │
+    │     | where Timestamp > ago(24h)                                               │
+    │     | summarize LastSeen = max(Timestamp) by DeviceName;                       │
+    │                                                                                 │
+    │ // Find gaps                                                                   │
+    │ CMDB_Devices                                                                   │
+    │ | join kind=leftanti MDE_Devices on DeviceName                                 │
+    │ | project DeviceName, AssetType, Criticality, Status = "NOT REPORTING"         │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ LOGIC APP: Daily Coverage Report                                                │
+    │                                                                                 │
+    │ Trigger: 6:00 AM daily                                                         │
+    │ Action 1: Run KQL query                                                        │
+    │ Action 2: Generate CSV                                                         │
+    │ Action 3: If gaps > 0, send Teams notification                                 │
+    │ Action 4: Save report to SharePoint                                            │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- WORKFLOW 3: Agent Health Monitoring -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-blue-400">3.</span> Agent Health Monitoring & Troubleshooting
+                </h2>
+
+                <div class="workflow-box rounded-xl p-6">
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                        AGENT HEALTH MONITORING WORKFLOW                             │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ CONTINUOUS MONITORING (Sentinel Dashboard)                                      │
+    │                                                                                 │
+    │ ┌──────────────────────────────────────────────────────────────────────────────┐│
+    │ │                        EDR HEALTH DASHBOARD                                  ││
+    │ │                                                                              ││
+    │ │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         ││
+    │ │  │ Total       │  │ Healthy     │  │ Unhealthy   │  │ Not         ││         │
+    │ │  │ Endpoints   │  │             │  │             │  │ Reporting   ││         │
+    │ │  │             │  │             │  │             │  │             ││         │
+    │ │  │   2,500     │  │   2,432     │  │     18      │  │     50      ││         │
+    │ │  │             │  │   (97.3%)   │  │   (0.7%)    │  │   (2.0%)    ││         │
+    │ │  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘         ││
+    │ │                                                                              ││
+    │ │  Trend: ▼ 5 fewer unhealthy than yesterday                                  ││
+    │ └──────────────────────────────────────────────────────────────────────────────┘│
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ ALERT: Device Not Reporting > 24 Hours                                              │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ TROUBLESHOOTING DECISION TREE                                                   │
+    │                                                                                 │
+    │                    ┌─────────────────────┐                                      │
+    │                    │ Is device online?   │                                      │
+    │                    │ (Ping / Intune)     │                                      │
+    │                    └──────────┬──────────┘                                      │
+    │                               │                                                  │
+    │              ┌────────────────┴────────────────┐                                │
+    │              ▼                                 ▼                                 │
+    │        ┌──────────┐                     ┌──────────┐                            │
+    │        │   NO     │                     │   YES    │                            │
+    │        └────┬─────┘                     └────┬─────┘                            │
+    │             │                                │                                   │
+    │             ▼                                ▼                                   │
+    │   ┌─────────────────┐             ┌─────────────────────┐                       │
+    │   │ Expected?       │             │ Check SENSE service │                       │
+    │   │ (shutdown,      │             │ sc query sense      │                       │
+    │   │  vacation)      │             └──────────┬──────────┘                       │
+    │   └─────────────────┘                        │                                   │
+    │                                ┌─────────────┴─────────────┐                    │
+    │                                ▼                           ▼                    │
+    │                         ┌──────────┐               ┌──────────┐                 │
+    │                         │ STOPPED  │               │ RUNNING  │                 │
+    │                         └────┬─────┘               └────┬─────┘                 │
+    │                              │                          │                        │
+    │                              ▼                          ▼                        │
+    │                    ┌─────────────────┐        ┌─────────────────┐               │
+    │                    │ Try restart:    │        │ Check connectivity│              │
+    │                    │ net start sense │        │ to MDE URLs       │              │
+    │                    └────────┬────────┘        └────────┬────────┘               │
+    │                             │                          │                         │
+    │                    ┌────────┴────────┐        ┌────────┴────────┐               │
+    │                    ▼                 ▼        ▼                 ▼               │
+    │              ┌──────────┐      ┌──────────┐  ┌──────────┐ ┌──────────┐          │
+    │              │ Success! │      │ Failed   │  │ Blocked  │ │ OK       │          │
+    │              │ Monitor  │      │          │  │          │ │          │          │
+    │              └──────────┘      └────┬─────┘  └────┬─────┘ └────┬─────┘          │
+    │                                     │             │            │                 │
+    │                                     ▼             ▼            ▼                 │
+    │                            ┌─────────────┐ ┌───────────┐ ┌───────────┐          │
+    │                            │ Check logs  │ │ Firewall/ │ │ Re-onboard│          │
+    │                            │ for errors  │ │ Proxy     │ │ device    │          │
+    │                            │             │ │ issue     │ │           │          │
+    │                            │ May need    │ │           │ │ Offboard, │          │
+    │                            │ re-onboard  │ │ Work with │ │ wait 24h, │          │
+    │                            │             │ │ Network   │ │ onboard   │          │
+    │                            └─────────────┘ └───────────┘ └───────────┘          │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- WORKFLOW 4: Telemetry Validation -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-blue-400">4.</span> Telemetry Quality Validation
+                </h2>
+
+                <div class="workflow-box rounded-xl p-6 phase-manual">
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                        TELEMETRY QUALITY VALIDATION                                 │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    Agent installed ≠ Quality telemetry
+    
+    Must validate:
+    □ Process creation events flowing
+    □ Network connection events captured
+    □ File modification events logged
+    □ Registry change events present
+    □ No excessive exclusions creating blind spots
+
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ VALIDATION QUERIES (Run in Sentinel/Advanced Hunting)                               │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ 1. PROCESS EVENTS CHECK                                                         │
+    │                                                                                 │
+    │ DeviceProcessEvents                                                            │
+    │ | where DeviceName == "TARGET_DEVICE"                                          │
+    │ | where Timestamp > ago(1h)                                                    │
+    │ | summarize EventCount = count() by bin(Timestamp, 5m)                         │
+    │ | render timechart                                                             │
+    │                                                                                 │
+    │ Expected: Continuous stream of events, not gaps                                │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ 2. NETWORK EVENTS CHECK                                                         │
+    │                                                                                 │
+    │ DeviceNetworkEvents                                                            │
+    │ | where DeviceName == "TARGET_DEVICE"                                          │
+    │ | where Timestamp > ago(1h)                                                    │
+    │ | summarize EventCount = count()                                               │
+    │                                                                                 │
+    │ Expected: Should see DNS, HTTP(S), SMB connections                             │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ 3. EXCLUSION AUDIT                                                              │
+    │                                                                                 │
+    │ Too many exclusions = Blind spots                                              │
+    │                                                                                 │
+    │ Review in MDE portal: Settings → Endpoints → Exclusions                        │
+    │                                                                                 │
+    │ Red flags:                                                                      │
+    │ • Excluding entire C:\ drive                                                   │
+    │ • Excluding common malware paths (C:\Users\*\AppData\Local\Temp)              │
+    │ • Excluding all .exe files                                                     │
+    │ • Exclusions without documented business justification                         │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ DETECTION TEST (Validate alerts work)                                               │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    Test 1: EICAR Test File
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ Download from: https://www.eicar.org/download-anti-malware-testfile/           │
+    │ Expected: Alert within minutes, file quarantined                               │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+
+    Test 2: Suspicious Process (if allowed in your environment)
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ Run: powershell.exe -enc [base64]                                              │
+    │ Expected: Alert for encoded PowerShell execution                               │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+
+    Test 3: Simulated Attack (with approval)
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │ Use MDE Attack Simulation in portal                                            │
+    │ Expected: Simulated attack triggers full detection chain                       │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- Summary Box -->
+            <div class="glass-card rounded-xl p-6 mt-8">
+                <h3 class="text-xl font-bold text-white mb-4"><i class="fas fa-key text-blue-400 mr-2"></i>Key Interview Points</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                    <div>
+                        <p class="text-blue-400 font-semibold mb-2">Your EDR Experience:</p>
+                        <ul class="text-gray-400 space-y-1">
+                            <li>• MDE deployment & onboarding</li>
+                            <li>• FireEye HX (14 consoles automation)</li>
+                            <li>• Cortex XDR, Trellix EDR</li>
+                            <li>• Coverage gap detection</li>
+                            <li>• Conflict resolution (ESET story)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-green-400 font-semibold mb-2">Value You Add:</p>
+                        <ul class="text-gray-400 space-y-1">
+                            <li>• Automation (Python scripts)</li>
+                            <li>• Sentinel integration & monitoring</li>
+                            <li>• Telemetry validation</li>
+                            <li>• Runbook documentation</li>
+                            <li>• Proactive gap identification</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex justify-between mt-8">
+                <a href="workflows-ngfw.html" class="px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>NGFW Workflows
+                </a>
+                <a href="workflows-dlp.html" class="px-6 py-3 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 rounded-lg text-blue-400 transition-colors">
+                    Next: DLP Workflows<i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

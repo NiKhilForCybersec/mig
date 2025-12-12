@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OT/ICS Security Workflows</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); min-height: 100vh; }
+        .glass-card { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(245, 158, 11, 0.2); }
+        .workflow-box { background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(245, 158, 11, 0.3); font-family: 'Courier New', monospace; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body class="text-gray-100">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center">
+                        <i class="fas fa-industry text-amber-400"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-semibold text-white">OT/ICS Security Workflows</h1>
+                        <p class="text-xs text-gray-400">Industrial Control Systems & SCADA</p>
+                    </div>
+                </div>
+                <a href="workflows-index.html" class="text-gray-400 hover:text-amber-400 transition-colors">
+                    <i class="fas fa-th-large mr-2"></i>All Workflows
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pt-24 pb-12 px-6">
+        <div class="max-w-6xl mx-auto space-y-12">
+
+            <!-- Context Banner -->
+            <div class="glass-card rounded-xl p-4 border-l-4 border-amber-500">
+                <p class="text-amber-400 font-semibold"><i class="fas fa-info-circle mr-2"></i>Context for Interviews</p>
+                <p class="text-gray-300 text-sm mt-2">
+                    "My hands-on experience is primarily IT security. At the Siemens subsidiary, I've been exposed to IT/OT convergence discussions and understand the challenges conceptually. I've studied the Purdue Model, IEC 62443, and real-world OT incidents like TRITON. My focus is the security layer at the IT-OT boundary."
+                </p>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- WORKFLOW 1: Purdue Model Segmentation -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-amber-400">1.</span> IT-OT Segmentation (Purdue Model)
+                </h2>
+
+                <div class="workflow-box rounded-xl p-6">
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                         PURDUE MODEL ARCHITECTURE                                   │
+│                    (IT-OT Network Segmentation)                                     │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ LEVEL 5: ENTERPRISE NETWORK                                                         │
+│ ═══════════════════════════════════════════════════════════════════════════════════ │
+│                                                                                     │
+│    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
+│    │ Corporate    │  │ Email        │  │ ERP          │  │ Internet     │          │
+│    │ Users        │  │ Servers      │  │ (SAP)        │  │ Access       │          │
+│    └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘          │
+│                                                                                     │
+│    SECURITY: Standard IT security (EDR, DLP, Firewall, SIEM)                       │
+│    YOUR ROLE: Full ownership                                                        │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                                         │
+                                         │ 🔥 FIREWALL (IT)
+                                         ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ LEVEL 4: BUSINESS PLANNING & LOGISTICS                                              │
+│ ═══════════════════════════════════════════════════════════════════════════════════ │
+│                                                                                     │
+│    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                            │
+│    │ Production   │  │ Scheduling   │  │ Data         │                            │
+│    │ Planning     │  │ Systems      │  │ Analytics    │                            │
+│    └──────────────┘  └──────────────┘  └──────────────┘                            │
+│                                                                                     │
+│    SECURITY: IT security, but more restricted access                               │
+│    YOUR ROLE: Full ownership                                                        │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                                         │
+                                         │ 🔥 FIREWALL (IT/OT Boundary)
+                                         ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ LEVEL 3.5: INDUSTRIAL DMZ (iDMZ) ← CRITICAL SECURITY BOUNDARY                       │
+│ ═══════════════════════════════════════════════════════════════════════════════════ │
+│                                                                                     │
+│    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
+│    │ Jump Server  │  │ Historian    │  │ Patch        │  │ OT Security  │          │
+│    │ (Remote      │  │ (Data        │  │ Server       │  │ Platform     │          │
+│    │  Access)     │  │  Transfer)   │  │              │  │ (Claroty)    │          │
+│    └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘          │
+│                                                                                     │
+│    ⚠️  NO DIRECT CONNECTIONS BETWEEN IT AND OT!                                     │
+│    Everything passes through iDMZ                                                  │
+│                                                                                     │
+│    SECURITY: Dual-homed systems, strict access control, session recording          │
+│    YOUR ROLE: Security profiles, SIEM integration, detection rules                 │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                                         │
+                                         │ 🔥 FIREWALL (OT)
+                                         ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ LEVEL 3: SITE OPERATIONS                                                            │
+│ ═══════════════════════════════════════════════════════════════════════════════════ │
+│                                                                                     │
+│    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                            │
+│    │ Site         │  │ Local        │  │ Engineering  │                            │
+│    │ Historian    │  │ HMI Server   │  │ Workstation  │                            │
+│    └──────────────┘  └──────────────┘  └──────────────┘                            │
+│                                                                                     │
+│    SECURITY: OT-aware security, passive monitoring preferred                       │
+│    YOUR ROLE: Limited - work with OT team                                          │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                                         │
+                                         │ 🔥 FIREWALL (Process)
+                                         ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ LEVEL 2: AREA SUPERVISORY CONTROL                                                   │
+│ ═══════════════════════════════════════════════════════════════════════════════════ │
+│                                                                                     │
+│    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                            │
+│    │ SCADA        │  │ DCS          │  │ Operator     │                            │
+│    │ Server       │  │ Server       │  │ HMI          │                            │
+│    └──────────────┘  └──────────────┘  └──────────────┘                            │
+│                                                                                     │
+│    SECURITY: Very restricted, OT team ownership                                    │
+│    YOUR ROLE: Advisory only                                                         │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                                         │
+                                         ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ LEVEL 1: BASIC CONTROL                                                              │
+│ ═══════════════════════════════════════════════════════════════════════════════════ │
+│                                                                                     │
+│    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                            │
+│    │ PLC          │  │ RTU          │  │ Safety       │                            │
+│    │ (Controller) │  │              │  │ Controller   │                            │
+│    └──────────────┘  └──────────────┘  └──────────────┘                            │
+│                                                                                     │
+│    SECURITY: Physical security, vendor-managed                                     │
+│    YOUR ROLE: None (OT/Vendor domain)                                              │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                                         │
+                                         ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ LEVEL 0: PROCESS (Physical Equipment)                                               │
+│ ═══════════════════════════════════════════════════════════════════════════════════ │
+│                                                                                     │
+│    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                            │
+│    │ Sensors      │  │ Actuators    │  │ Motors       │                            │
+│    │ (Temp, Press)│  │ (Valves)     │  │ (Pumps)      │                            │
+│    └──────────────┘  └──────────────┘  └──────────────┘                            │
+│                                                                                     │
+│    SECURITY: Safety systems, physical controls                                     │
+│    YOUR ROLE: None (Engineering domain)                                            │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- WORKFLOW 2: OT Firewall Rules -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-amber-400">2.</span> IT-OT Boundary Firewall Rules
+                </h2>
+
+                <div class="workflow-box rounded-xl p-6">
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                    IT-OT BOUNDARY FIREWALL DESIGN                                   │
+│                  (Defense in Depth at the iDMZ)                                     │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ ARCHITECTURE: DUAL FIREWALL                                                         │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    IT NETWORK                    iDMZ                      OT NETWORK
+    (Level 4-5)                (Level 3.5)                  (Level 0-3)
+         │                          │                            │
+         │    ┌─────────────┐       │       ┌─────────────┐      │
+         │    │             │       │       │             │      │
+         └────│ FIREWALL A  │───────┼───────│ FIREWALL B  │──────┘
+              │ (IT-facing) │       │       │ (OT-facing) │
+              │             │       │       │             │
+              └─────────────┘       │       └─────────────┘
+                                    │
+                          ┌─────────┴─────────┐
+                          │                   │
+                     ┌────┴────┐         ┌────┴────┐
+                     │ Jump    │         │ Data    │
+                     │ Server  │         │ Diode/  │
+                     │         │         │ Historian│
+                     └─────────┘         └─────────┘
+
+    WHY DUAL FIREWALL?
+    • Different vendors = different vulnerabilities
+    • Compromise of one doesn't compromise both
+    • Clear ownership (IT owns A, OT owns B)
+
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ RULE PRINCIPLES:                                                                    │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ 1. DEFAULT DENY EVERYTHING                                                    │
+    │                                                                               │
+    │    Last rule: DENY any any any LOG                                           │
+    │    Every allowed flow must be explicitly defined                             │
+    └───────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ 2. NO DIRECT IT ↔ OT TRAFFIC                                                  │
+    │                                                                               │
+    │    ❌ WRONG: IT Server → PLC                                                  │
+    │    ✅ RIGHT: IT Server → Jump Server (iDMZ) → PLC                            │
+    │                                                                               │
+    │    Everything terminates in iDMZ                                             │
+    └───────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ 3. OT INITIATES TO iDMZ (Not the reverse)                                     │
+    │                                                                               │
+    │    ❌ WRONG: iDMZ → Poll OT devices                                          │
+    │    ✅ RIGHT: OT devices → Push data to iDMZ Historian                        │
+    │                                                                               │
+    │    Reduces attack surface from IT toward OT                                  │
+    └───────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ 4. SPECIFIC PORTS AND PROTOCOLS ONLY                                          │
+    │                                                                               │
+    │    ❌ WRONG: Allow any port                                                   │
+    │    ✅ RIGHT: Allow TCP/443 to specific historian IP only                     │
+    │                                                                               │
+    │    OT protocols: Modbus (502), DNP3 (20000), OPC-UA (4840)                   │
+    └───────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ EXAMPLE RULESET (IT-Facing Firewall A):                                             │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ #  │ Source        │ Dest          │ Port    │ Action │ Profile │ Note       │
+    │ ───┼───────────────┼───────────────┼─────────┼────────┼─────────┼────────────│
+    │ 1  │ IT_Admin_VLAN │ Jump_Server   │ 3389    │ ALLOW  │ IPS+Log │ RDP access │
+    │ 2  │ IT_Admin_VLAN │ Jump_Server   │ 22      │ ALLOW  │ IPS+Log │ SSH access │
+    │ 3  │ ERP_Server    │ Historian_DMZ │ 443     │ ALLOW  │ IPS+Log │ Data sync  │
+    │ 4  │ SIEM_Collector│ OT_Sec_Plat   │ 514     │ ALLOW  │ Log     │ Log forward│
+    │ 5  │ Patch_Server  │ OT_Patch_Srv  │ 443     │ ALLOW  │ IPS+Log │ Updates    │
+    │ 99 │ any           │ any           │ any     │ DENY   │ Log     │ Default    │
+    └───────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- WORKFLOW 3: OT Security Monitoring -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-amber-400">3.</span> OT Security Monitoring (SIEM Integration)
+                </h2>
+
+                <div class="workflow-box rounded-xl p-6">
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                    OT SECURITY MONITORING                                           │
+│              (What IT Security Engineering owns)                                    │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ DATA FLOW: OT → SIEM                                                                │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌──────────────────┐
+    │ OT NETWORK       │
+    │                  │
+    │ ┌──────────────┐ │
+    │ │ OT Security  │ │    Alerts only
+    │ │ Platform     │─┼──────────────────┐
+    │ │ (Claroty,    │ │                  │
+    │ │  Nozomi)     │ │                  │
+    │ └──────────────┘ │                  │
+    │                  │                  │
+    │ ┌──────────────┐ │                  │
+    │ │ Firewall     │─┼──── Logs ────────┤
+    │ │ (OT-facing)  │ │                  │
+    │ └──────────────┘ │                  │
+    │                  │                  │
+    │ ┌──────────────┐ │                  │
+    │ │ Jump Server  │─┼──── Logs ────────┤
+    │ │ (iDMZ)       │ │                  │
+    │ └──────────────┘ │                  ▼
+    └──────────────────┘        ┌──────────────────┐
+                                │ SYSLOG COLLECTOR │
+                                │ (in iDMZ)        │
+                                └────────┬─────────┘
+                                         │
+                                         ▼
+                                ┌──────────────────┐
+                                │ MICROSOFT        │
+                                │ SENTINEL         │
+                                │                  │
+                                │ • Detection rules│
+                                │ • Correlation    │
+                                │ • Dashboards     │
+                                └──────────────────┘
+
+    ⚠️  IMPORTANT: Syslog collector is in iDMZ, not in OT network!
+    Never put SIEM agent directly in OT zones
+
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ DETECTION RULES FOR OT:                                                             │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ RULE 1: UNAUTHORIZED CROSS-BOUNDARY TRAFFIC                                   │
+    │                                                                               │
+    │ // Traffic from IT directly to OT (bypassing iDMZ)                           │
+    │ OT_Firewall_Logs                                                             │
+    │ | where SourceIP in (IT_Network_Range)                                       │
+    │ | where DestIP in (OT_Network_Range)                                         │
+    │ | where Action == "allow"  // Should never happen!                           │
+    │                                                                               │
+    │ Severity: CRITICAL                                                           │
+    └───────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ RULE 2: UNUSUAL PROTOCOL IN OT NETWORK                                        │
+    │                                                                               │
+    │ // IT protocols (RDP, SMB) in OT zones                                       │
+    │ OT_Firewall_Logs                                                             │
+    │ | where DestPort in (3389, 445, 135, 139)  // IT protocols                   │
+    │ | where DestIP in (OT_Network_Range)                                         │
+    │                                                                               │
+    │ Severity: HIGH (could indicate lateral movement)                             │
+    └───────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ RULE 3: OT SECURITY PLATFORM ALERTS                                           │
+    │                                                                               │
+    │ // Claroty/Nozomi alerts forwarded to Sentinel                               │
+    │ Syslog                                                                       │
+    │ | where SyslogMessage contains "ALERT"                                       │
+    │ | where Computer == "claroty-sensor"                                         │
+    │ | parse SyslogMessage with * "severity=" Severity *                         │
+    │ | where Severity in ("critical", "high")                                     │
+    │                                                                               │
+    │ Severity: Based on OT platform severity                                      │
+    └───────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────┐
+    │ RULE 4: JUMP SERVER SUSPICIOUS ACTIVITY                                       │
+    │                                                                               │
+    │ // Unusual hours, unusual user, unusual commands                             │
+    │ JumpServer_Logs                                                              │
+    │ | where TimeGenerated between (time(22:00)..time(06:00))                     │
+    │ | where Activity == "login"                                                  │
+    │                                                                               │
+    │ OR                                                                           │
+    │                                                                               │
+    │ JumpServer_Logs                                                              │
+    │ | where CommandLine contains_any ("powershell", "cmd", "wget", "curl")      │
+    │                                                                               │
+    │ Severity: MEDIUM-HIGH                                                        │
+    └───────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- Summary Box -->
+            <div class="glass-card rounded-xl p-6 mt-8">
+                <h3 class="text-xl font-bold text-white mb-4"><i class="fas fa-key text-amber-400 mr-2"></i>Key Interview Points</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                    <div>
+                        <p class="text-amber-400 font-semibold mb-2">Your OT Understanding:</p>
+                        <ul class="text-gray-400 space-y-1">
+                            <li>• Purdue Model architecture</li>
+                            <li>• iDMZ purpose and design</li>
+                            <li>• IT vs OT priority differences (CIA vs AIC)</li>
+                            <li>• Why passive monitoring for OT</li>
+                            <li>• SIEM integration from IT side</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-green-400 font-semibold mb-2">Honest Positioning:</p>
+                        <ul class="text-gray-400 space-y-1">
+                            <li>• "IT-side experience, studied OT concepts"</li>
+                            <li>• "Siemens exposure to IT/OT convergence"</li>
+                            <li>• "Security layer at boundary is my focus"</li>
+                            <li>• "Collaborate with OT engineers on their domain"</li>
+                            <li>• "Detection engineering for OT alerts in SIEM"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex justify-between mt-8">
+                <a href="workflows-cloud.html" class="px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Cloud & SIEM
+                </a>
+                <a href="workflows-index.html" class="px-6 py-3 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 rounded-lg text-amber-400 transition-colors">
+                    All Workflows<i class="fas fa-th-large ml-2"></i>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centralized Security - Coca-Cola Sentinel Architecture</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); min-height: 100vh; }
+        .glass-card { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(220, 38, 38, 0.2); }
+        .diagram-box { background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(220, 38, 38, 0.3); font-family: 'Courier New', monospace; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body class="text-gray-100">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center">
+                        <i class="fas fa-lock text-red-400"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-semibold text-white">Centralized Security Operations</h1>
+                        <p class="text-xs text-gray-400">Microsoft Sentinel as Unified SIEM</p>
+                    </div>
+                </div>
+                <a href="coke-arch-index.html" class="text-gray-400 hover:text-red-400 transition-colors">
+                    <i class="fas fa-th-large mr-2"></i>Architecture Index
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pt-24 pb-12 px-6">
+        <div class="max-w-6xl mx-auto space-y-8">
+
+            <!-- Overview -->
+            <div class="glass-card rounded-xl p-6">
+                <h2 class="text-2xl font-bold text-white mb-4">
+                    <i class="fas fa-lock text-red-400 mr-2"></i>Unified Security Operations Center
+                </h2>
+                <p class="text-gray-400 mb-4">
+                    All security telemetry across Azure cloud, 50+ plants, and 200+ distribution centers flows into 
+                    Microsoft Sentinel for centralized detection, investigation, and response. This provides a single 
+                    pane of glass for the global SOC team to monitor the entire Coca-Cola Bottling infrastructure.
+                </p>
+                <div class="grid grid-cols-4 gap-4">
+                    <div class="bg-cyan-500/10 border border-cyan-500/30 rounded-lg p-3 text-center">
+                        <div class="text-2xl font-bold text-cyan-400">500K+</div>
+                        <div class="text-xs text-gray-400">Events/Second</div>
+                    </div>
+                    <div class="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3 text-center">
+                        <div class="text-2xl font-bold text-purple-400">50+</div>
+                        <div class="text-xs text-gray-400">Data Connectors</div>
+                    </div>
+                    <div class="bg-green-500/10 border border-green-500/30 rounded-lg p-3 text-center">
+                        <div class="text-2xl font-bold text-green-400">200+</div>
+                        <div class="text-xs text-gray-400">Analytics Rules</div>
+                    </div>
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 text-center">
+                        <div class="text-2xl font-bold text-yellow-400">24/7</div>
+                        <div class="text-xs text-gray-400">SOC Coverage</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Complete Data Flow -->
+            <div class="diagram-box rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4">Complete Security Data Flow to Sentinel</h3>
+                <pre class="text-gray-300 text-xs">
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                         COCA-COLA SECURITY DATA FLOW TO MICROSOFT SENTINEL                              │
+│                                   (Global Security Visibility)                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    DATA SOURCES                                                         │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │ ☁️  CLOUD SOURCES (Native Connectors - Free Ingestion*)                                              │
+    │                                                                                                     │
+    │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐               │
+    │  │ Azure AD/   │  │ Microsoft   │  │ Defender    │  │ Defender    │  │ Azure       │               │
+    │  │ Entra ID    │  │ 365         │  │ for Cloud   │  │ for         │  │ Activity    │               │
+    │  │             │  │             │  │             │  │ Endpoint    │  │             │               │
+    │  │ Sign-in     │  │ Audit logs  │  │ Alerts      │  │ Alerts      │  │ Resource    │               │
+    │  │ Audit       │  │ SharePoint  │  │ Posture     │  │ Incidents   │  │ changes     │               │
+    │  │ Identity    │  │ Exchange    │  │ Recommends  │  │ Raw events  │  │ ARM ops     │               │
+    │  │ Protection  │  │ Teams       │  │             │  │             │  │             │               │
+    │  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘               │
+    │         │                │                │                │                │                       │
+    │         │   FREE*        │   FREE*        │   FREE*        │   FREE*        │   FREE*              │
+    └─────────┼────────────────┼────────────────┼────────────────┼────────────────┼───────────────────────┘
+              │                │                │                │                │
+              └────────────────┴────────────────┴───────┬────────┴────────────────┘
+                                                        │
+    ┌───────────────────────────────────────────────────┼───────────────────────────────────────────────────┐
+    │ 🔥 FIREWALL & NETWORK SOURCES                     │                                                   │
+    │                                                   │                                                   │
+    │  ┌─────────────────┐  ┌─────────────────┐        │                                                   │
+    │  │ Azure Firewall  │  │ Palo Alto NVAs  │        │                                                   │
+    │  │ (Hub VNet)      │  │ (Hub + Plants)  │        │                                                   │
+    │  │                 │  │                 │        │                                                   │
+    │  │ Diagnostic logs │  │ CEF via Syslog  │        │                                                   │
+    │  │ → Log Analytics │  │ → AMA → Sentinel│        │                                                   │
+    │  └────────┬────────┘  └────────┬────────┘        │                                                   │
+    │           │                    │                  │                                                   │
+    │  ┌─────────────────┐  ┌─────────────────┐        │                                                   │
+    │  │ NSG Flow Logs   │  │ Azure WAF       │        │                                                   │
+    │  │ (All VNets)     │  │ (App Gateway)   │        │                                                   │
+    │  │                 │  │                 │        │                                                   │
+    │  │ Traffic flows   │  │ Web attacks     │        │                                                   │
+    │  │ Blocked traffic │  │ OWASP alerts    │        │                                                   │
+    │  └────────┬────────┘  └────────┬────────┘        │                                                   │
+    │           │                    │                  │                                                   │
+    └───────────┼────────────────────┼──────────────────┼───────────────────────────────────────────────────┘
+                │                    │                  │
+    ┌───────────┼────────────────────┼──────────────────┼───────────────────────────────────────────────────┐
+    │ 🏭 ON-PREM & PLANT SOURCES     │                  │                                                   │
+    │                                │                  │                                                   │
+    │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐                  │
+    │  │ Windows Servers │  │ Linux Servers   │  │ On-Prem AD      │  │ Claroty         │                  │
+    │  │ (Plants/DCs)    │  │ (Plants/DCs)    │  │ (Domain Ctrls)  │  │ (OT Security)   │                  │
+    │  │                 │  │                 │  │                 │  │                 │                  │
+    │  │ Azure Monitor   │  │ Azure Monitor   │  │ AD connector    │  │ CEF/Syslog      │                  │
+    │  │ Agent (AMA)     │  │ Agent (AMA)     │  │ or AMA          │  │ via iDMZ        │                  │
+    │  │ → Security Evts │  │ → Syslog        │  │ → Security Evts │  │ → OT Alerts     │                  │
+    │  └────────┬────────┘  └────────┬────────┘  └────────┬────────┘  └────────┬────────┘                  │
+    │           │                    │                    │                    │                            │
+    │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐                                       │
+    │  │ Plant Firewalls │  │ Panorama        │  │ Historian       │                                       │
+    │  │ (PA-220s)       │  │ (FW Mgmt)       │  │ (OSIsoft PI)    │                                       │
+    │  │                 │  │                 │  │                 │                                       │
+    │  │ CEF via SD-WAN  │  │ API connector   │  │ OT data trends  │                                       │
+    │  │ → Log Analytics │  │ → Sentinel      │  │ (anomalies)     │                                       │
+    │  └────────┬────────┘  └────────┬────────┘  └────────┬────────┘                                       │
+    │           │                    │                    │                                                 │
+    └───────────┼────────────────────┼────────────────────┼─────────────────────────────────────────────────┘
+                │                    │                    │
+                └────────────────────┴──────────┬─────────┴─────────────────────────────────────────────────┐
+                                                │                                                           │
+                                                ▼                                                           │
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+│
+│   ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════╗
+│   ║                                                                                                       ║
+│   ║                              LOG ANALYTICS WORKSPACE                                                  ║
+│   ║                              "coke-security-law-eastus"                                               ║
+│   ║                                                                                                       ║
+│   ║    ┌─────────────────────────────────────────────────────────────────────────────────────────────┐   ║
+│   ║    │ DATA RETENTION:                                                                             │   ║
+│   ║    │ • Hot Storage: 90 days (fast queries)                                                      │   ║
+│   ║    │ • Archive: 2 years (compliance, long-term)                                                 │   ║
+│   ║    │ • Total Retention: 7 years (legal hold capability)                                         │   ║
+│   ║    │                                                                                             │   ║
+│   ║    │ DAILY INGESTION: ~2 TB/day                                                                 │   ║
+│   ║    │ COMMITMENT TIER: 500 GB/day (cost optimization)                                            │   ║
+│   ║    └─────────────────────────────────────────────────────────────────────────────────────────────┘   ║
+│   ║                                                │                                                     ║
+│   ╚════════════════════════════════════════════════╪═════════════════════════════════════════════════════╝
+│                                                    │
+│                                                    ▼
+│   ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════╗
+│   ║                                                                                                       ║
+│   ║                                    MICROSOFT SENTINEL                                                 ║
+│   ║                                                                                                       ║
+│   ╠═══════════════════════════════════════════════════════════════════════════════════════════════════════╣
+│   ║                                                                                                       ║
+│   ║   ┌─────────────────────────────────────────────────────────────────────────────────────────────────┐ ║
+│   ║   │                              DETECTION LAYER                                                    │ ║
+│   ║   │                                                                                                 │ ║
+│   ║   │  ┌───────────────────┐  ┌───────────────────┐  ┌───────────────────┐  ┌───────────────────┐    │ ║
+│   ║   │  │ ANALYTICS RULES   │  │ FUSION RULES      │  │ ML BEHAVIORAL     │  │ THREAT INTEL      │    │ ║
+│   ║   │  │ (200+ Custom)     │  │ (Microsoft AI)    │  │ ANALYTICS         │  │ MATCHING          │    │ ║
+│   ║   │  │                   │  │                   │  │                   │  │                   │    │ ║
+│   ║   │  │ • Brute force     │  │ • Multi-stage     │  │ • Anomalous       │  │ • IOC matching    │    │ ║
+│   ║   │  │ • Impossible      │  │   attacks         │  │   sign-in         │  │ • Domain blocklist│    │ ║
+│   ║   │  │   travel          │  │ • Ransomware      │  │ • Unusual         │  │ • IP reputation   │    │ ║
+│   ║   │  │ • OT anomalies    │  │   correlation     │  │   resource access │  │ • Hash matching   │    │ ║
+│   ║   │  │ • Data exfil      │  │ • Credential      │  │ • Lateral         │  │                   │    │ ║
+│   ║   │  │                   │  │   theft patterns  │  │   movement        │  │                   │    │ ║
+│   ║   │  └───────────────────┘  └───────────────────┘  └───────────────────┘  └───────────────────┘    │ ║
+│   ║   │                                                                                                 │ ║
+│   ║   └─────────────────────────────────────────────────────────────────────────────────────────────────┘ ║
+│   ║                                                │                                                     ║
+│   ║                                                ▼                                                     ║
+│   ║   ┌─────────────────────────────────────────────────────────────────────────────────────────────────┐ ║
+│   ║   │                              RESPONSE LAYER (SOAR)                                              │ ║
+│   ║   │                                                                                                 │ ║
+│   ║   │  ┌───────────────────┐  ┌───────────────────┐  ┌───────────────────┐  ┌───────────────────┐    │ ║
+│   ║   │  │ PLAYBOOK:         │  │ PLAYBOOK:         │  │ PLAYBOOK:         │  │ PLAYBOOK:         │    │ ║
+│   ║   │  │ Block-IP          │  │ Isolate-Endpoint  │  │ Disable-User      │  │ Enrich-Alert      │    │ ║
+│   ║   │  │                   │  │                   │  │                   │  │                   │    │ ║
+│   ║   │  │ Logic App →       │  │ Logic App →       │  │ Logic App →       │  │ Logic App →       │    │ ║
+│   ║   │  │ Azure FW API →    │  │ MDE API →         │  │ Azure AD API →    │  │ VirusTotal →      │    │ ║
+│   ║   │  │ Add to blocklist  │  │ Isolate device    │  │ Revoke sessions   │  │ Add context to    │    │ ║
+│   ║   │  │                   │  │                   │  │ Reset password    │  │ incident          │    │ ║
+│   ║   │  └───────────────────┘  └───────────────────┘  └───────────────────┘  └───────────────────┘    │ ║
+│   ║   │                                                                                                 │ ║
+│   ║   └─────────────────────────────────────────────────────────────────────────────────────────────────┘ ║
+│   ║                                                │                                                     ║
+│   ╚════════════════════════════════════════════════╪═════════════════════════════════════════════════════╝
+│                                                    │
+│                                                    ▼
+│   ┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│   │                              SOC OPERATIONS                                                         │
+│   │                                                                                                     │
+│   │    ┌───────────────────────────────────────────────────────────────────────────────────────────┐   │
+│   │    │ GLOBAL SOC (Atlanta HQ)                         REGIONAL SOC TEAMS                        │   │
+│   │    │ ┌─────────────────────────────┐                ┌─────────────────────────────┐            │   │
+│   │    │ │ 24/7 Operations             │                │ North America (Atlanta)     │            │   │
+│   │    │ │ • L1 Analysts (Triage)      │                │ Europe (TBD)                │            │   │
+│   │    │ │ • L2 Analysts (Investigate) │                │ Pacific (TBD)               │            │   │
+│   │    │ │ • L3 Engineers (Hunt/Tune)  │                │                             │            │   │
+│   │    │ └─────────────────────────────┘                └─────────────────────────────┘            │   │
+│   │    │                                                                                           │   │
+│   │    │ ESCALATION PATH:                                                                         │   │
+│   │    │ Alert → L1 Triage (15 min) → L2 Investigation (1 hr) → L3/IR Team → CISO (Critical)     │   │
+│   │    └───────────────────────────────────────────────────────────────────────────────────────────┘   │
+│   └─────────────────────────────────────────────────────────────────────────────────────────────────────┘
+│
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────
+                </pre>
+            </div>
+
+            <!-- Key Detection Rules -->
+            <div class="diagram-box rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4">Key Detection Rules by Category</h3>
+                <pre class="text-gray-300 text-xs">
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                         KEY DETECTION RULES CATEGORIES                                                  │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │ IDENTITY THREATS (Azure AD / Entra ID)                                                            │
+    │                                                                                                   │
+    │  • Brute force sign-in attempts (>10 failures in 5 min)                                          │
+    │  • Impossible travel (sign-in from two locations impossible to travel between)                   │
+    │  • Sign-in from anonymizer proxy/TOR                                                             │
+    │  • New country sign-in for user                                                                   │
+    │  • Privileged role assignment outside change window                                               │
+    │  • Service principal secret added                                                                 │
+    │  • MFA fatigue attack (multiple MFA prompts)                                                      │
+    └───────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │ ENDPOINT THREATS (Microsoft Defender for Endpoint)                                                │
+    │                                                                                                   │
+    │  • Ransomware behavior detected                                                                   │
+    │  • Credential dumping (Mimikatz, LSASS access)                                                   │
+    │  • Suspicious PowerShell execution (encoded commands)                                            │
+    │  • Lateral movement detected (PsExec, WMI)                                                       │
+    │  • Persistence mechanisms (scheduled tasks, registry)                                            │
+    │  • Process injection detected                                                                    │
+    │  • Cobalt Strike beacon indicators                                                               │
+    └───────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │ NETWORK THREATS (Azure Firewall / Palo Alto)                                                      │
+    │                                                                                                   │
+    │  • C2 communication to known bad IP/domain                                                        │
+    │  • DNS tunneling detected                                                                         │
+    │  • Large data transfer to external (>1GB)                                                        │
+    │  • Port scan from internal host                                                                   │
+    │  • Traffic to newly registered domain (<30 days)                                                  │
+    │  • TLS certificate anomaly                                                                        │
+    │  • Unusual outbound port usage                                                                    │
+    └───────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │ CLOUD THREATS (Defender for Cloud / Azure Activity)                                               │
+    │                                                                                                   │
+    │  • VM created in unusual region                                                                   │
+    │  • Storage account public access enabled                                                          │
+    │  • Key Vault secret accessed by unusual identity                                                  │
+    │  • NSG rule allowing 0.0.0.0/0 inbound                                                            │
+    │  • Subscription-level permission grant                                                            │
+    │  • Crypto mining detected                                                                         │
+    │  • Resource deletion spike                                                                        │
+    └───────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │ OT/ICS THREATS (Claroty / Plant Firewalls)                                                        │
+    │                                                                                                   │
+    │  • IT protocol (RDP/SMB) in OT zone                                                               │
+    │  • New device on OT network                                                                       │
+    │  • PLC firmware change                                                                            │
+    │  • Unauthorized connection from IT to OT                                                          │
+    │  • OT device communicating to internet                                                            │
+    │  • Modbus/EtherNet-IP anomaly                                                                     │
+    │  • Engineering workstation policy violation                                                       │
+    └───────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │ DATA PROTECTION (Microsoft Purview / DLP)                                                         │
+    │                                                                                                   │
+    │  • Sensitive data shared externally                                                               │
+    │  • Mass file download before termination                                                          │
+    │  • PII/PCI data to unauthorized destination                                                       │
+    │  • Email to competitor domain with attachments                                                    │
+    │  • Cloud storage sync to personal account                                                         │
+    │  • USB mass storage usage on sensitive system                                                     │
+    └───────────────────────────────────────────────────────────────────────────────────────────────────┘
+                </pre>
+            </div>
+
+            <!-- Workbooks & Dashboards -->
+            <div class="diagram-box rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4">SOC Dashboards & Workbooks</h3>
+                <pre class="text-gray-300 text-xs">
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                         SOC DASHBOARDS (SENTINEL WORKBOOKS)                                             │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │ EXECUTIVE DASHBOARD (CISO View)                                                                   │
+    │ ┌─────────────────────────────────────────────────────────────────────────────────────────────┐   │
+    │ │                                                                                             │   │
+    │ │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐       │   │
+    │ │  │ INCIDENTS   │  │ MTTR        │  │ COVERAGE    │  │ COMPLIANCE  │  │ RISK SCORE  │       │   │
+    │ │  │ This Week   │  │ (Avg Close  │  │ (% Assets   │  │ (Audit      │  │ (Overall)   │       │   │
+    │ │  │             │  │  Time)      │  │  Monitored) │  │  Status)    │  │             │       │   │
+    │ │  │    47       │  │   4.2 hrs   │  │    98.5%    │  │   PASS      │  │   LOW       │       │   │
+    │ │  │  ↓12%       │  │   ↓30min    │  │   ↑0.5%     │  │             │  │             │       │   │
+    │ │  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘       │   │
+    │ │                                                                                             │   │
+    │ │  [Incident Trend Chart]  [Top Threat Categories]  [Geographic Attack Map]                 │   │
+    │ │                                                                                             │   │
+    │ └─────────────────────────────────────────────────────────────────────────────────────────────┘   │
+    └───────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │ SOC OPERATIONS DASHBOARD (Analyst View)                                                           │
+    │ ┌─────────────────────────────────────────────────────────────────────────────────────────────┐   │
+    │ │                                                                                             │   │
+    │ │  OPEN INCIDENTS BY SEVERITY:                    QUEUE STATUS:                              │   │
+    │ │  ┌────────────────────────────┐                ┌────────────────────────────┐              │   │
+    │ │  │ 🔴 Critical: 2 (SLA: 1hr)  │                │ Unassigned: 5              │              │   │
+    │ │  │ 🟠 High:     8 (SLA: 4hr)  │                │ In Progress: 12            │              │   │
+    │ │  │ 🟡 Medium:  23 (SLA: 24hr) │                │ Pending Review: 7          │              │   │
+    │ │  │ 🟢 Low:     14 (SLA: 72hr) │                │ Closed Today: 34           │              │   │
+    │ │  └────────────────────────────┘                └────────────────────────────┘              │   │
+    │ │                                                                                             │   │
+    │ │  RECENT ALERTS (Last 1 Hour):                                                              │   │
+    │ │  ┌─────────────────────────────────────────────────────────────────────────────────────┐   │   │
+    │ │  │ 14:32 | HIGH   | Brute force - user@coke.com | 47 failures | Atlanta Plant        │   │   │
+    │ │  │ 14:28 | MEDIUM | Suspicious PowerShell | WS-ATL-042 | Encoded command            │   │   │
+    │ │  │ 14:15 | LOW    | New device OT network | Plant-DAL | MAC: aa:bb:cc:dd:ee:ff     │   │   │
+    │ │  │ 14:02 | MEDIUM | Large file upload | user@coke.com | 2.3GB to OneDrive          │   │   │
+    │ │  └─────────────────────────────────────────────────────────────────────────────────────┘   │   │
+    │ │                                                                                             │   │
+    │ └─────────────────────────────────────────────────────────────────────────────────────────────┘   │
+    └───────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │ PLANT/OT SECURITY DASHBOARD                                                                       │
+    │ ┌─────────────────────────────────────────────────────────────────────────────────────────────┐   │
+    │ │                                                                                             │   │
+    │ │  PLANT STATUS MAP:                              OT ALERTS (24HR):                          │   │
+    │ │  ┌────────────────────────────┐                ┌────────────────────────────┐              │   │
+    │ │  │ 🟢 Atlanta     - Normal    │                │ IT→OT Boundary: 3          │              │   │
+    │ │  │ 🟢 Dallas      - Normal    │                │ New OT Device: 7           │              │   │
+    │ │  │ 🟡 Chicago     - 1 Alert   │                │ Protocol Anomaly: 2        │              │   │
+    │ │  │ 🟢 Phoenix     - Normal    │                │ Firmware Change: 0         │              │   │
+    │ │  │ 🟢 Denver      - Normal    │                │ Internet Comm: 0           │              │   │
+    │ │  │ ... (50+ Plants)           │                └────────────────────────────┘              │   │
+    │ │  └────────────────────────────┘                                                            │   │
+    │ │                                                                                             │   │
+    │ │  CLAROTY INTEGRATION:                                                                      │   │
+    │ │  [Asset Inventory] [Vulnerability Summary] [Network Topology]                             │   │
+    │ │                                                                                             │   │
+    │ └─────────────────────────────────────────────────────────────────────────────────────────────┘   │
+    └───────────────────────────────────────────────────────────────────────────────────────────────────┘
+                </pre>
+            </div>
+
+            <!-- Summary Box -->
+            <div class="glass-card rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4"><i class="fas fa-key text-red-400 mr-2"></i>Key Interview Points</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                    <div>
+                        <p class="text-red-400 font-semibold mb-2">Sentinel Architecture:</p>
+                        <ul class="text-gray-400 space-y-1">
+                            <li>• Central Log Analytics Workspace</li>
+                            <li>• 50+ data connectors (cloud + on-prem)</li>
+                            <li>• 200+ custom analytics rules</li>
+                            <li>• SOAR playbooks via Logic Apps</li>
+                            <li>• Tiered retention (hot/archive)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-green-400 font-semibold mb-2">Your Security Engineering Role:</p>
+                        <ul class="text-gray-400 space-y-1">
+                            <li>• Detection rule development (KQL)</li>
+                            <li>• Data connector configuration</li>
+                            <li>• Playbook automation</li>
+                            <li>• Workbook/dashboard creation</li>
+                            <li>• False positive tuning</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex justify-between mt-8">
+                <a href="coke-arch-plants.html" class="px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Part 3: Plants & Distribution
+                </a>
+                <a href="coke-arch-index.html" class="px-6 py-3 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 rounded-lg text-red-400 transition-colors">
+                    Architecture Index<i class="fas fa-th-large ml-2"></i>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
