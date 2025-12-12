@@ -379,6 +379,11 @@
                                         <p class="text-yellow-400 font-bold">🔑 "Validate → Exploitability (CISA KEV!) → Impact → Remediate/Compensate → Verify"</p>
                                         <p class="text-gray-400 text-xs mt-1">Risk = Exploitability × Impact × Exposure. Tier 1/2/3 SLAs.</p>
                                     </div>
+                                    <div class="bg-black/20 rounded-lg p-3 border border-yellow-500/30">
+                                        <p class="text-white font-medium">Q15B: Prioritization & Tools ⭐</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Qualys + TVM → Sentinel enrichment (EPSS, KEV, CMDB) → Auto-tag → Manual validation"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Stop automation at tagging. Human validates before remediation tickets.</p>
+                                    </div>
                                 </div>
                             </div>
 
@@ -1608,6 +1613,74 @@
                                 <p class="text-purple-300 text-sm font-medium mb-2">How do you track remediation progress?</p>
                                 <p class="text-gray-400 text-sm">
                                     "Vulnerability management platform with dashboards. Track: total vulnerabilities by severity, age of vulnerabilities (how long have critical vulns been open?), remediation velocity (how many fixed this week vs opened?), SLA compliance (what percentage are fixed within target?), exceptions and their status. Regular reporting to stakeholders: 'We have 50 critical vulnerabilities, down from 75 last month. 10 are overdue SLA, here's why.' Trend lines matter more than point-in-time numbers. If the trend is improving, we're doing well even if the absolute numbers are high."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q15B - Vulnerability Prioritization & Tools -->
+                    <div class="question-card rounded-xl p-6 mb-6 border-l-4 border-red-500">
+                        <div class="flex items-start space-x-3 mb-4">
+                            <span class="px-2 py-1 rounded bg-red-500/20 text-red-400 text-xs font-bold">Q15B</span>
+                            <span class="px-2 py-1 rounded bg-yellow-500/20 text-yellow-400 text-xs font-bold ml-1">⭐ STRONG</span>
+                            <p class="text-white font-medium">How do you prioritize vulnerabilities and what is your experience with vulnerability management tools?</p>
+                        </div>
+                        
+                        <div class="answer-box">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "I've worked with both <strong class="text-emerald-400">Qualys VMDR and Microsoft Defender TVM</strong>, so I have experience with both traditional scanner-based vulnerability management and Microsoft's cloud-native exposure-based model. In Qualys VMDR, I handled authenticated scans, asset discovery, QID verification, false-positive reduction, and remediation reporting. In MDE TVM, I've worked extensively with exposure scoring, exploitability insights, configuration weaknesses, and enterprise-wide remediation prioritization.
+                                <br><br>
+                                <strong class="text-emerald-400">Risk-Based Prioritization:</strong>
+                                <br><br>
+                                When it comes to prioritizing vulnerabilities, I use a <strong>risk-based approach rather than relying only on CVSS</strong>. TVM gives a strong first layer of prioritization—CVSS, exploit likelihood, known exploited vulnerabilities, device exposure score, and recommended remediation steps—but real prioritization requires additional context.
+                                <br><br>
+                                <strong class="text-emerald-400">Enrichment & Correlation:</strong>
+                                <br><br>
+                                To achieve this, I integrate TVM or Qualys data into <strong>Microsoft Sentinel</strong> and enrich it with:
+                                <br><br>
+                                • <strong>External intelligence:</strong> EPSS (Exploit Prediction Scoring System) and CISA KEV catalog
+                                <br>• <strong>Internal context:</strong> Asset criticality from CMDB or Azure tags
+                                <br><br>
+                                Using KQL, I calculate a <strong>combined risk score</strong> that reflects severity, exploit probability, KEV presence, and business impact. High-risk assets identified through this model are automatically tagged through Logic Apps using MDE device tags or Azure resource tags. This gives downstream teams and tools near-real-time visibility into vulnerable systems.
+                                <br><br>
+                                <strong class="text-emerald-400">Automation Boundaries:</strong>
+                                <br><br>
+                                However, I <strong>intentionally stop automation at tagging</strong>. Once high-risk assets are identified, I validate the findings myself—checking for false positives, verifying applicability, confirming whether compensating controls already mitigate the risk, and assessing patch impact, especially for critical workloads, OT systems, or legacy applications. Only after validation do I open remediation tickets, coordinate patch windows with system owners, or escalate exceptions through the risk governance process.
+                                <br><br>
+                                <strong class="text-emerald-400">Summary:</strong>
+                                <br><br>
+                                My vulnerability management experience is a combination of <strong>strong technical tooling</strong> (Qualys, TVM, Sentinel, Logic Apps) and <strong>practical governance</strong>. I automate correlation and prioritization to accelerate the workflow, but I personally handle validation, exception management, risk communication, and coordinating remediation to ensure the vulnerabilities we address truly reduce organizational risk."
+                            </p>
+                        </div>
+
+                        <div class="mt-6 space-y-4">
+                            <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you calculate the combined risk score in KQL?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "I create a scoring formula that weights multiple factors. For example: <strong>Base score</strong> from CVSS (normalized to 0-100). <strong>Exploitability multiplier</strong>: if EPSS > 0.5 or in CISA KEV, multiply by 1.5-2x. <strong>Asset criticality multiplier</strong>: Tier 1 critical systems multiply by 2x, Tier 2 by 1.5x, Tier 3 by 1x. <strong>Exposure multiplier</strong>: Internet-facing multiply by 1.5x. The final score determines priority tier. I join TVM data with a watchlist containing asset criticality, then calculate: <code>RiskScore = CVSSScore * ExploitMultiplier * CriticalityMultiplier * ExposureMultiplier</code>. Assets above threshold get auto-tagged for immediate attention."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">Why do you stop automation at tagging rather than auto-remediating?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Because context matters and automation can cause harm. <strong>False positives:</strong> Scanners aren't perfect—I've seen vulnerabilities flagged that don't apply to our configuration. <strong>Compensating controls:</strong> A vulnerability might already be mitigated by network segmentation or WAF rules. <strong>Business impact:</strong> Auto-patching a production database during peak hours would be catastrophic. <strong>OT environments:</strong> Patching without vendor approval and testing could crash critical systems. <strong>Exception management:</strong> Some systems legitimately can't be patched and need documented risk acceptance. Tagging surfaces the risk quickly; human judgment ensures we don't break production while reducing risk."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you handle exceptions and risk acceptance?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Formal exception process. If a vulnerability can't be remediated within SLA, the system owner must submit an exception request documenting: <strong>Why</strong> patching isn't possible (technical limitation, vendor constraint, business impact). <strong>Compensating controls</strong> in place to reduce risk. <strong>Target remediation date</strong> (can't be indefinite). <strong>Business owner approval</strong> accepting residual risk. I review the compensating controls to ensure they're adequate. Exceptions are tracked in a register, reviewed quarterly, and escalated if they age out. This ensures visibility—leadership knows what risks we're carrying and why."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">What's the difference between Qualys VMDR and MDE TVM in practice?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "<strong>Qualys VMDR:</strong> Traditional scanner-based. Scheduled authenticated scans, comprehensive CVE coverage, strong for infrastructure and servers, requires scan windows, agent or agentless options. Better for compliance reporting and audit evidence. <strong>MDE TVM:</strong> Continuous, agent-based, cloud-native. No scan windows—it continuously assesses endpoints. Exposure scoring includes configuration weaknesses (not just CVEs), tight integration with MDE for remediation actions, excellent for Windows endpoints. I use them complementarily: TVM for continuous endpoint visibility, Qualys for infrastructure and compliance. Both feed into Sentinel for unified prioritization."
                                 </p>
                             </div>
                         </div>
