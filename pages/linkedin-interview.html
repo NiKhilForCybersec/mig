@@ -266,18 +266,18 @@
                                 <div class="space-y-3 text-sm">
                                     <div class="bg-black/20 rounded-lg p-3">
                                         <p class="text-white font-medium">Q1: Multi-site NGFW deployment</p>
-                                        <p class="text-yellow-400 font-bold">🔑 "Discovery → Templates → Panorama → Staged rollout"</p>
-                                        <p class="text-gray-400 text-xs mt-1">Honest: haven't done greenfield, but understand methodology</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Shared responsibility: Network = routing/NAT, Security = profiles/policies"</p>
+                                        <p class="text-gray-400 text-xs mt-1">I configure security profiles, threat prevention, URL filtering, app control. Network team handles SNAT/DNAT/HA.</p>
                                     </div>
                                     <div class="bg-black/20 rounded-lg p-3">
                                         <p class="text-white font-medium">Q2: Best practices alignment</p>
-                                        <p class="text-yellow-400 font-bold">🔑 "Explicit deny default + No any-any + Log everything + Quarterly cleanup"</p>
-                                        <p class="text-gray-400 text-xs mt-1">Top 5 misconfigs: any-any, SSL off, stale rules, no logging, default creds</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Quarterly firewall rule reviews + Security profile configuration"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Review stale rules, shadow rules, missing profiles. Ensure threat prevention/SSL/URL filtering enabled.</p>
                                     </div>
                                     <div class="bg-black/20 rounded-lg p-3">
                                         <p class="text-white font-medium">Q3: OT production downtime</p>
-                                        <p class="text-yellow-400 font-bold">🔑 "Coordinate with OT first → What changed? → Rollback → Post-incident"</p>
-                                        <p class="text-gray-400 text-xs mt-1">OT = call plant engineer before touching anything</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Coordinate OT first → Was it security or network change? → Surgical rollback"</p>
+                                        <p class="text-gray-400 text-xs mt-1">If my security profile broke it, I can revert it. Post-incident: better testing, OT maintenance windows.</p>
                                     </div>
                                 </div>
                             </div>
@@ -410,8 +410,8 @@
                                     </div>
                                     <div class="bg-black/20 rounded-lg p-3">
                                         <p class="text-white font-medium">Q20: Security incident</p>
-                                        <p class="text-yellow-400 font-bold">🔑 "Encoded PowerShell → Scheduled task → 3 servers → Isolated via MDE → Contained"</p>
-                                        <p class="text-gray-400 text-xs mt-1">Decoded commands, pivoted in Sentinel, coordinated isolation, credential rotation</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "500+ impossible travel alerts → Same IPs, diff users → ASN = Zscaler → FP!"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Rule tuning (ASN check), change control with network team, documented investigation, playbook update</p>
                                     </div>
                                 </div>
                             </div>
@@ -420,8 +420,8 @@
 
                         <!-- Key Stories to Remember -->
                         <div class="mt-6 bg-gradient-to-r from-emerald-500/10 to-blue-500/10 border border-emerald-500/20 rounded-xl p-4">
-                            <h3 class="text-white font-bold mb-3"><i class="fas fa-star text-yellow-400 mr-2"></i>Your 5 Power Stories - Use These Repeatedly</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-5 gap-3 text-sm">
+                            <h3 class="text-white font-bold mb-3"><i class="fas fa-star text-yellow-400 mr-2"></i>Your 6 Power Stories - Use These Repeatedly</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
                                 <div class="bg-black/30 rounded-lg p-3 text-center">
                                     <p class="text-emerald-400 font-bold">🔥 14 HX Consoles</p>
                                     <p class="text-gray-400 text-xs">Python automation<br>Hours → Minutes<br>Still in use today</p>
@@ -433,6 +433,10 @@
                                 <div class="bg-black/30 rounded-lg p-3 text-center">
                                     <p class="text-purple-400 font-bold">🔥 DLP Migration</p>
                                     <p class="text-gray-400 text-xs">Symantec → Purview<br>Leading it NOW<br>Enforcement phase</p>
+                                </div>
+                                <div class="bg-black/30 rounded-lg p-3 text-center">
+                                    <p class="text-orange-400 font-bold">🔥 500+ Zscaler FPs</p>
+                                    <p class="text-gray-400 text-xs">Impossible travel<br>ASN investigation<br>Rule tuning + change control</p>
                                 </div>
                                 <div class="bg-black/30 rounded-lg p-3 text-center">
                                     <p class="text-cyan-400 font-bold">🔥 UEBA Automation</p>
@@ -490,25 +494,23 @@
                         
                         <div class="answer-box">
                             <p class="text-gray-300 text-sm leading-relaxed">
-                                "I'll be upfront—I haven't done a greenfield multi-site NGFW deployment at scale. My experience is more on the security operations and integration side. But I understand the architectural considerations and how I'd approach this:
+                                "In my experience, NGFW deployment is a <strong class="text-emerald-400">shared responsibility between network engineers and security engineers</strong>. Network engineers handle the infrastructure side—routing, NAT, VPN tunnels, HA configuration, physical deployment. Security engineers like myself focus on the security layer—security profiles, threat prevention policies, URL filtering, application control, and ensuring the firewall actually provides security value, not just network segmentation.
                                 <br><br>
-                                <strong class="text-emerald-400">Phase 1: Discovery & Requirements</strong>
-                                <br>
-                                First, I'd understand each site's profile—what traffic patterns exist, what applications run, what's critical for production. A manufacturing plant has different needs than a distribution center. I'd work with network teams and plant engineers to map traffic flows and identify what needs to cross site boundaries.
+                                <strong class="text-emerald-400">My Role in NGFW Deployments:</strong>
                                 <br><br>
-                                <strong class="text-emerald-400">Phase 2: Architecture Design</strong>
-                                <br>
-                                I'd design for consistency across sites using templated configurations—same zone structure, same naming conventions, same security profiles. This makes management and troubleshooting much easier at scale. For OT environments, I'd follow the Purdue Model principles, ensuring proper segmentation between IT and OT networks.
+                                While I haven't done greenfield NGFW design and deployment from scratch—that's typically network engineering territory—I've been heavily involved in the <strong>security configuration and policy aspects</strong>:
                                 <br><br>
-                                <strong class="text-emerald-400">Phase 3: Centralized Management</strong>
-                                <br>
-                                With 10+ firewalls, centralized management is essential. For Palo Alto, that's Panorama with device groups and templates. For Fortinet, it's FortiManager. This allows policy consistency, staged rollouts, and unified logging.
+                                <strong>Security Profile Configuration:</strong> I configure and tune the security profiles that make an NGFW actually 'next-gen'—threat prevention profiles (IPS signatures, anti-malware), URL filtering categories, file blocking policies, SSL decryption rules, and application control policies. Without these properly configured, an NGFW is just an expensive stateful firewall.
                                 <br><br>
-                                <strong class="text-emerald-400">Phase 4: Staged Deployment</strong>
-                                <br>
-                                I'd start with a pilot site, validate the configuration, document lessons learned, then roll out to remaining sites using the refined template. Change management is critical—especially in OT environments where downtime impacts production.
+                                <strong>Policy Design & Review:</strong> I work with network engineers to design security policies that balance security with business needs. I conduct <strong>quarterly firewall rule reviews</strong>—identifying overly permissive rules, stale rules with no hits, shadow rules that never match, and rules missing proper logging.
                                 <br><br>
-                                Even without direct deployment experience, I understand the methodology and would lean on vendor professional services or experienced network engineers while contributing my security expertise around policy design and detection integration."
+                                <strong>Integration with Security Stack:</strong> I ensure firewall logs flow to our SIEM (Sentinel), configure log forwarding, build detection rules based on firewall telemetry, and integrate threat intelligence feeds.
+                                <br><br>
+                                <strong class="text-emerald-400">For a Multi-Site Deployment:</strong>
+                                <br><br>
+                                I'd collaborate with the network team on the infrastructure design while owning the security configuration. I'd create standardized security profile templates—consistent threat prevention, URL filtering, and app control across all sites. I'd establish the governance process: how changes are requested, reviewed, and approved. And I'd ensure centralized visibility—all firewall logs feeding into Sentinel for correlation and threat detection.
+                                <br><br>
+                                The network engineers handle SNAT, DNAT, routing, and HA. I handle making sure the traffic that flows through is actually inspected and protected."
                             </p>
                         </div>
 
@@ -519,28 +521,28 @@
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">How do you determine North–South vs East–West visibility needs?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "North-South is traffic entering/leaving the network—internet traffic, connections to external partners. That's your perimeter defense focus. East-West is internal traffic between segments—server to server, workstation to server. For a manufacturing environment, East-West visibility is actually more critical because once an attacker is inside (or an insider threat exists), they move laterally. I'd implement micro-segmentation between zones and ensure the firewall can inspect internal traffic, not just perimeter. In OT environments, this is especially important—you want to detect unexpected communication between PLCs and the corporate network."
+                                    "This is where security engineering input is critical. North-South is perimeter traffic—internet-bound, partner connections. East-West is internal traffic between segments. From a security perspective, I advocate for East-West visibility because that's where attackers move after initial compromise. I work with network engineers to ensure internal segmentation firewalls have proper security profiles enabled—not just routing, but actual inspection. For manufacturing environments like Coca-Cola, East-West between IT and OT zones is especially critical. I'd push for security profiles on those internal boundaries, not just the internet edge."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">How do you ensure consistent policy across 10+ firewalls in different locations?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "Centralized management is the answer. Using Panorama or FortiManager, I'd create device groups based on site type—all manufacturing plants share a common policy template, all distribution centers share another. Within those templates, I'd use variables for site-specific values like local subnets or DNS servers. Changes go to the template, which then pushes to all firewalls in that group. This ensures consistency and eliminates configuration drift. I'd also implement regular compliance checks—automated audits comparing actual configs to the golden standard."
+                                    "From the security side, I create <strong>standardized security profile templates</strong>. Every site should have the same threat prevention profile, the same URL filtering categories blocked, the same high-risk application controls. I document these as the security baseline. For policy governance, I establish a quarterly review process where I audit all firewalls against this baseline—are security profiles consistently applied? Are there sites with weaker configurations? I work with the network team who manages Panorama or FortiManager to ensure these templates are pushed consistently. My focus is the security configuration; their focus is the network infrastructure."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">How would you design HA for a plant that cannot tolerate downtime?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "For critical OT environments, I'd implement active-passive HA at minimum, with both firewalls synchronized for stateful failover. Session state, routing tables, and security policy are replicated so if the primary fails, traffic switches to the secondary without dropping connections. For ultra-critical environments, you might consider active-active with load balancing. I'd also ensure the HA heartbeat link is isolated from production traffic—dedicated HA interfaces. Testing failover during maintenance windows is essential—you don't want to discover HA doesn't work during an actual outage. And I'd coordinate with plant operations so they know what to expect during failover testing."
+                                    "HA design is primarily network engineering—active-passive clustering, heartbeat links, failover timing. My security input would be: ensure that during failover, security inspection doesn't get bypassed. Sometimes HA configurations have a 'fail-open' mode where traffic passes uninspected during failover—I'd push back on that for critical OT environments. I'd also ensure that both HA nodes have identical security profiles and that session state includes security context. And I'd want monitoring in place so if a failover happens, security gets alerted—not just network operations."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">What tools would you use for centralized management?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "It depends on the vendor. For Palo Alto, Panorama is the standard—device groups, templates, shared policies, centralized logging. For Fortinet, FortiManager handles config management and FortiAnalyzer handles logging. For multi-vendor environments, you might look at third-party tools like Tufin or AlgoSec for policy management across different firewall platforms. The key is having a single pane of glass for policy changes and a centralized log repository for security monitoring—which then feeds into Sentinel or whatever SIEM is in use."
+                                    "The network team typically owns Panorama (Palo Alto) or FortiManager (Fortinet). My interaction is: ensuring security profiles and policies I define get pushed through those tools consistently. I also own the logging side—making sure all firewalls forward logs to our SIEM. For security-specific management, I use the SIEM for visibility across all firewalls, building dashboards that show: blocked threats by site, policy violations, unusual traffic patterns. I might also use tools like Tufin or AlgoSec for policy analysis and compliance checking, which is more security-focused than the network management platforms."
                                 </p>
                             </div>
                         </div>
@@ -555,15 +557,31 @@
                         
                         <div class="answer-box">
                             <p class="text-gray-300 text-sm leading-relaxed">
-                                "I approach this in layers—initial design, ongoing governance, and continuous validation.
+                                "This is core to my role as a security engineer. While network engineers own the infrastructure configuration, I own ensuring the firewall actually provides security value.
                                 <br><br>
-                                <strong class="text-emerald-400">Design Phase:</strong> Start with explicit deny by default—nothing gets through unless there's a rule allowing it. No 'any-any' rules. Rules should be as specific as possible: specific source zones, specific destination applications, specific user groups where possible. Enable logging on everything, especially denies.
+                                <strong class="text-emerald-400">Security Profile Configuration:</strong>
                                 <br><br>
-                                <strong class="text-emerald-400">Security Features:</strong> Enable all the NGFW capabilities you're paying for—App-ID to identify applications regardless of port, URL filtering, threat prevention (IPS signatures), file blocking for known malicious file types, SSL decryption for traffic categories where you need visibility (with appropriate exceptions for privacy-sensitive categories).
+                                I ensure all the 'next-gen' features are properly configured and not just left at defaults:
                                 <br><br>
-                                <strong class="text-emerald-400">Ongoing Governance:</strong> Every rule should have an owner and a documented business justification. Rules without recent hits should be reviewed—maybe they're no longer needed. Shadow rule detection to identify rules that never match because a broader rule above them already allows the traffic. Quarterly rule cleanup reviews.
+                                • <strong>Threat Prevention Profiles:</strong> IPS signatures enabled and tuned for our environment, anti-malware scanning active, vulnerability protection aligned with our asset criticality
+                                <br>• <strong>URL Filtering:</strong> High-risk categories blocked (malware, phishing, C2), appropriate categories for business needs, logging enabled for visibility
+                                <br>• <strong>Application Control:</strong> High-risk applications blocked or restricted, sanctioned apps explicitly allowed, unknown applications flagged for review
+                                <br>• <strong>SSL Decryption:</strong> Enabled for categories where we need visibility, with appropriate exceptions for privacy-sensitive traffic and certificate-pinned applications
+                                <br>• <strong>File Blocking:</strong> Dangerous file types blocked (executables in email, scripts from untrusted sources)
                                 <br><br>
-                                <strong class="text-emerald-400">Validation:</strong> Regular security assessments—can we still access things that should be blocked? Are there bypasses? I'd also compare configs against vendor hardening guides and CIS benchmarks."
+                                <strong class="text-emerald-400">Quarterly Firewall Rule Reviews:</strong>
+                                <br><br>
+                                I conduct <strong>quarterly reviews of firewall policies</strong> to ensure they stay aligned with best practices:
+                                <br><br>
+                                • <strong>Overly permissive rules:</strong> Any 'any-any' rules or rules broader than necessary get flagged for tightening
+                                <br>• <strong>Stale rules:</strong> Rules with zero hits in 90 days—are they still needed? I work with rule owners to validate or remove
+                                <br>• <strong>Shadow rules:</strong> Rules that never match because a broader rule above them catches the traffic first
+                                <br>• <strong>Missing security profiles:</strong> Rules allowing traffic without threat inspection attached
+                                <br>• <strong>Logging gaps:</strong> Rules without logging enabled—we need visibility for incident response
+                                <br><br>
+                                <strong class="text-emerald-400">Governance & Documentation:</strong>
+                                <br><br>
+                                Every rule should have an owner and documented business justification. I maintain this documentation and ensure changes go through proper review before implementation."
                             </p>
                         </div>
 
@@ -573,21 +591,21 @@
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">What are the top five misconfigurations you commonly see on firewalls?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "From what I've seen and studied: (1) <strong>Overly permissive rules</strong>—'any-any' rules that were supposed to be temporary but became permanent. (2) <strong>Disabled security features</strong>—SSL decryption turned off because it was 'too complicated,' leaving you blind to encrypted threats. (3) <strong>Stale rules</strong>—rules for decommissioned servers or former employees still active. (4) <strong>Logging disabled</strong>—rules without logging, so you have no visibility when something goes wrong. (5) <strong>Default credentials</strong>—admin accounts still using vendor defaults, or management interfaces exposed to the internet."
+                                    "From my quarterly reviews: (1) <strong>Security profiles not attached:</strong> Rules allowing traffic but with no threat prevention, URL filtering, or app control—the traffic flows but isn't inspected. This defeats the purpose of having an NGFW. (2) <strong>SSL decryption disabled:</strong> 'Too complicated' or 'performance concerns'—but without it, you're blind to 80%+ of traffic that's encrypted. (3) <strong>Overly permissive rules:</strong> 'Any-any' rules that were temporary but became permanent, or rules allowing entire subnets when only specific hosts needed access. (4) <strong>Stale rules:</strong> Rules for decommissioned servers, former employees, or projects that ended years ago. (5) <strong>Logging disabled:</strong> Rules without logging, so when something goes wrong, we have no visibility into what happened."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">How do you standardize rule creation and governance?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "Process and documentation. Every firewall change should go through a request process—who needs access, to what, for what business reason, for how long. That becomes the rule documentation. Naming conventions should be standardized: 'ALLOW_WebTeam_to_ProdDB_MySQL' tells you exactly what the rule does. Pre-defined zone structures that everyone follows. A review process where security approves before implementation. And post-implementation verification—did the rule actually solve the requester's problem without opening more than intended?"
+                                    "Process and documentation. Every firewall change request must include: who needs access, to what specifically, for what business reason, and for how long (temporary vs permanent). That becomes the rule documentation. I've established naming conventions so rules are self-documenting: 'ALLOW_WebTeam_to_ProdDB_MySQL' tells you exactly what it does. Before implementation, I review security aspects: Is the scope as narrow as possible? Are appropriate security profiles attached? Is logging enabled? After implementation, I verify the rule works as intended without opening more than requested. All of this feeds into my quarterly review—I can trace every rule back to its justification."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">How do you document firewall deployments and changes?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "Multiple levels. <strong>Architecture documentation:</strong> network diagrams showing firewall placement, zone definitions, traffic flows. This lives in a central wiki or documentation system. <strong>Configuration documentation:</strong> what each policy does and why. <strong>Change records:</strong> every change linked to a ticket with business justification, approvals, implementation notes, and rollback plan. <strong>Runbooks:</strong> how to perform common tasks like adding a new zone or troubleshooting connectivity issues. The goal is that anyone on the team can understand and maintain the environment, not just the person who built it."
+                                    "Multiple levels. <strong>Security baseline documentation:</strong> What security profiles should be applied, what categories blocked, what applications restricted—this is the standard all firewalls should meet. <strong>Rule documentation:</strong> Every rule linked to a change ticket with business justification, owner, and review date. <strong>Quarterly review reports:</strong> Findings from my audits—what was cleaned up, what risks were identified, what needs remediation. <strong>Exception documentation:</strong> If something deviates from baseline (SSL decryption disabled for specific traffic, for example), it's documented with risk acceptance. The goal is that anyone can understand why the firewall is configured the way it is, and we can demonstrate compliance during audits."
                                 </p>
                             </div>
                         </div>
@@ -602,23 +620,27 @@
                         
                         <div class="answer-box">
                             <p class="text-gray-300 text-sm leading-relaxed">
-                                "First rule in OT: coordinate with operations. I'm not going to start making changes without talking to the plant engineer and understanding the impact. Production downtime in OT is serious—it's not just 'the website is slow,' it could be 'the production line stopped.'
+                                "First, context matters: was this a network change (routing, NAT) or a security change (policy, security profile)? In the shared responsibility model, network engineers handle infrastructure; I handle security. But during an outage, we work together.
                                 <br><br>
-                                <strong class="text-emerald-400">Immediate Triage:</strong>
-                                <br>
-                                What changed? Pull the most recent firewall changes from change management. If we just pushed a rule change and production immediately broke, that's probably the culprit.
+                                <strong class="text-emerald-400">Immediate Coordination:</strong>
                                 <br><br>
-                                <strong class="text-emerald-400">Traffic Analysis:</strong>
-                                <br>
-                                Look at session logs and traffic logs. Filter by the affected source/destination. Are we seeing denies that weren't there before? Is traffic being classified differently by App-ID? Is something hitting an implicit deny that used to match an allow rule?
+                                In OT environments, the first call is to the plant engineer or OT team—they need to know there's an issue and can tell us what's actually broken from the production side. We don't make changes in isolation.
+                                <br><br>
+                                <strong class="text-emerald-400">Identify the Change:</strong>
+                                <br><br>
+                                Pull the recent change log. What was modified? If it was a security profile change I made—maybe I tightened a threat prevention policy or added a new URL filtering category—that's my responsibility to troubleshoot. If it was a routing or NAT change, I'd work with the network engineer but the infrastructure troubleshooting is their domain.
+                                <br><br>
+                                <strong class="text-emerald-400">If It's a Security Policy Issue:</strong>
+                                <br><br>
+                                I check the traffic logs for denies. Is the OT traffic hitting a new block rule? Is a security profile (IPS, application control) blocking something it shouldn't? Is SSL decryption interfering with a certificate-pinned OT application? These are things I can diagnose from the logs.
                                 <br><br>
                                 <strong class="text-emerald-400">Rollback Decision:</strong>
-                                <br>
-                                If the cause is clear and rollback is safe, revert the change. In OT, restoring production takes priority over forensic investigation. We can analyze later. I'd coordinate with the OT team: 'I'm going to revert this rule change in 30 seconds—watch the production line and tell me if traffic resumes.'
                                 <br><br>
-                                <strong class="text-emerald-400">Verify & Document:</strong>
-                                <br>
-                                Confirm production is restored. Then do the post-incident analysis: why did this change cause this impact? Was the change request incomplete? Did we not understand all the traffic flows? Update documentation and change process to prevent recurrence."
+                                If my security change caused the outage, I can revert it—disable the new rule or restore the previous security profile. I'd coordinate with OT: 'I'm reverting this change in 30 seconds, watch the production line.' For security changes, I typically have the authority to rollback without lengthy approval chains during an active outage.
+                                <br><br>
+                                <strong class="text-emerald-400">Post-Incident:</strong>
+                                <br><br>
+                                Once production is restored, I do the analysis: why did this security change break production? Did I not understand the traffic patterns? Did we test in the wrong environment? The lesson feeds into better change control—for OT environments, security changes should probably be tested in a maintenance window, not during production hours."
                             </p>
                         </div>
 
@@ -628,28 +650,28 @@
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">What do you check first in session and traffic logs?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "I filter by the source and destination involved in the affected communication. Look for deny actions that weren't there before the change. Check the rule name—is it hitting the new rule we added, or an implicit deny? Look at App-ID—is the traffic being classified as something unexpected? If SSL decryption was enabled, is certificate verification failing? The logs usually tell the story quickly if you know where to look."
+                                    "I filter by the source and destination involved in the broken communication. Looking for: <strong>Deny actions</strong>—is traffic being blocked that wasn't before? <strong>Which rule is matching</strong>—is it hitting my new security policy or an unexpected rule? <strong>Security profile blocks</strong>—threat prevention, URL filtering, or app control triggering on legitimate traffic? <strong>Application identification</strong>—is App-ID classifying the OT traffic as something unexpected? <strong>SSL decryption issues</strong>—certificate errors if we're decrypting traffic from an application that doesn't tolerate it. The logs usually tell the story within a few minutes if you know what to look for."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">How would you safely roll back during active outage?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "If we're using centralized management like Panorama, there should be a config rollback option—revert to the last known-good configuration and push. If it's a single rule change, I'd disable the problematic rule rather than reverting the entire config—less risk of unintended side effects. I'd communicate clearly: 'Rolling back rule X in 30 seconds, watch for traffic restoration.' And I'd have someone monitoring the production system so we know immediately if the rollback worked."
+                                    "If it's a security policy I changed, I can disable that specific rule or revert the security profile—minimal blast radius. I don't want to roll back the entire firewall configuration if only one rule is the problem. I communicate clearly: 'Disabling rule X in 30 seconds, confirm when production resumes.' If it's more complex—like a security profile that's applied to multiple rules—I might temporarily set it to 'alert only' mode instead of 'block' to restore traffic while preserving some visibility. The key is surgical rollback, not wholesale revert, and constant communication with the OT team."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">How do you verify the fix doesn't impact other systems?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "Watch the logs for unexpected denies on other traffic after the rollback. Check with other teams—did anything else break when we reverted? If the original change was supposed to enable something, we need to understand why it broke something else. Maybe the rule order was wrong, or the scope was broader than intended. Don't rush to re-implement the original change until we understand the full picture."
+                                    "After the immediate rollback, I watch the logs for unexpected denies on other traffic. I check with other teams—did anything else break when we reverted? The original security change was made for a reason—maybe to block a risky application or enforce a policy. By rolling back, we've reopened whatever we were trying to close. So I need to find a better solution: maybe a more targeted rule that achieves the security goal without breaking OT, or an exception for specific OT traffic while still protecting IT. The rollback is temporary relief; the real fix comes after proper analysis."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">How do you prevent recurrence?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "Post-incident review. What went wrong? Was the change request incomplete—did it list all affected systems? Did we test in a non-production environment first? For OT networks, changes should probably require sign-off from OT engineers who understand the production dependencies. Maybe we need a better staging process—test the rule in 'log only' mode before setting it to block. Update the change management process based on lessons learned."
+                                    "Post-incident review focused on process improvement. <strong>Testing gaps:</strong> Did we test this change? Did our test environment actually reflect OT traffic patterns? <strong>Change windows:</strong> For OT environments, security changes should probably happen during maintenance windows when we can monitor impact, not during peak production. <strong>OT coordination:</strong> OT engineers should be notified—or even approve—security changes that affect their networks. They know what traffic patterns are critical. <strong>Documentation:</strong> I document what went wrong and update my change process. The goal is learning from the incident, not just fixing it."
                                 </p>
                             </div>
                         </div>
@@ -1676,23 +1698,37 @@
                             <p class="text-gray-300 text-sm leading-relaxed">
                                 "<strong class="text-emerald-400">Situation:</strong>
                                 <br>
-                                I was working an alert where MDE flagged suspicious PowerShell activity on a server. The alert showed encoded commands being executed—a common technique to evade detection.
+                                We suddenly had over 500 sign-in alerts flood our queue within a short timeframe. The alerts were flagging 'impossible travel'—users appearing to authenticate from geographically distant locations within timeframes that were physically impossible. Initial triage suggested this could be a credential stuffing attack or potentially a password spray targeting multiple accounts.
                                 <br><br>
                                 <strong class="text-emerald-400">Task:</strong>
                                 <br>
-                                As the security engineer investigating, I needed to determine: Was this malicious? How did it get there? What's the scope? What do we do about it?
+                                We were in the middle of a SIEM migration phase, and part of my responsibility was not just responding to alerts but actively validating detection rules for false positives. So while the initial assessment pointed toward a potential attack, I took the initiative to dig deeper before escalating this as a major incident.
                                 <br><br>
                                 <strong class="text-emerald-400">Action:</strong>
                                 <br>
-                                First, I decoded the PowerShell commands—they were attempting to download and execute a second-stage payload. I checked MDE telemetry for process lineage: what launched PowerShell? It came from a scheduled task that had been recently created.
+                                I started by looking at the patterns across the 500+ alerts. What I noticed was interesting: the <strong>same IP addresses</strong> were appearing across <strong>multiple different users</strong>. In a real credential attack, you'd typically see different source IPs trying the same accounts, or one compromised account being accessed from unusual locations. This was the opposite—same IPs, different users.
                                 <br><br>
-                                I used Sentinel to pivot: had we seen similar activity on other hosts? I found two more servers with the same pattern. This wasn't a one-off—we had a broader issue.
+                                That pattern made me suspicious. I pulled the <strong>ASN (Autonomous System Number)</strong> details for these IP addresses. They all came back as <strong>Zscaler</strong>—our cloud proxy provider.
                                 <br><br>
-                                I coordinated with the sysadmin to isolate the affected servers (using MDE's isolation feature for quick containment). I preserved evidence—process logs, scheduled task details, network connections. We identified the initial vector: a compromised service account used in an automation script.
+                                Then it clicked: Zscaler rotates their egress IPs as part of normal operations. When users connect through Zscaler, their traffic exits through various Zscaler data centers globally. If Zscaler rotates IPs or routes traffic through different geographic nodes, our sign-in logs would show the same user authenticating from different locations in quick succession—triggering impossible travel alerts.
+                                <br><br>
+                                I validated this theory by correlating the alert timestamps with Zscaler's IP rotation patterns and confirmed that the 'impossible travel' was actually just users' traffic being routed through different Zscaler egress points.
                                 <br><br>
                                 <strong class="text-emerald-400">Result:</strong>
                                 <br>
-                                Contained the incident before data exfiltration. Identified three affected servers (none in production thankfully). Rotated the compromised credentials. Implemented additional detection rules for similar encoded PowerShell patterns. Lessons learned fed into improving our service account management practices."
+                                <strong>Not an attack—false positives caused by infrastructure behavior.</strong> But instead of just closing the alerts and moving on, I turned this into process improvement:
+                                <br><br>
+                                • <strong>Rule Tuning:</strong> I updated our impossible travel detection rules to include ASN checks. If the source IP belongs to known proxy/VPN ASNs (Zscaler, corporate VPN ranges), we either exclude them or reduce severity, since 'impossible travel' through proxies is expected behavior.
+                                <br><br>
+                                • <strong>Change Control:</strong> I worked with the network team to enforce proper change control for proxy infrastructure changes. If Zscaler is adding new egress IPs or changing routing, security needs to be notified so we can update our allowlists and detection logic proactively—not reactively when 500 alerts hit our queue.
+                                <br><br>
+                                • <strong>Documentation:</strong> I documented the entire investigation—the initial hypothesis, how I pivoted based on patterns, the ASN analysis, and the root cause. This became a reference for the team so future analysts wouldn't waste hours investigating the same false positive pattern.
+                                <br><br>
+                                • <strong>Playbook Update:</strong> Added 'Check ASN for known proxy providers' as a standard step in our impossible travel investigation playbook.
+                                <br><br>
+                                <strong class="text-emerald-400">What I Learned:</strong>
+                                <br>
+                                This reinforced that not every alert flood is an attack—sometimes it's your own infrastructure behaving in ways the detection rules didn't anticipate. The value wasn't just in closing 500 alerts; it was in preventing the next 5,000 by fixing the underlying detection gap."
                             </p>
                         </div>
 
@@ -1700,23 +1736,37 @@
                             <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
                             
                             <div class="followup-card rounded-lg p-4">
-                                <p class="text-purple-300 text-sm font-medium mb-2">How did you validate the incident?</p>
+                                <p class="text-purple-300 text-sm font-medium mb-2">How did you validate this was a false positive and not an actual attack using Zscaler as cover?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "Multiple indicators. The encoded PowerShell alone could be legitimate (some admin tools use it), but combined with: recently created scheduled task, unknown external destination for the download, and no change request or known automation explaining it—this was clearly suspicious. I also checked the hash of the downloaded payload against VirusTotal: confirmed malicious. The combination of behavioral anomaly plus known-bad IOCs validated it as a real incident, not a false positive."
+                                    "Good question—that's exactly what I had to rule out. I looked at several factors: (1) <strong>Success vs failure ratio:</strong> In a credential attack, you'd see many failed attempts. These were all successful authentications from legitimate users. (2) <strong>User behavior post-login:</strong> I checked what users did after authenticating—normal activity, accessing expected resources, no lateral movement or data access anomalies. (3) <strong>Account diversity:</strong> The affected accounts spanned different departments, roles, and access levels—not the targeted pattern you'd see in a focused attack. (4) <strong>Timing correlation:</strong> The alerts clustered around when Zscaler would typically rotate IPs or during peak usage when load balancing across egress points increases. If it were an attack, I'd expect more random timing. The combination of these factors gave me confidence it was infrastructure behavior, not malicious activity."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
-                                <p class="text-purple-300 text-sm font-medium mb-2">How did you communicate with other teams?</p>
+                                <p class="text-purple-300 text-sm font-medium mb-2">How did you tune the detection rule to reduce false positives without missing real attacks?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "Clear, calm, action-oriented. To the sysadmin: 'We have a confirmed security incident on servers X, Y, Z. I need you to help me isolate them immediately. Here's what I'm seeing...' I didn't cause panic, but I conveyed urgency. To management: 'We're handling an incident involving three servers. It's contained. No evidence of data exfiltration. I'll provide a full update in one hour.' Brief, factual, reassuring that we have it under control. After resolution, a written incident report with timeline, impact, root cause, and remediation."
+                                    "The key was adding context, not just excluding traffic. I didn't want to blindly whitelist all Zscaler IPs because an attacker could potentially abuse that. Instead, I added logic that: (1) <strong>Checks ASN:</strong> If the source IP belongs to a known corporate proxy ASN (Zscaler, our VPN provider), the rule considers this context. (2) <strong>Adjusts severity:</strong> Impossible travel through known proxies generates a low-severity informational alert rather than a high-severity incident. (3) <strong>Adds correlation:</strong> If we see impossible travel through Zscaler AND other suspicious indicators (failed MFA, unusual user agent, access to sensitive resources), it still escalates. (4) <strong>Maintains visibility:</strong> We still log these events—we just don't alert on them at high severity. If we ever need to investigate a user, the data is there. The goal was reducing noise while preserving detection capability for scenarios where proxy traffic might actually be suspicious."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
-                                <p class="text-purple-300 text-sm font-medium mb-2">What lessons did you take forward?</p>
+                                <p class="text-purple-300 text-sm font-medium mb-2">What was the business impact of this investigation?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "Several. <strong>Detection gap:</strong> We didn't have good alerting on suspicious scheduled task creation—I added that. <strong>Service account hygiene:</strong> The compromised account was overprivileged and its password hadn't been rotated in too long. We implemented stricter service account policies. <strong>Playbook:</strong> I documented the investigation steps so the next person handling a similar alert has a guide to follow. <strong>Dwell time:</strong> The scheduled task had been there for two days before we detected execution—I looked at whether we could have detected the initial persistence earlier."
+                                    "Immediate impact: saved the SOC hours of wasted investigation time. Those 500+ alerts would have taken significant analyst hours to triage individually. By identifying the root cause quickly, I prevented that waste. <strong>Ongoing impact:</strong> The rule tuning prevented recurring false positives—we stopped seeing these Zscaler-triggered impossible travel alerts flood the queue. <strong>Process impact:</strong> The change control enforcement with the network team meant we'd be notified proactively about proxy changes, not surprised by alert spikes. <strong>Knowledge impact:</strong> The documentation I created became a training reference. New analysts now know to check ASN early in impossible travel investigations. It's about building institutional knowledge, not just solving one incident."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How did you communicate this to stakeholders?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Different messages for different audiences. To my <strong>immediate team</strong>: detailed technical walkthrough—here's what happened, here's the ASN analysis, here's how I tuned the rule, here's the documentation. To <strong>management</strong>: 'We had 500+ alerts that initially looked like a credential attack. Investigation confirmed it was false positives triggered by our Zscaler proxy infrastructure. No security incident. I've tuned our detection rules and implemented change control with the network team to prevent recurrence.' To the <strong>network team</strong>: 'Your Zscaler IP rotation triggered our security alerts. Not your fault, but let's establish a process where security is notified before proxy changes so we can update our detection logic proactively.' I framed it collaboratively—not 'you caused a problem' but 'let's work together to prevent this.'"
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">What would you have done differently if this had been a real attack?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "If the ASN analysis had shown non-corporate IPs, or if I'd seen failed authentication attempts, or suspicious post-login behavior—the response would have been very different. <strong>Immediate containment:</strong> Disable affected accounts or force password resets. <strong>Scope assessment:</strong> Which accounts were actually compromised vs attempted? <strong>Credential rotation:</strong> If it's password spray, assume exposed passwords need rotation. <strong>MFA verification:</strong> Ensure MFA was enforced and not bypassed. <strong>Threat hunt:</strong> Look for persistence mechanisms, lateral movement from compromised accounts. <strong>Block malicious IPs:</strong> If we identified attacker infrastructure, block at the perimeter. The investigation approach is similar—pattern analysis, pivoting, correlation—but the response actions are completely different. That's why validating whether it's real before escalating matters so much."
                                 </p>
                             </div>
                         </div>
