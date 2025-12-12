@@ -298,12 +298,12 @@
                                     </div>
                                     <div class="bg-black/20 rounded-lg p-3">
                                         <p class="text-white font-medium">Q6: PAM visibility</p>
-                                        <p class="text-yellow-400 font-bold">🔑 "Honest: SIEM side, not admin. Detection rules for privileged access"</p>
-                                        <p class="text-gray-400 text-xs mt-1">JIT, vaulting, session recording, rotation - understand concepts deeply</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "SIEM integration + Detection engineering + JIT/Vaulting/Rotation"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Built detection rules: off-hours sessions, unusual access, checkout without session</p>
                                     </div>
                                     <div class="bg-black/20 rounded-lg p-3">
                                         <p class="text-white font-medium">Q7: KMS/secrets</p>
-                                        <p class="text-yellow-400 font-bold">🔑 "Honest: conceptual. Never in code + Least privilege + Rotation + Audit"</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Never in code + Least privilege + Rotation + Audit + Detection"</p>
                                         <p class="text-gray-400 text-xs mt-1">Key Vault, HashiCorp Vault, managed identities, certificate monitoring</p>
                                     </div>
                                 </div>
@@ -315,8 +315,8 @@
                                 <div class="space-y-3 text-sm">
                                     <div class="bg-black/20 rounded-lg p-3">
                                         <p class="text-white font-medium">Q8: CI/CD security</p>
-                                        <p class="text-yellow-400 font-bold">🔑 "Personal project: GitHub Actions + SAST/DAST/dependency scanning"</p>
-                                        <p class="text-gray-400 text-xs mt-1">Right checks at right time. Secrets = blocking. Fast feedback loop.</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Layered: Pre-commit → Build → Post-build | Parallel + Incremental"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Secrets scanning blocks, SAST/SCA in parallel, DAST post-deploy</p>
                                     </div>
                                     <div class="bg-black/20 rounded-lg p-3">
                                         <p class="text-white font-medium">Q9: Python/PowerShell automation</p>
@@ -451,22 +451,22 @@
 
                         <!-- Honest Gaps Reminder -->
                         <div class="mt-4 bg-red-500/10 border border-red-500/20 rounded-xl p-4">
-                            <h3 class="text-red-400 font-bold mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>Remember Your Honest Gaps</h3>
+                            <h3 class="text-red-400 font-bold mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>Areas to Position Carefully</h3>
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
                                 <div class="text-center">
-                                    <p class="text-gray-400"><strong class="text-white">PAM:</strong> SIEM side, not admin</p>
+                                    <p class="text-gray-400"><strong class="text-white">CASB:</strong> Detection focus, learning admin</p>
                                 </div>
                                 <div class="text-center">
-                                    <p class="text-gray-400"><strong class="text-white">CASB:</strong> Detection, not config</p>
+                                    <p class="text-gray-400"><strong class="text-white">OT/ICS:</strong> IT-side, studied Purdue/IEC</p>
                                 </div>
                                 <div class="text-center">
-                                    <p class="text-gray-400"><strong class="text-white">OT:</strong> IT side, studied concepts</p>
+                                    <p class="text-gray-400"><strong class="text-white">Fortinet:</strong> Palo Alto is primary</p>
                                 </div>
                                 <div class="text-center">
-                                    <p class="text-gray-400"><strong class="text-white">Fortinet:</strong> Palo Alto primary</p>
+                                    <p class="text-gray-400"><strong class="text-white">Network infra:</strong> Security profiles, not routing</p>
                                 </div>
                             </div>
-                            <p class="text-gray-500 text-xs mt-2 text-center">But always follow with: "I understand the concepts deeply and I'm eager to expand into this area"</p>
+                            <p class="text-gray-500 text-xs mt-2 text-center">Position as: "My focus is the security layer—I bring deep expertise there and collaborate with specialists on infrastructure"</p>
                         </div>
                     </div>
                 </section>
@@ -494,23 +494,34 @@
                         
                         <div class="answer-box">
                             <p class="text-gray-300 text-sm leading-relaxed">
-                                "In my experience, NGFW deployment is a <strong class="text-emerald-400">shared responsibility between network engineers and security engineers</strong>. Network engineers handle the infrastructure side—routing, NAT, VPN tunnels, HA configuration, physical deployment. Security engineers like myself focus on the security layer—security profiles, threat prevention policies, URL filtering, application control, and ensuring the firewall actually provides security value, not just network segmentation.
+                                "When deploying NGFWs across multiple manufacturing and distribution sites, I approach it as both an <strong class="text-emerald-400">architecture exercise and an operational governance exercise</strong>. NGFW deployment is naturally a shared responsibility between network engineering and security engineering, but my role focuses on ensuring the firewalls are designed, standardized, and enforced as security controls—not just as routers with ACLs.
                                 <br><br>
-                                <strong class="text-emerald-400">My Role in NGFW Deployments:</strong>
+                                <strong class="text-emerald-400">From a Design Perspective:</strong>
                                 <br><br>
-                                While I haven't done greenfield NGFW design and deployment from scratch—that's typically network engineering territory—I've been heavily involved in the <strong>security configuration and policy aspects</strong>:
+                                I start by mapping out the <strong>segmentation model</strong>: IT zones versus OT zones, DMZs, production networks, vendor access paths, and cloud interconnects. For each site, I assess whether it requires only North-South filtering at the perimeter, or whether East-West inspection is needed within the plant for lateral movement detection. I also define the HA requirements based on criticality—manufacturing plants that can't tolerate downtime need active-passive clustering with sub-second failover.
                                 <br><br>
-                                <strong>Security Profile Configuration:</strong> I configure and tune the security profiles that make an NGFW actually 'next-gen'—threat prevention profiles (IPS signatures, anti-malware), URL filtering categories, file blocking policies, SSL decryption rules, and application control policies. Without these properly configured, an NGFW is just an expensive stateful firewall.
+                                <strong class="text-emerald-400">Security Layer Ownership:</strong>
                                 <br><br>
-                                <strong>Policy Design & Review:</strong> I work with network engineers to design security policies that balance security with business needs. I conduct <strong>quarterly firewall rule reviews</strong>—identifying overly permissive rules, stale rules with no hits, shadow rules that never match, and rules missing proper logging.
+                                This is where NGFW value is made real. I build <strong>standardized security baselines and templates</strong> for all sites:
                                 <br><br>
-                                <strong>Integration with Security Stack:</strong> I ensure firewall logs flow to our SIEM (Sentinel), configure log forwarding, build detection rules based on firewall telemetry, and integrate threat intelligence feeds.
+                                • <strong>Threat Prevention Profiles:</strong> IPS signatures tuned for our environment, anti-malware, vulnerability protection
+                                <br>• <strong>SSL Decryption Policies:</strong> Categories where we need visibility, with appropriate exceptions for certificate-pinned applications
+                                <br>• <strong>URL Filtering:</strong> High-risk categories blocked consistently across all sites
+                                <br>• <strong>Application Control:</strong> App-ID based rules instead of port-based—blocking risky apps, allowing sanctioned ones
+                                <br>• <strong>DNS Security:</strong> Blocking known malicious domains at the DNS layer
+                                <br>• <strong>File Blocking:</strong> Dangerous file types blocked at the perimeter
                                 <br><br>
-                                <strong class="text-emerald-400">For a Multi-Site Deployment:</strong>
+                                These templates ensure that whether the firewall is in Toronto or a bottling plant in Calgary, the inspection and enforcement posture is <strong>consistent and aligned to corporate standards</strong>.
                                 <br><br>
-                                I'd collaborate with the network team on the infrastructure design while owning the security configuration. I'd create standardized security profile templates—consistent threat prevention, URL filtering, and app control across all sites. I'd establish the governance process: how changes are requested, reviewed, and approved. And I'd ensure centralized visibility—all firewall logs feeding into Sentinel for correlation and threat detection.
+                                <strong class="text-emerald-400">Policy Design & Governance:</strong>
                                 <br><br>
-                                The network engineers handle SNAT, DNAT, routing, and HA. I handle making sure the traffic that flows through is actually inspected and protected."
+                                I work with operations and network teams to define <strong>least-privilege zone-to-zone rules</strong>. I proactively identify overly permissive rules, shadow rules, and stale access through quarterly audits. Every rule has an owner, a documented business justification, and a review date.
+                                <br><br>
+                                <strong class="text-emerald-400">Operational Integration:</strong>
+                                <br><br>
+                                I ensure all NGFWs forward logs to Sentinel, validate log completeness, and build detection use cases based on firewall telemetry—lateral movement indicators, C2 traffic patterns, anomalous OT protocol usage. I also define the change governance process: how firewall changes are requested, risk-assessed, approved, and implemented in a way that minimizes OT risk.
+                                <br><br>
+                                <strong class="text-emerald-400">Bottom line:</strong> Network engineering handles routing, NAT, and HA infrastructure. I own the security posture, policy standardization, threat inspection tuning, SIEM integration, and governance. That ensures every firewall deployment actually delivers strong, consistent, measurable security—not just network segmentation."
                             </p>
                         </div>
 
@@ -521,28 +532,28 @@
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">How do you determine North–South vs East–West visibility needs?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "This is where security engineering input is critical. North-South is perimeter traffic—internet-bound, partner connections. East-West is internal traffic between segments. From a security perspective, I advocate for East-West visibility because that's where attackers move after initial compromise. I work with network engineers to ensure internal segmentation firewalls have proper security profiles enabled—not just routing, but actual inspection. For manufacturing environments like Coca-Cola, East-West between IT and OT zones is especially critical. I'd push for security profiles on those internal boundaries, not just the internet edge."
+                                    "North-South handles perimeter traffic—internet-bound, partner connections, cloud access. But for manufacturing environments, <strong>East-West is where the real risk lives</strong>. Once an attacker gains initial access, they move laterally. For Coca-Cola's plants, I'd advocate for East-West inspection between IT and OT zones, between production segments, and anywhere sensitive systems communicate. I'd map the critical communication flows with OT engineers, then design inspection points that provide visibility without introducing latency that impacts production. The goal is detecting lateral movement and anomalous internal traffic, not just blocking internet threats."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">How do you ensure consistent policy across 10+ firewalls in different locations?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "From the security side, I create <strong>standardized security profile templates</strong>. Every site should have the same threat prevention profile, the same URL filtering categories blocked, the same high-risk application controls. I document these as the security baseline. For policy governance, I establish a quarterly review process where I audit all firewalls against this baseline—are security profiles consistently applied? Are there sites with weaker configurations? I work with the network team who manages Panorama or FortiManager to ensure these templates are pushed consistently. My focus is the security configuration; their focus is the network infrastructure."
+                                    "Template-driven deployment through centralized management. I create <strong>security baseline templates</strong>—standard threat prevention profiles, URL filtering categories, application control policies—that define 'what good looks like.' These templates are pushed through Panorama or FortiManager to all sites. Site-specific variables (local subnets, specific server IPs) are parameterized, but the security posture remains consistent. I also run <strong>quarterly compliance audits</strong> comparing each firewall against the baseline—identifying drift, exceptions, and sites with weaker configurations. Any deviation requires documented risk acceptance."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">How would you design HA for a plant that cannot tolerate downtime?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "HA design is primarily network engineering—active-passive clustering, heartbeat links, failover timing. My security input would be: ensure that during failover, security inspection doesn't get bypassed. Sometimes HA configurations have a 'fail-open' mode where traffic passes uninspected during failover—I'd push back on that for critical OT environments. I'd also ensure that both HA nodes have identical security profiles and that session state includes security context. And I'd want monitoring in place so if a failover happens, security gets alerted—not just network operations."
+                                    "Active-passive clustering with stateful failover is the minimum. Session state, connection tables, and security context must replicate so failover doesn't drop active connections. From the security side, my requirements are: (1) <strong>No fail-open mode</strong>—during failover, traffic should queue briefly rather than bypass inspection entirely. (2) <strong>Both nodes must have identical security profiles</strong>—a failover shouldn't change the security posture. (3) <strong>Monitoring and alerting</strong>—if a failover happens, security gets notified immediately, not just network operations. I'd also ensure failover testing happens during maintenance windows so we validate it actually works before an emergency."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">What tools would you use for centralized management?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "The network team typically owns Panorama (Palo Alto) or FortiManager (Fortinet). My interaction is: ensuring security profiles and policies I define get pushed through those tools consistently. I also own the logging side—making sure all firewalls forward logs to our SIEM. For security-specific management, I use the SIEM for visibility across all firewalls, building dashboards that show: blocked threats by site, policy violations, unusual traffic patterns. I might also use tools like Tufin or AlgoSec for policy analysis and compliance checking, which is more security-focused than the network management platforms."
+                                    "For Palo Alto environments, <strong>Panorama</strong> with device groups and templates—network team manages the infrastructure, I define the security policies and profiles that get pushed. For Fortinet, <strong>FortiManager plus FortiAnalyzer</strong>. For policy analysis and compliance, tools like <strong>Tufin or AlgoSec</strong> help identify risky rules, shadow rules, and compliance gaps across multi-vendor environments. On the security monitoring side, all logs flow to <strong>Sentinel</strong> where I build dashboards showing blocked threats by site, policy violations, and unusual traffic patterns. The combination gives me both configuration management and security visibility."
                                 </p>
                             </div>
                         </div>
@@ -620,27 +631,37 @@
                         
                         <div class="answer-box">
                             <p class="text-gray-300 text-sm leading-relaxed">
-                                "First, context matters: was this a network change (routing, NAT) or a security change (policy, security profile)? In the shared responsibility model, network engineers handle infrastructure; I handle security. But during an outage, we work together.
+                                "OT downtime is critical—every minute of production loss has direct business impact. My approach is <strong class="text-emerald-400">rapid triage, surgical rollback, and root cause analysis</strong>.
                                 <br><br>
-                                <strong class="text-emerald-400">Immediate Coordination:</strong>
+                                <strong class="text-emerald-400">Step 1: Immediate Coordination (First 2 Minutes)</strong>
                                 <br><br>
-                                In OT environments, the first call is to the plant engineer or OT team—they need to know there's an issue and can tell us what's actually broken from the production side. We don't make changes in isolation.
+                                In OT environments, the first call is to the plant engineer or OT operations—they need to know there's an issue and can tell us exactly what's broken from the production side. I don't troubleshoot in isolation. Parallel to this, I'm pulling up firewall logs and the recent change history.
                                 <br><br>
-                                <strong class="text-emerald-400">Identify the Change:</strong>
+                                <strong class="text-emerald-400">Step 2: Identify the Offending Change (Minutes 2-5)</strong>
                                 <br><br>
-                                Pull the recent change log. What was modified? If it was a security profile change I made—maybe I tightened a threat prevention policy or added a new URL filtering category—that's my responsibility to troubleshoot. If it was a routing or NAT change, I'd work with the network engineer but the infrastructure troubleshooting is their domain.
+                                I pull the change log immediately. What was modified in the last maintenance window? I categorize: was it a <strong>security change</strong> (policy, security profile, threat prevention tuning) or a <strong>network change</strong> (routing, NAT, zone configuration)? Security changes are my responsibility—I can act immediately.
                                 <br><br>
-                                <strong class="text-emerald-400">If It's a Security Policy Issue:</strong>
+                                <strong class="text-emerald-400">Step 3: Log Analysis</strong>
                                 <br><br>
-                                I check the traffic logs for denies. Is the OT traffic hitting a new block rule? Is a security profile (IPS, application control) blocking something it shouldn't? Is SSL decryption interfering with a certificate-pinned OT application? These are things I can diagnose from the logs.
+                                I filter traffic logs by the affected source/destination:
                                 <br><br>
-                                <strong class="text-emerald-400">Rollback Decision:</strong>
+                                • <strong>Deny actions:</strong> Is legitimate OT traffic now being blocked?
+                                <br>• <strong>Rule matching:</strong> Which rule is the traffic hitting? Is it my new policy?
+                                <br>• <strong>Security profile blocks:</strong> Is threat prevention, URL filtering, or app control triggering on OT protocols?
+                                <br>• <strong>App-ID classification:</strong> Is the firewall misidentifying OT traffic as something else?
+                                <br>• <strong>SSL decryption issues:</strong> Did we enable decryption on traffic from certificate-pinned OT applications?
                                 <br><br>
-                                If my security change caused the outage, I can revert it—disable the new rule or restore the previous security profile. I'd coordinate with OT: 'I'm reverting this change in 30 seconds, watch the production line.' For security changes, I typically have the authority to rollback without lengthy approval chains during an active outage.
+                                The logs tell the story within minutes if you know what to look for.
                                 <br><br>
-                                <strong class="text-emerald-400">Post-Incident:</strong>
+                                <strong class="text-emerald-400">Step 4: Surgical Rollback</strong>
                                 <br><br>
-                                Once production is restored, I do the analysis: why did this security change break production? Did I not understand the traffic patterns? Did we test in the wrong environment? The lesson feeds into better change control—for OT environments, security changes should probably be tested in a maintenance window, not during production hours."
+                                If I identify the cause, I execute a <strong>targeted rollback</strong>—disable the specific rule or revert the security profile. I communicate clearly: 'Disabling rule X in 30 seconds—confirm when production resumes.' For security changes, I have authority to rollback during active outages without waiting for approval chains.
+                                <br><br>
+                                Key principle: <strong>surgical rollback, not wholesale revert</strong>. I don't roll back the entire firewall config if one rule is the problem.
+                                <br><br>
+                                <strong class="text-emerald-400">Step 5: Post-Incident Analysis</strong>
+                                <br><br>
+                                Once production is restored, I conduct root cause analysis: Why did this change cause this impact? Did we not understand OT traffic patterns? Did we test in an environment that didn't reflect production? This feeds into process improvements—better change windows for OT, OT engineer sign-off on security changes, improved testing procedures."
                             </p>
                         </div>
 
@@ -650,28 +671,28 @@
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">What do you check first in session and traffic logs?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "I filter by the source and destination involved in the broken communication. Looking for: <strong>Deny actions</strong>—is traffic being blocked that wasn't before? <strong>Which rule is matching</strong>—is it hitting my new security policy or an unexpected rule? <strong>Security profile blocks</strong>—threat prevention, URL filtering, or app control triggering on legitimate traffic? <strong>Application identification</strong>—is App-ID classifying the OT traffic as something unexpected? <strong>SSL decryption issues</strong>—certificate errors if we're decrypting traffic from an application that doesn't tolerate it. The logs usually tell the story within a few minutes if you know what to look for."
+                                    "I filter by the affected source/destination IPs and look for: <strong>Deny actions</strong>—traffic being blocked that wasn't before. <strong>Rule hit counts</strong>—is traffic hitting my new rule or falling through to implicit deny? <strong>Threat log entries</strong>—is IPS/AV triggering on OT protocols (common false positive with industrial protocols). <strong>App-ID changes</strong>—did an application signature update change how OT traffic is classified? <strong>Decryption failures</strong>—certificate errors indicate SSL decryption breaking certificate-pinned OT applications. Most OT outages caused by firewall changes are security profile issues—threat prevention being too aggressive on protocols it doesn't understand, or App-ID misclassifying industrial traffic."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">How would you safely roll back during active outage?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "If it's a security policy I changed, I can disable that specific rule or revert the security profile—minimal blast radius. I don't want to roll back the entire firewall configuration if only one rule is the problem. I communicate clearly: 'Disabling rule X in 30 seconds, confirm when production resumes.' If it's more complex—like a security profile that's applied to multiple rules—I might temporarily set it to 'alert only' mode instead of 'block' to restore traffic while preserving some visibility. The key is surgical rollback, not wholesale revert, and constant communication with the OT team."
+                                    "Surgical precision. If it's a single rule I added, I disable that rule—not the entire policy. If it's a security profile change, I can either revert to the previous profile version or temporarily set the profile to <strong>'alert only' mode</strong> instead of 'block'—this restores traffic while maintaining visibility. Communication is critical: I announce the rollback to OT operations before executing: 'Rolling back in 30 seconds, confirm when production resumes.' I avoid wholesale configuration reverts—those can cause cascading issues. After rollback, I verify: is the original problem resolved? Did we introduce new problems? Only then do I close the immediate incident."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">How do you verify the fix doesn't impact other systems?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "After the immediate rollback, I watch the logs for unexpected denies on other traffic. I check with other teams—did anything else break when we reverted? The original security change was made for a reason—maybe to block a risky application or enforce a policy. By rolling back, we've reopened whatever we were trying to close. So I need to find a better solution: maybe a more targeted rule that achieves the security goal without breaking OT, or an exception for specific OT traffic while still protecting IT. The rollback is temporary relief; the real fix comes after proper analysis."
+                                    "After rollback, I monitor for unintended consequences. I watch traffic logs for new denies on other traffic. I check with other teams: 'Did anything else break when we reverted?' The original security change was made for a reason—maybe blocking a risky application or enforcing a policy. By rolling back, we've potentially reopened that risk. So the real fix comes after: I analyze how to achieve the security goal without breaking OT—maybe a more targeted rule with OT-specific exceptions, or different security profile settings for OT zones. Rollback is triage; the permanent fix requires proper engineering."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">How do you prevent recurrence?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "Post-incident review focused on process improvement. <strong>Testing gaps:</strong> Did we test this change? Did our test environment actually reflect OT traffic patterns? <strong>Change windows:</strong> For OT environments, security changes should probably happen during maintenance windows when we can monitor impact, not during peak production. <strong>OT coordination:</strong> OT engineers should be notified—or even approve—security changes that affect their networks. They know what traffic patterns are critical. <strong>Documentation:</strong> I document what went wrong and update my change process. The goal is learning from the incident, not just fixing it."
+                                    "Post-incident review with concrete process improvements. <strong>Testing:</strong> Security changes affecting OT should be tested against actual OT traffic patterns—either in a lab environment or during a controlled maintenance window with OT engineers monitoring production. <strong>Change windows:</strong> OT security changes shouldn't happen during peak production—schedule for maintenance windows when we can monitor impact. <strong>OT coordination:</strong> OT engineers should review and approve security changes affecting their networks. They understand critical traffic patterns better than IT security. <strong>Documentation:</strong> I document the incident, root cause, and process improvements. The goal is organizational learning, not just fixing one incident."
                                 </p>
                             </div>
                         </div>
@@ -811,19 +832,34 @@
                         
                         <div class="answer-box">
                             <p class="text-gray-300 text-sm leading-relaxed">
-                                "I'll be honest—I haven't directly administered a PAM solution like CyberArk or BeyondTrust. My experience is on the SIEM integration side: ingesting PAM logs into Sentinel, building detection rules around privileged access patterns, and using PAM session data during incident investigations.
+                                "PAM is critical for controlling the keys to the kingdom. My experience spans <strong class="text-emerald-400">SIEM integration, detection engineering around privileged access, and designing monitoring strategies</strong> for PAM telemetry—which is where I add security value beyond just deploying the tool.
                                 <br><br>
                                 <strong class="text-emerald-400">How PAM Improves Visibility:</strong>
-                                <br>
-                                Without PAM, privileged access is a black box—someone logs in as admin, does things, logs out, and you have minimal audit trail. PAM gives you: who accessed what system, when, for how long, and exactly what commands they ran (through session recording). This is invaluable for compliance and forensics.
+                                <br><br>
+                                Without PAM, privileged access is a black box—someone logs in as admin, does things, logs out, and you have minimal audit trail. PAM transforms this by providing:
+                                <br><br>
+                                • <strong>Complete session recording:</strong> Every keystroke, every command, fully searchable for investigations
+                                <br>• <strong>Who accessed what, when, and why:</strong> Audit trail linked to request tickets and business justification
+                                <br>• <strong>Behavioral baseline:</strong> Understanding normal privileged access patterns to detect anomalies
                                 <br><br>
                                 <strong class="text-emerald-400">How PAM Improves Control:</strong>
-                                <br>
-                                Just-in-time access—privileges granted only when needed, automatically revoked after. Users never know the actual password (credential vaulting), so they can't share it or write it down. Automatic credential rotation means even if a credential is compromised, it changes before the attacker can use it.
                                 <br><br>
-                                <strong class="text-emerald-400">From Detection Engineering:</strong>
-                                <br>
-                                I've built alerts around PAM events: privileged sessions outside business hours, sessions to systems the user doesn't normally access, credential checkouts without corresponding sessions (possible theft), multiple failed authentications (credential stuffing). PAM telemetry is gold for detecting compromised privileged accounts."
+                                • <strong>Just-In-Time (JIT) Access:</strong> Privileges granted only when needed, automatically revoked after—no standing admin access
+                                <br>• <strong>Credential Vaulting:</strong> Users never see the actual password, eliminating credential sharing and theft
+                                <br>• <strong>Automatic Rotation:</strong> Credentials change after every use or on schedule, limiting exposure window
+                                <br>• <strong>Approval Workflows:</strong> High-risk access requires manager or security approval before granting
+                                <br><br>
+                                <strong class="text-emerald-400">Detection Engineering Around PAM:</strong>
+                                <br><br>
+                                This is where I add significant value. I've built detection rules around PAM events that catch real threats:
+                                <br><br>
+                                • <strong>Privileged sessions outside business hours</strong>—why is someone accessing domain admin at 3 AM?
+                                <br>• <strong>Sessions to systems outside normal scope</strong>—this DBA never accesses HR servers, why now?
+                                <br>• <strong>Credential checkout without corresponding session</strong>—credential was retrieved but never used legitimately (possible theft)
+                                <br>• <strong>Multiple failed authentications</strong>—credential stuffing against the PAM portal
+                                <br>• <strong>Break-glass account usage</strong>—immediate high-priority alert, requires justification
+                                <br><br>
+                                PAM telemetry integrated into Sentinel gives me visibility that would be impossible otherwise. When investigating an incident, I can pull the exact session recording and see what the attacker did with those privileges."
                             </p>
                         </div>
 
@@ -833,21 +869,21 @@
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">How do you handle break-glass accounts?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "Break-glass is for emergencies when normal access fails—the PAM system is down, or there's an urgent situation where approval workflow can't wait. These accounts should be: stored separately with enhanced protection (physical safe, HSM), access triggers immediate alerts to security team, full session recording if used, mandatory post-incident review of why break-glass was needed. They should never be used routinely—if they're being used regularly, something's wrong with the normal access process. I'd monitor for any break-glass usage as a high-priority alert."
+                                    "Break-glass accounts are for emergencies when normal access fails—PAM system down, or urgent situation where approval workflow can't wait. My requirements: <strong>Enhanced protection</strong>—stored in physical safe or HSM, separate from normal PAM. <strong>Immediate alerting</strong>—any usage triggers high-priority alert to security team within minutes. <strong>Full session recording</strong>—if possible, ensure all activity is logged. <strong>Mandatory post-incident review</strong>—document why break-glass was needed, what was done, and whether normal process needs improvement. If break-glass is being used regularly, that's a red flag—something's wrong with the normal access process that needs fixing."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">What is your approach to password rotation policies?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "Automated rotation is the goal—humans shouldn't be changing privileged passwords manually. For service accounts, rotate frequently (daily or weekly) because there's no human impact. For interactive accounts, rotate after every use (the credential changes as soon as the session ends). For highly sensitive accounts like domain admin, potentially rotate on a schedule regardless of use. The key is that applications and workflows should retrieve credentials dynamically from the vault, not have them hardcoded—otherwise rotation breaks things. I've seen organizations struggle here because they have passwords embedded in scripts that nobody knows about."
+                                    "Automated rotation is non-negotiable—humans shouldn't manage privileged passwords manually. My approach by account type: <strong>Service accounts:</strong> Rotate daily or weekly—no human impact, maximum security. <strong>Interactive privileged accounts:</strong> Rotate after every use—credential changes when session ends. <strong>Domain admin / highest privilege:</strong> Rotate on schedule regardless of use, plus after any use. <strong>Critical infrastructure:</strong> Rotate immediately if any suspicious activity detected. The key prerequisite: applications must retrieve credentials dynamically from the vault, not hardcode them. I've seen organizations fail rotation because passwords were embedded in scripts nobody documented. Discovery and inventory of credential usage must happen before automated rotation."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">How do you integrate PAM with AD or cloud workloads?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "AD integration typically means PAM managing AD admin accounts—domain admins, server admins. Users authenticate to the PAM portal with their regular credentials (possibly with MFA), request access to the privileged AD account, and PAM either provisions the session or checks out the credential. For cloud workloads, similar concept—PAM manages access to Azure subscription admin roles, AWS IAM privileged roles. Azure Privileged Identity Management (PIM) is Microsoft's native approach for this. The goal is the same: no standing privileges, just-in-time access, full audit trail."
+                                    "For AD integration: PAM manages privileged AD accounts (domain admins, server admins, service accounts). Users authenticate to PAM with their regular credentials plus MFA, request access to the privileged account, and PAM either provisions a session or checks out the credential with time-limited access. For Azure: <strong>Azure PIM (Privileged Identity Management)</strong> provides native JIT access to Azure AD roles and Azure resource roles. I'd integrate PIM with our PAM strategy—PIM for cloud-native roles, enterprise PAM for on-prem and hybrid. All PAM/PIM activity flows to Sentinel for unified visibility. The goal: no standing privileges anywhere, complete audit trail, consistent policy across on-prem and cloud."
                                 </p>
                             </div>
                         </div>
@@ -862,22 +898,33 @@
                         
                         <div class="answer-box">
                             <p class="text-gray-300 text-sm leading-relaxed">
-                                "I haven't directly administered an enterprise KMS solution, but I understand the principles and have applied them in my work—particularly around ensuring secrets aren't hardcoded and integrating with SIEM to detect key management issues.
+                                "Key and certificate management is fundamental to enterprise security—compromised keys mean compromised data. My approach covers <strong class="text-emerald-400">architecture principles, implementation patterns, and security monitoring</strong>.
                                 <br><br>
-                                <strong class="text-emerald-400">Core Principles:</strong>
-                                <br>
-                                • Secrets should never be in code—not in source control, not in config files
-                                <br>• Least privilege—applications only access the specific keys they need
-                                <br>• Rotation without downtime—architecture should support credential changes without breaking applications
-                                <br>• Audit everything—every access logged and reviewable
+                                <strong class="text-emerald-400">Core Architecture Principles:</strong>
                                 <br><br>
-                                <strong class="text-emerald-400">Technologies I Understand:</strong>
-                                <br>
-                                Azure Key Vault for secrets, keys, and certificates in Azure environments. HashiCorp Vault for multi-cloud or hybrid environments. HSMs for highest-security key storage. The pattern is similar: centralized secure storage, access controlled by identity, dynamic retrieval at runtime, automatic rotation where possible.
+                                • <strong>Secrets never in code:</strong> Not in source control, not in config files, not in environment variables baked into images
+                                <br>• <strong>Least privilege access:</strong> Applications access only the specific keys they need, nothing more
+                                <br>• <strong>Rotation without downtime:</strong> Architecture must support credential rotation without application restarts or outages
+                                <br>• <strong>Centralized management:</strong> Single source of truth for secrets, not scattered across systems
+                                <br>• <strong>Complete audit trail:</strong> Every access logged and reviewable for compliance and forensics
                                 <br><br>
-                                <strong class="text-emerald-400">From Security Monitoring:</strong>
-                                <br>
-                                I've built alerts for KMS-related risks: secrets appearing in logs or source control, certificate expiration warnings, unusual access patterns to vaults, failed authentication attempts against key storage. These are often early indicators of compromise or misconfiguration."
+                                <strong class="text-emerald-400">Implementation Patterns:</strong>
+                                <br><br>
+                                <strong>Azure Key Vault:</strong> For Azure-native workloads—secrets, keys, and certificates with managed identity access. Applications authenticate using system-assigned managed identities—no credentials needed to access the vault.
+                                <br><br>
+                                <strong>HashiCorp Vault:</strong> For multi-cloud or hybrid environments—consistent secrets management across AWS, Azure, GCP, and on-prem.
+                                <br><br>
+                                <strong>HSMs:</strong> For highest-security requirements—FIPS 140-2 compliant hardware for cryptographic key storage.
+                                <br><br>
+                                <strong class="text-emerald-400">Security Monitoring & Detection:</strong>
+                                <br><br>
+                                I build detection rules around KMS security events:
+                                <br><br>
+                                • <strong>Secrets in code:</strong> Pre-commit scanning and alerts if secrets appear in logs or repositories
+                                <br>• <strong>Certificate expiration:</strong> Tiered warnings at 90/30/7 days before expiry
+                                <br>• <strong>Unusual vault access:</strong> Applications accessing secrets they don't normally use
+                                <br>• <strong>Failed authentications:</strong> Brute force attempts against key storage
+                                <br>• <strong>Unauthorized key operations:</strong> Key deletion, export, or policy changes outside change windows"
                             </p>
                         </div>
 
@@ -931,32 +978,40 @@
                         
                         <div class="answer-box">
                             <p class="text-gray-300 text-sm leading-relaxed">
-                                "I'll be upfront—my direct CI/CD experience is from my personal projects, not enterprise pipelines. I built the GitHub Actions workflow for my email security platform, implementing SAST, DAST, dependency scanning, and secrets detection. That taught me the principles, even if at a smaller scale.
+                                "The goal is <strong class="text-emerald-400">fast feedback on security issues without becoming a deployment bottleneck</strong>. I approach this by layering security checks strategically throughout the pipeline—right checks at the right time.
                                 <br><br>
-                                <strong class="text-emerald-400">The Key: Right Checks at Right Time</strong>
-                                <br>
-                                Not every check needs to run on every commit. Fast checks run early and often; slow checks run less frequently.
+                                <strong class="text-emerald-400">Pre-Commit / Developer Workstation:</strong>
                                 <br><br>
-                                <strong class="text-emerald-400">Pre-commit / Early Pipeline:</strong>
-                                <br>
-                                • Secrets scanning (fast, catches mistakes immediately)
-                                <br>• Linting and basic SAST (fast, catches obvious issues)
-                                <br>• Dependency vulnerability check (fast lookup against known CVE databases)
+                                • <strong>Secrets scanning:</strong> Git hooks that block commits containing credentials—catches mistakes before they hit version control
+                                <br>• <strong>IDE security plugins:</strong> Real-time SAST feedback as developers write code
+                                <br>• <strong>Linting:</strong> Basic security patterns caught immediately
                                 <br><br>
-                                <strong class="text-emerald-400">Build Stage:</strong>
-                                <br>
-                                • Full SAST analysis
-                                <br>• Container image scanning
-                                <br>• IaC security scanning (Terraform, CloudFormation)
+                                These are <strong>instant feedback loops</strong>—developers fix issues while the code is fresh in their mind.
+                                <br><br>
+                                <strong class="text-emerald-400">PR / Build Stage:</strong>
+                                <br><br>
+                                • <strong>Full SAST analysis:</strong> Static code analysis for injection vulnerabilities, insecure patterns
+                                <br>• <strong>Dependency scanning:</strong> Check for known CVEs in third-party libraries (SCA)
+                                <br>• <strong>Container image scanning:</strong> Vulnerabilities in base images and layers
+                                <br>• <strong>IaC security scanning:</strong> Terraform, CloudFormation, ARM templates checked for misconfigurations
+                                <br><br>
+                                These run in <strong>parallel</strong> with unit tests—security shouldn't add sequential time.
                                 <br><br>
                                 <strong class="text-emerald-400">Post-Build / Staging:</strong>
-                                <br>
-                                • DAST against running application (slower, but catches runtime issues)
-                                <br>• Integration security tests
+                                <br><br>
+                                • <strong>DAST:</strong> Dynamic scanning against running application—catches runtime vulnerabilities
+                                <br>• <strong>API security testing:</strong> Fuzzing, authentication testing
+                                <br>• <strong>Integration security tests:</strong> Verify security controls work end-to-end
                                 <br><br>
                                 <strong class="text-emerald-400">Making It Fast:</strong>
-                                <br>
-                                Parallelize scans where possible. Cache dependencies. Incremental scanning—only scan changed files, not the entire codebase. Set reasonable thresholds—fail on critical/high, warn on medium, log low."
+                                <br><br>
+                                • <strong>Parallelize:</strong> Run SAST, SCA, and container scanning simultaneously
+                                <br>• <strong>Incremental scanning:</strong> Only scan changed files, not entire codebase
+                                <br>• <strong>Caching:</strong> Cache dependency analysis, only re-scan on changes
+                                <br>• <strong>Tiered severity:</strong> Block on critical/high, warn on medium, log low
+                                <br>• <strong>Baseline comparison:</strong> Only alert on new findings, not existing technical debt
+                                <br><br>
+                                I've implemented this pattern using GitHub Actions with SAST, DAST, dependency scanning, and secrets detection—each check optimized to minimize pipeline impact while maximizing security coverage."
                             </p>
                         </div>
 
@@ -966,28 +1021,28 @@
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">Which checks should be blocking vs non-blocking?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "<strong>Blocking (fail the build):</strong> Secrets in code (never acceptable), critical CVEs in dependencies, SAST findings that indicate clear vulnerabilities (SQL injection, hardcoded credentials). <strong>Non-blocking (warn but proceed):</strong> Medium/low vulnerabilities, SAST findings that need human review, code quality issues. <strong>Post-deployment/async:</strong> DAST results, penetration testing findings. The goal is fast feedback on clear issues, human judgment on nuanced issues, without blocking deployment for things that can be addressed in the next sprint."
+                                    "<strong>Blocking (fail the build):</strong> Secrets in code—never acceptable, no exceptions. Critical CVEs in dependencies with known exploits. SAST findings indicating clear vulnerabilities (SQL injection, command injection, hardcoded credentials). <strong>Non-blocking (warn but proceed):</strong> Medium/low vulnerabilities that need human risk assessment. SAST findings that need context to evaluate. Code quality issues. <strong>Post-deployment/async:</strong> DAST results, penetration testing findings, compliance verification. The principle: block on clear, immediate risks. Warn on issues requiring judgment. Everything else feeds into the backlog with appropriate prioritization."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">How do you handle secrets scanning at pre-commit?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "Pre-commit hooks using tools like git-secrets or detect-secrets. When a developer tries to commit, the hook scans for patterns that look like credentials—API keys, passwords, AWS secrets. If found, the commit is blocked before it ever reaches the repo. This is the cheapest place to catch secrets—before they're in version history. In GitHub, I also enable secret scanning at the repo level as a backup. For my projects, I use GitHub's built-in secret scanning plus custom patterns for internal credential formats."
+                                    "Pre-commit hooks using tools like <strong>git-secrets, detect-secrets, or gitleaks</strong>. When a developer tries to commit, the hook scans for patterns matching credentials—API keys, passwords, AWS secrets, private keys. If found, commit is blocked before it reaches the repo. This is the cheapest place to catch secrets—before they're in version history where they live forever. I also enable <strong>repository-level secret scanning</strong> (GitHub Advanced Security, GitLab) as a backup. Custom patterns can catch company-specific credential formats. The key is immediate feedback: 'This commit contains what looks like an API key. Remove it and try again.'"
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">How would you tune SAST rules to avoid noise?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "Start by understanding the noise. What are the most common false positives? Often it's things like test code flagged as vulnerable (intentional test cases), internal APIs flagged as injection points, or patterns that match but aren't actually exploitable in context. I'd create suppressions for known false positives—documented with why they're safe. Adjust severity thresholds—maybe certain rule categories are just informational. Use baseline comparison—only alert on new findings, not the 500 existing issues you haven't fixed yet. The goal is actionable output that developers trust and act on."
+                                    "Start by understanding the noise sources. Common false positives: test code flagged as vulnerable (intentional test cases), internal APIs flagged as injection points, patterns that match signatures but aren't exploitable in context. My tuning approach: <strong>Document and suppress known false positives</strong>—with clear justification of why they're safe. <strong>Adjust severity thresholds</strong>—some rule categories are informational, not actionable. <strong>Baseline comparison</strong>—only alert on new findings, not 500 existing issues. <strong>Context-aware rules</strong>—if the framework provides built-in protection, adjust detection accordingly. The goal: actionable output that developers trust. If they learn to ignore SAST, it provides zero value."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">What's your approach to shift-left security?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "Shift-left means finding issues earlier when they're cheaper to fix. Writing code → cheapest. In PR review → cheap. In testing → moderate. In production → expensive. So: give developers security feedback in their IDE (real-time SAST). Block commits with secrets before they hit the repo. Review PRs for security implications, not just functionality. Train developers on secure coding so they write secure code the first time. Threat modeling during design, not after deployment. It's a mindset shift: security is everyone's job, not something the security team finds after the fact."
+                                    "Shift-left means finding issues earlier when they're cheaper to fix. Cost escalation: writing code (cheapest) → PR review (cheap) → testing (moderate) → production (expensive) → post-breach (catastrophic). My approach: <strong>Developer enablement:</strong> Security feedback in their IDE—real-time SAST, dependency warnings. <strong>Pre-commit gates:</strong> Block secrets before they hit the repo. <strong>PR security review:</strong> Automated checks plus human review for security-sensitive changes. <strong>Security training:</strong> Developers write secure code the first time, not relying on tools to catch mistakes. <strong>Threat modeling:</strong> Security considered during design, not discovered after deployment. Shift-left is a culture shift: security is everyone's responsibility, integrated into the development process, not bolted on at the end."
                                 </p>
                             </div>
                         </div>
