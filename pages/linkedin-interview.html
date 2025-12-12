@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn AI Interview Simulation | Coca-Cola Security Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+            min-height: 100vh;
+        }
+        
+        .code-font { font-family: 'JetBrains Mono', monospace; }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .glow-box {
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.1);
+        }
+        
+        .section-card {
+            background: linear-gradient(145deg, rgba(16, 185, 129, 0.05) 0%, rgba(0, 0, 0, 0.2) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        .question-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+        }
+        
+        .followup-card {
+            background: rgba(139, 92, 246, 0.05);
+            border-left: 3px solid rgba(139, 92, 246, 0.5);
+        }
+        
+        .answer-box {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 12px;
+        }
+        
+        .nav-link {
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            background: rgba(16, 185, 129, 0.1);
+            border-left-color: #10b981;
+        }
+        
+        .sidebar {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(16, 185, 129, 0.3) transparent;
+        }
+        
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(16, 185, 129, 0.3);
+            border-radius: 2px;
+        }
+        
+        .linkedin-badge {
+            background: linear-gradient(135deg, #0077b5 0%, #005582 100%);
+        }
+    </style>
+</head>
+<body class="text-gray-100">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-gray-800">
+        <div class="max-w-full mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button id="sidebar-toggle" class="text-gray-400 hover:text-emerald-400 transition-colors lg:hidden">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-lg linkedin-badge flex items-center justify-center">
+                            <i class="fab fa-linkedin-in text-white"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-lg font-semibold text-white">LinkedIn AI Interview Simulation</h1>
+                            <p class="text-xs text-gray-400">Coca-Cola Cyber Security Engineer Prep</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-medium border border-emerald-500/20">
+                        <i class="fas fa-check-circle mr-1"></i> 20 Questions + Follow-ups
+                    </span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex pt-16">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 glass-card border-r border-gray-800 overflow-y-auto transform -translate-x-full lg:translate-x-0 transition-transform duration-300 z-40">
+            <div class="p-4">
+                <div class="mb-6">
+                    <a href="../index.html" class="flex items-center space-x-2 text-gray-400 hover:text-emerald-400 transition-colors mb-4">
+                        <i class="fas fa-arrow-left"></i>
+                        <span class="text-sm">Back to Portfolio</span>
+                    </a>
+                </div>
+
+                <div class="space-y-2">
+                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Interview Sections</p>
+                    
+                    <a href="#cheatsheet" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-yellow-400 hover:text-white border-l-2 border-yellow-500 bg-yellow-500/10">
+                        <i class="fas fa-brain text-xs text-yellow-500"></i>
+                        <span class="text-sm font-medium">🧠 Memory Cheat Sheet</span>
+                    </a>
+                    
+                    <a href="#section1" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-shield-alt text-xs text-emerald-500"></i>
+                        <span class="text-sm">1. NGFW Design</span>
+                    </a>
+                    
+                    <a href="#section2" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-tools text-xs text-blue-500"></i>
+                        <span class="text-sm">2. Security Tools</span>
+                    </a>
+                    
+                    <a href="#section3" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-code text-xs text-purple-500"></i>
+                        <span class="text-sm">3. DevSecOps</span>
+                    </a>
+                    
+                    <a href="#section4" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-cloud text-xs text-cyan-500"></i>
+                        <span class="text-sm">4. Cloud Security</span>
+                    </a>
+                    
+                    <a href="#section5" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-industry text-xs text-orange-500"></i>
+                        <span class="text-sm">5. OT/ICS Security</span>
+                    </a>
+                    
+                    <a href="#section6" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-bug text-xs text-red-500"></i>
+                        <span class="text-sm">6. Vuln Management</span>
+                    </a>
+                    
+                    <a href="#section7" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-file-alt text-xs text-yellow-500"></i>
+                        <span class="text-sm">7. Architecture & Docs</span>
+                    </a>
+                    
+                    <a href="#section8" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-user text-xs text-pink-500"></i>
+                        <span class="text-sm">8. Behavioral</span>
+                    </a>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-gray-800">
+                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Other Interview Pages</p>
+                    <a href="coca-cola-interview.html" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-clipboard-list text-xs text-emerald-500"></i>
+                        <span class="text-sm">Main Interview Prep</span>
+                    </a>
+                    <a href="interview-prep.html" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-question-circle text-xs text-blue-500"></i>
+                        <span class="text-sm">General Q&A</span>
+                    </a>
+                    <a href="ngfw-deep-dive.html" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-fire text-xs text-orange-500"></i>
+                        <span class="text-sm">NGFW Deep Dive</span>
+                    </a>
+                    <a href="ot-security.html" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
+                        <i class="fas fa-cogs text-xs text-yellow-500"></i>
+                        <span class="text-sm">OT Security</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 lg:ml-64 p-8">
+            <div class="max-w-5xl mx-auto">
+                
+                <!-- Header -->
+                <div class="mb-10">
+                    <div class="section-card rounded-2xl p-8 glow-box">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <h1 class="text-3xl font-bold text-white mb-3">
+                                    <i class="fab fa-linkedin text-[#0077b5] mr-3"></i>
+                                    LinkedIn AI Interview Simulation
+                                </h1>
+                                <p class="text-gray-400 text-lg mb-4">
+                                    Coca-Cola Canada Bottling — Cyber Security Engineer
+                                </p>
+                                <p class="text-gray-500 text-sm max-w-2xl">
+                                    20 realistic interview questions mapped to actual job responsibilities, with follow-up questions that mimic LinkedIn AI interview drilling. Answers are based on my real experience—honest about gaps, strong on fundamentals.
+                                </p>
+                            </div>
+                            <div class="hidden md:block">
+                                <div class="w-20 h-20 rounded-xl bg-gradient-to-br from-[#0077b5] to-[#005582] flex items-center justify-center">
+                                    <i class="fab fa-linkedin-in text-4xl text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                            <div class="bg-black/20 rounded-lg p-3 text-center">
+                                <p class="text-2xl font-bold text-emerald-400">20</p>
+                                <p class="text-xs text-gray-500">Primary Questions</p>
+                            </div>
+                            <div class="bg-black/20 rounded-lg p-3 text-center">
+                                <p class="text-2xl font-bold text-purple-400">60+</p>
+                                <p class="text-xs text-gray-500">Follow-up Questions</p>
+                            </div>
+                            <div class="bg-black/20 rounded-lg p-3 text-center">
+                                <p class="text-2xl font-bold text-blue-400">8</p>
+                                <p class="text-xs text-gray-500">Topic Sections</p>
+                            </div>
+                            <div class="bg-black/20 rounded-lg p-3 text-center">
+                                <p class="text-2xl font-bold text-orange-400">100%</p>
+                                <p class="text-xs text-gray-500">Role-Mapped</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================ -->
+                <!-- MEMORY HOOKS CHEAT SHEET -->
+                <!-- ============================================ -->
+                <section id="cheatsheet" class="mb-12">
+                    <div class="section-card rounded-2xl p-6 glow-box">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center">
+                                <i class="fas fa-brain text-yellow-400"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-bold text-white">🧠 Memory Hooks Cheat Sheet</h2>
+                                <p class="text-gray-500 text-sm">Quick triggers to remember each answer - review before interview</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            
+                            <!-- Section 1 Memory Hooks -->
+                            <div class="bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-4">
+                                <h3 class="text-emerald-400 font-bold mb-3"><i class="fas fa-shield-alt mr-2"></i>Section 1: NGFW</h3>
+                                <div class="space-y-3 text-sm">
+                                    <div class="bg-black/20 rounded-lg p-3">
+                                        <p class="text-white font-medium">Q1: Multi-site NGFW deployment</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Discovery → Templates → Panorama → Staged rollout"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Honest: haven't done greenfield, but understand methodology</p>
+                                    </div>
+                                    <div class="bg-black/20 rounded-lg p-3">
+                                        <p class="text-white font-medium">Q2: Best practices alignment</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Explicit deny default + No any-any + Log everything + Quarterly cleanup"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Top 5 misconfigs: any-any, SSL off, stale rules, no logging, default creds</p>
+                                    </div>
+                                    <div class="bg-black/20 rounded-lg p-3">
+                                        <p class="text-white font-medium">Q3: OT production downtime</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Coordinate with OT first → What changed? → Rollback → Post-incident"</p>
+                                        <p class="text-gray-400 text-xs mt-1">OT = call plant engineer before touching anything</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Section 2 Memory Hooks -->
+                            <div class="bg-blue-500/5 border border-blue-500/20 rounded-xl p-4">
+                                <h3 class="text-blue-400 font-bold mb-3"><i class="fas fa-tools mr-2"></i>Section 2: Security Tools</h3>
+                                <div class="space-y-3 text-sm">
+                                    <div class="bg-black/20 rounded-lg p-3">
+                                        <p class="text-white font-medium">Q4: EDR telemetry</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "14 FireEye HX consoles + Python automation = still in use today"</p>
+                                        <p class="text-gray-400 text-xs mt-1">MDE rollout, ESET conflict resolution, Sentinel monitoring for gaps</p>
+                                    </div>
+                                    <div class="bg-black/20 rounded-lg p-3">
+                                        <p class="text-white font-medium">Q5: DLP tuning</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Audit → Warn → Block + Leading Symantec→Purview migration NOW"</p>
+                                        <p class="text-gray-400 text-xs mt-1">SITs + EDM + Keywords layered. False positive rate < 10% before enforce</p>
+                                    </div>
+                                    <div class="bg-black/20 rounded-lg p-3">
+                                        <p class="text-white font-medium">Q6: PAM visibility</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Honest: SIEM side, not admin. Detection rules for privileged access"</p>
+                                        <p class="text-gray-400 text-xs mt-1">JIT, vaulting, session recording, rotation - understand concepts deeply</p>
+                                    </div>
+                                    <div class="bg-black/20 rounded-lg p-3">
+                                        <p class="text-white font-medium">Q7: KMS/secrets</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Honest: conceptual. Never in code + Least privilege + Rotation + Audit"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Key Vault, HashiCorp Vault, managed identities, certificate monitoring</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Section 3 Memory Hooks -->
+                            <div class="bg-purple-500/5 border border-purple-500/20 rounded-xl p-4">
+                                <h3 class="text-purple-400 font-bold mb-3"><i class="fas fa-code mr-2"></i>Section 3: DevSecOps</h3>
+                                <div class="space-y-3 text-sm">
+                                    <div class="bg-black/20 rounded-lg p-3">
+                                        <p class="text-white font-medium">Q8: CI/CD security</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Personal project: GitHub Actions + SAST/DAST/dependency scanning"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Right checks at right time. Secrets = blocking. Fast feedback loop.</p>
+                                    </div>
+                                    <div class="bg-black/20 rounded-lg p-3">
+                                        <p class="text-white font-medium">Q9: Python/PowerShell automation</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "14 HX consoles → Python → hours to minutes → STILL IN USE"</p>
+                                        <p class="text-gray-400 text-xs mt-1">+ UEBA resigned employee: 2 scripts, partial automation, reduced errors</p>
+                                    </div>
+                                    <div class="bg-black/20 rounded-lg p-3">
+                                        <p class="text-white font-medium">Q10: Speed vs security</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Guardrails not gates + Make secure the path of least resistance"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Security that blocks everything gets bypassed. Be an enabler.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Section 4 Memory Hooks -->
+                            <div class="bg-cyan-500/5 border border-cyan-500/20 rounded-xl p-4">
+                                <h3 class="text-cyan-400 font-bold mb-3"><i class="fas fa-cloud mr-2"></i>Section 4: Cloud/Azure</h3>
+                                <div class="space-y-3 text-sm">
+                                    <div class="bg-black/20 rounded-lg p-3">
+                                        <p class="text-white font-medium">Q11: Secure new Azure workload</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Identity → Network → Data → Monitoring → Governance"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Managed identities, NSGs/ASGs, Key Vault, Defender for Cloud, Azure Policy</p>
+                                    </div>
+                                    <div class="bg-black/20 rounded-lg p-3">
+                                        <p class="text-white font-medium">Q12: Sentinel workflow</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Central nervous system: Collect → Detect → Investigate → Respond"</p>
+                                        <p class="text-gray-400 text-xs mt-1">KQL, ASIM normalization, playbooks, OT via syslog through DMZ</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Section 5 Memory Hooks -->
+                            <div class="bg-orange-500/5 border border-orange-500/20 rounded-xl p-4">
+                                <h3 class="text-orange-400 font-bold mb-3"><i class="fas fa-industry mr-2"></i>Section 5: OT/ICS</h3>
+                                <div class="space-y-3 text-sm">
+                                    <div class="bg-black/20 rounded-lg p-3">
+                                        <p class="text-white font-medium">Q13: OT challenges</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "SAIC not CIA: Safety → Availability → Integrity → Confidentiality"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Honest: IT side, studied Purdue/IEC 62443. Legacy, patching limits, scanning kills PLCs</p>
+                                    </div>
+                                    <div class="bg-black/20 rounded-lg p-3">
+                                        <p class="text-white font-medium">Q14: SCADA to cloud</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Never direct. Always through Industrial DMZ. Push-pull pattern."</p>
+                                        <p class="text-gray-400 text-xs mt-1">OT pushes to DMZ historian, IT pulls from DMZ. No inbound to OT.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Section 6 Memory Hooks -->
+                            <div class="bg-red-500/5 border border-red-500/20 rounded-xl p-4">
+                                <h3 class="text-red-400 font-bold mb-3"><i class="fas fa-bug mr-2"></i>Section 6: Vuln Mgmt</h3>
+                                <div class="space-y-3 text-sm">
+                                    <div class="bg-black/20 rounded-lg p-3">
+                                        <p class="text-white font-medium">Q15: Critical vuln workflow</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Validate → Exploitability (CISA KEV!) → Impact → Remediate/Compensate → Verify"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Risk = Exploitability × Impact × Exposure. Tier 1/2/3 SLAs.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Section 7 Memory Hooks -->
+                            <div class="bg-yellow-500/5 border border-yellow-500/20 rounded-xl p-4">
+                                <h3 class="text-yellow-400 font-bold mb-3"><i class="fas fa-file-alt mr-2"></i>Section 7: Architecture</h3>
+                                <div class="space-y-3 text-sm">
+                                    <div class="bg-black/20 rounded-lg p-3">
+                                        <p class="text-white font-medium">Q16: Security architecture review</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Auth → Data → Network → Secrets → Logging → Dependencies"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Look for Zero Trust patterns. Common misconfigures: public buckets, overprivileged IAM</p>
+                                    </div>
+                                    <div class="bg-black/20 rounded-lg p-3">
+                                        <p class="text-white font-medium">Q17: Runbook created</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "MDE onboarding runbook: Purpose → Prerequisites → Steps → Troubleshoot → Validate"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Ownership, quarterly reviews, change triggers update docs</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Section 8 Memory Hooks -->
+                            <div class="bg-pink-500/5 border border-pink-500/20 rounded-xl p-4">
+                                <h3 class="text-pink-400 font-bold mb-3"><i class="fas fa-user mr-2"></i>Section 8: Behavioral</h3>
+                                <div class="space-y-3 text-sm">
+                                    <div class="bg-black/20 rounded-lg p-3">
+                                        <p class="text-white font-medium">Q18: Disagreed with decision</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "MDE vs sysadmin → Pilot 2 servers → Found ESET conflict → Earned trust"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Didn't escalate. Understood concerns. Data-driven pilot. Relationship preserved.</p>
+                                    </div>
+                                    <div class="bg-black/20 rounded-lg p-3">
+                                        <p class="text-white font-medium">Q19: Improved process</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "14 HX consoles → Python → Hours to minutes → STILL IN USE TODAY"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Nobody asked me. I saw inefficiency. I fixed it. Lasting impact.</p>
+                                    </div>
+                                    <div class="bg-black/20 rounded-lg p-3">
+                                        <p class="text-white font-medium">Q20: Security incident</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Encoded PowerShell → Scheduled task → 3 servers → Isolated via MDE → Contained"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Decoded commands, pivoted in Sentinel, coordinated isolation, credential rotation</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Key Stories to Remember -->
+                        <div class="mt-6 bg-gradient-to-r from-emerald-500/10 to-blue-500/10 border border-emerald-500/20 rounded-xl p-4">
+                            <h3 class="text-white font-bold mb-3"><i class="fas fa-star text-yellow-400 mr-2"></i>Your 5 Power Stories - Use These Repeatedly</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-5 gap-3 text-sm">
+                                <div class="bg-black/30 rounded-lg p-3 text-center">
+                                    <p class="text-emerald-400 font-bold">🔥 14 HX Consoles</p>
+                                    <p class="text-gray-400 text-xs">Python automation<br>Hours → Minutes<br>Still in use today</p>
+                                </div>
+                                <div class="bg-black/30 rounded-lg p-3 text-center">
+                                    <p class="text-blue-400 font-bold">🔥 MDE vs ESET</p>
+                                    <p class="text-gray-400 text-xs">Conflict resolution<br>Pilot approach<br>Earned trust</p>
+                                </div>
+                                <div class="bg-black/30 rounded-lg p-3 text-center">
+                                    <p class="text-purple-400 font-bold">🔥 DLP Migration</p>
+                                    <p class="text-gray-400 text-xs">Symantec → Purview<br>Leading it NOW<br>Enforcement phase</p>
+                                </div>
+                                <div class="bg-black/30 rounded-lg p-3 text-center">
+                                    <p class="text-cyan-400 font-bold">🔥 UEBA Automation</p>
+                                    <p class="text-gray-400 text-xs">2-script solution<br>Partial automation<br>Reduced errors</p>
+                                </div>
+                                <div class="bg-black/30 rounded-lg p-3 text-center">
+                                    <p class="text-pink-400 font-bold">🔥 Personal Projects</p>
+                                    <p class="text-gray-400 text-xs">Email security platform<br>Malware tools<br>GRC bridge tool</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Honest Gaps Reminder -->
+                        <div class="mt-4 bg-red-500/10 border border-red-500/20 rounded-xl p-4">
+                            <h3 class="text-red-400 font-bold mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>Remember Your Honest Gaps</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                                <div class="text-center">
+                                    <p class="text-gray-400"><strong class="text-white">PAM:</strong> SIEM side, not admin</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-gray-400"><strong class="text-white">CASB:</strong> Detection, not config</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-gray-400"><strong class="text-white">OT:</strong> IT side, studied concepts</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-gray-400"><strong class="text-white">Fortinet:</strong> Palo Alto primary</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-500 text-xs mt-2 text-center">But always follow with: "I understand the concepts deeply and I'm eager to expand into this area"</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================ -->
+                <!-- SECTION 1: NGFW Design -->
+                <!-- ============================================ -->
+                <section id="section1" class="mb-12">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                            <i class="fas fa-shield-alt text-emerald-400"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white">Section 1: Core Security Engineering & NGFW Design</h2>
+                            <p class="text-gray-500 text-sm">Firewall architecture, deployment, and troubleshooting</p>
+                        </div>
+                    </div>
+
+                    <!-- Q1 -->
+                    <div class="question-card rounded-xl p-6 mb-6">
+                        <div class="flex items-start space-x-3 mb-4">
+                            <span class="px-2 py-1 rounded bg-emerald-500/20 text-emerald-400 text-xs font-bold">Q1</span>
+                            <p class="text-white font-medium">You are tasked with deploying multiple NGFWs across Coca-Cola manufacturing and distribution sites. How would you approach the design and implementation?</p>
+                        </div>
+                        
+                        <div class="answer-box">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "I'll be upfront—I haven't done a greenfield multi-site NGFW deployment at scale. My experience is more on the security operations and integration side. But I understand the architectural considerations and how I'd approach this:
+                                <br><br>
+                                <strong class="text-emerald-400">Phase 1: Discovery & Requirements</strong>
+                                <br>
+                                First, I'd understand each site's profile—what traffic patterns exist, what applications run, what's critical for production. A manufacturing plant has different needs than a distribution center. I'd work with network teams and plant engineers to map traffic flows and identify what needs to cross site boundaries.
+                                <br><br>
+                                <strong class="text-emerald-400">Phase 2: Architecture Design</strong>
+                                <br>
+                                I'd design for consistency across sites using templated configurations—same zone structure, same naming conventions, same security profiles. This makes management and troubleshooting much easier at scale. For OT environments, I'd follow the Purdue Model principles, ensuring proper segmentation between IT and OT networks.
+                                <br><br>
+                                <strong class="text-emerald-400">Phase 3: Centralized Management</strong>
+                                <br>
+                                With 10+ firewalls, centralized management is essential. For Palo Alto, that's Panorama with device groups and templates. For Fortinet, it's FortiManager. This allows policy consistency, staged rollouts, and unified logging.
+                                <br><br>
+                                <strong class="text-emerald-400">Phase 4: Staged Deployment</strong>
+                                <br>
+                                I'd start with a pilot site, validate the configuration, document lessons learned, then roll out to remaining sites using the refined template. Change management is critical—especially in OT environments where downtime impacts production.
+                                <br><br>
+                                Even without direct deployment experience, I understand the methodology and would lean on vendor professional services or experienced network engineers while contributing my security expertise around policy design and detection integration."
+                            </p>
+                        </div>
+
+                        <!-- Follow-ups -->
+                        <div class="mt-6 space-y-4">
+                            <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you determine North–South vs East–West visibility needs?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "North-South is traffic entering/leaving the network—internet traffic, connections to external partners. That's your perimeter defense focus. East-West is internal traffic between segments—server to server, workstation to server. For a manufacturing environment, East-West visibility is actually more critical because once an attacker is inside (or an insider threat exists), they move laterally. I'd implement micro-segmentation between zones and ensure the firewall can inspect internal traffic, not just perimeter. In OT environments, this is especially important—you want to detect unexpected communication between PLCs and the corporate network."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you ensure consistent policy across 10+ firewalls in different locations?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Centralized management is the answer. Using Panorama or FortiManager, I'd create device groups based on site type—all manufacturing plants share a common policy template, all distribution centers share another. Within those templates, I'd use variables for site-specific values like local subnets or DNS servers. Changes go to the template, which then pushes to all firewalls in that group. This ensures consistency and eliminates configuration drift. I'd also implement regular compliance checks—automated audits comparing actual configs to the golden standard."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How would you design HA for a plant that cannot tolerate downtime?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "For critical OT environments, I'd implement active-passive HA at minimum, with both firewalls synchronized for stateful failover. Session state, routing tables, and security policy are replicated so if the primary fails, traffic switches to the secondary without dropping connections. For ultra-critical environments, you might consider active-active with load balancing. I'd also ensure the HA heartbeat link is isolated from production traffic—dedicated HA interfaces. Testing failover during maintenance windows is essential—you don't want to discover HA doesn't work during an actual outage. And I'd coordinate with plant operations so they know what to expect during failover testing."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">What tools would you use for centralized management?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "It depends on the vendor. For Palo Alto, Panorama is the standard—device groups, templates, shared policies, centralized logging. For Fortinet, FortiManager handles config management and FortiAnalyzer handles logging. For multi-vendor environments, you might look at third-party tools like Tufin or AlgoSec for policy management across different firewall platforms. The key is having a single pane of glass for policy changes and a centralized log repository for security monitoring—which then feeds into Sentinel or whatever SIEM is in use."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="question-card rounded-xl p-6 mb-6">
+                        <div class="flex items-start space-x-3 mb-4">
+                            <span class="px-2 py-1 rounded bg-emerald-500/20 text-emerald-400 text-xs font-bold">Q2</span>
+                            <p class="text-white font-medium">What steps do you take to ensure the NGFW configuration aligns with security best practices?</p>
+                        </div>
+                        
+                        <div class="answer-box">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "I approach this in layers—initial design, ongoing governance, and continuous validation.
+                                <br><br>
+                                <strong class="text-emerald-400">Design Phase:</strong> Start with explicit deny by default—nothing gets through unless there's a rule allowing it. No 'any-any' rules. Rules should be as specific as possible: specific source zones, specific destination applications, specific user groups where possible. Enable logging on everything, especially denies.
+                                <br><br>
+                                <strong class="text-emerald-400">Security Features:</strong> Enable all the NGFW capabilities you're paying for—App-ID to identify applications regardless of port, URL filtering, threat prevention (IPS signatures), file blocking for known malicious file types, SSL decryption for traffic categories where you need visibility (with appropriate exceptions for privacy-sensitive categories).
+                                <br><br>
+                                <strong class="text-emerald-400">Ongoing Governance:</strong> Every rule should have an owner and a documented business justification. Rules without recent hits should be reviewed—maybe they're no longer needed. Shadow rule detection to identify rules that never match because a broader rule above them already allows the traffic. Quarterly rule cleanup reviews.
+                                <br><br>
+                                <strong class="text-emerald-400">Validation:</strong> Regular security assessments—can we still access things that should be blocked? Are there bypasses? I'd also compare configs against vendor hardening guides and CIS benchmarks."
+                            </p>
+                        </div>
+
+                        <div class="mt-6 space-y-4">
+                            <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">What are the top five misconfigurations you commonly see on firewalls?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "From what I've seen and studied: (1) <strong>Overly permissive rules</strong>—'any-any' rules that were supposed to be temporary but became permanent. (2) <strong>Disabled security features</strong>—SSL decryption turned off because it was 'too complicated,' leaving you blind to encrypted threats. (3) <strong>Stale rules</strong>—rules for decommissioned servers or former employees still active. (4) <strong>Logging disabled</strong>—rules without logging, so you have no visibility when something goes wrong. (5) <strong>Default credentials</strong>—admin accounts still using vendor defaults, or management interfaces exposed to the internet."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you standardize rule creation and governance?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Process and documentation. Every firewall change should go through a request process—who needs access, to what, for what business reason, for how long. That becomes the rule documentation. Naming conventions should be standardized: 'ALLOW_WebTeam_to_ProdDB_MySQL' tells you exactly what the rule does. Pre-defined zone structures that everyone follows. A review process where security approves before implementation. And post-implementation verification—did the rule actually solve the requester's problem without opening more than intended?"
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you document firewall deployments and changes?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Multiple levels. <strong>Architecture documentation:</strong> network diagrams showing firewall placement, zone definitions, traffic flows. This lives in a central wiki or documentation system. <strong>Configuration documentation:</strong> what each policy does and why. <strong>Change records:</strong> every change linked to a ticket with business justification, approvals, implementation notes, and rollback plan. <strong>Runbooks:</strong> how to perform common tasks like adding a new zone or troubleshooting connectivity issues. The goal is that anyone on the team can understand and maintain the environment, not just the person who built it."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="question-card rounded-xl p-6 mb-6">
+                        <div class="flex items-start space-x-3 mb-4">
+                            <span class="px-2 py-1 rounded bg-emerald-500/20 text-emerald-400 text-xs font-bold">Q3</span>
+                            <p class="text-white font-medium">A firewall rule change has caused production downtime in an OT network. How would you troubleshoot and resolve it?</p>
+                        </div>
+                        
+                        <div class="answer-box">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "First rule in OT: coordinate with operations. I'm not going to start making changes without talking to the plant engineer and understanding the impact. Production downtime in OT is serious—it's not just 'the website is slow,' it could be 'the production line stopped.'
+                                <br><br>
+                                <strong class="text-emerald-400">Immediate Triage:</strong>
+                                <br>
+                                What changed? Pull the most recent firewall changes from change management. If we just pushed a rule change and production immediately broke, that's probably the culprit.
+                                <br><br>
+                                <strong class="text-emerald-400">Traffic Analysis:</strong>
+                                <br>
+                                Look at session logs and traffic logs. Filter by the affected source/destination. Are we seeing denies that weren't there before? Is traffic being classified differently by App-ID? Is something hitting an implicit deny that used to match an allow rule?
+                                <br><br>
+                                <strong class="text-emerald-400">Rollback Decision:</strong>
+                                <br>
+                                If the cause is clear and rollback is safe, revert the change. In OT, restoring production takes priority over forensic investigation. We can analyze later. I'd coordinate with the OT team: 'I'm going to revert this rule change in 30 seconds—watch the production line and tell me if traffic resumes.'
+                                <br><br>
+                                <strong class="text-emerald-400">Verify & Document:</strong>
+                                <br>
+                                Confirm production is restored. Then do the post-incident analysis: why did this change cause this impact? Was the change request incomplete? Did we not understand all the traffic flows? Update documentation and change process to prevent recurrence."
+                            </p>
+                        </div>
+
+                        <div class="mt-6 space-y-4">
+                            <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">What do you check first in session and traffic logs?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "I filter by the source and destination involved in the affected communication. Look for deny actions that weren't there before the change. Check the rule name—is it hitting the new rule we added, or an implicit deny? Look at App-ID—is the traffic being classified as something unexpected? If SSL decryption was enabled, is certificate verification failing? The logs usually tell the story quickly if you know where to look."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How would you safely roll back during active outage?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "If we're using centralized management like Panorama, there should be a config rollback option—revert to the last known-good configuration and push. If it's a single rule change, I'd disable the problematic rule rather than reverting the entire config—less risk of unintended side effects. I'd communicate clearly: 'Rolling back rule X in 30 seconds, watch for traffic restoration.' And I'd have someone monitoring the production system so we know immediately if the rollback worked."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you verify the fix doesn't impact other systems?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Watch the logs for unexpected denies on other traffic after the rollback. Check with other teams—did anything else break when we reverted? If the original change was supposed to enable something, we need to understand why it broke something else. Maybe the rule order was wrong, or the scope was broader than intended. Don't rush to re-implement the original change until we understand the full picture."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you prevent recurrence?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Post-incident review. What went wrong? Was the change request incomplete—did it list all affected systems? Did we test in a non-production environment first? For OT networks, changes should probably require sign-off from OT engineers who understand the production dependencies. Maybe we need a better staging process—test the rule in 'log only' mode before setting it to block. Update the change management process based on lessons learned."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================ -->
+                <!-- SECTION 2: Security Tools -->
+                <!-- ============================================ -->
+                <section id="section2" class="mb-12">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                            <i class="fas fa-tools text-blue-400"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white">Section 2: Security Tools (EDR, DLP, PAM, Email, KMS)</h2>
+                            <p class="text-gray-500 text-sm">Endpoint protection, data loss prevention, privileged access</p>
+                        </div>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="question-card rounded-xl p-6 mb-6">
+                        <div class="flex items-start space-x-3 mb-4">
+                            <span class="px-2 py-1 rounded bg-blue-500/20 text-blue-400 text-xs font-bold">Q4</span>
+                            <p class="text-white font-medium">Describe your experience managing EDR tools and how you ensure high-quality telemetry across endpoints.</p>
+                        </div>
+                        
+                        <div class="answer-box">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "This is actually my strongest area. I've worked extensively with EDR platforms—Cortex XDR, Microsoft Defender for Endpoint, Trellix, and FireEye HX.
+                                <br><br>
+                                <strong class="text-emerald-400">MDE at Current Role:</strong>
+                                <br>
+                                I led the Defender for Endpoint rollout across our server and workstation environment. This involved onboarding hundreds of devices, dealing with conflicts (like the ESET conflict I resolved), and ensuring we had comprehensive coverage.
+                                <br><br>
+                                <strong class="text-emerald-400">Ensuring High-Quality Telemetry:</strong>
+                                <br>
+                                The agent needs to be healthy and reporting. I built monitoring in Sentinel to detect devices that stop reporting—if we haven't seen telemetry from a device in 24 hours, that's a gap we need to investigate. Is the agent crashed? Is the device off? Is there a network issue blocking communication to Microsoft's endpoints?
+                                <br><br>
+                                <strong class="text-emerald-400">FireEye HX Automation:</strong>
+                                <br>
+                                At Infosys, we had 14 FireEye HX consoles. I built a Python automation that pulled device lists from all 14 consoles, merged them, and compared against the asset inventory to identify coverage gaps. This ran regularly and told us exactly which endpoints were missing protection. That automation is still in use today.
+                                <br><br>
+                                <strong class="text-emerald-400">Telemetry Quality:</strong>
+                                <br>
+                                It's not just about the agent being installed—it's about getting useful data. I've validated that we're collecting process events, network connections, file modifications, registry changes. If the telemetry is incomplete, our detections won't work. I've also worked on tuning exclusions—you need some exclusions for performance, but too many and you create blind spots."
+                            </p>
+                        </div>
+
+                        <div class="mt-6 space-y-4">
+                            <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you detect missing telemetry?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Multiple approaches. In Sentinel, I have a watchlist of all devices from our asset inventory. I join this against the last-seen timestamp from MDE telemetry. Devices that haven't reported in X hours get flagged. I also monitor the MDE health dashboard for unhealthy agents. For coverage gaps, I compare the CMDB device count against the MDE device count—if we have 500 servers but only 450 in MDE, that's 50 we need to investigate. The FireEye automation I built did exactly this across 14 consoles automatically."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">What steps do you take when an agent goes unhealthy?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "First, verify the device is actually online—check if it's responding to ping or if other agents (like Intune) see it healthy. If the device is up but the EDR agent is unhealthy, I'll remote in and check the agent service status. For MDE, that's the SENSE service. Check if it's running, check the diagnostic logs for errors. Common issues: service crashed, certificate issues, connectivity blocked to Microsoft endpoints. Sometimes a service restart fixes it. For persistent issues, I might need to re-onboard—offboard, wait for cleanup, then onboard fresh."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you validate new device onboarding?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "After onboarding, I verify the device appears in the console within the expected timeframe (usually within an hour). I check that it's sending telemetry—look for process creation events or heartbeat. I verify it's in the correct device group and has the right policies applied. For servers, I validate that any necessary exclusions are working without creating security gaps. I documented this entire validation process as part of our onboarding runbook so it's consistent regardless of who does the onboarding."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="question-card rounded-xl p-6 mb-6">
+                        <div class="flex items-start space-x-3 mb-4">
+                            <span class="px-2 py-1 rounded bg-blue-500/20 text-blue-400 text-xs font-bold">Q5</span>
+                            <p class="text-white font-medium">Coca-Cola uses DLP across IT and OT environments. How would you design and tune DLP policies to minimize false positives?</p>
+                        </div>
+                        
+                        <div class="answer-box">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "This is directly relevant to my current role—I'm leading the migration from Symantec DLP to Microsoft Purview Endpoint DLP, and we're in the enforcement phase right now.
+                                <br><br>
+                                <strong class="text-emerald-400">Design Philosophy:</strong>
+                                <br>
+                                DLP should protect sensitive data without blocking legitimate business. If you create too many false positives, users will find workarounds and you'll lose visibility. Start conservative, tune based on data, then tighten controls.
+                                <br><br>
+                                <strong class="text-emerald-400">Classifier Selection:</strong>
+                                <br>
+                                I use a layered approach. Built-in Sensitive Information Types (SITs) for standard patterns like credit card numbers, SINs, passport numbers. Custom SITs for company-specific data—internal project codes, customer account formats. Exact Data Match (EDM) when you have a database of specific values to protect—like actual customer names or account numbers. Keyword rules as additional context—looking for 'confidential' or 'internal only' near sensitive content increases confidence.
+                                <br><br>
+                                <strong class="text-emerald-400">Tuning Process:</strong>
+                                <br>
+                                Deploy in Audit/Test mode first—see what would trigger without blocking anything. Analyze the alerts. Are they true positives (real sensitive data) or false positives (regex matching something that looks like a SSN but isn't)? Tune the rules—add exceptions for known safe destinations, adjust confidence thresholds, refine the patterns. Only move to Warn (user override with justification) and then Block after the false positive rate is acceptable.
+                                <br><br>
+                                <strong class="text-emerald-400">OT Considerations:</strong>
+                                <br>
+                                For OT environments, I'd be even more careful. False positive blocking could impact operations. I'd focus on network DLP at the IT/OT boundary rather than endpoint DLP on OT systems, which may not even support agents."
+                            </p>
+                        </div>
+
+                        <div class="mt-6 space-y-4">
+                            <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you differentiate between endpoint DLP vs network DLP?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "<strong>Endpoint DLP</strong> inspects data at the source—when a user tries to copy a file to USB, email an attachment, upload to cloud storage. It can see unencrypted content regardless of network path. <strong>Network DLP</strong> inspects traffic at network boundaries—what's leaving the network, what's going to certain destinations. It struggles with encrypted traffic unless you're doing SSL inspection. I see them as complementary: endpoint DLP for user actions on managed devices, network DLP for visibility at boundaries and for devices you can't put agents on (like OT systems). In my Purview migration, we're focused on endpoint because that's where most data handling happens."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">What classifiers (SIT, EDM, keyword rules) would you use?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Depends on what we're protecting. For <strong>personal data (PII)</strong>: built-in SITs for SIN, credit cards, passport numbers—these have good pattern matching. For <strong>company-specific data</strong>: custom SITs with regex patterns matching internal formats—customer IDs, project codes. For <strong>known sensitive databases</strong>: EDM is powerful—upload a hash of actual customer names, and DLP will detect when those specific values appear. <strong>Keywords</strong> as context boosters: 'confidential' near a credit card number increases confidence it's real, not a test. I layer these—a SIT hit near relevant keywords with high confidence triggers the policy."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you evaluate if a DLP alert should move from Audit → Enforcement?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Data-driven decision. I track metrics in audit mode: how many alerts per day, what percentage are true positives, what's the user impact if we blocked these? If we're seeing 100 alerts/day with 80% false positives, we're not ready to enforce—we'd destroy productivity. Tune until false positive rate is acceptable (I aim for under 10%). Then move to Warn mode—user sees a prompt but can override with justification. Monitor override reasons—are they legitimate exceptions we should codify? Only move to Block when we're confident we won't break legitimate business processes. For my Purview migration, we spent months in audit mode before enabling warn, and we're carefully rolling out block actions."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q6 -->
+                    <div class="question-card rounded-xl p-6 mb-6">
+                        <div class="flex items-start space-x-3 mb-4">
+                            <span class="px-2 py-1 rounded bg-blue-500/20 text-blue-400 text-xs font-bold">Q6</span>
+                            <p class="text-white font-medium">How would you improve visibility and control using a Privileged Access Management (PAM) solution?</p>
+                        </div>
+                        
+                        <div class="answer-box">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "I'll be honest—I haven't directly administered a PAM solution like CyberArk or BeyondTrust. My experience is on the SIEM integration side: ingesting PAM logs into Sentinel, building detection rules around privileged access patterns, and using PAM session data during incident investigations.
+                                <br><br>
+                                <strong class="text-emerald-400">How PAM Improves Visibility:</strong>
+                                <br>
+                                Without PAM, privileged access is a black box—someone logs in as admin, does things, logs out, and you have minimal audit trail. PAM gives you: who accessed what system, when, for how long, and exactly what commands they ran (through session recording). This is invaluable for compliance and forensics.
+                                <br><br>
+                                <strong class="text-emerald-400">How PAM Improves Control:</strong>
+                                <br>
+                                Just-in-time access—privileges granted only when needed, automatically revoked after. Users never know the actual password (credential vaulting), so they can't share it or write it down. Automatic credential rotation means even if a credential is compromised, it changes before the attacker can use it.
+                                <br><br>
+                                <strong class="text-emerald-400">From Detection Engineering:</strong>
+                                <br>
+                                I've built alerts around PAM events: privileged sessions outside business hours, sessions to systems the user doesn't normally access, credential checkouts without corresponding sessions (possible theft), multiple failed authentications (credential stuffing). PAM telemetry is gold for detecting compromised privileged accounts."
+                            </p>
+                        </div>
+
+                        <div class="mt-6 space-y-4">
+                            <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you handle break-glass accounts?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Break-glass is for emergencies when normal access fails—the PAM system is down, or there's an urgent situation where approval workflow can't wait. These accounts should be: stored separately with enhanced protection (physical safe, HSM), access triggers immediate alerts to security team, full session recording if used, mandatory post-incident review of why break-glass was needed. They should never be used routinely—if they're being used regularly, something's wrong with the normal access process. I'd monitor for any break-glass usage as a high-priority alert."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">What is your approach to password rotation policies?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Automated rotation is the goal—humans shouldn't be changing privileged passwords manually. For service accounts, rotate frequently (daily or weekly) because there's no human impact. For interactive accounts, rotate after every use (the credential changes as soon as the session ends). For highly sensitive accounts like domain admin, potentially rotate on a schedule regardless of use. The key is that applications and workflows should retrieve credentials dynamically from the vault, not have them hardcoded—otherwise rotation breaks things. I've seen organizations struggle here because they have passwords embedded in scripts that nobody knows about."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you integrate PAM with AD or cloud workloads?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "AD integration typically means PAM managing AD admin accounts—domain admins, server admins. Users authenticate to the PAM portal with their regular credentials (possibly with MFA), request access to the privileged AD account, and PAM either provisions the session or checks out the credential. For cloud workloads, similar concept—PAM manages access to Azure subscription admin roles, AWS IAM privileged roles. Azure Privileged Identity Management (PIM) is Microsoft's native approach for this. The goal is the same: no standing privileges, just-in-time access, full audit trail."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q7 -->
+                    <div class="question-card rounded-xl p-6 mb-6">
+                        <div class="flex items-start space-x-3 mb-4">
+                            <span class="px-2 py-1 rounded bg-blue-500/20 text-blue-400 text-xs font-bold">Q7</span>
+                            <p class="text-white font-medium">Explain how you secure key and certificate management (KMS).</p>
+                        </div>
+                        
+                        <div class="answer-box">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "I haven't directly administered an enterprise KMS solution, but I understand the principles and have applied them in my work—particularly around ensuring secrets aren't hardcoded and integrating with SIEM to detect key management issues.
+                                <br><br>
+                                <strong class="text-emerald-400">Core Principles:</strong>
+                                <br>
+                                • Secrets should never be in code—not in source control, not in config files
+                                <br>• Least privilege—applications only access the specific keys they need
+                                <br>• Rotation without downtime—architecture should support credential changes without breaking applications
+                                <br>• Audit everything—every access logged and reviewable
+                                <br><br>
+                                <strong class="text-emerald-400">Technologies I Understand:</strong>
+                                <br>
+                                Azure Key Vault for secrets, keys, and certificates in Azure environments. HashiCorp Vault for multi-cloud or hybrid environments. HSMs for highest-security key storage. The pattern is similar: centralized secure storage, access controlled by identity, dynamic retrieval at runtime, automatic rotation where possible.
+                                <br><br>
+                                <strong class="text-emerald-400">From Security Monitoring:</strong>
+                                <br>
+                                I've built alerts for KMS-related risks: secrets appearing in logs or source control, certificate expiration warnings, unusual access patterns to vaults, failed authentication attempts against key storage. These are often early indicators of compromise or misconfiguration."
+                            </p>
+                        </div>
+
+                        <div class="mt-6 space-y-4">
+                            <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">What types of keys must be rotated periodically?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "API keys and service account credentials—rotate regularly since these often have broad access. Database connection strings—especially if they grant admin access. Encryption keys—rotate periodically to limit exposure if one key is compromised (all data encrypted with that key is at risk). SSL/TLS certificates—rotate before expiration. SSH keys—rotate and remove keys for former employees or decommissioned systems. The frequency depends on risk: high-privilege credentials more frequently, encryption keys based on data sensitivity and compliance requirements."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you detect certificate expiry proactively?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Automated monitoring. Azure Key Vault can send notifications before certificate expiration. For certificates outside the vault, scanning tools that inventory all certificates and track expiration dates. I'd set alerts at 90 days, 30 days, and 7 days before expiration—giving progressively more urgent warnings. The goal is never being surprised by an expired certificate taking down production on a Sunday night. For internal PKI, integrate certificate lifecycle management with automation to auto-renew where possible."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you store secrets in cloud-native applications?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Use the cloud provider's secrets service—Azure Key Vault, AWS Secrets Manager, GCP Secret Manager. Applications authenticate using managed identities (Azure) or IAM roles (AWS)—no credentials needed for the app to access the vault. Secrets are retrieved at runtime, not baked into container images or environment variables. In Kubernetes, use the CSI secrets driver to mount secrets as volumes. The principle is: application code knows which secret it needs by name, but never sees or stores the actual value. This means you can rotate secrets without redeploying applications."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================ -->
+                <!-- SECTION 3: DevSecOps -->
+                <!-- ============================================ -->
+                <section id="section3" class="mb-12">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                            <i class="fas fa-code text-purple-400"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white">Section 3: DevSecOps, CI/CD, and Automation</h2>
+                            <p class="text-gray-500 text-sm">Pipeline security, scripting, shift-left practices</p>
+                        </div>
+                    </div>
+
+                    <!-- Q8 -->
+                    <div class="question-card rounded-xl p-6 mb-6">
+                        <div class="flex items-start space-x-3 mb-4">
+                            <span class="px-2 py-1 rounded bg-purple-500/20 text-purple-400 text-xs font-bold">Q8</span>
+                            <p class="text-white font-medium">How do you integrate automated security testing into a CI/CD pipeline without slowing down deployments?</p>
+                        </div>
+                        
+                        <div class="answer-box">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "I'll be upfront—my direct CI/CD experience is from my personal projects, not enterprise pipelines. I built the GitHub Actions workflow for my email security platform, implementing SAST, DAST, dependency scanning, and secrets detection. That taught me the principles, even if at a smaller scale.
+                                <br><br>
+                                <strong class="text-emerald-400">The Key: Right Checks at Right Time</strong>
+                                <br>
+                                Not every check needs to run on every commit. Fast checks run early and often; slow checks run less frequently.
+                                <br><br>
+                                <strong class="text-emerald-400">Pre-commit / Early Pipeline:</strong>
+                                <br>
+                                • Secrets scanning (fast, catches mistakes immediately)
+                                <br>• Linting and basic SAST (fast, catches obvious issues)
+                                <br>• Dependency vulnerability check (fast lookup against known CVE databases)
+                                <br><br>
+                                <strong class="text-emerald-400">Build Stage:</strong>
+                                <br>
+                                • Full SAST analysis
+                                <br>• Container image scanning
+                                <br>• IaC security scanning (Terraform, CloudFormation)
+                                <br><br>
+                                <strong class="text-emerald-400">Post-Build / Staging:</strong>
+                                <br>
+                                • DAST against running application (slower, but catches runtime issues)
+                                <br>• Integration security tests
+                                <br><br>
+                                <strong class="text-emerald-400">Making It Fast:</strong>
+                                <br>
+                                Parallelize scans where possible. Cache dependencies. Incremental scanning—only scan changed files, not the entire codebase. Set reasonable thresholds—fail on critical/high, warn on medium, log low."
+                            </p>
+                        </div>
+
+                        <div class="mt-6 space-y-4">
+                            <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">Which checks should be blocking vs non-blocking?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "<strong>Blocking (fail the build):</strong> Secrets in code (never acceptable), critical CVEs in dependencies, SAST findings that indicate clear vulnerabilities (SQL injection, hardcoded credentials). <strong>Non-blocking (warn but proceed):</strong> Medium/low vulnerabilities, SAST findings that need human review, code quality issues. <strong>Post-deployment/async:</strong> DAST results, penetration testing findings. The goal is fast feedback on clear issues, human judgment on nuanced issues, without blocking deployment for things that can be addressed in the next sprint."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you handle secrets scanning at pre-commit?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Pre-commit hooks using tools like git-secrets or detect-secrets. When a developer tries to commit, the hook scans for patterns that look like credentials—API keys, passwords, AWS secrets. If found, the commit is blocked before it ever reaches the repo. This is the cheapest place to catch secrets—before they're in version history. In GitHub, I also enable secret scanning at the repo level as a backup. For my projects, I use GitHub's built-in secret scanning plus custom patterns for internal credential formats."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How would you tune SAST rules to avoid noise?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Start by understanding the noise. What are the most common false positives? Often it's things like test code flagged as vulnerable (intentional test cases), internal APIs flagged as injection points, or patterns that match but aren't actually exploitable in context. I'd create suppressions for known false positives—documented with why they're safe. Adjust severity thresholds—maybe certain rule categories are just informational. Use baseline comparison—only alert on new findings, not the 500 existing issues you haven't fixed yet. The goal is actionable output that developers trust and act on."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">What's your approach to shift-left security?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Shift-left means finding issues earlier when they're cheaper to fix. Writing code → cheapest. In PR review → cheap. In testing → moderate. In production → expensive. So: give developers security feedback in their IDE (real-time SAST). Block commits with secrets before they hit the repo. Review PRs for security implications, not just functionality. Train developers on secure coding so they write secure code the first time. Threat modeling during design, not after deployment. It's a mindset shift: security is everyone's job, not something the security team finds after the fact."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q9 -->
+                    <div class="question-card rounded-xl p-6 mb-6">
+                        <div class="flex items-start space-x-3 mb-4">
+                            <span class="px-2 py-1 rounded bg-purple-500/20 text-purple-400 text-xs font-bold">Q9</span>
+                            <p class="text-white font-medium">Describe a security automation you built using Python or PowerShell.</p>
+                        </div>
+                        
+                        <div class="answer-box">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "I've built several. Let me share two from my work experience:
+                                <br><br>
+                                <strong class="text-emerald-400">1. FireEye HX Compliance Automation (Python)</strong>
+                                <br>
+                                At Infosys, we had 14 FireEye HX consoles across the environment. Tracking endpoint compliance was a nightmare—log into each console, download device lists, copy-paste into Excel, VLOOKUP against the asset inventory. Hours of manual work weekly.
+                                <br><br>
+                                I wrote a Python script that: connected to all 14 HX consoles via API, pulled the device inventory from each, merged into a single dataframe using pandas, performed the VLOOKUP automatically against the infra team's asset list, and generated a report showing: compliant devices, non-reporting devices, and devices not in inventory.
+                                <br><br>
+                                What took hours now runs in minutes. That automation is still in use today, even after I left.
+                                <br><br>
+                                <strong class="text-emerald-400">2. UEBA Resigned Employee Upload (PowerShell + Python)</strong>
+                                <br>
+                                We had a weekly insider threat process: HR emails resigned employee list, we upload to UEBA for enhanced monitoring. Manual process: download attachment, clean data, RDP to DMZ, copy file, SSH to UEBA, upload.
+                                <br><br>
+                                I couldn't fully automate the RDP hop, but I automated everything else:
+                                <br>• Script 1: Downloads HR attachment, validates data format, cleans duplicates, places in DMZ share
+                                <br>• Script 2: After manual RDP, picks up file from share, SSH uploads to UEBA with error handling
+                                <br><br>
+                                Reduced 20 minutes of error-prone manual work to 3 minutes, mostly waiting."
+                            </p>
+                        </div>
+
+                        <div class="mt-6 space-y-4">
+                            <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you handle authentication securely in automation scripts?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Never hardcode credentials. For service accounts, store credentials in a secrets manager or encrypted credential store—Windows Credential Manager for PowerShell, environment variables or vault integration for Python. For Azure, use managed identities where possible—the script runs as an identity that has permissions, no password needed. For APIs, store API keys in Key Vault and retrieve at runtime. In my scripts, I typically have a config section at the top that pulls credentials from secure storage, never inline in the code."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you log results and errors?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Structured logging from the start. For Python, I use the logging module with different levels—DEBUG for detailed troubleshooting, INFO for normal operations, WARNING for issues that don't stop execution, ERROR for failures. Log to both console and file. Include timestamps, what action was attempted, success/failure, and any error messages. For the FireEye script, I logged: 'Connecting to HX01...', 'Retrieved 342 devices from HX01', 'ERROR: Connection to HX05 failed: timeout'. This makes troubleshooting easy. I also send summary reports—'Compliance report generated: 450/500 devices compliant, 50 non-reporting.'"
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you handle scaling the automation (e.g., thousands of endpoints)?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "For the FireEye script, I handled it through efficient API usage and pandas for data manipulation. API calls were the bottleneck, so I cached results and only made fresh calls when needed. For thousands of endpoints, I'd consider: parallel API calls (threading/asyncio), pagination handling for large result sets, incremental processing (only query changes since last run), and breaking into batches if memory is a concern. For the MDE onboarding at scale, I used PowerShell jobs to run onboarding against multiple servers in parallel rather than sequentially. The key is identifying the bottleneck—usually API rate limits or network latency—and designing around it."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q10 -->
+                    <div class="question-card rounded-xl p-6 mb-6">
+                        <div class="flex items-start space-x-3 mb-4">
+                            <span class="px-2 py-1 rounded bg-purple-500/20 text-purple-400 text-xs font-bold">Q10</span>
+                            <p class="text-white font-medium">The DevOps team wants faster deployments, but security wants strong controls. How do you balance this?</p>
+                        </div>
+                        
+                        <div class="answer-box">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "This is the central tension in DevSecOps, and the answer isn't 'security wins' or 'speed wins'—it's designing controls that enable both.
+                                <br><br>
+                                <strong class="text-emerald-400">My Philosophy:</strong>
+                                <br>
+                                Security that blocks everything gets bypassed. If the security process is too slow, developers will find workarounds and you'll have less security, not more. The goal is making secure the path of least resistance.
+                                <br><br>
+                                <strong class="text-emerald-400">Practical Approaches:</strong>
+                                <br><br>
+                                <strong>Automate Everything Possible:</strong> Manual security reviews don't scale. Automated scanning catches 80% of issues instantly. Reserve human review for architecture changes and high-risk releases.
+                                <br><br>
+                                <strong>Tiered Controls:</strong> Not every deployment needs the same scrutiny. Routine updates to non-critical systems → automated checks only. New features with data access changes → automated checks plus review. Major architecture changes → full security review.
+                                <br><br>
+                                <strong>Fast Feedback:</strong> Developers should know about security issues in minutes, not days. Integrate scanning into their workflow—IDE plugins, PR checks—so they fix issues while the code is fresh in their mind.
+                                <br><br>
+                                <strong>Guardrails, Not Gates:</strong> Instead of 'you can't deploy without security approval,' implement guardrails: automated policies that prevent obviously insecure configurations. Deploy whatever you want within the guardrails.
+                                <br><br>
+                                <strong>Build Relationships:</strong> I try to be an enabler, not a blocker. When I say no, I explain why and offer alternatives. When teams are designing something new, I want to be involved early so security is built in, not bolted on."
+                            </p>
+                        </div>
+
+                        <div class="mt-6 space-y-4">
+                            <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you design frictionless guardrails?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Guardrails should prevent bad things without requiring action for good things. Examples: Azure Policy that prevents creating VMs with public IPs (automatic, no action needed). Pre-commit hook that blocks secrets (developer fixes and re-commits, no approval needed). Container registry that rejects images with critical vulnerabilities (immediate feedback). The pattern is: define what's acceptable, automatically enforce it, give clear feedback on violations. Developers can move fast within the boundaries without asking permission."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you measure pipeline performance impact?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Track pipeline duration over time. When I add a new security check, I compare before/after. If the pipeline went from 10 minutes to 30 minutes, that's a problem—developers will be blocked waiting. Target: security checks should add minimal time. Secrets scanning: seconds. SAST on changed files: a minute or two. Dependency check: seconds (it's a database lookup). If something takes longer, run it in parallel or make it non-blocking. Also track failure rate—if a new check fails 50% of builds, investigate whether it's catching real issues or generating noise."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">What are examples of security controls that can safely run post-deployment?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "DAST (dynamic scanning) makes sense post-deployment—you need a running application to test. Penetration testing runs against deployed environments. Continuous security monitoring—anomaly detection, unexpected behavior. Some compliance checks—verifying runtime configuration matches expected state. The key is: anything that doesn't prevent immediate exploitation can run post-deployment, but you need a feedback loop to address findings. Post-deployment findings should still block the next deployment if not addressed."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================ -->
+                <!-- SECTION 4: Cloud Security -->
+                <!-- ============================================ -->
+                <section id="section4" class="mb-12">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center">
+                            <i class="fas fa-cloud text-cyan-400"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white">Section 4: Cloud Security (Azure Focus)</h2>
+                            <p class="text-gray-500 text-sm">Azure workload security, Sentinel, cloud architecture</p>
+                        </div>
+                    </div>
+
+                    <!-- Q11 -->
+                    <div class="question-card rounded-xl p-6 mb-6">
+                        <div class="flex items-start space-x-3 mb-4">
+                            <span class="px-2 py-1 rounded bg-cyan-500/20 text-cyan-400 text-xs font-bold">Q11</span>
+                            <p class="text-white font-medium">Describe how you would secure a new workload being deployed into Azure.</p>
+                        </div>
+                        
+                        <div class="answer-box">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "I'd approach this methodically, covering identity, network, data, and monitoring.
+                                <br><br>
+                                <strong class="text-emerald-400">Identity & Access:</strong>
+                                <br>
+                                • Use managed identities for the workload—no stored credentials
+                                <br>• RBAC with least privilege—what does this workload actually need to access?
+                                <br>• If human access is needed, use PIM for just-in-time privileged access
+                                <br>• Conditional Access policies if users are accessing the workload
+                                <br><br>
+                                <strong class="text-emerald-400">Network:</strong>
+                                <br>
+                                • Deploy in a VNet with proper segmentation—not the default network
+                                <br>• NSGs restricting traffic to only what's necessary
+                                <br>• Private endpoints for Azure services—no public internet exposure for data access
+                                <br>• If internet-facing, use Azure WAF or Azure Front Door with DDoS protection
+                                <br><br>
+                                <strong class="text-emerald-400">Data:</strong>
+                                <br>
+                                • Encryption at rest (default, but verify) and in transit
+                                <br>• Secrets in Key Vault, not in code or config
+                                <br>• Backup configuration with appropriate retention
+                                <br><br>
+                                <strong class="text-emerald-400">Monitoring:</strong>
+                                <br>
+                                • Enable Defender for Cloud for the relevant workload type
+                                <br>• Connect diagnostic logs to Log Analytics/Sentinel
+                                <br>• Enable MDE if it's a VM/server workload
+                                <br><br>
+                                <strong class="text-emerald-400">Governance:</strong>
+                                <br>
+                                • Azure Policy to enforce compliance—prevent misconfigurations before they happen"
+                            </p>
+                        </div>
+
+                        <div class="mt-6 space-y-4">
+                            <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you enforce network segmentation using NSGs/ASGs?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "NSGs apply to subnets or NICs, controlling traffic by IP, port, and protocol. But managing by IP is painful at scale. ASGs let you group VMs by role—WebServers ASG, DatabaseServers ASG—and write rules like 'WebServers can talk to DatabaseServers on port 1433.' This is cleaner and scales better. I'd structure it: subnets for workload types (web tier, app tier, data tier), NSGs on subnets with default deny, ASG-based rules for allowed traffic, and separate NSGs on NICs if finer control is needed."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you ensure secrets are never stored in code or environment variables?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Architecture and automation. Applications use managed identities to authenticate to Key Vault and retrieve secrets at runtime. Secrets are never in source code (pre-commit scanning catches mistakes). Environment variables are acceptable for non-sensitive config, but secrets always come from Key Vault. For containers, use the Key Vault CSI driver to mount secrets. Azure DevOps variables that are secrets should be stored in Key Vault and referenced, not stored in pipeline definitions. Regular scanning with tools like truffleHog to catch any secrets that slipped through."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you integrate Defender for Cloud recommendations?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Defender for Cloud provides a secure score and specific recommendations. I'd review recommendations at deployment: anything critical or high should be addressed before going live. Medium/low can be tracked for remediation. For ongoing management, I integrate Defender recommendations into Sentinel—high-severity findings create incidents. I also use Azure Policy to enforce the most important recommendations automatically—if Defender says 'disk encryption not enabled,' policy should prevent that from happening in the first place."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you validate identity and access configurations?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Multiple layers. <strong>Design review:</strong> Does this workload need Owner rights, or is Contributor sufficient? Does it need subscription-level access, or just resource group? <strong>Testing:</strong> Verify the workload can do what it needs and can't do what it shouldn't. <strong>Monitoring:</strong> Azure AD sign-in logs and audit logs to Sentinel—unusual access patterns get flagged. <strong>Periodic review:</strong> Access reviews for human accounts, periodic audit of managed identity permissions. The goal is least privilege, validated, and monitored."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q12 -->
+                    <div class="question-card rounded-xl p-6 mb-6">
+                        <div class="flex items-start space-x-3 mb-4">
+                            <span class="px-2 py-1 rounded bg-cyan-500/20 text-cyan-400 text-xs font-bold">Q12</span>
+                            <p class="text-white font-medium">Explain how Azure Sentinel fits into the detection and response workflow for this organization.</p>
+                        </div>
+                        
+                        <div class="answer-box">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "Sentinel is where I have deep experience. It's the central nervous system for security operations—collecting data, detecting threats, and enabling response.
+                                <br><br>
+                                <strong class="text-emerald-400">Data Collection:</strong>
+                                <br>
+                                Sentinel ingests logs from across the environment: MDE endpoint telemetry, Azure AD sign-in and audit logs, firewall logs, cloud app security alerts, custom application logs. For an organization with OT, I'd also ingest from OT security platforms like Claroty or Nozomi via syslog or API.
+                                <br><br>
+                                <strong class="text-emerald-400">Detection:</strong>
+                                <br>
+                                Built-in analytics rules for common threats. Custom rules using KQL for organization-specific detections. Threat intelligence integration to detect known IOCs. Machine learning for anomaly detection—unusual sign-in patterns, unexpected data transfers.
+                                <br><br>
+                                <strong class="text-emerald-400">Investigation:</strong>
+                                <br>
+                                When an alert fires, Sentinel creates an incident. Analysts use investigation tools: entity pages (what do we know about this user/host?), timeline view (what happened before and after?), bookmarks to save evidence. KQL hunting queries to explore hypotheses.
+                                <br><br>
+                                <strong class="text-emerald-400">Response:</strong>
+                                <br>
+                                Playbooks (Logic Apps) for automated response: enrich alerts with threat intel, create ServiceNow tickets, isolate compromised hosts via MDE API, disable compromised accounts.
+                                <br><br>
+                                <strong class="text-emerald-400">For Coca-Cola's Environment:</strong>
+                                <br>
+                                I'd ensure both IT and OT security data flows into Sentinel, with distinct workspaces or careful access controls if OT data sensitivity requires it."
+                            </p>
+                        </div>
+
+                        <div class="mt-6 space-y-4">
+                            <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you map logs from OT and IT networks into Sentinel?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "IT logs are straightforward—native connectors for Microsoft products, syslog or API for third-party. OT is more nuanced. OT security platforms (Claroty, Nozomi, Dragos) typically forward alerts via syslog to a collector in the DMZ, which then forwards to Sentinel. I wouldn't put a Sentinel agent directly in the OT network—that violates segmentation principles. The DMZ acts as a security boundary. I'd also be selective about what OT data goes to Sentinel—security alerts yes, raw OT telemetry probably stays in the OT security platform for performance and access control reasons."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you validate normalization via ASIM?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "ASIM (Advanced Security Information Model) normalizes data from different sources into common schemas—so a 'network session' looks the same whether it came from Palo Alto or Windows firewall. I validate by querying with ASIM parsers and checking that the expected fields are populated. If I query _Im_NetworkSession and Palo Alto traffic shows up with proper source/destination/port fields, the parser is working. If fields are null or wrong, I troubleshoot the parser. Microsoft provides built-in parsers for common sources; for custom sources, I'd build custom parsers following the ASIM schema."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you detect ingestion delays or data gaps?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "I build monitoring for this. Compare TimeGenerated (when Sentinel received it) vs the event's actual timestamp—large deltas indicate ingestion lag. Track expected data volume: if we normally get 1M events/day from MDE and suddenly it's 100K, something's wrong. Heartbeat monitoring for agents—if a device stops sending heartbeats, investigate. I create workbooks that visualize ingestion health: events over time by source, latency distribution, devices not reporting. I've also seen issues where a parser breaks and data stops being indexed properly—monitoring for sudden schema changes catches this."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================ -->
+                <!-- SECTION 5: OT/ICS Security -->
+                <!-- ============================================ -->
+                <section id="section5" class="mb-12">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
+                            <i class="fas fa-industry text-orange-400"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white">Section 5: OT/ICS Cybersecurity</h2>
+                            <p class="text-gray-500 text-sm">Industrial control systems, SCADA, manufacturing security</p>
+                        </div>
+                    </div>
+
+                    <!-- Q13 -->
+                    <div class="question-card rounded-xl p-6 mb-6">
+                        <div class="flex items-start space-x-3 mb-4">
+                            <span class="px-2 py-1 rounded bg-orange-500/20 text-orange-400 text-xs font-bold">Q13</span>
+                            <p class="text-white font-medium">Coca-Cola operates large OT/ICS environments. What are the main cybersecurity challenges in an OT setting?</p>
+                        </div>
+                        
+                        <div class="answer-box">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "I want to be upfront—my hands-on experience is primarily IT security. At the Siemens subsidiary, I've been exposed to IT/OT convergence discussions and understand the challenges conceptually. I've studied the Purdue Model, IEC 62443, and real-world OT incidents like TRITON.
+                                <br><br>
+                                <strong class="text-emerald-400">Core Challenges:</strong>
+                                <br><br>
+                                <strong>1. Safety First:</strong> IT security prioritizes Confidentiality → Integrity → Availability. OT flips this: Safety → Availability → Integrity → Confidentiality. A misconfigured PLC could cause physical harm. Availability is critical—downtime means production stops, products spoil, revenue lost.
+                                <br><br>
+                                <strong>2. Legacy Systems:</strong> OT environments have 15-20 year old systems running Windows XP or proprietary OSes. Not because they don't know it's outdated—because the vendor went out of business, or the upgrade would cost millions and require line shutdown.
+                                <br><br>
+                                <strong>3. Patching Limitations:</strong> You can't patch a production line during the work week. Patches require vendor approval, extensive testing, and scheduled downtime. Some systems can only be patched annually during planned shutdowns.
+                                <br><br>
+                                <strong>4. Scanning Risks:</strong> Aggressive network scanning can crash PLCs. Vulnerability scanners that work fine in IT can cause production outages in OT. Passive monitoring is preferred.
+                                <br><br>
+                                <strong>5. Air Gap Erosion:</strong> OT networks that were once isolated now connect to IT for data analytics, remote monitoring, vendor support. This creates attack paths."
+                            </p>
+                        </div>
+
+                        <div class="mt-6 space-y-4">
+                            <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">Why can't you run active vulnerability scans in OT networks?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "OT devices—PLCs, RTUs, HMIs—weren't designed to handle the traffic that vulnerability scanners generate. They have limited CPU, memory, and network stack. A scan that would barely register on a Windows server can crash a PLC or cause it to fail-safe (which might mean shutting down the process it controls). I've read incident reports where Nmap scans caused production outages. Instead, use passive monitoring: put a sensor on a SPAN port that observes traffic without injecting anything. Tools like Claroty, Nozomi, and Dragos specialize in this."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How would you segment OT from IT using firewalls?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Follow the Purdue Model. IT (Levels 4-5) and OT (Levels 0-3) should be separated by an Industrial DMZ (Level 3.5). No direct connections between IT and OT—everything goes through the DMZ. In the DMZ: jump hosts for remote access, data diodes or historians for data transfer, security tools like OT sensors. Firewall rules should be explicit: specific IPs, specific ports, specific protocols. Default deny everything. Ideally, dual firewalls at the IT/DMZ and DMZ/OT boundaries for defense in depth."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">What logs would you collect from OT systems if full logging isn't possible?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Prioritize what gives the most security value. Network traffic at the IT/OT boundary—who's communicating across the DMZ. Authentication logs from jump hosts and remote access solutions. Alerts from OT security platforms (Claroty, Nozomi). Historian data changes—if process values are being modified unexpectedly. HMI access logs if available. Even if PLCs don't log well, the traffic to and from them can be monitored passively. Focus on detecting: unauthorized access, unexpected protocol usage, connections to unusual destinations, changes to PLC programs."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">What are the risks of applying patches in OT environments?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Multiple risks: <strong>Downtime:</strong> Patching requires system restart, which means production stops. <strong>Compatibility:</strong> A Windows patch might break the application that controls the process. <strong>Vendor support:</strong> Some OT vendors only support specific patch levels—apply the wrong patch and you lose support. <strong>Testing requirements:</strong> Patches need to be tested in a staging environment that mirrors production, which many organizations don't have for OT. <strong>Change velocity:</strong> IT patches monthly; OT might patch annually during planned shutdowns. This is why compensating controls—segmentation, monitoring, allowlisting—are so important for OT."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q14 -->
+                    <div class="question-card rounded-xl p-6 mb-6">
+                        <div class="flex items-start space-x-3 mb-4">
+                            <span class="px-2 py-1 rounded bg-orange-500/20 text-orange-400 text-xs font-bold">Q14</span>
+                            <p class="text-white font-medium">How do you secure communication between SCADA systems and IT cloud workloads?</p>
+                        </div>
+                        
+                        <div class="answer-box">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "The key principle: SCADA/OT should never communicate directly with cloud. Everything goes through the Industrial DMZ.
+                                <br><br>
+                                <strong class="text-emerald-400">Architecture:</strong>
+                                <br><br>
+                                <strong>Data Transfer:</strong> SCADA data that needs to go to cloud analytics should go through a historian or data diode in the DMZ. The OT network pushes data to the DMZ; the IT/cloud side pulls from the DMZ. No inbound connections from IT to OT.
+                                <br><br>
+                                <strong>Encryption:</strong> All traffic crossing the IT/OT boundary should be encrypted—TLS at minimum. VPN tunnels for site-to-cloud communication.
+                                <br><br>
+                                <strong>Access Control:</strong> Strict firewall rules at both boundaries. Only specific ports and protocols needed for the data transfer. Application-level proxies in the DMZ that validate the protocol content.
+                                <br><br>
+                                <strong>Monitoring:</strong> OT security sensor in the DMZ watching for anomalous traffic patterns. All boundary traffic logged and analyzed.
+                                <br><br>
+                                <strong>Authentication:</strong> Service accounts for data transfer should be specific to that purpose, minimally privileged, and rotated regularly. No shared credentials.
+                                <br><br>
+                                The goal is: cloud gets the data it needs for analytics, but an attacker who compromises cloud can't pivot into OT."
+                            </p>
+                        </div>
+
+                        <div class="mt-6 space-y-4">
+                            <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">What are Purdue Model implications?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "The Purdue Model defines levels: 0-3 are OT (physical process, basic control, supervisory), 4-5 are IT (enterprise). Level 3.5 is the Industrial DMZ. The rule: traffic only flows between adjacent levels, and IT-to-OT traffic must pass through the DMZ. SCADA sits at Level 2-3. Cloud is Level 5 or external. So SCADA → DMZ historian → IT network → cloud. Never SCADA → cloud directly. This limits blast radius: compromise at one level doesn't automatically give access to others."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">Which traffic types must be inspected or blocked?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "<strong>Block:</strong> Any protocol that shouldn't cross the boundary—SMB, RDP, SSH directly from IT to OT. Generic internet protocols to OT devices. <strong>Inspect:</strong> Allowed protocols should be application-aware inspected—if we allow Modbus or OPC-UA through, the firewall should validate it's actually that protocol, not something tunneled inside. HTTP/HTTPS should go through a proxy. <strong>Log everything:</strong> Every connection crossing the boundary should be logged for forensics. Unusual traffic patterns should alert."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you design firewall rules for PLCs?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Ultra-restrictive. PLCs should only communicate with: the HMI that operates them, the engineering workstation that programs them, the historian that collects their data. Specific IPs, specific ports. Any other traffic is suspicious. Ideally, PLCs are in their own microsegment. I'd work with the OT engineers who know which devices need to talk to which—they understand the process. Then implement exactly that communication map in firewall rules, nothing more. Monitor for any connection attempts outside the allowed matrix."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================ -->
+                <!-- SECTION 6: Vulnerability Management -->
+                <!-- ============================================ -->
+                <section id="section6" class="mb-12">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center">
+                            <i class="fas fa-bug text-red-400"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white">Section 6: Vulnerability Management</h2>
+                            <p class="text-gray-500 text-sm">Risk assessment, remediation prioritization, patching</p>
+                        </div>
+                    </div>
+
+                    <!-- Q15 -->
+                    <div class="question-card rounded-xl p-6 mb-6">
+                        <div class="flex items-start space-x-3 mb-4">
+                            <span class="px-2 py-1 rounded bg-red-500/20 text-red-400 text-xs font-bold">Q15</span>
+                            <p class="text-white font-medium">You discover a critical vulnerability affecting a production system. What is your workflow for handling it?</p>
+                        </div>
+                        
+                        <div class="answer-box">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "I'd follow a structured triage and remediation workflow:
+                                <br><br>
+                                <strong class="text-emerald-400">1. Validate & Understand:</strong>
+                                <br>
+                                Is this a real vulnerability or a false positive? Check the CVE details—what's affected, what's the attack vector? Is our version/configuration actually vulnerable? Sometimes a scan flags a vulnerability that doesn't apply to our specific implementation.
+                                <br><br>
+                                <strong class="text-emerald-400">2. Assess Exploitability:</strong>
+                                <br>
+                                Is there a public exploit? Is it being actively exploited in the wild (check CISA KEV, threat intel feeds)? What access does an attacker need—remote unauthenticated (worst case) vs local authenticated (less urgent)? CVSS score is a starting point, but real-world exploitability matters more.
+                                <br><br>
+                                <strong class="text-emerald-400">3. Assess Impact:</strong>
+                                <br>
+                                What does this system do? How critical is it? What data does it have access to? A critical vulnerability on an internet-facing system with customer data is very different from the same vulnerability on an isolated test system.
+                                <br><br>
+                                <strong class="text-emerald-400">4. Determine Remediation Path:</strong>
+                                <br>
+                                Patch available? Can we apply it? If patching isn't immediately possible, what compensating controls can we implement? Network isolation, WAF rules, disabling vulnerable features, enhanced monitoring.
+                                <br><br>
+                                <strong class="text-emerald-400">5. Execute & Verify:</strong>
+                                <br>
+                                Apply the fix through change management. Verify the vulnerability is remediated (re-scan). Document what was done."
+                            </p>
+                        </div>
+
+                        <div class="mt-6 space-y-4">
+                            <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you determine if it is actively exploitable?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Multiple sources. <strong>CISA KEV (Known Exploited Vulnerabilities):</strong> If it's on this list, it's being actively exploited—prioritize immediately. <strong>Exploit databases:</strong> Is there a Metasploit module or public POC? <strong>Threat intel feeds:</strong> Are threat actors discussing or using this? <strong>Vendor advisories:</strong> Sometimes vendors know about exploitation before public disclosure. <strong>Technical analysis:</strong> What's required to exploit? If it needs local access and authentication, an internet attacker can't directly exploit it. If it's remote code execution on an exposed service, it's immediately dangerous."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you prioritize remediation across hundreds of assets?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Risk-based prioritization: Exploitability × Impact × Exposure. <strong>Exploitability:</strong> Active exploitation > Public exploit > Theoretical. <strong>Impact:</strong> Critical systems > Important > Nice-to-have. Data sensitivity matters. <strong>Exposure:</strong> Internet-facing > Internal-facing > Isolated. I'd create tiers: Tier 1 (patch within 24-48 hours): actively exploited, internet-facing, critical system. Tier 2 (patch within 7 days): high severity, internal but important. Tier 3 (patch within 30 days): medium severity, compensating controls in place. Track everything in a vulnerability management system with SLAs."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you handle systems where patching is not immediately possible?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Compensating controls. <strong>Network controls:</strong> Can we isolate the system? Restrict access to only what's necessary? Put a WAF in front of it? <strong>Disable vulnerable features:</strong> If the vulnerability is in a service we're not using, disable that service. <strong>Enhanced monitoring:</strong> Create detection rules for exploitation attempts. <strong>Workarounds:</strong> Sometimes vendors provide configuration changes that mitigate without a full patch. <strong>Risk acceptance:</strong> If none of the above works, document the risk, get business owner sign-off, and track for remediation when possible. The key is compensating controls plus documentation, not just ignoring it."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you track remediation progress?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Vulnerability management platform with dashboards. Track: total vulnerabilities by severity, age of vulnerabilities (how long have critical vulns been open?), remediation velocity (how many fixed this week vs opened?), SLA compliance (what percentage are fixed within target?), exceptions and their status. Regular reporting to stakeholders: 'We have 50 critical vulnerabilities, down from 75 last month. 10 are overdue SLA, here's why.' Trend lines matter more than point-in-time numbers. If the trend is improving, we're doing well even if the absolute numbers are high."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================ -->
+                <!-- SECTION 7: Architecture & Documentation -->
+                <!-- ============================================ -->
+                <section id="section7" class="mb-12">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center">
+                            <i class="fas fa-file-alt text-yellow-400"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white">Section 7: Architecture & Documentation</h2>
+                            <p class="text-gray-500 text-sm">Security design reviews, runbooks, technical documentation</p>
+                        </div>
+                    </div>
+
+                    <!-- Q16 -->
+                    <div class="question-card rounded-xl p-6 mb-6">
+                        <div class="flex items-start space-x-3 mb-4">
+                            <span class="px-2 py-1 rounded bg-yellow-500/20 text-yellow-400 text-xs font-bold">Q16</span>
+                            <p class="text-white font-medium">How would you participate in a security architecture review for a new application?</p>
+                        </div>
+                        
+                        <div class="answer-box">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "I approach architecture reviews systematically, looking at security across all layers.
+                                <br><br>
+                                <strong class="text-emerald-400">Before the Review:</strong>
+                                <br>
+                                Request documentation—architecture diagrams, data flow diagrams, threat model if one exists. Understand what the application does and what data it handles.
+                                <br><br>
+                                <strong class="text-emerald-400">During the Review:</strong>
+                                <br><br>
+                                <strong>Authentication & Authorization:</strong> How do users authenticate? How are permissions managed? Is there separation between user types? Is MFA enforced?
+                                <br><br>
+                                <strong>Data Protection:</strong> What sensitive data is involved? How is it encrypted at rest and in transit? Who has access to what data? How is data retained and deleted?
+                                <br><br>
+                                <strong>Network Architecture:</strong> How is the application exposed? What network segmentation exists? What traffic flows where?
+                                <br><br>
+                                <strong>Secrets Management:</strong> How are credentials and API keys handled? Are they in code? In environment variables? In a vault?
+                                <br><br>
+                                <strong>Logging & Monitoring:</strong> What gets logged? Where do logs go? How would we detect an attack?
+                                <br><br>
+                                <strong>Dependencies:</strong> What third-party services does it rely on? What's the security posture of those dependencies?
+                                <br><br>
+                                <strong class="text-emerald-400">Output:</strong>
+                                <br>
+                                Document findings with severity, recommendations, and reference to standards. Work with the team to remediate before go-live."
+                            </p>
+                        </div>
+
+                        <div class="mt-6 space-y-4">
+                            <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">What security patterns do you look for?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Good patterns: Zero Trust principles (verify explicitly, least privilege, assume breach). Defense in depth (multiple layers of controls). Fail secure (if something breaks, default to deny, not allow). Separation of duties (different accounts for different functions). Good patterns I validate are present: centralized authentication, secrets management, input validation, output encoding, rate limiting, proper error handling that doesn't leak information. I also look for anti-patterns: trust based on network location, security through obscurity, overly permissive defaults."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">What are common misconfigurations in cloud-native apps?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Storage buckets with public access (still happens constantly). Overly permissive IAM roles—giving a Lambda function admin permissions instead of least privilege. Secrets in environment variables or container images. No encryption at rest (relying on defaults that might not be what you expect). Security groups with 0.0.0.0/0 for SSH or RDP. Logging disabled or not sent anywhere useful. Default credentials on managed services. Missing network segmentation—everything in one VNet with no NSGs. No WAF on internet-facing apps. These are the things I specifically check for."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you document your findings for engineering teams?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Clear, actionable, prioritized. Each finding includes: <strong>Title:</strong> Clear description of the issue. <strong>Severity:</strong> Critical/High/Medium/Low with rationale. <strong>Description:</strong> What the issue is and why it matters. <strong>Impact:</strong> What could happen if exploited. <strong>Recommendation:</strong> Specific steps to fix, not vague guidance. <strong>References:</strong> Link to relevant standards or documentation. I avoid security jargon—speak in terms the dev team understands. And I'm available to discuss: 'If you have questions about implementing this fix, let's talk.' The goal is findings that get fixed, not a report that sits on a shelf."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q17 -->
+                    <div class="question-card rounded-xl p-6 mb-6">
+                        <div class="flex items-start space-x-3 mb-4">
+                            <span class="px-2 py-1 rounded bg-yellow-500/20 text-yellow-400 text-xs font-bold">Q17</span>
+                            <p class="text-white font-medium">Describe a security design document or runbook you created. What sections did you include?</p>
+                        </div>
+                        
+                        <div class="answer-box">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "I've created several. Let me describe the MDE onboarding runbook I built:
+                                <br><br>
+                                <strong class="text-emerald-400">Purpose & Scope:</strong>
+                                <br>
+                                What this document covers, who it's for, what systems it applies to. 'This runbook covers onboarding Windows servers and workstations to Microsoft Defender for Endpoint.'
+                                <br><br>
+                                <strong class="text-emerald-400">Prerequisites:</strong>
+                                <br>
+                                What you need before starting—permissions required, packages to have ready, network connectivity requirements (which Microsoft endpoints need to be reachable).
+                                <br><br>
+                                <strong class="text-emerald-400">Step-by-Step Procedure:</strong>
+                                <br>
+                                Detailed steps with screenshots. How to check if already onboarded. How to run the onboarding package. How to verify success. What to do if it fails.
+                                <br><br>
+                                <strong class="text-emerald-400">Troubleshooting:</strong>
+                                <br>
+                                Common issues and how to resolve them. Agent not starting—check these services. Connectivity issues—verify these firewall rules. Conflict with existing AV—resolution steps (like the ESET conflict I resolved).
+                                <br><br>
+                                <strong class="text-emerald-400">Validation Checklist:</strong>
+                                <br>
+                                How to confirm successful onboarding—device appears in console, telemetry flowing, correct policies applied.
+                                <br><br>
+                                <strong class="text-emerald-400">Revision History:</strong>
+                                <br>
+                                Who updated it when and why. Important for audits and knowing if the doc is current."
+                            </p>
+                        </div>
+
+                        <div class="mt-6 space-y-4">
+                            <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you create diagrams that are clear and reusable?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Consistency is key. Use standard shapes and colors: servers look one way, firewalls another, cloud services another. Clear labels—don't make people guess what a box represents. Show traffic flows with arrows and label the protocols/ports. Layer the diagram appropriately—a high-level overview for executives, detailed technical diagrams for engineers. Tools: I use draw.io (free, integrates with Confluence), Visio if available, or Mermaid for diagrams-as-code that live with documentation. Keep source files editable—PNG screenshots can't be updated. And include a legend explaining the symbols."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you ensure documentation stays up to date?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "This is the hardest part. <strong>Ownership:</strong> Every document has an owner responsible for keeping it current. <strong>Review schedule:</strong> Quarterly reviews at minimum—is this still accurate? <strong>Change triggers:</strong> When we make changes to a system, updating documentation is part of the change. It's in the checklist. <strong>Make it easy to update:</strong> Wiki-based documentation that anyone can edit is more likely to stay current than Word docs locked in someone's folder. <strong>Use it:</strong> If people actually use the documentation, they'll notice when it's wrong and report it. If it sits unused, it rots. I reference documentation when helping people, which keeps it relevant."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================ -->
+                <!-- SECTION 8: Behavioral -->
+                <!-- ============================================ -->
+                <section id="section8" class="mb-12">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-pink-500/20 flex items-center justify-center">
+                            <i class="fas fa-user text-pink-400"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white">Section 8: Behavioral / Ownership / Problem-Solving</h2>
+                            <p class="text-gray-500 text-sm">STAR format stories demonstrating soft skills</p>
+                        </div>
+                    </div>
+
+                    <!-- Q18 -->
+                    <div class="question-card rounded-xl p-6 mb-6">
+                        <div class="flex items-start space-x-3 mb-4">
+                            <span class="px-2 py-1 rounded bg-pink-500/20 text-pink-400 text-xs font-bold">Q18</span>
+                            <p class="text-white font-medium">Tell me about a time you disagreed with a technical decision. How did you handle it?</p>
+                        </div>
+                        
+                        <div class="answer-box">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "<strong class="text-emerald-400">Situation:</strong>
+                                <br>
+                                During our MDE rollout, a senior sysadmin didn't want MDE on his servers. He had concerns about performance impact and felt ESET (our existing AV) was sufficient. He pushed back hard and wanted his servers excluded from the migration.
+                                <br><br>
+                                <strong class="text-emerald-400">Task:</strong>
+                                <br>
+                                I needed to get MDE deployed on those servers for consistent security visibility, but I also needed to maintain a working relationship with this sysadmin—we'd be working together long after this project.
+                                <br><br>
+                                <strong class="text-emerald-400">Action:</strong>
+                                <br>
+                                Instead of escalating or insisting, I took time to understand his concerns. Performance was legitimate—his servers were older and heavily utilized. I proposed a pilot: let me deploy MDE on two of his less critical servers first. I'd monitor performance metrics for a week. If there was significant impact, we'd address it.
+                                <br><br>
+                                During the pilot, I also discovered the real issue: there was a conflict between MDE and ESET causing high CPU. I resolved this by properly configuring exclusions and eventually removing ESET once MDE was stable.
+                                <br><br>
+                                <strong class="text-emerald-400">Result:</strong>
+                                <br>
+                                The pilot showed no performance issues after the conflict was resolved. The sysadmin agreed to full deployment. More importantly, I earned his trust. Now when security asks for something, he's more cooperative because he knows I'll work with him, not just dictate."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Q19 -->
+                    <div class="question-card rounded-xl p-6 mb-6">
+                        <div class="flex items-start space-x-3 mb-4">
+                            <span class="px-2 py-1 rounded bg-pink-500/20 text-pink-400 text-xs font-bold">Q19</span>
+                            <p class="text-white font-medium">Describe a time you improved a security control or process significantly.</p>
+                        </div>
+                        
+                        <div class="answer-box">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "<strong class="text-emerald-400">Situation:</strong>
+                                <br>
+                                At Infosys, our endpoint compliance tracking was a mess. We had 14 FireEye HX consoles across the environment. Every week, someone had to manually log into each console, download device lists, copy-paste into Excel, and VLOOKUP against the asset inventory. It took hours and was error-prone.
+                                <br><br>
+                                <strong class="text-emerald-400">Task:</strong>
+                                <br>
+                                I saw an opportunity to automate this entirely. Nobody asked me to—I identified the inefficiency and decided to fix it.
+                                <br><br>
+                                <strong class="text-emerald-400">Action:</strong>
+                                <br>
+                                I wrote a Python script that: connected to all 14 HX consoles via their APIs, pulled device inventories, merged them using pandas, automatically performed the VLOOKUP against the infrastructure team's asset list, and generated a report showing compliant, non-reporting, and unknown devices.
+                                <br><br>
+                                I tested it thoroughly, documented how it worked, and trained the team to use it.
+                                <br><br>
+                                <strong class="text-emerald-400">Result:</strong>
+                                <br>
+                                What took hours now ran in minutes. The report was more accurate because human copy-paste errors were eliminated. The team could run it more frequently, catching compliance gaps faster. And the automation is still in use today, even after I left—that's the kind of lasting impact I aim for."
+                            </p>
+                        </div>
+
+                        <div class="mt-6 space-y-4">
+                            <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How did you measure improvement?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Time: from ~3-4 hours manual work to ~5 minutes automated. Accuracy: eliminated human transcription errors—we caught devices that were previously missed due to copy-paste mistakes. Frequency: we could run it daily instead of weekly, catching compliance gaps faster. Coverage: because it was easier, we actually tracked all 14 consoles consistently instead of sometimes skipping some due to time constraints."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">Who were your stakeholders?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Direct stakeholders were my security team who used the reports and the infrastructure team who provided the asset lists. Indirect stakeholders were management who needed compliance metrics for reporting. I worked with infra to get their asset list in a consistent format the script could consume. I demoed the tool to my manager to show the efficiency gain. The security team adopted it immediately because it made their lives easier."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q20 -->
+                    <div class="question-card rounded-xl p-6 mb-6">
+                        <div class="flex items-start space-x-3 mb-4">
+                            <span class="px-2 py-1 rounded bg-pink-500/20 text-pink-400 text-xs font-bold">Q20</span>
+                            <p class="text-white font-medium">Tell me about a security incident you handled. What was your role and contribution?</p>
+                        </div>
+                        
+                        <div class="answer-box">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "<strong class="text-emerald-400">Situation:</strong>
+                                <br>
+                                I was working an alert where MDE flagged suspicious PowerShell activity on a server. The alert showed encoded commands being executed—a common technique to evade detection.
+                                <br><br>
+                                <strong class="text-emerald-400">Task:</strong>
+                                <br>
+                                As the security engineer investigating, I needed to determine: Was this malicious? How did it get there? What's the scope? What do we do about it?
+                                <br><br>
+                                <strong class="text-emerald-400">Action:</strong>
+                                <br>
+                                First, I decoded the PowerShell commands—they were attempting to download and execute a second-stage payload. I checked MDE telemetry for process lineage: what launched PowerShell? It came from a scheduled task that had been recently created.
+                                <br><br>
+                                I used Sentinel to pivot: had we seen similar activity on other hosts? I found two more servers with the same pattern. This wasn't a one-off—we had a broader issue.
+                                <br><br>
+                                I coordinated with the sysadmin to isolate the affected servers (using MDE's isolation feature for quick containment). I preserved evidence—process logs, scheduled task details, network connections. We identified the initial vector: a compromised service account used in an automation script.
+                                <br><br>
+                                <strong class="text-emerald-400">Result:</strong>
+                                <br>
+                                Contained the incident before data exfiltration. Identified three affected servers (none in production thankfully). Rotated the compromised credentials. Implemented additional detection rules for similar encoded PowerShell patterns. Lessons learned fed into improving our service account management practices."
+                            </p>
+                        </div>
+
+                        <div class="mt-6 space-y-4">
+                            <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How did you validate the incident?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Multiple indicators. The encoded PowerShell alone could be legitimate (some admin tools use it), but combined with: recently created scheduled task, unknown external destination for the download, and no change request or known automation explaining it—this was clearly suspicious. I also checked the hash of the downloaded payload against VirusTotal: confirmed malicious. The combination of behavioral anomaly plus known-bad IOCs validated it as a real incident, not a false positive."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How did you communicate with other teams?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Clear, calm, action-oriented. To the sysadmin: 'We have a confirmed security incident on servers X, Y, Z. I need you to help me isolate them immediately. Here's what I'm seeing...' I didn't cause panic, but I conveyed urgency. To management: 'We're handling an incident involving three servers. It's contained. No evidence of data exfiltration. I'll provide a full update in one hour.' Brief, factual, reassuring that we have it under control. After resolution, a written incident report with timeline, impact, root cause, and remediation."
+                                </p>
+                            </div>
+                            
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">What lessons did you take forward?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Several. <strong>Detection gap:</strong> We didn't have good alerting on suspicious scheduled task creation—I added that. <strong>Service account hygiene:</strong> The compromised account was overprivileged and its password hadn't been rotated in too long. We implemented stricter service account policies. <strong>Playbook:</strong> I documented the investigation steps so the next person handling a similar alert has a guide to follow. <strong>Dwell time:</strong> The scheduled task had been there for two days before we detected execution—I looked at whether we could have detected the initial persistence earlier."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Footer -->
+                <div class="section-card rounded-2xl p-8 text-center">
+                    <h3 class="text-xl font-bold text-white mb-3">Interview Preparation Complete</h3>
+                    <p class="text-gray-400 mb-6">20 questions with 60+ follow-ups covering all job requirements</p>
+                    <div class="flex justify-center space-x-4">
+                        <a href="coca-cola-interview.html" class="px-6 py-3 bg-emerald-500/20 text-emerald-400 rounded-lg hover:bg-emerald-500/30 transition-colors">
+                            <i class="fas fa-clipboard-list mr-2"></i>Main Interview Prep
+                        </a>
+                        <a href="../index.html" class="px-6 py-3 bg-gray-700/50 text-gray-300 rounded-lg hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-home mr-2"></i>Back to Portfolio
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/sidebar.js"></script>
+</body>
+</html>
