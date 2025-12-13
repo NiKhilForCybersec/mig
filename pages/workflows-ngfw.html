@@ -541,29 +541,1043 @@
                 </div>
             </section>
 
+            <!-- ============================================ -->
+            <!-- WORKFLOW 5: Security Baseline Template Structure -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-emerald-400">5.</span> Security Baseline Template Structure
+                </h2>
+
+                <div class="workflow-box rounded-xl p-6 mb-4">
+                    <h3 class="text-emerald-400 font-bold mb-4"><i class="fas fa-file-code mr-2"></i>WHAT IS A SECURITY BASELINE TEMPLATE?</h3>
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                     SECURITY BASELINE TEMPLATE OVERVIEW                              │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                     │
+│  A Security Baseline Template is a PRE-CONFIGURED SET of security profiles         │
+│  that can be applied consistently across all firewalls in the organization.        │
+│                                                                                     │
+│  PURPOSE:                                                                           │
+│  • Ensure consistent security posture across 50+ sites                             │
+│  • Reduce configuration drift                                                       │
+│  • Speed up deployment of new firewalls                                            │
+│  • Simplify compliance auditing                                                     │
+│  • Enable centralized policy management via Panorama                               │
+│                                                                                     │
+│  TEMPLATE HIERARCHY (Panorama):                                                     │
+│                                                                                     │
+│      ┌───────────────────────────────────────┐                                     │
+│      │     TEMPLATE STACK (Parent)           │                                     │
+│      │     "Corp-Security-Baseline"          │                                     │
+│      └───────────────────────┬───────────────┘                                     │
+│                              │                                                      │
+│          ┌───────────────────┼───────────────────┐                                 │
+│          ▼                   ▼                   ▼                                 │
+│  ┌───────────────┐   ┌───────────────┐   ┌───────────────┐                        │
+│  │ IT-Standard   │   │ OT-Safe       │   │ DMZ-Strict    │                        │
+│  │ Template      │   │ Template      │   │ Template      │                        │
+│  └───────────────┘   └───────────────┘   └───────────────┘                        │
+│                                                                                     │
+│  INHERITANCE: Child templates inherit parent settings, can override specific items │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <div class="workflow-box rounded-xl p-6 mb-4">
+                    <h3 class="text-emerald-400 font-bold mb-4"><i class="fas fa-layer-group mr-2"></i>TEMPLATE CONTENTS - WHAT'S INSIDE</h3>
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                    SECURITY BASELINE TEMPLATE CONTENTS                               │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                     │
+│  TEMPLATE: "Corp-Security-Baseline-v2.1"                                           │
+│  Last Updated: 2024-03-15                                                           │
+│  Approved By: Security Manager                                                      │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ 1. SECURITY PROFILES (Objects > Security Profiles)                          │   │
+│  ├─────────────────────────────────────────────────────────────────────────────┤   │
+│  │                                                                              │   │
+│  │   ┌─────────────────┐                                                       │   │
+│  │   │ ANTIVIRUS       │  Profile: "AV-Standard"                               │   │
+│  │   │                 │  • Decoder Actions: Block for PE, PDF, Flash          │   │
+│  │   │                 │  • WildFire: Upload unknown files                     │   │
+│  │   │                 │  • ML-Based Detection: Enabled                        │   │
+│  │   └─────────────────┘                                                       │   │
+│  │                                                                              │   │
+│  │   ┌─────────────────┐                                                       │   │
+│  │   │ ANTI-SPYWARE    │  Profile: "AS-Standard"                               │   │
+│  │   │                 │  • DNS Sinkhole: Enabled (sinkhole.corp.local)        │   │
+│  │   │                 │  • Botnet Domains: Block                              │   │
+│  │   │                 │  • C2 Signatures: Block Critical/High, Alert Med     │   │
+│  │   └─────────────────┘                                                       │   │
+│  │                                                                              │   │
+│  │   ┌─────────────────┐                                                       │   │
+│  │   │ VULNERABILITY   │  Profile: "VP-Standard"                               │   │
+│  │   │ PROTECTION      │  • Critical CVEs: Block + Log                         │   │
+│  │   │                 │  • High CVEs: Block + Log                             │   │
+│  │   │                 │  • Medium CVEs: Alert + Log                           │   │
+│  │   │                 │  • Low/Info: Log Only                                 │   │
+│  │   └─────────────────┘                                                       │   │
+│  │                                                                              │   │
+│  │   ┌─────────────────┐                                                       │   │
+│  │   │ URL FILTERING   │  Profile: "URL-Standard"                              │   │
+│  │   │                 │  • Block: Malware, Phishing, C2, Adult, Gambling      │   │
+│  │   │                 │  • Alert: Unknown, Newly Registered Domains           │   │
+│  │   │                 │  • Allow: Business categories                         │   │
+│  │   └─────────────────┘                                                       │   │
+│  │                                                                              │   │
+│  │   ┌─────────────────┐                                                       │   │
+│  │   │ FILE BLOCKING   │  Profile: "FB-Standard"                               │   │
+│  │   │                 │  • Block: EXE, DLL, BAT, PS1, VBS, JAR from web       │   │
+│  │   │                 │  • Alert: Office Macros, ZIP containing above         │   │
+│  │   │                 │  • Allow: Business file types (PDF, DOCX, XLSX)       │   │
+│  │   └─────────────────┘                                                       │   │
+│  │                                                                              │   │
+│  │   ┌─────────────────┐                                                       │   │
+│  │   │ WILDFIRE        │  Profile: "WF-Standard"                               │   │
+│  │   │                 │  • Submit: PE, PDF, APK, Office, Archive              │   │
+│  │   │                 │  • Verdict Action: Block Malware, Grayware            │   │
+│  │   │                 │  • Cloud: Public WildFire cloud                       │   │
+│  │   └─────────────────┘                                                       │   │
+│  │                                                                              │   │
+│  │   ┌─────────────────┐                                                       │   │
+│  │   │ DNS SECURITY    │  Profile: "DNS-Standard"                              │   │
+│  │   │                 │  • Block: DGA domains, DNS Tunneling                  │   │
+│  │   │                 │  • Sinkhole: Malicious DNS queries                    │   │
+│  │   │                 │  • Log: All DNS queries for visibility                │   │
+│  │   └─────────────────┘                                                       │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ 2. SECURITY PROFILE GROUPS (Pre-bundled for easy attachment)                │   │
+│  ├─────────────────────────────────────────────────────────────────────────────┤   │
+│  │                                                                              │   │
+│  │   GROUP: "SPG-Strict" (Internet-facing traffic)                             │   │
+│  │   ├── Antivirus: AV-Standard                                                │   │
+│  │   ├── Anti-Spyware: AS-Standard                                             │   │
+│  │   ├── Vulnerability: VP-Standard                                            │   │
+│  │   ├── URL Filtering: URL-Standard                                           │   │
+│  │   ├── File Blocking: FB-Standard                                            │   │
+│  │   ├── WildFire: WF-Standard                                                 │   │
+│  │   └── DNS Security: DNS-Standard                                            │   │
+│  │                                                                              │   │
+│  │   GROUP: "SPG-Internal" (East-West traffic)                                 │   │
+│  │   ├── Antivirus: AV-Standard                                                │   │
+│  │   ├── Anti-Spyware: AS-Standard                                             │   │
+│  │   ├── Vulnerability: VP-Internal (Alert only for Medium/Low)               │   │
+│  │   └── WildFire: WF-Standard                                                 │   │
+│  │                                                                              │   │
+│  │   GROUP: "SPG-OT-Safe" (OT/ICS traffic)                                     │   │
+│  │   ├── Anti-Spyware: AS-Alert-Only (no blocking, alert mode)                │   │
+│  │   └── Vulnerability: VP-Alert-Only (detect, don't block)                   │   │
+│  │                                                                              │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ 3. DECRYPTION POLICY (SSL/TLS Inspection)                                   │   │
+│  ├─────────────────────────────────────────────────────────────────────────────┤   │
+│  │                                                                              │   │
+│  │   Rule 1: "Decrypt-Web-Browsing"                                            │   │
+│  │   • Source: Corporate Users                                                 │   │
+│  │   • Dest: Internet                                                          │   │
+│  │   • Action: DECRYPT (Forward Proxy)                                         │   │
+│  │                                                                              │   │
+│  │   Rule 2: "No-Decrypt-Financial"                                            │   │
+│  │   • Dest: URL Category = Financial Services, Healthcare                    │   │
+│  │   • Action: NO-DECRYPT                                                      │   │
+│  │                                                                              │   │
+│  │   Rule 3: "No-Decrypt-OT"                                                   │   │
+│  │   • Source Zone: OT-Zone                                                    │   │
+│  │   • Action: NO-DECRYPT                                                      │   │
+│  │                                                                              │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ 4. LOG FORWARDING PROFILE                                                   │   │
+│  ├─────────────────────────────────────────────────────────────────────────────┤   │
+│  │                                                                              │   │
+│  │   Profile: "Log-to-Sentinel"                                                │   │
+│  │   • Traffic Logs: Forward All (Session End)                                 │   │
+│  │   • Threat Logs: Forward All                                                │   │
+│  │   • URL Logs: Forward All                                                   │   │
+│  │   • WildFire Logs: Forward All                                              │   │
+│  │   • Data Logs: Forward All                                                  │   │
+│  │   • Destination: Syslog Server → CEF → Sentinel                            │   │
+│  │                                                                              │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- WORKFLOW 6: Security Profile Configuration Deep Dive -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-emerald-400">6.</span> Security Profile Configuration Options (Deep Dive)
+                </h2>
+
+                <!-- Antivirus Profile -->
+                <div class="workflow-box rounded-xl p-6 mb-4">
+                    <h3 class="text-red-400 font-bold mb-4"><i class="fas fa-virus mr-2"></i>ANTIVIRUS PROFILE - All Options</h3>
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                           ANTIVIRUS PROFILE OPTIONS                                  │
+│                    Panorama: Objects > Security Profiles > Antivirus                │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                     │
+│  PROFILE NAME: "AV-Standard"                                                        │
+│  DESCRIPTION: "Corporate standard antivirus profile for all IT traffic"            │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ TAB 1: DECODER ACTIONS (Per Protocol)                                       │   │
+│  │                                                                              │   │
+│  │  ┌────────────┬──────────────┬──────────────┬────────────────────────────┐  │   │
+│  │  │ Protocol   │ Action       │ WildFire     │ Notes                      │  │   │
+│  │  ├────────────┼──────────────┼──────────────┼────────────────────────────┤  │   │
+│  │  │ HTTP       │ reset-both   │ enabled      │ Web downloads              │  │   │
+│  │  │ HTTPS      │ reset-both   │ enabled      │ Requires decryption policy │  │   │
+│  │  │ FTP        │ reset-both   │ enabled      │ File transfers             │  │   │
+│  │  │ SMTP       │ reset-both   │ enabled      │ Email attachments          │  │   │
+│  │  │ IMAP       │ reset-both   │ enabled      │ Email sync                 │  │   │
+│  │  │ POP3       │ reset-both   │ enabled      │ Email download             │  │   │
+│  │  │ SMB        │ reset-both   │ enabled      │ File shares (East-West)    │  │   │
+│  │  └────────────┴──────────────┴──────────────┴────────────────────────────┘  │   │
+│  │                                                                              │   │
+│  │  Action Options:                                                            │   │
+│  │  • default         - Use global default (usually reset-both)               │   │
+│  │  • allow           - Allow but log (NOT recommended)                       │   │
+│  │  • alert           - Allow and generate alert                              │   │
+│  │  • drop            - Silently drop packets                                 │   │
+│  │  • reset-client    - Send RST to client                                    │   │
+│  │  • reset-server    - Send RST to server                                    │   │
+│  │  • reset-both      - Send RST to both (RECOMMENDED)                        │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ TAB 2: WILDFIRE INLINE ML (Machine Learning)                                │   │
+│  │                                                                              │   │
+│  │  ┌─────────────────────────────────────────────────────────────────────┐   │   │
+│  │  │ Model                          │ Action     │ Status                │   │   │
+│  │  ├────────────────────────────────┼────────────┼───────────────────────┤   │   │
+│  │  │ PE (Windows Executables)       │ reset-both │ ✅ Enabled            │   │   │
+│  │  │ ELF (Linux Executables)        │ reset-both │ ✅ Enabled            │   │   │
+│  │  │ Mach-O (macOS Executables)     │ reset-both │ ✅ Enabled            │   │   │
+│  │  │ MS Office Files (Macro-enabled)│ reset-both │ ✅ Enabled            │   │   │
+│  │  │ JavaScript                     │ alert      │ ✅ Enabled            │   │   │
+│  │  │ PowerShell Scripts             │ reset-both │ ✅ Enabled            │   │   │
+│  │  │ Shell Scripts                  │ alert      │ ✅ Enabled            │   │   │
+│  │  └────────────────────────────────┴────────────┴───────────────────────┘   │   │
+│  │                                                                              │   │
+│  │  NOTE: ML models detect UNKNOWN malware before WildFire cloud verdict       │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ TAB 3: EXCEPTIONS                                                           │   │
+│  │                                                                              │   │
+│  │  Add specific threat IDs to exclude from scanning:                          │   │
+│  │  • Threat ID: (e.g., 12345678)                                             │   │
+│  │  • Reason: "False positive - internal tool detected as malware"            │   │
+│  │  • Approved By: Security Manager                                            │   │
+│  │  • Expiry: 90 days (forces re-review)                                       │   │
+│  │                                                                              │   │
+│  │  ⚠️ BEST PRACTICE: Document all exceptions in change management system      │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <!-- Anti-Spyware Profile -->
+                <div class="workflow-box rounded-xl p-6 mb-4">
+                    <h3 class="text-purple-400 font-bold mb-4"><i class="fas fa-user-secret mr-2"></i>ANTI-SPYWARE PROFILE - All Options</h3>
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                          ANTI-SPYWARE PROFILE OPTIONS                                │
+│                  Panorama: Objects > Security Profiles > Anti-Spyware               │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                     │
+│  PROFILE NAME: "AS-Standard"                                                        │
+│  DESCRIPTION: "Detects spyware, C2 communication, botnet activity"                 │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ TAB 1: SIGNATURE POLICIES (Rules)                                           │   │
+│  │                                                                              │   │
+│  │  ┌──────────────┬────────────┬──────────────┬────────────────────────────┐  │   │
+│  │  │ Severity     │ Action     │ Packet Cap   │ Typical Threats            │  │   │
+│  │  ├──────────────┼────────────┼──────────────┼────────────────────────────┤  │   │
+│  │  │ Critical     │ reset-both │ extended     │ APT C2, Zero-days          │  │   │
+│  │  │ High         │ reset-both │ extended     │ Known malware C2           │  │   │
+│  │  │ Medium       │ alert      │ single-pkt   │ Suspicious callbacks       │  │   │
+│  │  │ Low          │ default    │ disable      │ PUPs, Adware               │  │   │
+│  │  │ Informational│ default    │ disable      │ Tracking cookies           │  │   │
+│  │  └──────────────┴────────────┴──────────────┴────────────────────────────┘  │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ TAB 2: DNS POLICIES (DNS Sinkhole)                                          │   │
+│  │                                                                              │   │
+│  │  DNS Sinkhole Configuration:                                                │   │
+│  │  ┌─────────────────────────────────────────────────────────────────────┐   │   │
+│  │  │ Setting                     │ Value                                 │   │   │
+│  │  ├─────────────────────────────┼───────────────────────────────────────┤   │   │
+│  │  │ Sinkhole IPv4 Address       │ 72.5.65.111 (Palo Alto default)       │   │   │
+│  │  │   OR                        │ 10.0.0.254 (Internal sinkhole)        │   │   │
+│  │  │ Sinkhole IPv6 Address       │ 2600:5200::1                          │   │   │
+│  │  │ DNS Security Categories:    │                                       │   │   │
+│  │  │   • Command and Control     │ ✅ Sinkhole                           │   │   │
+│  │  │   • Malware                 │ ✅ Sinkhole                           │   │   │
+│  │  │   • Phishing                │ ✅ Sinkhole                           │   │   │
+│  │  │   • DGA (Domain Gen Algo)   │ ✅ Sinkhole                           │   │   │
+│  │  │   • Newly Registered (<30d) │ ⚠️ Alert (too many false positives)   │   │   │
+│  │  └─────────────────────────────┴───────────────────────────────────────┘   │   │
+│  │                                                                              │   │
+│  │  WHY SINKHOLE?                                                              │   │
+│  │  • Infected host tries to reach malware.evil.com                           │   │
+│  │  • Firewall intercepts DNS query → returns sinkhole IP instead             │   │
+│  │  • Host connects to sinkhole → Security team can identify infected host    │   │
+│  │  • Better than just blocking: gives you VISIBILITY into compromised assets │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ TAB 3: INLINE CLOUD ANALYSIS (Advanced)                                     │   │
+│  │                                                                              │   │
+│  │  ┌──────────────────────────────────────────────────────────────────────┐  │   │
+│  │  │ Evasive DNS Traffic Analysis      │ ✅ Enabled                       │  │   │
+│  │  │ DNS Tunneling Detection           │ ✅ Enabled                       │  │   │
+│  │  │ ML-Based DNS Analysis             │ ✅ Enabled                       │  │   │
+│  │  │ Encrypted DNS (DoH/DoT) Handling  │ Block or Decrypt                 │  │   │
+│  │  └──────────────────────────────────────────────────────────────────────┘  │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <!-- Vulnerability Protection Profile -->
+                <div class="workflow-box rounded-xl p-6 mb-4">
+                    <h3 class="text-orange-400 font-bold mb-4"><i class="fas fa-bug mr-2"></i>VULNERABILITY PROTECTION PROFILE (IPS)</h3>
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                       VULNERABILITY PROTECTION (IPS) OPTIONS                         │
+│             Panorama: Objects > Security Profiles > Vulnerability Protection        │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                     │
+│  PROFILE NAME: "VP-Standard"                                                        │
+│  DESCRIPTION: "IPS signatures for known CVEs and exploit techniques"               │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ TAB 1: SIMPLE MODE (Recommended for most deployments)                       │   │
+│  │                                                                              │   │
+│  │  Rule: Default                                                              │   │
+│  │  ┌──────────────┬────────────┬──────────────┬────────────────────────────┐  │   │
+│  │  │ Severity     │ Action     │ Packet Cap   │ Examples                   │  │   │
+│  │  ├──────────────┼────────────┼──────────────┼────────────────────────────┤  │   │
+│  │  │ Critical     │ reset-both │ extended     │ Log4Shell, EternalBlue     │  │   │
+│  │  │ High         │ reset-both │ extended     │ Apache Struts, Exchange    │  │   │
+│  │  │ Medium       │ alert      │ single-pkt   │ SQL injection attempts     │  │   │
+│  │  │ Low          │ alert      │ disable      │ Information disclosure     │  │   │
+│  │  │ Informational│ default    │ disable      │ Scan detection             │  │   │
+│  │  └──────────────┴────────────┴──────────────┴────────────────────────────┘  │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ TAB 2: ADVANCED MODE (Granular control by CVE/Category)                     │   │
+│  │                                                                              │   │
+│  │  Custom Rules (Examples):                                                   │   │
+│  │                                                                              │   │
+│  │  Rule 1: "Block-CISA-KEV" (Highest priority)                               │   │
+│  │  ├── CVE: Match signature tags containing "kev" or manual list             │   │
+│  │  ├── Action: reset-both                                                    │   │
+│  │  └── Packet Capture: extended (for forensics)                              │   │
+│  │                                                                              │   │
+│  │  Rule 2: "Alert-OT-Protocols" (Don't block OT traffic)                     │   │
+│  │  ├── Category: industrial-systems                                          │   │
+│  │  ├── Category: scada                                                       │   │
+│  │  ├── Action: alert (NOT block - production safety)                         │   │
+│  │  └── Note: Security monitors, OT team remediates                           │   │
+│  │                                                                              │   │
+│  │  Rule 3: "Block-Browser-Exploits"                                          │   │
+│  │  ├── Category: browser                                                     │   │
+│  │  ├── Category: client-side                                                 │   │
+│  │  ├── Action: reset-both                                                    │   │
+│  │  └── Note: Protect user endpoints                                          │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ TAB 3: EXCEPTIONS                                                           │   │
+│  │                                                                              │   │
+│  │  Exception: Threat ID 91234                                                 │   │
+│  │  ├── Reason: "False positive on internal vulnerability scanner"            │   │
+│  │  ├── Source IP: 10.1.1.50 (Qualys scanner)                                 │   │
+│  │  ├── Action: Allow                                                         │   │
+│  │  ├── Approved: Security Manager                                            │   │
+│  │  └── Expiry: 2024-12-31                                                    │   │
+│  │                                                                              │   │
+│  │  ⚠️ IMPORTANT: Never create blanket exceptions - always scope to source IP │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  SIGNATURE CATEGORIES:                                                              │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ • browser          • code-execution   • dos               • info-leak     │   │
+│  │ • overflow         • phishing         • protocol-anomaly  • scan          │   │
+│  │ • sql-injection    • xss              • brute-force       • backdoor      │   │
+│  │ • botnet           • spyware          • industrial-systems• scada         │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <!-- URL Filtering Profile -->
+                <div class="workflow-box rounded-xl p-6 mb-4">
+                    <h3 class="text-blue-400 font-bold mb-4"><i class="fas fa-globe mr-2"></i>URL FILTERING PROFILE - All Options</h3>
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                          URL FILTERING PROFILE OPTIONS                               │
+│                 Panorama: Objects > Security Profiles > URL Filtering               │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                     │
+│  PROFILE NAME: "URL-Standard"                                                       │
+│  DESCRIPTION: "Corporate web filtering policy with block/alert actions"            │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ TAB 1: CATEGORIES (80+ categories available)                                │   │
+│  │                                                                              │   │
+│  │  ┌─────────────────────────────────────────────────────────────────────┐   │   │
+│  │  │ CATEGORY               │ ACTION  │ REASON                          │   │   │
+│  │  ├────────────────────────┼─────────┼─────────────────────────────────┤   │   │
+│  │  │ SECURITY CATEGORIES (Always Block):                                │   │   │
+│  │  │ malware                │ BLOCK   │ Known malware distribution      │   │   │
+│  │  │ phishing               │ BLOCK   │ Credential theft sites          │   │   │
+│  │  │ command-and-control    │ BLOCK   │ Botnet C2 servers               │   │   │
+│  │  │ hacking                │ BLOCK   │ Hacking tools/tutorials         │   │   │
+│  │  │ proxy-avoidance        │ BLOCK   │ Anonymous proxies               │   │   │
+│  │  │ cryptomining           │ BLOCK   │ Browser-based mining            │   │   │
+│  │  │ newly-registered-domain│ ALERT   │ <30 days old (suspicious)       │   │   │
+│  │  │ parked                 │ ALERT   │ Often used for malicious redirect│   │   │
+│  │  │ unknown                │ ALERT   │ Uncategorized (monitor)         │   │   │
+│  │  │                        │         │                                 │   │   │
+│  │  │ POLICY CATEGORIES (Business Policy):                               │   │   │
+│  │  │ adult                  │ BLOCK   │ HR/Legal compliance             │   │   │
+│  │  │ gambling               │ BLOCK   │ Company policy                  │   │   │
+│  │  │ weapons                │ BLOCK   │ Company policy                  │   │   │
+│  │  │ illegal-drugs          │ BLOCK   │ Company policy                  │   │   │
+│  │  │ streaming-media        │ ALERT   │ Bandwidth monitoring            │   │   │
+│  │  │ social-networking      │ ALERT   │ Productivity monitoring         │   │   │
+│  │  │ personal-sites         │ ALLOW   │ Permitted during breaks         │   │   │
+│  │  │                        │         │                                 │   │   │
+│  │  │ BUSINESS CATEGORIES (Allow):                                       │   │   │
+│  │  │ business               │ ALLOW   │ Normal business use             │   │   │
+│  │  │ computer-and-internet  │ ALLOW   │ Tech resources                  │   │   │
+│  │  │ financial-services     │ ALLOW   │ Banking, expense reports        │   │   │
+│  │  │ government             │ ALLOW   │ Regulatory sites                │   │   │
+│  │  │ health-and-medicine    │ ALLOW   │ Benefits, healthcare            │   │   │
+│  │  │ news                   │ ALLOW   │ Current events                  │   │   │
+│  │  │ reference              │ ALLOW   │ Wikipedia, documentation        │   │   │
+│  │  └────────────────────────┴─────────┴─────────────────────────────────┘   │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ TAB 2: URL ACCESS MANAGEMENT (Custom allow/block lists)                     │   │
+│  │                                                                              │   │
+│  │  Block List (Always blocked regardless of category):                        │   │
+│  │  ├── competitor-portal.com         │ Business policy                       │   │
+│  │  ├── known-bad-domain.io           │ Threat intel                          │   │
+│  │  └── unauthorized-fileshare.net    │ Shadow IT                             │   │
+│  │                                                                              │   │
+│  │  Allow List (Always allowed regardless of category):                        │   │
+│  │  ├── corporate-intranet.company.com│ Internal sites                        │   │
+│  │  ├── approved-vendor.com           │ Business need                         │   │
+│  │  └── zoom.us                       │ Communication tool                    │   │
+│  │                                                                              │   │
+│  │  ⚠️ Allow lists bypass ALL inspection - use sparingly!                      │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ TAB 3: HTTP HEADER INSERTION (Advanced)                                     │   │
+│  │                                                                              │   │
+│  │  Use Case: Insert headers for SaaS tenant restrictions                      │   │
+│  │                                                                              │   │
+│  │  Rule: "O365-Tenant-Restriction"                                            │   │
+│  │  ├── Domains: *.microsoftonline.com, *.sharepoint.com                       │   │
+│  │  └── Header: "Restrict-Access-To-Tenants: company.onmicrosoft.com"         │   │
+│  │                                                                              │   │
+│  │  Rule: "Google-Workspace-Restriction"                                       │   │
+│  │  ├── Domains: *.google.com, *.googleapis.com                                │   │
+│  │  └── Header: "X-GoogApps-Allowed-Domains: company.com"                     │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  ACTION OPTIONS:                                                                   │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ • allow     - Permit access, log visit                                      │   │
+│  │ • alert     - Permit access, generate alert in SIEM                        │   │
+│  │ • block     - Block with customizable block page                           │   │
+│  │ • continue  - Warn user, allow if they acknowledge (productivity policy)   │   │
+│  │ • override  - Block, but allow with manager password (emergency access)    │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <!-- File Blocking & WildFire -->
+                <div class="workflow-box rounded-xl p-6 mb-4">
+                    <h3 class="text-yellow-400 font-bold mb-4"><i class="fas fa-file-archive mr-2"></i>FILE BLOCKING & WILDFIRE PROFILES</h3>
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                     FILE BLOCKING & WILDFIRE PROFILE OPTIONS                         │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                     │
+│  ═══════════════════════════════════════════════════════════════════════════════   │
+│  FILE BLOCKING PROFILE: "FB-Standard"                                               │
+│  Panorama: Objects > Security Profiles > File Blocking                             │
+│  ═══════════════════════════════════════════════════════════════════════════════   │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ RULES (Processed top-to-bottom)                                             │   │
+│  │                                                                              │   │
+│  │  Rule 1: "Block-Dangerous-Executables"                                      │   │
+│  │  ├── Application: web-browsing, ftp, smtp                                   │   │
+│  │  ├── File Types: exe, dll, scr, bat, cmd, ps1, vbs, js, jar, msi           │   │
+│  │  ├── Direction: both (upload and download)                                  │   │
+│  │  └── Action: BLOCK                                                          │   │
+│  │                                                                              │   │
+│  │  Rule 2: "Alert-Office-Macros"                                              │   │
+│  │  ├── Application: web-browsing, smtp                                        │   │
+│  │  ├── File Types: docm, xlsm, pptm (macro-enabled Office)                    │   │
+│  │  ├── Direction: download                                                    │   │
+│  │  └── Action: ALERT (allow but flag for review)                              │   │
+│  │                                                                              │   │
+│  │  Rule 3: "Alert-Archives"                                                   │   │
+│  │  ├── Application: web-browsing, smtp                                        │   │
+│  │  ├── File Types: zip, rar, 7z, tar, gz                                      │   │
+│  │  ├── Direction: download                                                    │   │
+│  │  └── Action: ALERT (may contain blocked types)                              │   │
+│  │                                                                              │   │
+│  │  Rule 4: "Allow-Business-Files"                                             │   │
+│  │  ├── File Types: pdf, doc, docx, xls, xlsx, ppt, pptx, jpg, png             │   │
+│  │  ├── Direction: both                                                        │   │
+│  │  └── Action: ALLOW (still scanned by AV & WildFire)                         │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  ═══════════════════════════════════════════════════════════════════════════════   │
+│  WILDFIRE ANALYSIS PROFILE: "WF-Standard"                                          │
+│  Panorama: Objects > Security Profiles > WildFire Analysis                         │
+│  ═══════════════════════════════════════════════════════════════════════════════   │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ RULES                                                                       │   │
+│  │                                                                              │   │
+│  │  Rule: "Submit-All-Unknown"                                                 │   │
+│  │  ├── Applications: Any                                                      │   │
+│  │  ├── File Types: PE, PDF, APK, Office, Archive, Script                      │   │
+│  │  ├── Direction: both                                                        │   │
+│  │  └── Analysis: public-cloud (or private WildFire appliance)                │   │
+│  │                                                                              │   │
+│  │  FILE TYPE OPTIONS:                                                         │   │
+│  │  ┌─────────────────────────────────────────────────────────────────────┐   │   │
+│  │  │ Type           │ Submit │ Notes                                    │   │   │
+│  │  ├────────────────┼────────┼──────────────────────────────────────────┤   │   │
+│  │  │ PE (exe, dll)  │ ✅     │ Windows executables - always submit      │   │   │
+│  │  │ PDF            │ ✅     │ Often used for exploits                  │   │   │
+│  │  │ MS Office      │ ✅     │ Macro malware detection                  │   │   │
+│  │  │ APK            │ ✅     │ Android apps (if mobile traffic)         │   │   │
+│  │  │ JAR            │ ✅     │ Java archives                            │   │   │
+│  │  │ Linux ELF      │ ✅     │ Linux binaries                           │   │   │
+│  │  │ macOS Mach-O   │ ✅     │ macOS binaries                           │   │   │
+│  │  │ Archive        │ ✅     │ Extracts and analyzes contents           │   │   │
+│  │  │ Script         │ ✅     │ PowerShell, VBS, JS                      │   │   │
+│  │  └────────────────┴────────┴──────────────────────────────────────────┘   │   │
+│  │                                                                              │   │
+│  │  VERDICTS & ACTIONS:                                                        │   │
+│  │  ┌─────────────────────────────────────────────────────────────────────┐   │   │
+│  │  │ Verdict        │ Action         │ Response Time                    │   │   │
+│  │  ├────────────────┼────────────────┼──────────────────────────────────┤   │   │
+│  │  │ Benign         │ Allow          │ ~5 minutes (cloud analysis)      │   │   │
+│  │  │ Grayware       │ Alert/Block    │ (Configurable)                   │   │   │
+│  │  │ Malware        │ Block          │ Signature pushed to all FWs      │   │   │
+│  │  │ Phishing       │ Block          │ within 5 minutes globally        │   │   │
+│  │  │ Unknown/Error  │ Allow/Alert    │ (Configurable)                   │   │   │
+│  │  └────────────────┴────────────────┴──────────────────────────────────┘   │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- WORKFLOW 7: Applying Templates via Panorama UI -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-emerald-400">7.</span> Applying Security Templates via Panorama UI
+                </h2>
+
+                <div class="workflow-box rounded-xl p-6 mb-4">
+                    <h3 class="text-cyan-400 font-bold mb-4"><i class="fas fa-desktop mr-2"></i>PANORAMA UI WALKTHROUGH - Enabling Security Features</h3>
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                     PANORAMA UI - TEMPLATE MANAGEMENT                                │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                     │
+│  ═══════════════════════════════════════════════════════════════════════════════   │
+│  STEP 1: CREATE SECURITY PROFILES (One-time setup)                                 │
+│  ═══════════════════════════════════════════════════════════════════════════════   │
+│                                                                                     │
+│  Navigation: Panorama > Objects > Security Profiles                                │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │  ┌──────────────────────────────────────────────────────────────────────┐  │   │
+│  │  │                         PANORAMA                                      │  │   │
+│  │  ├──────────────────────────────────────────────────────────────────────┤  │   │
+│  │  │ ≡ Panorama  │ Device Groups │ Templates │ Objects │ Policies │ ...  │  │   │
+│  │  └──────────────────────────────────────────────────────────────────────┘  │   │
+│  │                                      │                                     │   │
+│  │                                      ▼                                     │   │
+│  │  ┌─────────────────────────────────────────────────────────────────────┐  │   │
+│  │  │ Objects > Security Profiles                                          │  │   │
+│  │  │ ├── Antivirus                 [+Add]  [Clone]  [Delete]             │  │   │
+│  │  │ ├── Anti-Spyware              [+Add]  [Clone]  [Delete]             │  │   │
+│  │  │ ├── Vulnerability Protection  [+Add]  [Clone]  [Delete]             │  │   │
+│  │  │ ├── URL Filtering             [+Add]  [Clone]  [Delete]             │  │   │
+│  │  │ ├── File Blocking             [+Add]  [Clone]  [Delete]             │  │   │
+│  │  │ ├── WildFire Analysis         [+Add]  [Clone]  [Delete]             │  │   │
+│  │  │ └── DNS Security              [+Add]  [Clone]  [Delete]             │  │   │
+│  │  └─────────────────────────────────────────────────────────────────────┘  │   │
+│  │                                                                            │   │
+│  │  Click [+Add] for each profile type, configure settings, click OK        │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  ═══════════════════════════════════════════════════════════════════════════════   │
+│  STEP 2: CREATE SECURITY PROFILE GROUP (Bundle profiles for easy attachment)       │
+│  ═══════════════════════════════════════════════════════════════════════════════   │
+│                                                                                     │
+│  Navigation: Panorama > Objects > Security Profile Groups > [+Add]                 │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │  ┌──────────────────────────────────────────────────────────────────────┐  │   │
+│  │  │ Security Profile Group                                                │  │   │
+│  │  ├──────────────────────────────────────────────────────────────────────┤  │   │
+│  │  │                                                                       │  │   │
+│  │  │  Name:        [ SPG-Internet-Strict                    ]             │  │   │
+│  │  │                                                                       │  │   │
+│  │  │  Antivirus:            [ AV-Standard              ▼]                 │  │   │
+│  │  │  Anti-Spyware:         [ AS-Standard              ▼]                 │  │   │
+│  │  │  Vulnerability:        [ VP-Standard              ▼]                 │  │   │
+│  │  │  URL Filtering:        [ URL-Standard             ▼]                 │  │   │
+│  │  │  File Blocking:        [ FB-Standard              ▼]                 │  │   │
+│  │  │  WildFire Analysis:    [ WF-Standard              ▼]                 │  │   │
+│  │  │  DNS Security:         [ DNS-Standard             ▼]                 │  │   │
+│  │  │                                                                       │  │   │
+│  │  │              [  OK  ]         [ Cancel ]                             │  │   │
+│  │  └──────────────────────────────────────────────────────────────────────┘  │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  ═══════════════════════════════════════════════════════════════════════════════   │
+│  STEP 3: ATTACH TO SECURITY POLICY RULE                                            │
+│  ═══════════════════════════════════════════════════════════════════════════════   │
+│                                                                                     │
+│  Navigation: Panorama > Policies > Security > [Select Rule] > [Edit]              │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │  ┌──────────────────────────────────────────────────────────────────────┐  │   │
+│  │  │ Security Policy Rule                                                  │  │   │
+│  │  ├──────────────────────────────────────────────────────────────────────┤  │   │
+│  │  │ General │ Source │ Dest │ Application │ Service │ ACTIONS           │  │   │
+│  │  │                                                   ▲                  │  │   │
+│  │  │                                                   │                  │  │   │
+│  │  │                                         Click this tab               │  │   │
+│  │  └──────────────────────────────────────────────────────────────────────┘  │   │
+│  │                                                                            │   │
+│  │  ┌──────────────────────────────────────────────────────────────────────┐  │   │
+│  │  │ Actions Tab                                                           │  │   │
+│  │  ├──────────────────────────────────────────────────────────────────────┤  │   │
+│  │  │                                                                       │  │   │
+│  │  │  Action:             (•) Allow  ( ) Deny  ( ) Drop                   │  │   │
+│  │  │                                                                       │  │   │
+│  │  │  Profile Type:       (•) Group  ( ) Profiles                         │  │   │
+│  │  │                       ▲                                               │  │   │
+│  │  │                       └── Select "Group" to use profile group         │  │   │
+│  │  │                                                                       │  │   │
+│  │  │  Group Profile:      [ SPG-Internet-Strict          ▼]               │  │   │
+│  │  │                       ▲                                               │  │   │
+│  │  │                       └── Select your security profile group          │  │   │
+│  │  │                                                                       │  │   │
+│  │  │  Log at Session End: [✓]                                             │  │   │
+│  │  │  Log Forwarding:     [ Log-to-Sentinel              ▼]               │  │   │
+│  │  │                                                                       │  │   │
+│  │  │              [  OK  ]         [ Cancel ]                             │  │   │
+│  │  └──────────────────────────────────────────────────────────────────────┘  │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  ═══════════════════════════════════════════════════════════════════════════════   │
+│  STEP 4: COMMIT & PUSH TO FIREWALLS                                                │
+│  ═══════════════════════════════════════════════════════════════════════════════   │
+│                                                                                     │
+│  Navigation: Panorama > Commit > Commit and Push                                   │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │  ┌──────────────────────────────────────────────────────────────────────┐  │   │
+│  │  │ Commit and Push                                                       │  │   │
+│  │  ├──────────────────────────────────────────────────────────────────────┤  │   │
+│  │  │                                                                       │  │   │
+│  │  │  Commit Type:        [ Panorama and Device Groups  ▼]                │  │   │
+│  │  │                                                                       │  │   │
+│  │  │  Device Groups:                                                       │  │   │
+│  │  │  ├── [✓] All-Firewalls                                               │  │   │
+│  │  │  │   ├── [✓] Plant-Firewalls (52 devices)                            │  │   │
+│  │  │  │   ├── [✓] DC-Firewalls (8 devices)                                │  │   │
+│  │  │  │   └── [✓] Distribution-Firewalls (203 devices)                    │  │   │
+│  │  │                                                                       │  │   │
+│  │  │  Templates:                                                           │  │   │
+│  │  │  ├── [✓] Corp-Security-Baseline                                      │  │   │
+│  │  │                                                                       │  │   │
+│  │  │  Admin:              [ NetworkAdmin                 ]                │  │   │
+│  │  │  Comment:            [ Applied Q4 security baseline v2.1 ]           │  │   │
+│  │  │                                                                       │  │   │
+│  │  │          [ Commit and Push ]     [ Validate ]     [ Cancel ]         │  │   │
+│  │  └──────────────────────────────────────────────────────────────────────┘  │   │
+│  │                                                                            │   │
+│  │  ⚠️ BEST PRACTICE:                                                         │   │
+│  │  1. Click [Validate] first to check for errors                            │   │
+│  │  2. Use scheduled pushes for production (off-hours)                       │   │
+│  │  3. Push to test device group first, verify, then push to all             │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <div class="workflow-box rounded-xl p-6 mb-4">
+                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-check-circle mr-2"></i>VERIFICATION: Confirming Security Features Are Active</h3>
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                  VERIFICATION: ARE SECURITY PROFILES WORKING?                        │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                     │
+│  ═══════════════════════════════════════════════════════════════════════════════   │
+│  METHOD 1: CHECK THREAT LOG (Did we block anything?)                               │
+│  ═══════════════════════════════════════════════════════════════════════════════   │
+│                                                                                     │
+│  Navigation: Monitor > Logs > Threat                                               │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ Threat Log                                                                   │   │
+│  │ ┌─────────┬──────────┬────────────────┬───────────┬────────────┬─────────┐ │   │
+│  │ │ Time    │ Src IP   │ Threat Name    │ Severity  │ Action     │ Profile │ │   │
+│  │ ├─────────┼──────────┼────────────────┼───────────┼────────────┼─────────┤ │   │
+│  │ │ 14:32:01│ 10.1.2.50│ Emotet Variant │ Critical  │ reset-both │ AV-Std  │ │   │
+│  │ │ 14:31:45│ 10.1.3.22│ SQL Injection  │ High      │ reset-both │ VP-Std  │ │   │
+│  │ │ 14:30:12│ 10.1.1.15│ Phishing URL   │ High      │ block      │ URL-Std │ │   │
+│  │ │ 14:29:58│ 10.1.4.88│ Suspicious EXE │ Medium    │ alert      │ WF-Std  │ │   │
+│  │ └─────────┴──────────┴────────────────┴───────────┴────────────┴─────────┘ │   │
+│  │                                                                              │   │
+│  │  ✅ If you see threats with "reset-both" or "block" actions, profiles work! │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  ═══════════════════════════════════════════════════════════════════════════════   │
+│  METHOD 2: CHECK TRAFFIC LOG (Is traffic being inspected?)                         │
+│  ═══════════════════════════════════════════════════════════════════════════════   │
+│                                                                                     │
+│  Navigation: Monitor > Logs > Traffic                                              │
+│                                                                                     │
+│  Look for "Profiles" column - should show your security profile group             │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ Traffic Log                                                                  │   │
+│  │ ┌─────────┬──────────┬────────────┬───────┬─────────────────────────────┐  │   │
+│  │ │ Time    │ Src IP   │ Application│ Action│ Profiles Applied            │  │   │
+│  │ ├─────────┼──────────┼────────────┼───────┼─────────────────────────────┤  │   │
+│  │ │ 14:35:22│ 10.1.2.50│ ssl        │ allow │ SPG-Internet-Strict ✅      │  │   │
+│  │ │ 14:35:18│ 10.1.3.22│ web-browse │ allow │ SPG-Internal ✅             │  │   │
+│  │ │ 14:35:01│ 10.50.1.5│ modbus     │ allow │ SPG-OT-Safe ✅              │  │   │
+│  │ │ 14:34:55│ 10.1.1.15│ smtp       │ allow │ (none) ⚠️ PROBLEM!         │  │   │
+│  │ └─────────┴──────────┴────────────┴───────┴─────────────────────────────┘  │   │
+│  │                                                                              │   │
+│  │  ⚠️ If "Profiles" is blank, the rule is missing security profile attachment!│   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  ═══════════════════════════════════════════════════════════════════════════════   │
+│  METHOD 3: TEST WITH EICAR (Safe malware test file)                                │
+│  ═══════════════════════════════════════════════════════════════════════════════   │
+│                                                                                     │
+│  1. Download EICAR test file: https://secure.eicar.org/eicar.com                  │
+│  2. Firewall should BLOCK the download                                             │
+│  3. Check Threat Log for "EICAR-Test-File" entry                                   │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │                                                                              │   │
+│  │  Browser shows:    "Access Denied - Threat Detected"                        │   │
+│  │                                                                              │   │
+│  │  Threat Log shows: EICAR-Test-File | Critical | reset-both | AV-Standard   │   │
+│  │                                                                              │   │
+│  │  ✅ SUCCESS: Antivirus profile is working!                                   │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  ═══════════════════════════════════════════════════════════════════════════════   │
+│  METHOD 4: SECURITY POLICY AUDIT (Panorama)                                        │
+│  ═══════════════════════════════════════════════════════════════════════════════   │
+│                                                                                     │
+│  Navigation: Panorama > Policies > Security                                        │
+│                                                                                     │
+│  Filter: Show rules where "Profile" = "None"                                       │
+│                                                                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│  │ Security Rules Missing Profiles  ⚠️ GAPS TO FIX                             │   │
+│  │ ┌─────────────────────────┬────────────┬─────────────────────────────────┐ │   │
+│  │ │ Rule Name               │ Action     │ Profile Status                  │ │   │
+│  │ ├─────────────────────────┼────────────┼─────────────────────────────────┤ │   │
+│  │ │ Allow-Web-to-DB         │ Allow      │ ⚠️ No Profile (needs fixing)    │ │   │
+│  │ │ Allow-Backup-Traffic    │ Allow      │ ⚠️ No Profile (needs fixing)    │ │   │
+│  │ │ Legacy-App-Exception    │ Allow      │ ⚠️ No Profile (document risk)   │ │   │
+│  │ └─────────────────────────┴────────────┴─────────────────────────────────┘ │   │
+│  │                                                                              │   │
+│  │  ACTION: Add security profile groups to all "Allow" rules                   │   │
+│  └─────────────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- WORKFLOW 8: Security Baseline Template YAML/Config Export -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-emerald-400">8.</span> Security Baseline Template - Config Export Format
+                </h2>
+
+                <div class="workflow-box rounded-xl p-6 mb-4">
+                    <h3 class="text-pink-400 font-bold mb-4"><i class="fas fa-code mr-2"></i>WHAT THE TEMPLATE LOOKS LIKE (XML Config Export)</h3>
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                  PANORAMA CONFIG EXPORT - SECURITY PROFILE GROUP                     │
+│                            (Simplified XML representation)                           │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+
+  &lt;profile-group&gt;
+    &lt;entry name="SPG-Internet-Strict"&gt;
+      &lt;virus&gt;
+        &lt;member&gt;AV-Standard&lt;/member&gt;
+      &lt;/virus&gt;
+      &lt;spyware&gt;
+        &lt;member&gt;AS-Standard&lt;/member&gt;
+      &lt;/spyware&gt;
+      &lt;vulnerability&gt;
+        &lt;member&gt;VP-Standard&lt;/member&gt;
+      &lt;/vulnerability&gt;
+      &lt;url-filtering&gt;
+        &lt;member&gt;URL-Standard&lt;/member&gt;
+      &lt;/url-filtering&gt;
+      &lt;file-blocking&gt;
+        &lt;member&gt;FB-Standard&lt;/member&gt;
+      &lt;/file-blocking&gt;
+      &lt;wildfire-analysis&gt;
+        &lt;member&gt;WF-Standard&lt;/member&gt;
+      &lt;/wildfire-analysis&gt;
+      &lt;dns-security&gt;
+        &lt;member&gt;DNS-Standard&lt;/member&gt;
+      &lt;/dns-security&gt;
+    &lt;/entry&gt;
+  &lt;/profile-group&gt;
+
+  &lt;!-- Individual Profile Definition --&gt;
+  &lt;profiles&gt;
+    &lt;virus&gt;
+      &lt;entry name="AV-Standard"&gt;
+        &lt;decoder&gt;
+          &lt;entry name="http"&gt;
+            &lt;action&gt;reset-both&lt;/action&gt;
+            &lt;wildfire-action&gt;reset-both&lt;/wildfire-action&gt;
+            &lt;mlav-action&gt;reset-both&lt;/mlav-action&gt;
+          &lt;/entry&gt;
+          &lt;entry name="smb"&gt;
+            &lt;action&gt;reset-both&lt;/action&gt;
+            &lt;wildfire-action&gt;reset-both&lt;/wildfire-action&gt;
+          &lt;/entry&gt;
+          &lt;!-- Additional protocols... --&gt;
+        &lt;/decoder&gt;
+        &lt;mlav-engine-filebased-enabled&gt;
+          &lt;entry name="Windows Executables"&gt;
+            &lt;mlav-policy-action&gt;enable&lt;/mlav-policy-action&gt;
+          &lt;/entry&gt;
+        &lt;/mlav-engine-filebased-enabled&gt;
+      &lt;/entry&gt;
+    &lt;/virus&gt;
+
+    &lt;spyware&gt;
+      &lt;entry name="AS-Standard"&gt;
+        &lt;botnet-domains&gt;
+          &lt;lists&gt;
+            &lt;entry name="default-paloalto-dns"&gt;
+              &lt;action&gt;
+                &lt;sinkhole&gt;
+                  &lt;ipv4-address&gt;sinkhole.paloaltonetworks.com&lt;/ipv4-address&gt;
+                  &lt;ipv6-address&gt;2600:5200::1&lt;/ipv6-address&gt;
+                &lt;/sinkhole&gt;
+              &lt;/action&gt;
+            &lt;/entry&gt;
+          &lt;/lists&gt;
+          &lt;dns-security-categories&gt;
+            &lt;entry name="pan-dns-sec-cc"&gt;
+              &lt;log-level&gt;default&lt;/log-level&gt;
+              &lt;action&gt;sinkhole&lt;/action&gt;
+              &lt;packet-capture&gt;extended-capture&lt;/packet-capture&gt;
+            &lt;/entry&gt;
+            &lt;entry name="pan-dns-sec-malware"&gt;
+              &lt;action&gt;sinkhole&lt;/action&gt;
+            &lt;/entry&gt;
+          &lt;/dns-security-categories&gt;
+        &lt;/botnet-domains&gt;
+        &lt;rules&gt;
+          &lt;entry name="critical"&gt;
+            &lt;severity&gt;&lt;member&gt;critical&lt;/member&gt;&lt;/severity&gt;
+            &lt;action&gt;&lt;reset-both/&gt;&lt;/action&gt;
+            &lt;packet-capture&gt;extended-capture&lt;/packet-capture&gt;
+          &lt;/entry&gt;
+          &lt;entry name="high"&gt;
+            &lt;severity&gt;&lt;member&gt;high&lt;/member&gt;&lt;/severity&gt;
+            &lt;action&gt;&lt;reset-both/&gt;&lt;/action&gt;
+          &lt;/entry&gt;
+          &lt;entry name="medium"&gt;
+            &lt;severity&gt;&lt;member&gt;medium&lt;/member&gt;&lt;/severity&gt;
+            &lt;action&gt;&lt;alert/&gt;&lt;/action&gt;
+          &lt;/entry&gt;
+        &lt;/rules&gt;
+      &lt;/entry&gt;
+    &lt;/spyware&gt;
+
+    &lt;vulnerability&gt;
+      &lt;entry name="VP-Standard"&gt;
+        &lt;rules&gt;
+          &lt;entry name="critical-high"&gt;
+            &lt;severity&gt;
+              &lt;member&gt;critical&lt;/member&gt;
+              &lt;member&gt;high&lt;/member&gt;
+            &lt;/severity&gt;
+            &lt;action&gt;&lt;reset-both/&gt;&lt;/action&gt;
+            &lt;vendor-id&gt;&lt;member&gt;any&lt;/member&gt;&lt;/vendor-id&gt;
+            &lt;packet-capture&gt;extended-capture&lt;/packet-capture&gt;
+          &lt;/entry&gt;
+          &lt;entry name="medium-low"&gt;
+            &lt;severity&gt;
+              &lt;member&gt;medium&lt;/member&gt;
+              &lt;member&gt;low&lt;/member&gt;
+            &lt;/severity&gt;
+            &lt;action&gt;&lt;alert/&gt;&lt;/action&gt;
+          &lt;/entry&gt;
+        &lt;/rules&gt;
+      &lt;/entry&gt;
+    &lt;/vulnerability&gt;
+
+    &lt;url-filtering&gt;
+      &lt;entry name="URL-Standard"&gt;
+        &lt;credential-enforcement&gt;
+          &lt;mode&gt;&lt;disabled/&gt;&lt;/mode&gt;
+        &lt;/credential-enforcement&gt;
+        &lt;block&gt;
+          &lt;member&gt;adult&lt;/member&gt;
+          &lt;member&gt;command-and-control&lt;/member&gt;
+          &lt;member&gt;hacking&lt;/member&gt;
+          &lt;member&gt;malware&lt;/member&gt;
+          &lt;member&gt;phishing&lt;/member&gt;
+          &lt;member&gt;proxy-avoidance-and-anonymizers&lt;/member&gt;
+          &lt;member&gt;gambling&lt;/member&gt;
+        &lt;/block&gt;
+        &lt;alert&gt;
+          &lt;member&gt;newly-registered-domain&lt;/member&gt;
+          &lt;member&gt;unknown&lt;/member&gt;
+          &lt;member&gt;parked&lt;/member&gt;
+        &lt;/alert&gt;
+        &lt;allow&gt;
+          &lt;member&gt;business-and-economy&lt;/member&gt;
+          &lt;member&gt;computer-and-internet-info&lt;/member&gt;
+          &lt;member&gt;financial-services&lt;/member&gt;
+          &lt;member&gt;government&lt;/member&gt;
+        &lt;/allow&gt;
+      &lt;/entry&gt;
+    &lt;/url-filtering&gt;
+  &lt;/profiles&gt;
+
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <!-- Interview Callout -->
+                <div class="glass-card rounded-xl p-6 mt-6 border-2 border-emerald-500/50 bg-gradient-to-r from-emerald-500/10 to-transparent">
+                    <h4 class="text-emerald-400 font-bold mb-3"><i class="fas fa-star mr-2"></i>YOUR INTERVIEW TALKING POINTS</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="bg-black/20 rounded-lg p-3">
+                            <p class="text-cyan-400 font-semibold mb-2">When asked "How do you standardize security across multiple firewalls?"</p>
+                            <p class="text-gray-400">
+                                "I create security baseline templates in Panorama that define standard security profiles—Antivirus, Anti-Spyware with DNS sinkhole, Vulnerability Protection (IPS), URL Filtering, File Blocking, and WildFire. These are bundled into Security Profile Groups like 'SPG-Internet-Strict' for external traffic. The template is pushed to all firewalls from Panorama, ensuring consistent security posture across 50+ sites."
+                            </p>
+                        </div>
+                        <div class="bg-black/20 rounded-lg p-3">
+                            <p class="text-purple-400 font-semibold mb-2">When asked "What's in your security profile?"</p>
+                            <p class="text-gray-400">
+                                "For Threat Prevention: IPS signatures tuned for our environment—block Critical/High CVEs, alert on Medium. Anti-malware with ML-based detection. DNS sinkhole to identify compromised hosts calling malicious domains. URL Filtering blocks security categories (malware, phishing, C2) and policy categories (adult, gambling). File Blocking prevents dangerous executables (EXE, PS1, BAT) from web downloads. WildFire submits unknown files for cloud analysis."
+                            </p>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                        <p class="text-yellow-400 text-sm">
+                            <strong>💡 Key Differentiator:</strong> "I differentiate profiles by traffic type. Internet-facing traffic gets full inspection (SPG-Strict). Internal East-West traffic gets standard inspection (SPG-Internal). OT traffic gets alert-only mode (SPG-OT-Safe) because blocking could cause production impact—we monitor and alert, but don't block without OT team coordination."
+                        </p>
+                    </div>
+                </div>
+            </section>
+
             <!-- Summary Box -->
             <div class="glass-card rounded-xl p-6 mt-8">
                 <h3 class="text-xl font-bold text-white mb-4"><i class="fas fa-key text-emerald-400 mr-2"></i>Key Interview Points</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
                     <div>
                         <p class="text-emerald-400 font-semibold mb-2">Your Role (Security Engineering):</p>
                         <ul class="text-gray-400 space-y-1">
                             <li>• Security profiles & templates</li>
-                            <li>• Policy design & governance</li>
+                            <li>• Threat Prevention configuration</li>
+                            <li>• URL Filtering policy design</li>
+                            <li>• WildFire & File Blocking setup</li>
                             <li>• SIEM integration & detection rules</li>
                             <li>• Quarterly rule reviews</li>
-                            <li>• Security profile troubleshooting</li>
                         </ul>
                     </div>
                     <div>
-                        <p class="text-blue-400 font-semibold mb-2">Network Team's Role:</p>
+                        <p class="text-blue-400 font-semibold mb-2">Security Profile Components:</p>
                         <ul class="text-gray-400 space-y-1">
-                            <li>• Routing, NAT, VPN</li>
-                            <li>• HA configuration</li>
-                            <li>• Physical deployment</li>
-                            <li>• Panorama/FMC administration</li>
-                            <li>• Infrastructure troubleshooting</li>
+                            <li>• Antivirus (AV-Standard)</li>
+                            <li>• Anti-Spyware + DNS Sinkhole</li>
+                            <li>• Vulnerability Protection (IPS)</li>
+                            <li>• URL Filtering (80+ categories)</li>
+                            <li>• File Blocking (dangerous types)</li>
+                            <li>• WildFire Analysis (cloud sandbox)</li>
+                            <li>• DNS Security</li>
                         </ul>
+                    </div>
+                    <div>
+                        <p class="text-purple-400 font-semibold mb-2">Template Deployment:</p>
+                        <ul class="text-gray-400 space-y-1">
+                            <li>• Create profiles in Panorama</li>
+                            <li>• Bundle into Profile Groups</li>
+                            <li>• Attach to security rules</li>
+                            <li>• Commit & Push to firewalls</li>
+                            <li>• Verify in Threat/Traffic logs</li>
+                            <li>• Test with EICAR file</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-700">
+                    <p class="text-yellow-400 font-semibold mb-2">Workflows in This Page:</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs text-gray-400">
+                        <span>1. Multi-Site Deployment</span>
+                        <span>2. OT Troubleshooting</span>
+                        <span>3. Quarterly Review</span>
+                        <span>4. Profile Selection</span>
+                        <span>5. Baseline Template Structure</span>
+                        <span>6. Profile Config Deep Dive</span>
+                        <span>7. Panorama UI Walkthrough</span>
+                        <span>8. Config Export Format</span>
                     </div>
                 </div>
             </div>
