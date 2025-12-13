@@ -1067,24 +1067,43 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                     <p class="text-orange-400 font-bold mb-3">Q13: How do you prioritize vulnerability remediation when you have thousands of findings across your environment?</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "At Siemens, we use Microsoft Defender Threat and Vulnerability Management (TVM), which helps with prioritization. But the framework I apply is tool-agnostic:<br><br>
+                            "I follow a <strong>risk-based approach</strong> to vulnerability management rather than relying solely on CVSS scores. When a vulnerability is identified, the first goal is to understand its <strong>real risk in our environment</strong>—considering exploitability, asset criticality, and exposure.<br><br>
                             
-                            <strong>My Prioritization Framework</strong><br>
-                            • <strong>Tier 1 - Immediate (24-48 hours)</strong>: Critical vulns on internet-facing systems OR any actively exploited vulnerability (KEV list). These get emergency patching.<br>
-                            • <strong>Tier 2 - Urgent (7 days)</strong>: High-severity on internal systems with sensitive data, or critical on internal systems.<br>
-                            • <strong>Tier 3 - Standard (30 days)</strong>: Medium severity or high severity with significant compensating controls already in place.<br>
-                            • <strong>Tier 4 - Scheduled (next maintenance window)</strong>: Low severity, or vulnerabilities on isolated systems with limited exposure.<br><br>
+                            <strong>My Major Initiative: Unified Risk-Prioritization Pipeline</strong><br>
+                            In my current role, I took a major initiative to optimize and automate this prioritization process. Instead of replaying native risk scores from individual tools, I built a <strong>unified risk-prioritization pipeline using Sentinel and Logic Apps</strong>.<br><br>
                             
-                            <strong>Key Factors Beyond CVSS</strong><br>
-                            CVSS alone isn't enough. I consider:<br>
-                            • <strong>Asset criticality</strong> - A medium vuln on a payment system matters more than a critical vuln on a test server<br>
-                            • <strong>Exploit availability</strong> - Is there a public exploit? Is it actively used in the wild?<br>
-                            • <strong>Network exposure</strong> - Internet-facing vs. internal vs. isolated<br>
-                            • <strong>Compensating controls</strong> - Do we have EDR, segmentation, or other mitigations that reduce real risk?<br>
-                            • <strong>Data classification</strong> - What's at stake if this system is compromised?<br><br>
+                            <strong>Data Sources & Enrichment</strong><br>
+                            • Vulnerability data from <strong>Qualys and Defender TVM</strong> was correlated<br>
+                            • Enriched with external threat intelligence: <strong>FIRST EPSS</strong> (Exploit Prediction Scoring System) and <strong>CISA KEV</strong> (Known Exploited Vulnerabilities)<br>
+                            • Correlated with <strong>CMDB data</strong> to identify business-critical assets<br><br>
                             
-                            <strong>Practical Reality</strong><br>
-                            You'll never get to zero vulnerabilities. The goal is reducing risk, not chasing metrics. I'd rather have 100 well-prioritized vulnerabilities being actively worked than 10,000 in a spreadsheet no one looks at."
+                            <strong>Weighted Risk Scoring Model</strong><br>
+                            We weighted four dimensions with a <strong>manager-approved weighting model</strong>:<br>
+                            • <strong>Technical Severity</strong> (CVSS base score)<br>
+                            • <strong>Exploitability</strong> (EPSS probability + KEV status)<br>
+                            • <strong>Asset Criticality</strong> (from CMDB—Tier 1/2/3 classification)<br>
+                            • <strong>Exposure</strong> (Internet-facing, internal, isolated)<br><br>
+                            
+                            The output was a <strong>normalized risk score</strong> that reflects actual business risk, not just technical severity. This gave us a clear, risk-based priority list.<br><br>
+                            
+                            <strong>Validation Before Remediation</strong><br>
+                            High-risk findings were then <strong>manually validated</strong> for:<br>
+                            • False positives (version detection issues, backported patches)<br>
+                            • Patch availability (is there actually a fix?)<br>
+                            • Compensating controls already in place<br><br>
+                            
+                            Final decision: <strong>Remediate, Mitigate, Accept Risk, or Close as False Positive</strong>.<br><br>
+                            
+                            <strong>Why This Matters</strong><br>
+                            You'll never get to zero vulnerabilities. The goal is <strong>reducing risk, not chasing metrics</strong>. I'd rather have 100 well-prioritized vulnerabilities being actively worked than 10,000 in a spreadsheet no one looks at. This pipeline ensured we focused on what actually mattered."
+                        </p>
+                    </div>
+                    
+                    <!-- Follow-up callout -->
+                    <div class="mt-4 p-4 bg-purple-500/10 border border-purple-500/30 rounded-lg">
+                        <p class="text-purple-400 text-xs font-semibold mb-2">💡 FOLLOW-UP: "Can you explain the weighting model in more detail?"</p>
+                        <p class="text-gray-400 text-sm">
+                            "We weighted four dimensions: <strong>technical severity</strong> (CVSS), <strong>exploitability</strong> using EPSS probability and KEV status, <strong>asset criticality</strong> from CMDB, and <strong>exposure</strong> (network position). The weights were manager-approved to reflect business risk priorities. The output was a normalized score used for prioritization, with manual validation before remediation decisions. For example, a medium CVSS vulnerability with high EPSS score on a Tier-1 internet-facing asset would score higher than a critical CVSS on an isolated test server."
                         </p>
                     </div>
                 </div>
