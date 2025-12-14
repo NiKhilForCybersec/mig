@@ -209,9 +209,420 @@
                     </pre>
                 </div>
 
+                <!-- EPSS INTEGRATION ARCHITECTURE -->
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-context">
+                    <h3 class="text-blue-400 font-bold mb-4"><i class="fas fa-project-diagram mr-2"></i>3.2 EPSS Integration Architecture (FIRST.org → Sentinel)</h3>
+                    <p class="text-gray-400 text-sm mb-4">Complete data pipeline for ingesting EPSS scores into Microsoft Sentinel for vulnerability risk scoring.</p>
+                    
+                    <div class="bg-black/50 rounded-lg p-4 overflow-x-auto mb-4">
+                        <pre class="text-xs text-cyan-400">
+┌──────────────────────────┐
+│        FIRST EPSS        │
+│   Public REST API        │
+│  (epss.score, percentile │
+│   per CVE per date)      │
+│                          │
+│  api.first.org/data/v1/  │
+│  epss?cve=CVE-XXXX-XXXX  │
+└─────────────┬────────────┘
+              │ HTTPS (GET)
+              │ Paging (offset/limit)
+              │ ~240K CVEs daily
+              ▼
+┌──────────────────────────┐
+│   Azure Function App     │
+│  (Timer Trigger - Daily) │
+│                          │
+│  • Fetch EPSS data       │
+│  • Handle paging         │
+│  • Transform JSON        │
+│  • Batch records (500)   │
+│  • Retry / error logic   │
+│  • Managed Identity auth │
+└─────────────┬────────────┘
+              │ HTTPS (Logs Ingestion API)
+              │ Entra ID Auth (Managed Identity)
+              │ POST /dataCollectionRules/{DCR}/streams/{stream}
+              ▼
+┌──────────────────────────┐
+│ Data Collection Endpoint │
+│          (DCE)           │
+│                          │
+│  Ingestion Endpoint URL: │
+│  https://dce-xxx.ingest  │
+│  .monitor.azure.com      │
+└─────────────┬────────────┘
+              │
+              │ governed by
+              ▼
+┌──────────────────────────┐
+│  Data Collection Rule    │
+│          (DCR)           │
+│                          │
+│  • Defines stream name   │
+│  • Maps input → output   │
+│  • Schema transformation │
+│  • Routes to LAW table   │
+└─────────────┬────────────┘
+              │
+              ▼
+┌──────────────────────────┐
+│ Log Analytics Workspace  │
+│                          │
+│  Custom Table: EPSS_CL   │
+│                          │
+│  TimeGenerated | CVE |   │
+│  EpssScore | Percentile  │
+└─────────────┬────────────┘
+              │
+              ▼
+┌──────────────────────────┐
+│   Microsoft Sentinel     │
+│                          │
+│  • KQL joins with        │
+│    Qualys / TVM vulns    │
+│  • Risk score calc       │
+│  • Correlation rules     │
+│  • Logic App automation  │
+└──────────────────────────┘
+                        </pre>
+                    </div>
+
+                    <!-- Component Details -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-cyan-400 font-semibold text-sm mb-2"><i class="fas fa-globe mr-2"></i>FIRST EPSS API</p>
+                            <ul class="text-gray-400 text-xs space-y-1">
+                                <li>• <strong>Endpoint:</strong> api.first.org/data/v1/epss</li>
+                                <li>• <strong>Data:</strong> ~240,000 CVEs with daily scores</li>
+                                <li>• <strong>Format:</strong> JSON (CVE, EPSS score 0.0-1.0, percentile)</li>
+                                <li>• <strong>Rate Limit:</strong> Reasonable (use paging)</li>
+                                <li>• <strong>Update:</strong> Daily refresh recommended</li>
+                            </ul>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-purple-400 font-semibold text-sm mb-2"><i class="fas fa-bolt mr-2"></i>Azure Function App</p>
+                            <ul class="text-gray-400 text-xs space-y-1">
+                                <li>• <strong>Trigger:</strong> Timer (0 0 6 * * * = 6 AM daily)</li>
+                                <li>• <strong>Runtime:</strong> Python 3.11 or PowerShell 7</li>
+                                <li>• <strong>Auth:</strong> System-assigned Managed Identity</li>
+                                <li>• <strong>Batching:</strong> 500 records per API call</li>
+                                <li>• <strong>Retry:</strong> Exponential backoff on failures</li>
+                            </ul>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-emerald-400 font-semibold text-sm mb-2"><i class="fas fa-database mr-2"></i>DCE/DCR Configuration</p>
+                            <ul class="text-gray-400 text-xs space-y-1">
+                                <li>• <strong>DCE:</strong> Data Collection Endpoint (regional)</li>
+                                <li>• <strong>DCR:</strong> Defines schema mapping</li>
+                                <li>• <strong>Stream:</strong> Custom-EPSS_CL</li>
+                                <li>• <strong>RBAC:</strong> Monitoring Metrics Publisher role</li>
+                                <li>• <strong>Schema:</strong> TimeGenerated, CVE, EpssScore, Percentile</li>
+                            </ul>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-yellow-400 font-semibold text-sm mb-2"><i class="fas fa-table mr-2"></i>EPSS_CL Table Schema</p>
+                            <ul class="text-gray-400 text-xs space-y-1">
+                                <li>• <strong>TimeGenerated:</strong> datetime (required)</li>
+                                <li>• <strong>CVE:</strong> string (CVE-XXXX-XXXXX)</li>
+                                <li>• <strong>EpssScore:</strong> real (0.0 - 1.0)</li>
+                                <li>• <strong>Percentile:</strong> real (0.0 - 1.0)</li>
+                                <li>• <strong>Retention:</strong> 30-90 days (adjust to need)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Azure Function Code -->
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-context">
+                    <h3 class="text-blue-400 font-bold mb-4"><i class="fas fa-code mr-2"></i>3.3 Azure Function: EPSS Data Ingestion (Python)</h3>
+                    <div class="bg-black/50 rounded-lg p-4 overflow-x-auto">
+                        <pre class="text-xs text-yellow-400">
+# ============================================================================
+# Azure Function: EPSS Data Ingestion to Sentinel
+# Trigger: Timer (daily at 6 AM UTC)
+# Auth: Managed Identity → Logs Ingestion API
+# ============================================================================
+
+import azure.functions as func
+import logging
+import requests
+import json
+from datetime import datetime, timezone
+from azure.identity import DefaultAzureCredential
+from azure.monitor.ingestion import LogsIngestionClient
+
+app = func.FunctionApp()
+
+# Configuration (set in Function App Settings)
+DCE_ENDPOINT = "https://dce-xxxxx.eastus-1.ingest.monitor.azure.com"
+DCR_IMMUTABLE_ID = "dcr-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+STREAM_NAME = "Custom-EPSS_CL"
+EPSS_API_BASE = "https://api.first.org/data/v1/epss"
+BATCH_SIZE = 500
+
+@app.timer_trigger(schedule="0 0 6 * * *", arg_name="timer", run_on_startup=False)
+def epss_ingestion(timer: func.TimerRequest) -> None:
+    logging.info("EPSS ingestion function started")
+    
+    try:
+        # Authenticate using Managed Identity
+        credential = DefaultAzureCredential()
+        client = LogsIngestionClient(endpoint=DCE_ENDPOINT, credential=credential)
+        
+        # Fetch all EPSS data with paging
+        all_records = []
+        offset = 0
+        limit = 1000  # FIRST API page size
+        
+        while True:
+            url = f"{EPSS_API_BASE}?offset={offset}&limit={limit}"
+            response = requests.get(url, timeout=60)
+            response.raise_for_status()
+            
+            data = response.json()
+            records = data.get("data", [])
+            
+            if not records:
+                break
+                
+            # Transform to Sentinel schema
+            for record in records:
+                all_records.append({
+                    "TimeGenerated": datetime.now(timezone.utc).isoformat(),
+                    "CVE": record.get("cve"),
+                    "EpssScore": float(record.get("epss", 0)),
+                    "Percentile": float(record.get("percentile", 0))
+                })
+            
+            offset += limit
+            logging.info(f"Fetched {len(all_records)} EPSS records so far...")
+            
+            # Check if we've reached the end
+            if len(records) < limit:
+                break
+        
+        logging.info(f"Total EPSS records fetched: {len(all_records)}")
+        
+        # Batch upload to Sentinel via Logs Ingestion API
+        for i in range(0, len(all_records), BATCH_SIZE):
+            batch = all_records[i:i + BATCH_SIZE]
+            client.upload(
+                rule_id=DCR_IMMUTABLE_ID,
+                stream_name=STREAM_NAME,
+                logs=batch
+            )
+            logging.info(f"Uploaded batch {i // BATCH_SIZE + 1}")
+        
+        logging.info(f"EPSS ingestion complete: {len(all_records)} records uploaded")
+        
+    except Exception as e:
+        logging.error(f"EPSS ingestion failed: {str(e)}")
+        raise
+                        </pre>
+                    </div>
+                    
+                    <div class="mt-4 bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+                        <p class="text-blue-400 font-semibold text-sm mb-2"><i class="fas fa-cog mr-2"></i>Required Function App Settings:</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                            <code class="text-gray-400 bg-black/30 p-1 rounded">DCE_ENDPOINT = "https://dce-xxx.ingest.monitor.azure.com"</code>
+                            <code class="text-gray-400 bg-black/30 p-1 rounded">DCR_IMMUTABLE_ID = "dcr-xxxxxxxxxxxx"</code>
+                            <code class="text-gray-400 bg-black/30 p-1 rounded">STREAM_NAME = "Custom-EPSS_CL"</code>
+                            <code class="text-gray-400 bg-black/30 p-1 rounded">Managed Identity = System-assigned (ENABLED)</code>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DCR ARM Template -->
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-context">
+                    <h3 class="text-blue-400 font-bold mb-4"><i class="fas fa-file-code mr-2"></i>3.4 Data Collection Rule (DCR) - ARM Template</h3>
+                    <div class="bg-black/50 rounded-lg p-4 overflow-x-auto">
+                        <pre class="text-xs text-emerald-400">
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "resources": [
+        {
+            "type": "Microsoft.Insights/dataCollectionRules",
+            "apiVersion": "2022-06-01",
+            "name": "DCR-EPSS-Ingestion",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "dataCollectionEndpointId": "[resourceId('Microsoft.Insights/dataCollectionEndpoints', 'DCE-Security-Ingestion')]",
+                "streamDeclarations": {
+                    "Custom-EPSS_CL": {
+                        "columns": [
+                            { "name": "TimeGenerated", "type": "datetime" },
+                            { "name": "CVE", "type": "string" },
+                            { "name": "EpssScore", "type": "real" },
+                            { "name": "Percentile", "type": "real" }
+                        ]
+                    }
+                },
+                "destinations": {
+                    "logAnalytics": [
+                        {
+                            "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', 'LAW-Sentinel-Prod')]",
+                            "name": "SentinelWorkspace"
+                        }
+                    ]
+                },
+                "dataFlows": [
+                    {
+                        "streams": [ "Custom-EPSS_CL" ],
+                        "destinations": [ "SentinelWorkspace" ],
+                        "transformKql": "source | extend TimeGenerated = todatetime(TimeGenerated)",
+                        "outputStream": "Custom-EPSS_CL"
+                    }
+                ]
+            }
+        }
+    ]
+}
+                        </pre>
+                    </div>
+                </div>
+
+                <!-- RBAC and Managed Identity Setup -->
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-context">
+                    <h3 class="text-blue-400 font-bold mb-4"><i class="fas fa-key mr-2"></i>3.5 RBAC & Managed Identity Configuration</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-purple-400 font-semibold text-sm mb-2">Step 1: Enable Managed Identity</p>
+                            <pre class="text-gray-400 text-xs">
+# Azure CLI
+az functionapp identity assign \
+  --name "func-epss-ingestion" \
+  --resource-group "rg-security-automation"
+
+# Returns:
+# principalId: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                            </pre>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-purple-400 font-semibold text-sm mb-2">Step 2: Assign DCR Permissions</p>
+                            <pre class="text-gray-400 text-xs">
+# Grant "Monitoring Metrics Publisher" on DCR
+az role assignment create \
+  --assignee "[principalId]" \
+  --role "Monitoring Metrics Publisher" \
+  --scope "/subscriptions/{sub}/resourceGroups/{rg}/
+    providers/Microsoft.Insights/
+    dataCollectionRules/DCR-EPSS-Ingestion"
+                            </pre>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
+                        <p class="text-yellow-400 font-semibold text-sm mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>Common Pitfalls:</p>
+                        <ul class="text-gray-400 text-xs space-y-1">
+                            <li>• <strong>Wrong role:</strong> Must be "Monitoring Metrics Publisher", not "Log Analytics Contributor"</li>
+                            <li>• <strong>Wrong scope:</strong> Role must be assigned on the DCR, not the workspace</li>
+                            <li>• <strong>Region mismatch:</strong> DCE must be in same region as Log Analytics Workspace</li>
+                            <li>• <strong>Stream name:</strong> Must match exactly between DCR and Function code (case-sensitive)</li>
+                            <li>• <strong>Table creation:</strong> Custom table (EPSS_CL) auto-created on first ingestion</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- KQL Validation Queries -->
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-context">
+                    <h3 class="text-blue-400 font-bold mb-4"><i class="fas fa-search mr-2"></i>3.6 Validation KQL Queries</h3>
+                    <div class="bg-black/50 rounded-lg p-4 overflow-x-auto">
+                        <pre class="text-xs text-cyan-400">
+// ============================================================================
+// EPSS DATA VALIDATION QUERIES
+// ============================================================================
+
+// 1. Check EPSS data freshness
+EPSS_CL
+| summarize 
+    LatestIngestion = max(TimeGenerated),
+    TotalRecords = count(),
+    DistinctCVEs = dcount(CVE)
+| extend 
+    DataAge = datetime_diff('hour', now(), LatestIngestion),
+    IsStale = datetime_diff('hour', now(), LatestIngestion) > 36
+
+// 2. Top 20 highest EPSS scores (most likely to be exploited)
+EPSS_CL
+| where TimeGenerated > ago(2d)
+| summarize EpssScore = max(EpssScore), Percentile = max(Percentile) by CVE
+| top 20 by EpssScore desc
+
+// 3. Join EPSS with Qualys vulnerabilities for risk scoring
+QualysVuln_CL
+| where todatetime(LastDetected) > ago(14d)
+| extend CVE = tostring(CVE)
+| join kind=leftouter (
+    EPSS_CL 
+    | where TimeGenerated > ago(2d)
+    | summarize EpssScore = max(EpssScore), Percentile = max(Percentile) by CVE
+) on CVE
+| extend 
+    EpssScore = coalesce(EpssScore, 0.0),
+    RiskBoost = EpssScore * 50  // Scale 0-1 to 0-50 points
+| project AssetName, CVE, Cvss, EpssScore, RiskBoost
+| order by EpssScore desc
+
+// 4. EPSS coverage check (what % of our vulns have EPSS scores?)
+let OurCVEs = QualysVuln_CL | where todatetime(LastDetected) > ago(14d) | distinct CVE;
+let EPSSCVEs = EPSS_CL | where TimeGenerated > ago(2d) | distinct CVE;
+OurCVEs
+| summarize TotalCVEs = count()
+| extend 
+    WithEPSS = toscalar(OurCVEs | join kind=inner EPSSCVEs on CVE | count),
+    CoveragePercent = round(100.0 * toscalar(OurCVEs | join kind=inner EPSSCVEs on CVE | count) / count(), 1)
+                        </pre>
+                    </div>
+                </div>
+
+                <!-- CISA KEV Integration (Similar Pattern) -->
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-context">
+                    <h3 class="text-blue-400 font-bold mb-4"><i class="fas fa-shield-alt mr-2"></i>3.7 CISA KEV Integration (Same Pattern)</h3>
+                    <p class="text-gray-400 text-sm mb-4">CISA KEV uses the same ingestion pattern as EPSS. The only differences are the API endpoint and schema.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-red-400 font-semibold text-sm mb-2"><i class="fas fa-globe mr-2"></i>CISA KEV API</p>
+                            <ul class="text-gray-400 text-xs space-y-1">
+                                <li>• <strong>URL:</strong> www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json</li>
+                                <li>• <strong>Format:</strong> JSON (single file, ~1000 CVEs)</li>
+                                <li>• <strong>Update:</strong> When CISA adds new KEVs</li>
+                                <li>• <strong>No paging:</strong> Small dataset, single request</li>
+                            </ul>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-red-400 font-semibold text-sm mb-2"><i class="fas fa-table mr-2"></i>CISA_KEV_CL Schema</p>
+                            <ul class="text-gray-400 text-xs space-y-1">
+                                <li>• <strong>TimeGenerated:</strong> datetime</li>
+                                <li>• <strong>CVE:</strong> string</li>
+                                <li>• <strong>VendorProject:</strong> string</li>
+                                <li>• <strong>Product:</strong> string</li>
+                                <li>• <strong>DateAdded:</strong> datetime</li>
+                                <li>• <strong>DueDate:</strong> datetime (remediation deadline)</li>
+                                <li>• <strong>IsKEV:</strong> bool (always true)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+                        <p class="text-red-400 font-semibold text-sm mb-2"><i class="fas fa-exclamation-circle mr-2"></i>KEV Priority:</p>
+                        <p class="text-gray-400 text-xs">CVEs in CISA KEV are <strong class="text-white">actively exploited in the wild</strong>. They should receive the highest priority boost in your risk scoring (e.g., +100 points). Federal agencies have mandatory remediation deadlines; private sector should treat similarly.</p>
+                    </div>
+                </div>
+
+                <!-- Interview Talking Point -->
+                <div class="bg-yellow-500/10 border border-yellow-500/50 rounded-xl p-4 mb-4">
+                    <p class="text-yellow-400 font-bold mb-2"><i class="fas fa-microphone mr-2"></i>Interview Talking Point: EPSS Integration</p>
+                    <p class="text-gray-300 text-sm">
+                        "I built an automated pipeline to ingest EPSS scores from FIRST.org into Sentinel. An Azure Function runs daily, fetches ~240,000 CVE scores via the public API with paging, transforms the data, and pushes it to a custom Log Analytics table via the Logs Ingestion API using Managed Identity authentication. The DCR defines the schema mapping, and in Sentinel I join EPSS_CL with our vulnerability data from Qualys and TVM. EPSS adds up to 50 points to our risk score—a CVE with 0.95 EPSS (95% probability of exploitation in 30 days) gets treated very differently than one with 0.02 EPSS, even if they have the same CVSS."
+                    </p>
+                </div>
+
                 <!-- FULL KQL CORRELATION RULE -->
                 <div class="workflow-box rounded-xl p-6 mb-4 phase-context">
-                    <h3 class="text-blue-400 font-bold mb-4"><i class="fas fa-code mr-2"></i>3.2 Complete Correlation Rule (Production KQL)</h3>
+                    <h3 class="text-blue-400 font-bold mb-4"><i class="fas fa-code mr-2"></i>3.8 Complete Correlation Rule (Production KQL)</h3>
                     <div class="bg-black/50 rounded-lg p-4 overflow-x-auto">
                         <pre class="text-xs text-cyan-400">
 // ============================================================================

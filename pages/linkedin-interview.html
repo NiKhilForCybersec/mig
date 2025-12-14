@@ -597,37 +597,50 @@
                     <!-- POSITIONING CALLOUT -->
                     <div class="bg-yellow-500/10 border border-yellow-500/50 rounded-xl p-4 mb-6">
                         <p class="text-yellow-400 text-sm font-semibold mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>POSITIONING REMINDER</p>
-                        <p class="text-gray-300 text-sm">
-                            Frame firewall experience as <strong class="text-white">security monitoring, policy validation, and risk-control perspective</strong> integrated with Sentinel. 
-                            <strong class="text-emerald-400">NOT</strong> as NGFW ownership, deployment, or network design.
+                        <p class="text-gray-300 text-sm mb-3">
+                            Frame firewall experience as <strong class="text-white">security engineering and detection side</strong>, 
+                            <strong class="text-emerald-400">NOT</strong> as greenfield design, deployment, or network ownership.
                         </p>
+                        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-3">
+                            <p class="text-emerald-400 text-xs font-semibold mb-1">🎯 ONE-LINE BACKUP VERSION:</p>
+                            <p class="text-white text-xs italic">"I worked in environments with Palo Alto and Azure firewalls, primarily from a security monitoring and detection perspective—reviewing policies, validating security profile application, and using NGFW telemetry in Sentinel to build detection and correlation rules."</p>
+                        </div>
                     </div>
 
-                    <!-- Q1 - Core Experience -->
-                    <div class="question-card rounded-xl p-6 mb-6">
+                    <!-- Q1 - Core Experience - FINAL NGFW ANSWER -->
+                    <div class="question-card rounded-xl p-6 mb-6 border-l-4 border-emerald-500">
                         <div class="flex items-start space-x-3 mb-4">
                             <span class="px-2 py-1 rounded bg-emerald-500/20 text-emerald-400 text-xs font-bold">Q1</span>
                             <p class="text-white font-medium">What is your experience with firewalls and NGFWs?</p>
                         </div>
+                        <p class="text-yellow-400 text-xs mb-3 font-bold">⭐ FINAL ANSWER - USE THIS VERBATIM (Safe Version)</p>
                         
-                        <div class="answer-box">
+                        <div class="answer-box bg-emerald-500/5 border border-emerald-500/30">
                             <p class="text-gray-300 text-sm leading-relaxed">
-                                "Alongside my core work with Microsoft Sentinel, MDE, and vulnerability management, I also worked with Palo Alto NGFWs and Azure Firewall from a <strong class="text-emerald-400">security operations and policy validation perspective</strong>.
+                                "My experience with NGFWs has been primarily on the <strong class="text-white">security monitoring and detection side</strong>, rather than firewall design or deployment.
                                 <br><br>
-                                My involvement wasn't around firewall design or deployment—the firewall architecture was already established when I joined. Instead, I <strong class="text-white">reviewed and validated security policies</strong>, managed TLS decryption exceptions, ensured appropriate inspection profiles were applied for higher-risk traffic, and verified that firewall controls aligned with detection and response requirements in Sentinel.
+                                I worked in environments with <strong class="text-emerald-400">Palo Alto NGFWs</strong> on-prem and <strong class="text-emerald-400">Azure Firewall</strong> for cloud workloads. The firewall architecture was already mature and centrally managed through platforms like Panorama, with standardized baseline templates covering zones, routing, and default security profiles.
                                 <br><br>
-                                I primarily interacted with firewalls as a <strong class="text-emerald-400">preventive and detective control</strong>, rather than as a standalone network platform.
+                                My role focused on <strong class="text-white">security policy review and telemetry ownership</strong> rather than firewall design or deployment. This included reviewing application-based rules and access controls, validating user and group alignment with business requirements, and working with existing TLS decryption policies and exceptions. I also ensured that standard security profiles defined by the organization—IPS, anti-malware, URL filtering, DNS security—were consistently applied to firewall rules across multiple business units.
                                 <br><br>
-                                <strong class="text-emerald-400">Specific contributions:</strong>
+                                I was closely involved in <strong class="text-white">log engineering and detection engineering</strong> using firewall telemetry. Firewall logs were forwarded in CEF format via centralized syslog collectors into Microsoft Sentinel, where I validated log coverage, monitored ingestion health, and built KQL-based detection and correlation rules from NGFW data.
                                 <br><br>
-                                • Validated that security profiles (AV, IPS, URL filtering) were attached to rules for internet-bound traffic
-                                <br>• Managed TLS decryption exception lists—ensuring visibility without breaking banking/healthcare sites
-                                <br>• Built KQL queries in Sentinel to correlate firewall threat logs with MDE alerts for end-to-end attack chain visibility
-                                <br>• Identified rules missing security profiles during quarterly reviews (traffic allowed but not inspected = gap)
-                                <br>• Worked with network team to tune IPS signatures generating false positives in OT environments
+                                From a detection perspective, I consumed NGFW signals—<strong class="text-emerald-400">threat logs, exploit attempts, DNS sinkhole hits, anomalous outbound traffic</strong>—and correlated them with endpoint and vulnerability data to reduce false positives and improve incident fidelity. My focus was ensuring firewall alerts were <strong class="text-white">actionable for SOC</strong>, not just noisy indicators.
                                 <br><br>
-                                <strong class="text-emerald-400">Bottom line:</strong> I treated firewalls as a control point feeding Sentinel, ensuring what was allowed, inspected, or blocked aligned with endpoint telemetry, threat intelligence, and vulnerability risk. That gave me a solid working understanding of NGFW behavior without owning the full network design."
+                                Overall, while I did not design or deploy firewalls, I <strong class="text-white">owned the security monitoring, log validation, and detection use cases</strong> around them—ensuring they were effectively integrated into the broader security monitoring and response ecosystem."
                             </p>
+                        </div>
+
+                        <!-- Why This Answer Is Safe -->
+                        <div class="mt-4 bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
+                            <p class="text-blue-400 text-xs font-bold mb-2">Why This Answer Is Safe:</p>
+                            <div class="grid grid-cols-2 gap-2 text-xs mb-2">
+                                <p class="text-gray-400"><span class="text-red-400">❌</span> "tuning" → <span class="text-green-400">✅</span> "reviewing"</p>
+                                <p class="text-gray-400"><span class="text-red-400">❌</span> "managing TLS" → <span class="text-green-400">✅</span> "working with existing"</p>
+                                <p class="text-gray-400"><span class="text-red-400">❌</span> "ensuring profiles attached" → <span class="text-green-400">✅</span> "org-defined profiles applied"</p>
+                                <p class="text-gray-400"><span class="text-red-400">❌</span> "owned controls" → <span class="text-green-400">✅</span> "owned monitoring"</p>
+                            </div>
+                            <p class="text-gray-500 text-xs">Pre-answers: "Did you create policies?" → No, reviewed. "Did you define profiles?" → No, org defined them.</p>
                         </div>
 
                         <!-- Follow-ups -->
@@ -645,6 +658,13 @@
                                 <p class="text-purple-300 text-sm font-medium mb-2">What's the difference between your role and the network team's role with firewalls?</p>
                                 <p class="text-gray-400 text-sm">
                                     "Clear separation. <strong>Network team owns:</strong> Routing, NAT, VPN configuration, HA clustering, physical deployment, Panorama/FMC administration, interface configuration, performance tuning. <strong>I own:</strong> Security policy validation, ensuring inspection profiles are applied, TLS decryption scope, reviewing rules for overly permissive access, SIEM integration and log validation, building detection rules based on firewall telemetry, quarterly security audits of rule effectiveness. I don't configure the network infrastructure—I ensure the security controls on top of it are properly configured and aligned with our detection strategy."
+                                </p>
+                            </div>
+
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">Did you deploy firewalls? Did you design the architecture?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "No, and that's intentionally scoped. The firewall architecture was already mature when I joined—standardized baselines existed. My ownership was security controls, visibility, logging, and detection use cases. I ensured firewalls were effectively integrated into the broader security monitoring ecosystem, not the physical or network design."
                                 </p>
                             </div>
                         </div>
