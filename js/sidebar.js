@@ -11,6 +11,12 @@ const sidebarHTML = `
         <a href="{{BASE}}pages/cheatsheet.html" class="flex items-center gap-2 px-3 py-2 mb-2 text-sm text-yellow-400 rounded-lg bg-yellow-500/10 border border-yellow-500/30 hover:bg-yellow-500/20">
             <span>🧠</span><span class="font-medium">Cheat Sheet</span>
         </a>
+        <a href="{{BASE}}pages/quick-prep.html" class="flex items-center gap-2 px-3 py-2 mb-2 text-sm text-emerald-400 rounded-lg bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20">
+            <span>⚡</span><span class="font-medium">Quick Prep (15 min)</span>
+        </a>
+        <a href="{{BASE}}pages/detailed-prep.html" class="flex items-center gap-2 px-3 py-2 mb-2 text-sm text-purple-400 rounded-lg bg-purple-500/10 border border-purple-500/30 hover:bg-purple-500/20">
+            <span>📚</span><span class="font-medium">Detailed Prep</span>
+        </a>
         <a href="{{BASE}}pages/interview-prep.html" class="flex items-center gap-2 px-3 py-2 mb-2 text-sm text-cyan-400 rounded-lg bg-cyan-500/10 border border-cyan-500/30 hover:bg-cyan-500/20">
             <span>🎯</span><span class="font-medium">Interview Prep</span>
         </a>
