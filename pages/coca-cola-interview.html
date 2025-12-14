@@ -93,11 +93,11 @@
                         <p class="text-gray-300 text-sm leading-relaxed">
                             "I started my cybersecurity career as a SOC Analyst at Cognizant, where I worked primarily with Splunk for alert triage and incident investigations. That role gave me a strong foundation in detection logic, attacker behavior, and end-to-end incident response.<br><br>
                             
-                            I then moved into a security engineering position at Infosys, working across Trellix HX/EX/NX and Symantec DLP. I handled agent deployments, upgrades, policy tuning, and malware investigation. I also participated in evaluating next-generation EDR/XDR platforms such as CrowdStrike, Carbon Black, and Cortex XDR, and contributed to the migration from Trellix to Cortex XDR.<br><br>
+                            I then moved into a security engineering position at Infosys, working across Trellix HX/EX/NX and Symantec DLP. I handled agent deployments, upgrades, and troubleshooting. I also participated in evaluating next-generation EDR/XDR platforms such as CrowdStrike, Carbon Black, and Cortex XDR, and contributed to the migration from Trellix to Cortex XDR.<br><br>
                             
                             After relocating to Canada, I joined a Siemens subsidiary—an environment of about <strong class="text-emerald-400">5,000 endpoints supporting 2,500 employees</strong>. I initially worked on Cortex XDR agent rollouts, VM broker deployments, and developing XSOAR automations. Later, I transitioned to a major security modernization project—migrating from RSA NetWitness and ESET to a cloud-native Microsoft ecosystem. <strong class="text-white">My role was migration and engineering support</strong>—I built the detection rules, KQL analytics, automation pipelines, and dashboards, then conducted a structured handover to the subsidiary's internal security team. The SOC remained operational throughout; I wasn't running day-to-day operations, I was enabling them with modern tooling.<br><br>
                             
-                            Currently, I'm completing the migration from Symantec DLP to Microsoft Purview Endpoint DLP. I joined during the pilot phase, helped with simulation-mode testing, reduced false positives, and now I'm leading the enforcement rollout—implementing block/warn actions and coordinating phased deployment with business teams. The project is nearing completion.<br><br>
+                            Currently, I'm supporting the migration from Symantec DLP to Microsoft Purview Endpoint DLP. I joined during the pilot phase. The data classification framework—SITs and EDMs—was already configured. I've been working on policy translation, running simulation and audit testing, and now we're in enforcement. Symantec is in alert-only mode, and I'm handling the handover and knowledge transfer to the internal SOC.<br><br>
                             
                             Outside of work, I'm genuinely passionate about security—I don't just clock out and forget about it. I build personal projects to deepen my skills and contribute to the people around me. I've built an email security platform that my friends, family, and colleagues now use to check suspicious emails and phishing attempts. I've created malware investigation tools for analyzing samples. And I'm currently working on a bridge tool to help GRC teams and security engineers speak the same language. For me, building things is how I learn best, and I like that these projects actually help people.<br><br>
                             
@@ -113,9 +113,9 @@
                     <p class="text-purple-400 font-bold mb-3">Short Version (50-60 seconds)</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "I started as a SOC Analyst at Cognizant working with Splunk, which gave me a strong foundation in incident response. I then moved into security engineering at Infosys, where I worked with Trellix EDR, Symantec DLP, and contributed to the migration from Trellix to Cortex XDR.<br><br>
+                            "I started as a SOC Analyst at Cognizant working with Splunk, which gave me a strong foundation in incident response. I then moved into security engineering at Infosys, where I worked with Trellix EDR and Symantec DLP—primarily agent deployments and troubleshooting—and contributed to the migration from Trellix to Cortex XDR.<br><br>
                             
-                            After relocating to Canada, I joined a Siemens subsidiary—about <strong class="text-emerald-400">5,000 endpoints, 2,500 employees</strong>. I provided migration and engineering support for their move from RSA NetWitness to Microsoft Sentinel—building detection rules, KQL analytics, and automation pipelines, then handing over to their internal team. The SOC remained operational throughout; my role was enabling them with modern tooling. Currently, I'm completing the Symantec to Purview DLP migration, now in the enforcement phase.<br><br>
+                            After relocating to Canada, I joined a Siemens subsidiary—about <strong class="text-emerald-400">5,000 endpoints, 2,500 employees</strong>. I provided migration and engineering support for their move from RSA NetWitness to Microsoft Sentinel—building detection rules, KQL analytics, and automation pipelines, then handing over to their internal team. The SOC remained operational throughout; my role was enabling them with modern tooling. Currently, I'm supporting the Symantec to Purview DLP migration—policy translation, testing, and now in the enforcement and handover phase.<br><br>
                             
                             Outside of work, I build personal security projects—an email security platform that friends and family actually use to check phishing emails, malware analysis tools, and a GRC-security bridge tool I'm developing now. Building things is how I learn, and I enjoy creating tools that genuinely help people.<br><br>
                             
@@ -374,79 +374,105 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
             <section class="mb-16">
                 <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
                     <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400">5</span>
-                    Purview DLP Migration (Your Flagship Project)
+                    Purview DLP Migration (Supporting Role)
                 </h2>
 
+                <!-- POSITIONING CALLOUT -->
+                <div class="bg-yellow-500/10 border border-yellow-500/50 rounded-xl p-4 mb-4">
+                    <p class="text-yellow-400 font-bold mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>POSITIONING (Be Accurate)</p>
+                    <p class="text-gray-300 text-sm">
+                        <strong class="text-white">Your role:</strong> Supporting the migration, NOT leading it. SITs and EDMs were already configured. You handled policy translation, simulation testing, and handover to SOC.<br>
+                        <strong class="text-red-400">Don't overclaim:</strong> You didn't design the classifiers or create the data classification framework.
+                    </p>
+                </div>
+
                 <div class="memorize rounded-xl p-6 mb-4">
-                    <h3 class="text-pink-400 font-bold mb-3">🧠 High-Value Phrases to Memorize</h3>
+                    <h3 class="text-pink-400 font-bold mb-3">🧠 Safe Phrases to Use</h3>
                     <div class="space-y-2">
                         <div class="gold-phrase">
-                            <p class="text-gray-300 text-sm">"Purview uses a <strong>condition-based model</strong>, whereas Symantec uses a <strong>rule-based model</strong>."</p>
+                            <p class="text-gray-300 text-sm">"I <strong>supported</strong> the migration from Symantec DLP to Purview Endpoint DLP."</p>
                         </div>
                         <div class="gold-phrase">
-                            <p class="text-gray-300 text-sm">"I translated Symantec rule logic into Purview conditions, SITs, and exceptions."</p>
+                            <p class="text-gray-300 text-sm">"The SITs and EDMs were <strong>already configured</strong>—I worked with existing classifiers."</p>
                         </div>
                         <div class="gold-phrase">
-                            <p class="text-gray-300 text-sm">"I validated each policy in <strong>Audit Mode</strong> before moving into enforcement."</p>
+                            <p class="text-gray-300 text-sm">"I translated Symantec policy logic into Purview policies using the <strong>pre-configured</strong> SITs and EDMs."</p>
                         </div>
                         <div class="gold-phrase">
-                            <p class="text-gray-300 text-sm">"We followed a structured, phased migration: <strong>Simulation → Audit → Enforcement</strong>."</p>
+                            <p class="text-gray-300 text-sm">"We followed a phased approach: <strong>Simulation → Audit → Enforcement</strong>."</p>
                         </div>
                         <div class="gold-phrase">
-                            <p class="text-gray-300 text-sm">"During the dual-running phase, Symantec remained in enforcement while Purview ran in audit-only mode."</p>
+                            <p class="text-gray-300 text-sm">"Symantec is now in <strong>alert-only mode</strong> while Purview handles enforcement."</p>
                         </div>
                         <div class="gold-phrase">
-                            <p class="text-gray-300 text-sm">"Tuning was primarily SIT confidence adjustments, exception creation, and aligning contextual logic."</p>
+                            <p class="text-gray-300 text-sm">"I'm currently doing <strong>handover and knowledge transfer</strong> to the internal SOC."</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="technical rounded-xl p-6 mb-4">
-                    <p class="text-green-400 font-bold mb-3">Q: Walk me through your Purview Endpoint DLP migration end-to-end.</p>
+                    <p class="text-green-400 font-bold mb-3">Q: Walk me through your Purview Endpoint DLP experience.</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "The Purview Endpoint DLP migration was a fully technical, end-to-end rebuild of our legacy Symantec rule base.<br><br>
+                            "I supported the migration from Symantec DLP to Microsoft Purview Endpoint DLP. I joined during the pilot phase, so the groundwork—including the data classification framework, SITs, and EDMs—was <strong class="text-white">already configured</strong> by the time I came on board.<br><br>
                             
-                            I started by translating Symantec's rule-based logic into Purview's condition-based model using SITs (Sensitive Information Types), EDM datasets, confidence levels, and proximity logic. Once the baseline policies were recreated, I ran both tools in parallel—Symantec in enforcement and Purview in audit mode—to compare behavioral parity and identify mismatches.<br><br>
+                            My role focused on <strong class="text-emerald-400">policy translation and validation</strong>. I worked on translating Symantec's rule-based policies into Purview's condition-based model using the existing SITs and EDMs. This involved mapping Symantec rules to equivalent Purview conditions, ensuring the logic matched, and identifying gaps where Purview handled things differently.<br><br>
                             
-                            Most of the tuning work involved adjusting SIT confidence thresholds, refining EDM match requirements, and adding path, process, and domain exceptions to eliminate noise without weakening coverage. I validated every high-risk workflow, including Salesforce exports, Finance data transfers, and Engineering file movements, to ensure they behaved identically in both systems.<br><br>
+                            We ran both systems in parallel—<strong class="text-white">Symantec in enforcement, Purview in simulation/audit mode</strong>—to compare alert volumes and identify mismatches. When Purview flagged something Symantec didn't (or vice versa), I investigated the root cause and adjusted the policy logic.<br><br>
                             
-                            After the logic stabilized, I ran a controlled pilot, validated audit hits, fine-tuned remaining edge cases, and then executed a phased enforcement rollout before supporting the final decommissioning of Symantec.<br><br>
-                            
-                            By the end, we had fully rebuilt the DLP program with cleaner logic, tighter precision, and workflow-safe enforcement. False positives dropped by about 40% compared to the legacy system because of better tuning and Purview's native integration with the Microsoft ecosystem."
+                            Once audit results stabilized, we moved to enforcement in Purview and switched Symantec to <strong class="text-white">alert-only mode</strong>. I'm currently in the <strong class="text-emerald-400">handover phase</strong>—documenting the policies, conducting knowledge transfer sessions with the internal SOC, and ensuring they can handle steady-state operations independently."
                         </p>
                     </div>
                 </div>
 
                 <div class="technical rounded-xl p-6 mb-4">
-                    <p class="text-green-400 font-bold mb-3">Q: How did you tune false positives in Purview?</p>
+                    <p class="text-green-400 font-bold mb-3">Q: How did you handle false positives during the migration?</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "When I tuned false positives in Purview, I always started with root-cause analysis to understand why a policy fired—whether it was an overly strict SIT confidence level, an EDM match that was too sensitive, or a workflow pattern that wasn't part of the original rule design.<br><br>
+                            "During the simulation and audit phases, I analyzed alerts to identify false positives. The common causes were:<br><br>
                             
-                            My tuning approaches included:<br>
-                            • <strong>SIT confidence adjustments</strong> - Lowering from High to Medium+High if catching too much<br>
-                            • <strong>EDM threshold refinement</strong> - Adjusting match count requirements<br>
-                            • <strong>Contextual exceptions</strong> - Path-based, process-based, or domain-based exclusions<br>
-                            • <strong>Proximity logic</strong> - Ensuring related data elements appear together<br><br>
+                            • <strong>SIT confidence levels</strong> set too aggressively—catching patterns that weren't actually sensitive data<br>
+                            • <strong>Missing exceptions</strong> for legitimate business workflows<br>
+                            • <strong>Differences in how Purview and Symantec</strong> evaluate the same content<br><br>
                             
-                            I validated every change in audit mode and replayed historical data to see how the updated logic behaved under real conditions. After confirming clean, predictable alerting, I deployed the tuned policy, documented the update, and informed the SOC so they were aware of the expected detection pattern going forward."
+                            For each false positive pattern, I documented the finding and worked with the team to adjust the policy—either adding exceptions for specific paths/processes/domains, or adjusting confidence thresholds. The goal was matching Symantec's behavior before moving to enforcement, then tuning further once we had clean Purview-only data.<br><br>
+                            
+                            I didn't own the SIT or EDM configuration—those were pre-built. My focus was on the <strong class="text-white">policy logic and exception handling</strong> to reduce noise without weakening coverage."
                         </p>
                     </div>
                 </div>
 
-                <div class="technical rounded-xl p-6">
-                    <p class="text-green-400 font-bold mb-3">Q: How did you ensure no workflow breakage during enforcement?</p>
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-green-400 font-bold mb-3">Q: What's the current state of the migration?</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "To prevent workflow breakage during Purview DLP enforcement, I used a combined technical and business validation approach.<br><br>
+                            "We're in the <strong class="text-emerald-400">enforcement and handover phase</strong>.<br><br>
                             
-                            I first baseline-tested every policy in audit mode and compared Purview audit hits against Symantec's live enforcement to confirm behavioral parity. From there, I mapped all high-risk workflows—Salesforce exports, Finance data movements, Engineering file transfers—and collected real samples from the business teams so I could tune SIT confidence, refine EDM match thresholds, and add exceptions only where they didn't weaken coverage.<br><br>
+                            <strong>Purview:</strong> Now in enforcement mode with block/warn actions active<br>
+                            <strong>Symantec:</strong> Switched to alert-only mode—still running for comparison but not blocking<br>
+                            <strong>Handover:</strong> I'm conducting knowledge transfer with the internal SOC—documenting policies, explaining the logic, and ensuring they can handle tuning and exceptions going forward<br><br>
                             
-                            Once the logic was stable, I ran a small pilot with representative users, monitored audit-only alerts for any anomalies, and worked directly with the business to validate that their workflows behaved exactly as expected.<br><br>
-                            
-                            After that, I expanded enforcement gradually, documented each exception in the register, and kept SOC and stakeholders updated so visibility stayed consistent. This combination of deep technical tuning and active business alignment ensured we reached full enforcement without disrupting a single critical workflow."
+                            The project is nearing completion. Once the SOC is fully ramped and we've validated that Purview is handling everything correctly, Symantec will be decommissioned."
                         </p>
+                    </div>
+                </div>
+
+                <!-- Follow-up pre-answers -->
+                <div class="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 mb-4">
+                    <p class="text-blue-400 font-bold mb-3"><i class="fas fa-comments mr-2"></i>Pre-Answered Follow-ups</p>
+                    <div class="space-y-3 text-sm">
+                        <div>
+                            <p class="text-purple-300 font-medium">Did you configure the SITs and EDMs?</p>
+                            <p class="text-gray-400">"No, the data classification framework was already in place when I joined. I worked with existing SITs and EDMs to translate and validate policies."</p>
+                        </div>
+                        <div>
+                            <p class="text-purple-300 font-medium">What classifiers did you use?</p>
+                            <p class="text-gray-400">"We used a combination of built-in SITs for standard patterns like credit cards and SINs, custom SITs for company-specific formats, and EDM for exact matches against sensitive databases. These were pre-configured—I used them in the policy conditions."</p>
+                        </div>
+                        <div>
+                            <p class="text-purple-300 font-medium">What was your Symantec DLP experience before this?</p>
+                            <p class="text-gray-400">"At Infosys, I worked on Symantec DLP primarily from an <strong>agent deployment and troubleshooting</strong> perspective—installations, upgrades, connectivity issues. The policy work at my current role gave me deeper exposure to the detection logic side."</p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -546,14 +572,14 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
 
                 <!-- Follow-up: Why moved to DLP -->
                 <div class="behavioral rounded-xl p-6 mb-4">
-                    <p class="text-purple-400 font-bold mb-3">Follow-up: Why were you moved to DLP before fully stabilizing the Sentinel migration?</p>
+                    <p class="text-purple-400 font-bold mb-3">Follow-up: Why were you moved to DLP after the Sentinel migration?</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
                             "The Sentinel migration was structured in phases. Once we completed the baseline requirements—including <strong class="text-emerald-400">log ingestion, core detections, validation, and knowledge transfer</strong>—the environment was handed over to the subsidiary's internal security team for steady-state operations.<br><br>
                             
-                            At that point, I was reassigned to the DLP program, which had moved into <strong class="text-emerald-400">active enforcement across multiple policies</strong> and required dedicated security engineering effort. This was a <strong class="text-emerald-400">planned resource transition</strong> rather than an incomplete migration.<br><br>
+                            At that point, I was reassigned to <strong class="text-emerald-400">support the DLP migration</strong>, which was moving into enforcement and needed additional resources for policy translation and testing. The data classification framework was already in place—I joined to help with policy work, simulation testing, and the handover to SOC.<br><br>
                             
-                            The migration deliverables were completed and handed off properly—detection parity achieved, SOC trained, runbooks documented, workbooks built. The subsidiary's team took over steady-state operations while I moved to where the organization needed engineering focus next. This is standard practice for migration projects—you build, validate, hand over, then move to the next priority."
+                            This was a <strong class="text-emerald-400">planned resource transition</strong>. The Sentinel deliverables were completed and handed off properly. I moved to where the organization needed support next."
                         </p>
                     </div>
                 </div>
