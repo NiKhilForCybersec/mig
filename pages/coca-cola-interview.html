@@ -604,7 +604,7 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                     </div>
                 </div>
 
-                <div class="technical rounded-xl p-6">
+                <div class="technical rounded-xl p-6 mb-4">
                     <p class="text-green-400 font-bold mb-3">Q: How do you design a high-fidelity detection rule in Sentinel?</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
@@ -622,6 +622,38 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                             I always review the draft with the SOC to finalize expected alert patterns before enabling it in production. The goal is high fidelity—alerts that are actionable, not noise."
                         </p>
                     </div>
+                </div>
+
+                <!-- Detection Quality Metrics -->
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-green-400 font-bold mb-3">Q: How do you measure detection rule quality beyond MITRE coverage?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "We don't measure detections only by MITRE mapping. <strong class="text-white">MITRE defines coverage, but rule quality is measured by operational metrics</strong>:<br><br>
+                            
+                            <strong class="text-emerald-400">Immediate Quality Metrics:</strong><br>
+                            • <strong>True-positive rate</strong> - How often does the alert indicate real malicious activity?<br>
+                            • <strong>False-positive rate</strong> - How often does SOC dismiss it as noise?<br>
+                            • <strong>Alert volume</strong> - Is it generating manageable volume or flooding the queue?<br>
+                            • <strong>Severity accuracy</strong> - Does the severity match the actual risk?<br>
+                            • <strong>Actionability</strong> - Can SOC actually investigate and respond, or is context missing?<br><br>
+                            
+                            <strong class="text-emerald-400">Long-term Operational Metrics:</strong><br>
+                            • <strong>Time-to-detect (TTD)</strong> - How quickly does the rule fire after malicious activity begins?<br>
+                            • <strong>Time-to-triage</strong> - How long does SOC spend determining if it's real?<br>
+                            • <strong>Maintenance cost</strong> - How often does the rule need tuning to stay effective?<br><br>
+                            
+                            I track these metrics in a detection health dashboard. A rule with 90% MITRE coverage but 80% false positives is worse than a rule with 70% coverage and 5% false positives. <strong class="text-white">The goal is actionable alerts that SOC can actually investigate, not theoretical coverage that drowns them in noise.</strong>"
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Gold Phrase Box -->
+                <div class="bg-emerald-500/20 border border-emerald-500/50 rounded-xl p-4 mb-4">
+                    <p class="text-emerald-400 font-bold mb-2"><i class="fas fa-gem mr-2"></i>Gold Phrase for Detection Quality:</p>
+                    <p class="text-white text-lg font-semibold italic">
+                        "MITRE defines coverage; operational metrics define quality."
+                    </p>
                 </div>
             </section>
 

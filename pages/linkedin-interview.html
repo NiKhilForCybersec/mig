@@ -1431,6 +1431,23 @@
                                     "I build monitoring for this. Compare TimeGenerated (when Sentinel received it) vs the event's actual timestamp—large deltas indicate ingestion lag. Track expected data volume: if we normally get 1M events/day from MDE and suddenly it's 100K, something's wrong. Heartbeat monitoring for agents—if a device stops sending heartbeats, investigate. I create workbooks that visualize ingestion health: events over time by source, latency distribution, devices not reporting. I've also seen issues where a parser breaks and data stops being indexed properly—monitoring for sudden schema changes catches this."
                                 </p>
                             </div>
+
+                            <div class="followup-card rounded-lg p-4 bg-emerald-500/5 border border-emerald-500/30">
+                                <p class="text-emerald-400 text-sm font-medium mb-2">How do you measure detection rule quality beyond MITRE coverage?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "We don't measure detections only by MITRE mapping. <strong class="text-white">MITRE defines coverage, but rule quality is measured by operational metrics</strong>:
+                                    <br><br>
+                                    <strong>Immediate:</strong> True-positive rate, false-positive rate, alert volume, severity accuracy, and actionability—can SOC actually investigate?
+                                    <br><br>
+                                    <strong>Long-term:</strong> Time-to-detect (TTD), time-to-triage, and maintenance cost—how often does the rule need tuning?
+                                    <br><br>
+                                    A rule with 90% MITRE coverage but 80% false positives is worse than a rule with 70% coverage and 5% false positives. The goal is actionable alerts, not theoretical coverage."
+                                </p>
+                                <div class="mt-3 p-2 bg-emerald-500/10 rounded">
+                                    <p class="text-emerald-400 text-xs font-bold"><i class="fas fa-gem mr-1"></i>Gold Phrase:</p>
+                                    <p class="text-white text-sm font-semibold italic">"MITRE defines coverage; operational metrics define quality."</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>

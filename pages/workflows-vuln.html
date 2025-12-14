@@ -993,6 +993,276 @@ APP-SERVER-03,CVE-2024-9012,7.5,0.45,FALSE,165,High,7,dev.team@company.com,Appli
 └─────────────────────────────────────────────────────────────────────────────────────────┘
                     </pre>
                 </div>
+
+                <!-- SOC Incident Correlation Rule -->
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-soc">
+                    <h3 class="text-purple-400 font-bold mb-4"><i class="fas fa-code mr-2"></i>11.2 SOC Incident Correlation Rule (Vuln + NGFW + Endpoint)</h3>
+                    <p class="text-gray-400 text-sm mb-4">This rule triggers a SOC incident ONLY when: (1) Host is high-risk vulnerable, AND (2) NGFW detects exploit/threat signal, AND (3) Endpoint shows confirming suspicious behavior.</p>
+                    <div class="bg-black/50 rounded-lg p-4 overflow-x-auto">
+                        <pre class="text-xs text-purple-400">
+// ===============================
+// INCIDENT CORRELATION: VULN + NGFW + ENDPOINT
+// Scheduled Analytics Rule - Runs every 15-60 minutes
+// Incident Creation: ON (this IS for SOC triage)
+// ===============================
+
+let Lookback = 24h;
+let MinRiskScoreForIncident = 85;
+let CorrelationWindow = 30m;
+
+// ---- Build prioritized vulnerable hosts (reuse scoring logic) ----
+let PrioritizedVulns =
+    QualysVuln_CL
+    | where todatetime(LastDetected) > ago(14d)
+    | extend AssetId=tostring(AssetId), AssetIP=tostring(AssetIP), AssetName=tostring(AssetName),
+             CVE=tostring(CVE), Cvss=todouble(Cvss), LastDetected=todatetime(LastDetected)
+    | summarize Cvss=max(Cvss), LastDetected=max(LastDetected), AnyName=any(AssetName), AnyIP=any(AssetIP) by AssetId, CVE
+    | join kind=leftouter EPSS_CL on CVE
+    | join kind=leftouter CISA_KEV_CL on CVE
+    | join kind=leftouter CMDBAssets_Watchlist on AssetId
+    | extend
+        EpssScore = todouble(EpssScore),
+        IsKEV = tobool(IsKEV),
+        IsInternetFacing = tobool(IsInternetFacing),
+        CriticalityTier = toint(CriticalityTier),
+        // Scoring (keep consistent with backlog scoring)
+        RiskScore = round((Cvss * 3) + (coalesce(EpssScore,0.0) * 40) + iff(IsKEV,25,0) 
+                    + iff(IsInternetFacing,15,0) + (case(CriticalityTier==0,45, CriticalityTier==1,30, 
+                    CriticalityTier==2,15, 10)), 1)
+    | where RiskScore >= MinRiskScoreForIncident
+    | project AssetId, AssetName=AnyName, AssetIP=AnyIP, CVE, Cvss, EpssScore, IsKEV, 
+              IsInternetFacing, CriticalityTier, RiskScore;
+
+// ---- NGFW exploitation / threat signal targeting the host ----
+let NGFWThreatSignals =
+    CommonSecurityLog
+    | where TimeGenerated > ago(Lookback)
+    | where DeviceVendor has_any ("Palo Alto", "Fortinet", "Check Point")
+    | where Activity in ("THREAT", "Threat", "TRAFFIC")
+    | where LogSeverity >= 3 or DeviceAction in ("drop","deny","block","reset-both","reset-client","reset-server")
+    | extend
+        DstIP = tostring(DestinationIP),
+        SrcIP = tostring(SourceIP),
+        FWAction = tostring(DeviceAction),
+        FWRule = tostring(DeviceCustomString1),
+        FWThreat = tostring(ThreatDescription),
+        FWCategory = tostring(ThreatCategory),
+        App = tostring(ApplicationProtocol),
+        DstPort = toint(DestinationPort)
+    | project FW_Time=TimeGenerated, SrcIP, DstIP, DstPort, FWAction, FWRule, FWThreat, 
+              FWCategory, App, DeviceVendor, DeviceProduct;
+
+// ---- Endpoint confirmation (network + suspicious process execution) ----
+let EndpointNet =
+    DeviceNetworkEvents
+    | where TimeGenerated > ago(Lookback)
+    | extend LocalIP = tostring(LocalIP), RemoteIP=tostring(RemoteIP)
+    | project EDRN_Time=TimeGenerated, DeviceId, DeviceName, LocalIP, RemoteIP, RemotePort, 
+              InitiatingProcessFileName, InitiatingProcessCommandLine;
+
+let EndpointProc =
+    DeviceProcessEvents
+    | where TimeGenerated > ago(Lookback)
+    | where FileName in~ ("powershell.exe","cmd.exe","wscript.exe","cscript.exe","mshta.exe",
+                          "rundll32.exe","regsvr32.exe")
+       or ProcessCommandLine has_any ("-enc","EncodedCommand","IEX","FromBase64String",
+                                       "Invoke-WebRequest","bitsadmin")
+    | project EDRP_Time=TimeGenerated, DeviceId, DeviceName, AccountName, FileName, 
+              ProcessCommandLine, InitiatingProcessFileName;
+
+// ---- Correlate: vulnerable host + firewall signal + endpoint activity ----
+PrioritizedVulns
+| join kind=inner NGFWThreatSignals on $left.AssetIP == $right.DstIP
+| where abs(datetime_diff("minute", FW_Time, now())) <= 24*60
+| join kind=leftouter EndpointNet on $left.AssetIP == $right.LocalIP
+| extend
+    WithinWindow_Net = iff(isnotempty(EDRN_Time) and abs(datetime_diff("minute", FW_Time, EDRN_Time)) 
+                       <= toint(CorrelationWindow/1m), true, false)
+| join kind=leftouter EndpointProc on DeviceId
+| extend
+    WithinWindow_Proc = iff(isnotempty(EDRP_Time) and abs(datetime_diff("minute", FW_Time, EDRP_Time)) 
+                        <= toint(CorrelationWindow/1m), true, false),
+    Confidence = case(
+        WithinWindow_Net and WithinWindow_Proc, "High",
+        WithinWindow_Net and not(WithinWindow_Proc), "Medium",
+        not(WithinWindow_Net) and WithinWindow_Proc, "Medium",
+        "Low"
+    )
+| where Confidence in ("High","Medium")   // Gate incident creation
+| project
+    TimeGenerated = FW_Time,
+    Confidence,
+    RiskScore,
+    AssetId,
+    AssetName,
+    AssetIP,
+    CVE,
+    Cvss,
+    EpssScore,
+    IsKEV,
+    IsInternetFacing,
+    CriticalityTier,
+    // Firewall evidence
+    DeviceVendor,
+    DeviceProduct,
+    SrcIP,
+    DstPort,
+    FWAction,
+    FWThreat,
+    FWCategory,
+    FWRule,
+    App,
+    // Endpoint evidence
+    DeviceName,
+    InitiatingProcessFileName,
+    InitiatingProcessCommandLine,
+    FileName,
+    ProcessCommandLine
+| order by RiskScore desc, TimeGenerated desc
+                        </pre>
+                    </div>
+                    
+                    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-black/30 rounded-lg p-3">
+                            <p class="text-purple-400 font-semibold text-sm mb-2">Confidence Levels:</p>
+                            <ul class="text-gray-400 text-xs space-y-1">
+                                <li>• <strong class="text-red-400">High:</strong> NGFW threat + Network activity + Suspicious process (all within 30m)</li>
+                                <li>• <strong class="text-yellow-400">Medium:</strong> NGFW threat + Either network OR process correlation</li>
+                                <li>• <strong class="text-gray-500">Low:</strong> NGFW threat only (no endpoint confirmation) → No incident</li>
+                            </ul>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-3">
+                            <p class="text-purple-400 font-semibold text-sm mb-2">Sentinel Rule Settings:</p>
+                            <ul class="text-gray-400 text-xs space-y-1">
+                                <li>• <strong>Frequency:</strong> Every 15-60 minutes</li>
+                                <li>• <strong>Incident Creation:</strong> ✅ ON</li>
+                                <li>• <strong>Group by:</strong> AssetIP + CVE</li>
+                                <li>• <strong>Severity:</strong> High if Confidence=High or IsKEV=true</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Production KQL: Prioritized Backlog -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-4">
+                    <i class="fas fa-file-code text-cyan-400 mr-2"></i>Production KQL: Prioritized Vulnerability Backlog
+                </h2>
+                <p class="text-gray-400 text-sm mb-4">This rule generates a deduped, risk-scored backlog of vulnerability items for tickets/CSV/Power BI. <strong class="text-white">Alert only, no SOC incident.</strong></p>
+                
+                <div class="workflow-box rounded-xl p-6 mb-4">
+                    <div class="bg-black/50 rounded-lg p-4 overflow-x-auto">
+                        <pre class="text-xs text-cyan-400">
+// ===============================
+// PRIORITIZED VULNERABILITY BACKLOG (AUTOMATION OUTPUT)
+// Scheduled Analytics Rule - Alert only, no incident
+// ===============================
+
+// Tuning knobs
+let Lookback = 14d;
+let MinRiskScoreForTicket = 70;
+let CriticalityWeight = 15;
+let InternetFacingBonus = 15;
+let KEVBonus = 25;
+let EpssWeight = 40;             // EPSS in 0..1 scaled into 0..40
+let CvssWeight = 3;              // CVSS in 0..10 scaled into 0..30
+
+// Normalize CMDB watchlist
+let CMDB =
+    CMDBAssets_Watchlist
+    | project
+        AssetId = tostring(AssetId),
+        OwnerUPN = tostring(OwnerUPN),
+        BusinessUnit = tostring(BusinessUnit),
+        CriticalityTier = toint(CriticalityTier),
+        IsInternetFacing = tobool(IsInternetFacing);
+
+// EPSS + KEV
+let EPSS =
+    EPSS_CL
+    | project CVE = tostring(CVE), EpssScore = todouble(EpssScore);
+
+let KEV =
+    CISA_KEV_CL
+    | project CVE = tostring(CVE), IsKEV = tobool(IsKEV);
+
+// Qualys raw findings (dedupe to latest per AssetId+CVE)
+let QualysFindings =
+    QualysVuln_CL
+    | where todatetime(LastDetected) > ago(Lookback)
+    | extend
+        AssetId = tostring(AssetId),
+        AssetName = tostring(AssetName),
+        AssetIP = tostring(AssetIP),
+        CVE = tostring(CVE),
+        Cvss = todouble(Cvss),
+        LastDetected = todatetime(LastDetected),
+        FirstDetected = todatetime(FirstDetected),
+        Port = toint(Port),
+        Protocol = tostring(Protocol)
+    | summarize
+        LastDetected = max(LastDetected),
+        FirstDetected = min(FirstDetected),
+        AnyAssetName = any(AssetName),
+        AnyAssetIP = any(AssetIP),
+        AnyPort = any(Port),
+        AnyProto = any(Protocol),
+        Cvss = max(Cvss)
+      by AssetId, CVE;
+
+// Enrich + risk score
+QualysFindings
+| join kind=leftouter EPSS on CVE
+| join kind=leftouter KEV on CVE
+| join kind=leftouter CMDB on AssetId
+| extend
+    CriticalityScore =
+        case(
+            CriticalityTier == 0, 3,
+            CriticalityTier == 1, 2,
+            CriticalityTier == 2, 1,
+            CriticalityTier == 3, 0,
+            1
+        ) * CriticalityWeight,
+    CvssScore = Cvss * CvssWeight,
+    EpssScoreScaled = coalesce(EpssScore, 0.0) * EpssWeight,
+    KevScore = iff(IsKEV == true, KEVBonus, 0),
+    ExposureScore = iff(IsInternetFacing == true, InternetFacingBonus, 0),
+    RiskScore = round(CvssScore + EpssScoreScaled + KevScore + ExposureScore + CriticalityScore, 1)
+| where RiskScore >= MinRiskScoreForTicket
+| project
+    TimeGenerated = now(),
+    AssetId,
+    AssetName = AnyAssetName,
+    AssetIP = AnyAssetIP,
+    CVE,
+    Cvss,
+    EpssScore,
+    IsKEV,
+    IsInternetFacing,
+    CriticalityTier,
+    OwnerUPN,
+    BusinessUnit,
+    ServicePort = AnyPort,
+    ServiceProtocol = AnyProto,
+    FirstDetected,
+    LastDetected,
+    RiskScore
+| order by RiskScore desc, LastDetected desc
+                        </pre>
+                    </div>
+                    
+                    <div class="mt-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4">
+                        <p class="text-emerald-400 font-semibold text-sm mb-2"><i class="fas fa-cogs mr-2"></i>Operational Use:</p>
+                        <ul class="text-gray-400 text-xs space-y-1">
+                            <li>• Scheduled analytics rule runs every X hours</li>
+                            <li>• <strong class="text-white">Alert only</strong> (no SOC incident)</li>
+                            <li>• Logic App takes results → exports CSV / updates Power BI / creates tickets</li>
+                            <li>• Often one ticket per asset with list of CVEs, or one ticket per CVE family per owner</li>
+                        </ul>
+                    </div>
+                </div>
             </section>
 
             <!-- Summary Flow -->
