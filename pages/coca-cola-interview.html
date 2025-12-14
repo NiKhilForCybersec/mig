@@ -95,7 +95,7 @@
                             
                             I started my career as a SOC Analyst at Cognizant, working with Splunk on alert triage and incident investigations, which gave me a strong foundation in detection logic and attacker behavior. I then moved into security engineering at Infosys, where I worked on Trellix EDR and Symantec DLP agent deployments, troubleshooting, and operational support.<br><br>
                             
-                            After relocating to Canada, I joined a Siemens subsidiary, where I worked on the translation phase of an RSA NetWitness to Microsoft Sentinel migration. My role involved translating and validating detection rules in KQL across multiple security controls, including MDE, vulnerability management, identity, NGFW, DLP, and PAM. Once the detections were stabilized, they were documented and handed over to the internal SOC.<br><br>
+                            After relocating to Canada, I joined a Siemens subsidiary. My primary responsibility has been <strong class="text-emerald-400">Microsoft Defender for Endpoint</strong>—handling configurations, policy management, and operational support. I also supported the translation phase of an RSA NetWitness to Microsoft Sentinel migration, where I worked on detection rules around MDE, TVM, Qualys VMDR, DLP, and NGFW.<br><br>
                             
                             Currently, I'm supporting a Symantec to Microsoft Purview DLP migration, focusing on policy translation, simulation testing, and enforcement. The project is now in its final knowledge transfer and handover phase.<br><br>
                             
@@ -112,7 +112,7 @@
                 <div class="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 mb-4">
                     <p class="text-blue-400 font-bold mb-2"><i class="fas fa-list-ol mr-2"></i>Memory Structure</p>
                     <p class="text-gray-400 text-xs">
-                        1. 5 yrs (detection, endpoint, SIEM) → 2. Cognizant SOC (Splunk) → 3. Infosys (EDR/DLP agents) → 4. Siemens (translation phase, KQL, multiple controls, handover) → 5. DLP migration (supporting, final phase) → 6. Personal projects (standalone, enterprise patterns) → 7. Cliffhanger
+                        1. 5 yrs (detection, endpoint, SIEM) → 2. Cognizant SOC (Splunk) → 3. Infosys (EDR/DLP agents) → 4. Siemens (<strong>Primary: MDE</strong> + Supported migration: MDE, TVM, Qualys, DLP, NGFW) → 5. DLP migration (supporting, final phase) → 6. Personal projects → 7. Cliffhanger
                     </p>
                 </div>
 
@@ -505,9 +505,9 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                 <div class="bg-yellow-500/10 border border-yellow-500/50 rounded-xl p-4 mb-4">
                     <p class="text-yellow-400 font-bold mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>POSITIONING (Be Accurate)</p>
                     <p class="text-gray-300 text-sm">
-                        <strong class="text-white">Your role:</strong> Worked on the <strong>translation phase</strong> for a subset of detection categories. The organization had 800+ rules—you didn't own the entire migration.<br>
-                        <strong class="text-white">Your scope:</strong> MDE, TVM, Qualys, DLP, Entra ID, NGFW, PAM, and vulnerability workflow<br>
-                        <strong class="text-red-400">Don't overclaim:</strong> You didn't translate all 800+ rules or own the full migration program.
+                        <strong class="text-white">Primary responsibility:</strong> MDE—configurations, policy management, operational support<br>
+                        <strong class="text-white">Supported migration:</strong> Detection rules for MDE, TVM, Qualys VMDR, DLP, NGFW<br>
+                        <strong class="text-red-400">Don't overclaim:</strong> You didn't own identity, PAM, email security, or the full migration program.
                     </p>
                 </div>
 
@@ -523,7 +523,7 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                     <p class="text-green-400 font-bold mb-3">Q: Walk me through how you migrated RSA NetWitness correlation rules to Sentinel KQL analytics.</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "We worked primarily on the <strong class="text-emerald-400">translation phase</strong> of the migration. Using RSA NetWitness as the reference for parity, we designed the translation approach with a <strong class="text-white">translation catalog</strong> and reference documentation.<br><br>
+                            "My primary responsibility at the Siemens subsidiary has been <strong class="text-emerald-400">Microsoft Defender for Endpoint</strong>—handling configurations, policy management, and operational support. Alongside that, I supported the translation phase of the RSA NetWitness to Sentinel migration.<br><br>
                             
                             <strong class="text-emerald-400">Evaluation Approach:</strong><br>
                             NetWitness had been in use for a long time, so not every detection was treated equally. We first used the existing detections as a baseline for visibility and parity, then <strong class="text-white">evaluated them for relevance and signal quality</strong>.<br><br>
@@ -535,40 +535,44 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                             The goal wasn't <strong class="text-white">one-to-one rule count parity</strong>, but functional coverage and improved signal quality.<br><br>
                             
                             <strong class="text-emerald-400">My Scope:</strong><br>
-                            The organization had <strong class="text-white">800+ detection rules</strong> in RSA NetWitness. I worked on a subset focused on specific security controls: MDE, TVM, Qualys, Entra ID, NGFW, DLP, and PAM.<br><br>
+                            I worked on detection rules around:<br>
+                            • <strong>MDE</strong> — Endpoint telemetry, process events, network connections<br>
+                            • <strong>TVM</strong> — Threat and Vulnerability Management<br>
+                            • <strong>Qualys VMDR</strong> — Vulnerability data correlation<br>
+                            • <strong>DLP</strong> — Data loss prevention telemetry<br>
+                            • <strong>NGFW</strong> — Firewall logs and threat events<br><br>
                             
-                            Based on the translation catalog, I translated NetWitness detections into Sentinel KQL, ensuring <strong class="text-white">functional equivalence</strong> and alignment with MITRE ATT&CK. Where applicable, I supported correlation logic for scenarios combining endpoint, network, and identity signals.<br><br>
-                            
-                            <strong class="text-emerald-400">Handover:</strong><br>
-                            Once detections were stabilized, they were documented and handed over to the internal SOC as part of the migration deliverables."
+                            Using the translation catalog, I translated NetWitness detections into Sentinel KQL, ensuring <strong class="text-white">functional equivalence</strong> and alignment with MITRE ATT&CK."
                         </p>
                     </div>
                 </div>
 
                 <!-- Scope Clarification Box -->
                 <div class="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 mb-4">
-                    <p class="text-blue-400 font-bold mb-2"><i class="fas fa-info-circle mr-2"></i>My Translation Scope</p>
+                    <p class="text-blue-400 font-bold mb-2"><i class="fas fa-info-circle mr-2"></i>My Scope Summary</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                         <div>
-                            <p class="text-green-400 font-semibold mb-2">✅ My Scope (What I Worked On):</p>
+                            <p class="text-green-400 font-semibold mb-2">✅ Primary Responsibility:</p>
                             <ul class="text-gray-400 space-y-1 text-xs">
-                                <li>• Endpoint/EDR (MDE)</li>
-                                <li>• Vulnerability (TVM, Qualys)</li>
-                                <li>• Vulnerability workflow automation</li>
-                                <li>• Identity (Entra ID)</li>
-                                <li>• NGFW / Firewall logs</li>
+                                <li>• <strong class="text-white">MDE</strong> — Configurations, policies, operational support</li>
+                            </ul>
+                            <p class="text-green-400 font-semibold mb-2 mt-3">✅ Migration Support (Detection Rules):</p>
+                            <ul class="text-gray-400 space-y-1 text-xs">
+                                <li>• MDE telemetry</li>
+                                <li>• TVM (Threat & Vulnerability Management)</li>
+                                <li>• Qualys VMDR</li>
                                 <li>• DLP telemetry</li>
-                                <li>• PAM / Privileged Access</li>
+                                <li>• NGFW / Firewall logs</li>
                             </ul>
                         </div>
                         <div>
                             <p class="text-yellow-400 font-semibold mb-2">📋 Owned by Others:</p>
                             <ul class="text-gray-400 space-y-1 text-xs">
+                                <li>• Identity / Entra ID rules</li>
+                                <li>• PAM / Privileged Access rules</li>
                                 <li>• Email Security rules</li>
                                 <li>• DevSecOps / CI/CD telemetry</li>
                                 <li>• Application-specific logs</li>
-                                <li>• Custom integrations</li>
-                                <li class="text-gray-500 italic">Organization had 800+ total rules</li>
                             </ul>
                         </div>
                     </div>
