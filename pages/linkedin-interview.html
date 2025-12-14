@@ -131,7 +131,7 @@
                     
                     <a href="#section1" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
                         <i class="fas fa-shield-alt text-xs text-emerald-500"></i>
-                        <span class="text-sm">1. NGFW Design</span>
+                        <span class="text-sm">1. Firewall & Logs</span>
                     </a>
                     
                     <a href="#section2" class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white border-l-2 border-transparent">
@@ -275,22 +275,22 @@
                             
                             <!-- Section 1 Memory Hooks -->
                             <div class="bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-4">
-                                <h3 class="text-emerald-400 font-bold mb-3"><i class="fas fa-shield-alt mr-2"></i>Section 1: NGFW</h3>
+                                <h3 class="text-emerald-400 font-bold mb-3"><i class="fas fa-shield-alt mr-2"></i>Section 1: Firewall & Logs</h3>
                                 <div class="space-y-3 text-sm">
                                     <div class="bg-black/20 rounded-lg p-3">
-                                        <p class="text-white font-medium">Q1: Multi-site NGFW deployment</p>
-                                        <p class="text-yellow-400 font-bold">🔑 "Shared responsibility: Network = routing/NAT, Security = profiles/policies"</p>
-                                        <p class="text-gray-400 text-xs mt-1">I configure security profiles, threat prevention, URL filtering, app control. Network team handles SNAT/DNAT/HA.</p>
+                                        <p class="text-white font-medium">Q1: Firewall experience</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Security monitoring & policy validation perspective, integrated with Sentinel"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Not NGFW ownership. I validate security profiles, TLS exceptions, and align firewall controls with detection strategy.</p>
                                     </div>
                                     <div class="bg-black/20 rounded-lg p-3">
-                                        <p class="text-white font-medium">Q2: Best practices alignment</p>
-                                        <p class="text-yellow-400 font-bold">🔑 "Quarterly firewall rule reviews + Security profile configuration"</p>
-                                        <p class="text-gray-400 text-xs mt-1">Review stale rules, shadow rules, missing profiles. Ensure threat prevention/SSL/URL filtering enabled.</p>
+                                        <p class="text-white font-medium">Q2: Policy validation</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Ensure profiles attached + TLS scope + Quarterly audits for gaps"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Review stale rules, missing profiles, TLS bypass scope. Firewall as control point feeding Sentinel.</p>
                                     </div>
                                     <div class="bg-black/20 rounded-lg p-3">
-                                        <p class="text-white font-medium">Q3: OT production downtime</p>
-                                        <p class="text-yellow-400 font-bold">🔑 "Coordinate OT first → Was it security or network change? → Surgical rollback"</p>
-                                        <p class="text-gray-400 text-xs mt-1">If my security profile broke it, I can revert it. Post-incident: better testing, OT maintenance windows.</p>
+                                        <p class="text-white font-medium">Q3: Log analysis in Sentinel</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Threat correlation + DNS sinkhole hits + Deny spikes = detection value"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Correlate firewall threat logs with MDE. Build KQL for C2, tunneling, anomalous outbound.</p>
                                     </div>
                                 </div>
                             </div>
@@ -581,7 +581,7 @@
                 </section>
 
                 <!-- ============================================ -->
-                <!-- SECTION 1: NGFW Design -->
+                <!-- SECTION 1: Firewall & Network Security (Security Ops Perspective) -->
                 <!-- ============================================ -->
                 <section id="section1" class="mb-12">
                     <div class="flex items-center space-x-3 mb-6">
@@ -589,48 +589,44 @@
                             <i class="fas fa-shield-alt text-emerald-400"></i>
                         </div>
                         <div>
-                            <h2 class="text-2xl font-bold text-white">Section 1: Core Security Engineering & NGFW Design</h2>
-                            <p class="text-gray-500 text-sm">Firewall architecture, deployment, and troubleshooting</p>
+                            <h2 class="text-2xl font-bold text-white">Section 1: Firewall & Network Security</h2>
+                            <p class="text-gray-500 text-sm">Security monitoring, policy validation, Sentinel integration</p>
                         </div>
                     </div>
 
-                    <!-- Q1 -->
+                    <!-- POSITIONING CALLOUT -->
+                    <div class="bg-yellow-500/10 border border-yellow-500/50 rounded-xl p-4 mb-6">
+                        <p class="text-yellow-400 text-sm font-semibold mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>POSITIONING REMINDER</p>
+                        <p class="text-gray-300 text-sm">
+                            Frame firewall experience as <strong class="text-white">security monitoring, policy validation, and risk-control perspective</strong> integrated with Sentinel. 
+                            <strong class="text-emerald-400">NOT</strong> as NGFW ownership, deployment, or network design.
+                        </p>
+                    </div>
+
+                    <!-- Q1 - Core Experience -->
                     <div class="question-card rounded-xl p-6 mb-6">
                         <div class="flex items-start space-x-3 mb-4">
                             <span class="px-2 py-1 rounded bg-emerald-500/20 text-emerald-400 text-xs font-bold">Q1</span>
-                            <p class="text-white font-medium">You are tasked with deploying multiple NGFWs across Coca-Cola manufacturing and distribution sites. How would you approach the design and implementation?</p>
+                            <p class="text-white font-medium">What is your experience with firewalls and NGFWs?</p>
                         </div>
                         
                         <div class="answer-box">
                             <p class="text-gray-300 text-sm leading-relaxed">
-                                "When deploying NGFWs across multiple manufacturing and distribution sites, I approach it as both an <strong class="text-emerald-400">architecture exercise and an operational governance exercise</strong>. NGFW deployment is naturally a shared responsibility between network engineering and security engineering, but my role focuses on ensuring the firewalls are designed, standardized, and enforced as security controls—not just as routers with ACLs.
+                                "Alongside my core work with Microsoft Sentinel, MDE, and vulnerability management, I also worked with Palo Alto NGFWs and Azure Firewall from a <strong class="text-emerald-400">security operations and policy validation perspective</strong>.
                                 <br><br>
-                                <strong class="text-emerald-400">From a Design Perspective:</strong>
+                                My involvement wasn't around firewall design or deployment—the firewall architecture was already established when I joined. Instead, I <strong class="text-white">reviewed and validated security policies</strong>, managed TLS decryption exceptions, ensured appropriate inspection profiles were applied for higher-risk traffic, and verified that firewall controls aligned with detection and response requirements in Sentinel.
                                 <br><br>
-                                I start by mapping out the <strong>segmentation model</strong>: IT zones versus OT zones, DMZs, production networks, vendor access paths, and cloud interconnects. For each site, I assess whether it requires only North-South filtering at the perimeter, or whether East-West inspection is needed within the plant for lateral movement detection. I also define the HA requirements based on criticality—manufacturing plants that can't tolerate downtime need active-passive clustering with sub-second failover.
+                                I primarily interacted with firewalls as a <strong class="text-emerald-400">preventive and detective control</strong>, rather than as a standalone network platform.
                                 <br><br>
-                                <strong class="text-emerald-400">Security Layer Ownership:</strong>
+                                <strong class="text-emerald-400">Specific contributions:</strong>
                                 <br><br>
-                                This is where NGFW value is made real. I build <strong>standardized security baselines and templates</strong> for all sites:
+                                • Validated that security profiles (AV, IPS, URL filtering) were attached to rules for internet-bound traffic
+                                <br>• Managed TLS decryption exception lists—ensuring visibility without breaking banking/healthcare sites
+                                <br>• Built KQL queries in Sentinel to correlate firewall threat logs with MDE alerts for end-to-end attack chain visibility
+                                <br>• Identified rules missing security profiles during quarterly reviews (traffic allowed but not inspected = gap)
+                                <br>• Worked with network team to tune IPS signatures generating false positives in OT environments
                                 <br><br>
-                                • <strong>Threat Prevention Profiles:</strong> IPS signatures tuned for our environment, anti-malware, vulnerability protection
-                                <br>• <strong>SSL Decryption Policies:</strong> Categories where we need visibility, with appropriate exceptions for certificate-pinned applications
-                                <br>• <strong>URL Filtering:</strong> High-risk categories blocked consistently across all sites
-                                <br>• <strong>Application Control:</strong> App-ID based rules instead of port-based—blocking risky apps, allowing sanctioned ones
-                                <br>• <strong>DNS Security:</strong> Blocking known malicious domains at the DNS layer
-                                <br>• <strong>File Blocking:</strong> Dangerous file types blocked at the perimeter
-                                <br><br>
-                                These templates ensure that whether the firewall is in Toronto or a bottling plant in Calgary, the inspection and enforcement posture is <strong>consistent and aligned to corporate standards</strong>.
-                                <br><br>
-                                <strong class="text-emerald-400">Policy Design & Governance:</strong>
-                                <br><br>
-                                I work with operations and network teams to define <strong>least-privilege zone-to-zone rules</strong>. I proactively identify overly permissive rules, shadow rules, and stale access through quarterly audits. Every rule has an owner, a documented business justification, and a review date.
-                                <br><br>
-                                <strong class="text-emerald-400">Operational Integration:</strong>
-                                <br><br>
-                                I ensure all NGFWs forward logs to Sentinel, validate log completeness, and build detection use cases based on firewall telemetry—lateral movement indicators, C2 traffic patterns, anomalous OT protocol usage. I also define the change governance process: how firewall changes are requested, risk-assessed, approved, and implemented in a way that minimizes OT risk.
-                                <br><br>
-                                <strong class="text-emerald-400">Bottom line:</strong> Network engineering handles routing, NAT, and HA infrastructure. I own the security posture, policy standardization, threat inspection tuning, SIEM integration, and governance. That ensures every firewall deployment actually delivers strong, consistent, measurable security—not just network segmentation."
+                                <strong class="text-emerald-400">Bottom line:</strong> I treated firewalls as a control point feeding Sentinel, ensuring what was allowed, inspected, or blocked aligned with endpoint telemetry, threat intelligence, and vulnerability risk. That gave me a solid working understanding of NGFW behavior without owning the full network design."
                             </p>
                         </div>
 
@@ -639,69 +635,52 @@
                             <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
                             
                             <div class="followup-card rounded-lg p-4">
-                                <p class="text-purple-300 text-sm font-medium mb-2">How do you determine North–South vs East–West visibility needs?</p>
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you validate that firewall policies support your detection strategy?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "North-South handles perimeter traffic—internet-bound, partner connections, cloud access. But for manufacturing environments, <strong>East-West is where the real risk lives</strong>. Once an attacker gains initial access, they move laterally. For Coca-Cola's plants, I'd advocate for East-West inspection between IT and OT zones, between production segments, and anywhere sensitive systems communicate. I'd map the critical communication flows with OT engineers, then design inspection points that provide visibility without introducing latency that impacts production. The goal is detecting lateral movement and anomalous internal traffic, not just blocking internet threats."
+                                    "I approach firewalls as a data source and control point feeding Sentinel. <strong>Log coverage validation:</strong> I verify firewall logs flow correctly—traffic, threat, URL logs. I built a KQL dashboard showing log volume by type, so gaps are immediately visible. <strong>Security profile audit:</strong> I review rules to identify traffic that's allowed but not inspected. If a rule doesn't have Threat Prevention profiles attached, we have a blind spot. <strong>Detection correlation:</strong> When I build Sentinel analytics rules, I consider what the firewall should have caught. If I'm detecting C2 at the endpoint level but the firewall isn't alerting, either signatures need updating or SSL inspection is bypassed."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
-                                <p class="text-purple-300 text-sm font-medium mb-2">How do you ensure consistent policy across 10+ firewalls in different locations?</p>
+                                <p class="text-purple-300 text-sm font-medium mb-2">What's the difference between your role and the network team's role with firewalls?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "Template-driven deployment through centralized management. I create <strong>security baseline templates</strong>—standard threat prevention profiles, URL filtering categories, application control policies—that define 'what good looks like.' These templates are pushed through Panorama or FortiManager to all sites. Site-specific variables (local subnets, specific server IPs) are parameterized, but the security posture remains consistent. I also run <strong>quarterly compliance audits</strong> comparing each firewall against the baseline—identifying drift, exceptions, and sites with weaker configurations. Any deviation requires documented risk acceptance."
-                                </p>
-                            </div>
-                            
-                            <div class="followup-card rounded-lg p-4">
-                                <p class="text-purple-300 text-sm font-medium mb-2">How would you design HA for a plant that cannot tolerate downtime?</p>
-                                <p class="text-gray-400 text-sm">
-                                    "Active-passive clustering with stateful failover is the minimum. Session state, connection tables, and security context must replicate so failover doesn't drop active connections. From the security side, my requirements are: (1) <strong>No fail-open mode</strong>—during failover, traffic should queue briefly rather than bypass inspection entirely. (2) <strong>Both nodes must have identical security profiles</strong>—a failover shouldn't change the security posture. (3) <strong>Monitoring and alerting</strong>—if a failover happens, security gets notified immediately, not just network operations. I'd also ensure failover testing happens during maintenance windows so we validate it actually works before an emergency."
-                                </p>
-                            </div>
-                            
-                            <div class="followup-card rounded-lg p-4">
-                                <p class="text-purple-300 text-sm font-medium mb-2">What tools would you use for centralized management?</p>
-                                <p class="text-gray-400 text-sm">
-                                    "For Palo Alto environments, <strong>Panorama</strong> with device groups and templates—network team manages the infrastructure, I define the security policies and profiles that get pushed. For Fortinet, <strong>FortiManager plus FortiAnalyzer</strong>. For policy analysis and compliance, tools like <strong>Tufin or AlgoSec</strong> help identify risky rules, shadow rules, and compliance gaps across multi-vendor environments. On the security monitoring side, all logs flow to <strong>Sentinel</strong> where I build dashboards showing blocked threats by site, policy violations, and unusual traffic patterns. The combination gives me both configuration management and security visibility."
+                                    "Clear separation. <strong>Network team owns:</strong> Routing, NAT, VPN configuration, HA clustering, physical deployment, Panorama/FMC administration, interface configuration, performance tuning. <strong>I own:</strong> Security policy validation, ensuring inspection profiles are applied, TLS decryption scope, reviewing rules for overly permissive access, SIEM integration and log validation, building detection rules based on firewall telemetry, quarterly security audits of rule effectiveness. I don't configure the network infrastructure—I ensure the security controls on top of it are properly configured and aligned with our detection strategy."
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Q2 -->
+                    <!-- Q2 - Security Profile Validation -->
                     <div class="question-card rounded-xl p-6 mb-6">
                         <div class="flex items-start space-x-3 mb-4">
                             <span class="px-2 py-1 rounded bg-emerald-500/20 text-emerald-400 text-xs font-bold">Q2</span>
-                            <p class="text-white font-medium">What steps do you take to ensure the NGFW configuration aligns with security best practices?</p>
+                            <p class="text-white font-medium">How do you ensure firewall security controls are properly configured and maintained?</p>
                         </div>
                         
                         <div class="answer-box">
                             <p class="text-gray-300 text-sm leading-relaxed">
-                                "This is core to my role as a security engineer. While network engineers own the infrastructure configuration, I own ensuring the firewall actually provides security value.
+                                "My focus is ensuring the 'next-gen' features are actually enabled and effective—not just having an NGFW deployed but having it configured to provide real security value.
                                 <br><br>
-                                <strong class="text-emerald-400">Security Profile Configuration:</strong>
+                                <strong class="text-emerald-400">Security Profile Validation:</strong>
                                 <br><br>
-                                I ensure all the 'next-gen' features are properly configured and not just left at defaults:
+                                • <strong>Threat Prevention Profiles:</strong> I validate IPS signatures are enabled and tuned, anti-malware scanning is active, vulnerability protection aligns with our asset criticality
+                                <br>• <strong>URL Filtering:</strong> High-risk categories blocked (malware, phishing, C2), appropriate business categories allowed, logging enabled for visibility
+                                <br>• <strong>SSL Decryption:</strong> Enabled where we need visibility, with appropriate exceptions for privacy-sensitive and certificate-pinned applications
+                                <br>• <strong>DNS Security:</strong> Sinkhole configured to identify infected hosts calling malicious domains
                                 <br><br>
-                                • <strong>Threat Prevention Profiles:</strong> IPS signatures enabled and tuned for our environment, anti-malware scanning active, vulnerability protection aligned with our asset criticality
-                                <br>• <strong>URL Filtering:</strong> High-risk categories blocked (malware, phishing, C2), appropriate categories for business needs, logging enabled for visibility
-                                <br>• <strong>Application Control:</strong> High-risk applications blocked or restricted, sanctioned apps explicitly allowed, unknown applications flagged for review
-                                <br>• <strong>SSL Decryption:</strong> Enabled for categories where we need visibility, with appropriate exceptions for privacy-sensitive traffic and certificate-pinned applications
-                                <br>• <strong>File Blocking:</strong> Dangerous file types blocked (executables in email, scripts from untrusted sources)
+                                <strong class="text-emerald-400">Quarterly Security Audits:</strong>
                                 <br><br>
-                                <strong class="text-emerald-400">Quarterly Firewall Rule Reviews:</strong>
+                                I conduct periodic reviews focused on security gaps:
                                 <br><br>
-                                I conduct <strong>quarterly reviews of firewall policies</strong> to ensure they stay aligned with best practices:
+                                • <strong>Rules missing security profiles:</strong> Traffic allowed but not inspected—defeats the purpose of NGFW
+                                <br>• <strong>Overly permissive rules:</strong> 'Any-any' rules or broader than necessary
+                                <br>• <strong>Stale rules:</strong> Zero hits in 90 days—work with owners to validate or remove
+                                <br>• <strong>TLS decryption gaps:</strong> Categories that should be inspected but are bypassed
+                                <br>• <strong>Logging gaps:</strong> Rules without logging—no visibility for incident response
                                 <br><br>
-                                • <strong>Overly permissive rules:</strong> Any 'any-any' rules or rules broader than necessary get flagged for tightening
-                                <br>• <strong>Stale rules:</strong> Rules with zero hits in 90 days—are they still needed? I work with rule owners to validate or remove
-                                <br>• <strong>Shadow rules:</strong> Rules that never match because a broader rule above them catches the traffic first
-                                <br>• <strong>Missing security profiles:</strong> Rules allowing traffic without threat inspection attached
-                                <br>• <strong>Logging gaps:</strong> Rules without logging enabled—we need visibility for incident response
+                                <strong class="text-emerald-400">Documentation & Governance:</strong>
                                 <br><br>
-                                <strong class="text-emerald-400">Governance & Documentation:</strong>
-                                <br><br>
-                                Every rule should have an owner and documented business justification. I maintain this documentation and ensure changes go through proper review before implementation."
+                                I maintain security baseline documentation—what profiles should be applied, what categories blocked. Deviations are documented with risk acceptance. This ensures compliance during audits and provides clear standards for the network team to follow."
                             </p>
                         </div>
 
@@ -709,68 +688,45 @@
                             <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
                             
                             <div class="followup-card rounded-lg p-4">
-                                <p class="text-purple-300 text-sm font-medium mb-2">What are the top five misconfigurations you commonly see on firewalls?</p>
+                                <p class="text-purple-300 text-sm font-medium mb-2">What are common security misconfigurations you find on firewalls?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "From my quarterly reviews: (1) <strong>Security profiles not attached:</strong> Rules allowing traffic but with no threat prevention, URL filtering, or app control—the traffic flows but isn't inspected. This defeats the purpose of having an NGFW. (2) <strong>SSL decryption disabled:</strong> 'Too complicated' or 'performance concerns'—but without it, you're blind to 80%+ of traffic that's encrypted. (3) <strong>Overly permissive rules:</strong> 'Any-any' rules that were temporary but became permanent, or rules allowing entire subnets when only specific hosts needed access. (4) <strong>Stale rules:</strong> Rules for decommissioned servers, former employees, or projects that ended years ago. (5) <strong>Logging disabled:</strong> Rules without logging, so when something goes wrong, we have no visibility into what happened."
-                                </p>
-                            </div>
-                            
-                            <div class="followup-card rounded-lg p-4">
-                                <p class="text-purple-300 text-sm font-medium mb-2">How do you standardize rule creation and governance?</p>
-                                <p class="text-gray-400 text-sm">
-                                    "Process and documentation. Every firewall change request must include: who needs access, to what specifically, for what business reason, and for how long (temporary vs permanent). That becomes the rule documentation. I've established naming conventions so rules are self-documenting: 'ALLOW_WebTeam_to_ProdDB_MySQL' tells you exactly what it does. Before implementation, I review security aspects: Is the scope as narrow as possible? Are appropriate security profiles attached? Is logging enabled? After implementation, I verify the rule works as intended without opening more than requested. All of this feeds into my quarterly review—I can trace every rule back to its justification."
-                                </p>
-                            </div>
-                            
-                            <div class="followup-card rounded-lg p-4">
-                                <p class="text-purple-300 text-sm font-medium mb-2">How do you document firewall deployments and changes?</p>
-                                <p class="text-gray-400 text-sm">
-                                    "Multiple levels. <strong>Security baseline documentation:</strong> What security profiles should be applied, what categories blocked, what applications restricted—this is the standard all firewalls should meet. <strong>Rule documentation:</strong> Every rule linked to a change ticket with business justification, owner, and review date. <strong>Quarterly review reports:</strong> Findings from my audits—what was cleaned up, what risks were identified, what needs remediation. <strong>Exception documentation:</strong> If something deviates from baseline (SSL decryption disabled for specific traffic, for example), it's documented with risk acceptance. The goal is that anyone can understand why the firewall is configured the way it is, and we can demonstrate compliance during audits."
+                                    "From my reviews: (1) <strong>Security profiles not attached:</strong> Rules allowing traffic but no threat prevention—traffic flows but isn't inspected. This defeats NGFW purpose. (2) <strong>SSL decryption disabled:</strong> 'Too complicated' but without it, you're blind to 80%+ of encrypted traffic. (3) <strong>Overly permissive rules:</strong> 'Temporary' rules that became permanent, or entire subnets allowed when only specific hosts needed access. (4) <strong>Stale rules:</strong> Rules for decommissioned servers or former projects. (5) <strong>Logging disabled:</strong> No visibility when something goes wrong."
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Q3 -->
+                    <!-- Q3 - Log Analysis & Sentinel Integration -->
                     <div class="question-card rounded-xl p-6 mb-6">
                         <div class="flex items-start space-x-3 mb-4">
                             <span class="px-2 py-1 rounded bg-emerald-500/20 text-emerald-400 text-xs font-bold">Q3</span>
-                            <p class="text-white font-medium">A firewall rule change has caused production downtime in an OT network. How would you troubleshoot and resolve it?</p>
+                            <p class="text-white font-medium">How do you use firewall logs in your SIEM for detection and investigation?</p>
                         </div>
                         
                         <div class="answer-box">
                             <p class="text-gray-300 text-sm leading-relaxed">
-                                "OT downtime is critical—every minute of production loss has direct business impact. My approach is <strong class="text-emerald-400">rapid triage, surgical rollback, and root cause analysis</strong>.
+                                "Firewall logs are one of the most valuable data sources in Sentinel because they see all traffic—not just endpoints. Here's how I use them:
                                 <br><br>
-                                <strong class="text-emerald-400">Step 1: Immediate Coordination (First 2 Minutes)</strong>
+                                <strong class="text-emerald-400">Detection Rules I've Built:</strong>
                                 <br><br>
-                                In OT environments, the first call is to the plant engineer or OT operations—they need to know there's an issue and can tell us exactly what's broken from the production side. I don't troubleshoot in isolation. Parallel to this, I'm pulling up firewall logs and the recent change history.
+                                • <strong>Threat log correlation:</strong> When firewall blocks something (IPS signature, malware, C2 domain), I enrich with MDE data to see if endpoint was compromised before/after
+                                <br>• <strong>DNS sinkhole hits:</strong> Query firewall logs for traffic to our sinkhole IP—identifies infected hosts attempting malicious domain resolution
+                                <br>• <strong>Anomalous outbound traffic:</strong> Large data transfers to new destinations, especially outside business hours
+                                <br>• <strong>Application tunneling:</strong> Traffic the firewall identifies as tunneling or proxy-avoidance
+                                <br>• <strong>Deny log spikes:</strong> Sudden increase in blocked traffic from a host—often indicates scanning or malware
                                 <br><br>
-                                <strong class="text-emerald-400">Step 2: Identify the Offending Change (Minutes 2-5)</strong>
+                                <strong class="text-emerald-400">Investigation Workflows:</strong>
                                 <br><br>
-                                I pull the change log immediately. What was modified in the last maintenance window? I categorize: was it a <strong>security change</strong> (policy, security profile, threat prevention tuning) or a <strong>network change</strong> (routing, NAT, zone configuration)? Security changes are my responsibility—I can act immediately.
+                                When investigating an incident, I start with the endpoint (MDE) to understand what happened, then pivot to firewall logs to see:
+                                <br>• What network connections did the compromised host make?
+                                <br>• What was blocked vs allowed?
+                                <br>• Were there earlier indicators in firewall logs before the endpoint alert?
                                 <br><br>
-                                <strong class="text-emerald-400">Step 3: Log Analysis</strong>
+                                <strong class="text-emerald-400">Example KQL:</strong>
                                 <br><br>
-                                I filter traffic logs by the affected source/destination:
+                                <code class='text-cyan-400'>CommonSecurityLog | where DeviceVendor == 'Palo Alto' | where Activity == 'THREAT' | join kind=inner (DeviceEvents | where ActionType == 'ConnectionFound') on $left.SourceIP == $right.RemoteIP</code>
                                 <br><br>
-                                • <strong>Deny actions:</strong> Is legitimate OT traffic now being blocked?
-                                <br>• <strong>Rule matching:</strong> Which rule is the traffic hitting? Is it my new policy?
-                                <br>• <strong>Security profile blocks:</strong> Is threat prevention, URL filtering, or app control triggering on OT protocols?
-                                <br>• <strong>App-ID classification:</strong> Is the firewall misidentifying OT traffic as something else?
-                                <br>• <strong>SSL decryption issues:</strong> Did we enable decryption on traffic from certificate-pinned OT applications?
-                                <br><br>
-                                The logs tell the story within minutes if you know what to look for.
-                                <br><br>
-                                <strong class="text-emerald-400">Step 4: Surgical Rollback</strong>
-                                <br><br>
-                                If I identify the cause, I execute a <strong>targeted rollback</strong>—disable the specific rule or revert the security profile. I communicate clearly: 'Disabling rule X in 30 seconds—confirm when production resumes.' For security changes, I have authority to rollback during active outages without waiting for approval chains.
-                                <br><br>
-                                Key principle: <strong>surgical rollback, not wholesale revert</strong>. I don't roll back the entire firewall config if one rule is the problem.
-                                <br><br>
-                                <strong class="text-emerald-400">Step 5: Post-Incident Analysis</strong>
-                                <br><br>
-                                Once production is restored, I conduct root cause analysis: Why did this change cause this impact? Did we not understand OT traffic patterns? Did we test in an environment that didn't reflect production? This feeds into process improvements—better change windows for OT, OT engineer sign-off on security changes, improved testing procedures."
+                                This correlates firewall threat detections with endpoint network activity—full picture across both control points."
                             </p>
                         </div>
 
@@ -778,30 +734,9 @@
                             <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
                             
                             <div class="followup-card rounded-lg p-4">
-                                <p class="text-purple-300 text-sm font-medium mb-2">What do you check first in session and traffic logs?</p>
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you handle firewall-related incidents in OT environments?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "I filter by the affected source/destination IPs and look for: <strong>Deny actions</strong>—traffic being blocked that wasn't before. <strong>Rule hit counts</strong>—is traffic hitting my new rule or falling through to implicit deny? <strong>Threat log entries</strong>—is IPS/AV triggering on OT protocols (common false positive with industrial protocols). <strong>App-ID changes</strong>—did an application signature update change how OT traffic is classified? <strong>Decryption failures</strong>—certificate errors indicate SSL decryption breaking certificate-pinned OT applications. Most OT outages caused by firewall changes are security profile issues—threat prevention being too aggressive on protocols it doesn't understand, or App-ID misclassifying industrial traffic."
-                                </p>
-                            </div>
-                            
-                            <div class="followup-card rounded-lg p-4">
-                                <p class="text-purple-300 text-sm font-medium mb-2">How would you safely roll back during active outage?</p>
-                                <p class="text-gray-400 text-sm">
-                                    "Surgical precision. If it's a single rule I added, I disable that rule—not the entire policy. If it's a security profile change, I can either revert to the previous profile version or temporarily set the profile to <strong>'alert only' mode</strong> instead of 'block'—this restores traffic while maintaining visibility. Communication is critical: I announce the rollback to OT operations before executing: 'Rolling back in 30 seconds, confirm when production resumes.' I avoid wholesale configuration reverts—those can cause cascading issues. After rollback, I verify: is the original problem resolved? Did we introduce new problems? Only then do I close the immediate incident."
-                                </p>
-                            </div>
-                            
-                            <div class="followup-card rounded-lg p-4">
-                                <p class="text-purple-300 text-sm font-medium mb-2">How do you verify the fix doesn't impact other systems?</p>
-                                <p class="text-gray-400 text-sm">
-                                    "After rollback, I monitor for unintended consequences. I watch traffic logs for new denies on other traffic. I check with other teams: 'Did anything else break when we reverted?' The original security change was made for a reason—maybe blocking a risky application or enforcing a policy. By rolling back, we've potentially reopened that risk. So the real fix comes after: I analyze how to achieve the security goal without breaking OT—maybe a more targeted rule with OT-specific exceptions, or different security profile settings for OT zones. Rollback is triage; the permanent fix requires proper engineering."
-                                </p>
-                            </div>
-                            
-                            <div class="followup-card rounded-lg p-4">
-                                <p class="text-purple-300 text-sm font-medium mb-2">How do you prevent recurrence?</p>
-                                <p class="text-gray-400 text-sm">
-                                    "Post-incident review with concrete process improvements. <strong>Testing:</strong> Security changes affecting OT should be tested against actual OT traffic patterns—either in a lab environment or during a controlled maintenance window with OT engineers monitoring production. <strong>Change windows:</strong> OT security changes shouldn't happen during peak production—schedule for maintenance windows when we can monitor impact. <strong>OT coordination:</strong> OT engineers should review and approve security changes affecting their networks. They understand critical traffic patterns better than IT security. <strong>Documentation:</strong> I document the incident, root cause, and process improvements. The goal is organizational learning, not just fixing one incident."
+                                    "OT environments require extra caution. If a firewall change causes production impact: (1) <strong>Immediate coordination</strong>—call the OT/plant engineer first. Don't troubleshoot in isolation. (2) <strong>Rapid identification</strong>—pull recent change log, correlate timing with incident start. (3) <strong>Surgical rollback</strong>—if I can identify the specific change, rollback just that change, not the entire configuration. (4) <strong>Root cause analysis</strong>—understand why the change caused impact. Was it an IPS signature false positive on legitimate OT traffic? A URL category blocking a vendor system? (5) <strong>Prevention</strong>—update our testing process, add the scenario to our validation checklist. For OT, I lean toward alert-only mode for IPS rather than blocking, to avoid production impact from false positives."
                                 </p>
                             </div>
                         </div>

@@ -668,79 +668,148 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
             <section class="mb-16">
                 <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
                     <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400">11</span>
-                    Technical Deep Dive: Next-Generation Firewalls
+                    Technical Deep Dive: Firewall & Network Security
                 </h2>
 
-                <div class="technical rounded-xl p-6 mb-4">
-                    <p class="text-green-400 font-bold mb-3">Q1: Walk me through how you would design and implement a firewall rule change process that balances security requirements with business agility.</p>
-                    <p class="text-gray-500 text-xs mb-3">What they're assessing: Change management, risk assessment, operational workflows</p>
+                <!-- POSITIONING CALLOUT - IMPORTANT -->
+                <div class="bg-yellow-500/10 border-2 border-yellow-500/50 rounded-xl p-6 mb-6">
+                    <h4 class="text-yellow-400 font-bold mb-3"><i class="fas fa-exclamation-triangle mr-2"></i>POSITIONING STRATEGY (Memorize This)</h4>
+                    <p class="text-gray-300 text-sm mb-4">
+                        <strong class="text-white">Your core identity = Sentinel + MDE + Vulnerability Management.</strong><br>
+                        Frame firewall experience as <strong class="text-emerald-400">security monitoring, policy validation, and risk-control perspective</strong>, NOT as "NGFW ownership."
+                    </p>
+                    <div class="bg-black/30 rounded-lg p-4 mb-4">
+                        <p class="text-red-400 text-sm mb-2"><strong>❌ DON'T SAY:</strong></p>
+                        <p class="text-gray-400 text-sm italic">"I worked extensively on NGFW policies and DPI"</p>
+                    </div>
+                    <div class="bg-black/30 rounded-lg p-4 mb-4">
+                        <p class="text-green-400 text-sm mb-2"><strong>✅ DO SAY:</strong></p>
+                        <p class="text-gray-400 text-sm italic">"I worked with firewalls from a security monitoring, policy validation, and risk-control perspective, tightly integrated with Sentinel and endpoint security."</p>
+                    </div>
+                    <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4">
+                        <p class="text-emerald-400 text-sm font-semibold mb-2">🎯 THE GOLDEN SENTENCE (Memorize):</p>
+                        <p class="text-white text-sm italic">"My interaction with firewalls was primarily from a security control and monitoring perspective, ensuring policies, inspection, and logs aligned with our Sentinel and endpoint detection strategy."</p>
+                    </div>
+                </div>
+
+                <!-- Short Answer Template -->
+                <div class="technical rounded-xl p-6 mb-4 border-l-4 border-emerald-500">
+                    <p class="text-emerald-400 font-bold mb-3">Q1: What is your experience with firewalls and NGFWs?</p>
+                    <p class="text-gray-500 text-xs mb-3">Use the SHORT answer unless they ask to expand</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "At my current role, we follow a structured change management process for firewall rules that I helped refine. Here's how I approach it:<br><br>
+                            <strong class="text-yellow-400">SHORT ANSWER (Safe, Clean):</strong><br><br>
+                            "Alongside my core work with Microsoft Sentinel, MDE, and vulnerability management, I also worked with Palo Alto NGFWs and Azure Firewall from a <strong class="text-emerald-400">security operations and policy validation perspective</strong>.<br><br>
                             
-                            <strong>1. Request & Justification</strong><br>
-                            Every change starts with a formal request through our ticketing system. The requester documents business justification, source/destination, ports, and expected duration. This creates an audit trail and forces people to think through what they actually need.<br><br>
+                            My involvement wasn't around firewall design or deployment, but around <strong class="text-white">reviewing and validating security policies</strong>, managing TLS decryption exceptions, ensuring appropriate inspection profiles were applied for higher-risk traffic, and verifying that firewall controls aligned with detection and response requirements in Sentinel.<br><br>
                             
-                            <strong>2. Security Review</strong><br>
-                            I review each request against least privilege principles. I ask: Is this the minimum access needed? Can we use application-level rules instead of port-based? Are we opening anything to the internet that shouldn't be? I push back on overly broad requests like 'any-to-any' rules.<br><br>
-                            
-                            <strong>3. Validation & Testing</strong><br>
-                            Before implementing in production, I validate the rule logic won't conflict with existing policies. On Fortinet, I use the policy lookup tool to check for conflicts. For high-risk changes, we test in a maintenance window first.<br><br>
-                            
-                            <strong>4. Implementation with Rollback Plan</strong><br>
-                            I always document the current state before making changes so I can quickly rollback if something breaks. For critical systems, I coordinate with the application owner to test immediately after the change.<br><br>
-                            
-                            <strong>5. Review & Cleanup</strong><br>
-                            Temporary rules get expiration dates. I schedule quarterly reviews to identify unused rules using traffic logs. Stale rules are security debt—they accumulate if you don't actively clean them up."
+                            I primarily interacted with firewalls as a <strong class="text-emerald-400">preventive and detective control</strong>, rather than as a standalone network platform."
                         </p>
                     </div>
                 </div>
 
+                <!-- Detailed Answer (Only if they ask to expand) -->
                 <div class="technical rounded-xl p-6 mb-4">
-                    <p class="text-green-400 font-bold mb-3">Q2: You notice unusual traffic patterns that bypass traditional firewall rules. How would you investigate and respond using NGFW capabilities?</p>
+                    <p class="text-green-400 font-bold mb-3">Q1 (Expanded): Tell me more about your firewall experience</p>
+                    <p class="text-gray-500 text-xs mb-3">ONLY use if they specifically ask to expand</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "This is where the 'next-gen' capabilities really matter. Here's my investigation approach:<br><br>
+                            <strong class="text-yellow-400">DETAILED ANSWER (Only if Asked):</strong><br><br>
+                            "My primary focus has been on detection, endpoint security, and vulnerability management, but in that context I also worked with Palo Alto NGFWs and Azure Firewall as <strong class="text-white">upstream preventive controls</strong>.<br><br>
                             
-                            <strong>1. Application Identification</strong><br>
-                            First, I'd check if the traffic is using application tunneling or port obfuscation. NGFWs like Fortinet can identify applications regardless of port—so even if something is running on port 443, it'll show if it's actually HTTPS, SSH-over-HTTPS, or something else entirely. I'd look at the application control logs to see what's being identified.<br><br>
+                            The firewall architecture was already established when I joined, so my role was not in greenfield design. Instead, I <strong class="text-emerald-400">reviewed and validated security rules and inspection profiles</strong> to ensure they supported our detection strategy—things like confirming that high-risk or internet-facing traffic had appropriate inspection, managing TLS decryption scopes and exclusions, and reviewing firewall logs in Sentinel to validate rule effectiveness and reduce noise.<br><br>
                             
-                            <strong>2. SSL/TLS Inspection Review</strong><br>
-                            If traffic is encrypted, it could be creating blind spots. I'd check if SSL inspection is enabled for that traffic flow. Sometimes legitimate apps break with inspection, so there may be bypass rules that attackers could exploit. I'd review the decrypt policy exceptions.<br><br>
+                            From a security operations standpoint, I treated firewalls as a <strong class="text-white">control point feeding Sentinel</strong>, ensuring that what was allowed, inspected, or blocked at the firewall layer aligned with endpoint telemetry, threat intelligence, and vulnerability risk. That gave me a solid working understanding of NGFW behavior without owning the full network design.<br><br>
                             
-                            <strong>3. Deep Packet Inspection</strong><br>
-                            I'd enable detailed logging and packet capture for the suspicious traffic to analyze payload patterns. Looking for signatures of known tunneling tools like DNS tunneling, ICMP tunneling, or HTTP-over-DNS.<br><br>
-                            
-                            <strong>4. Threat Intelligence Correlation</strong><br>
-                            Cross-reference the destination IPs and domains against our threat intelligence feeds. Fortinet's FortiGuard provides real-time threat intel that can identify C2 domains or known malicious infrastructure.<br><br>
-                            
-                            <strong>5. Immediate Response</strong><br>
-                            If I confirm malicious activity, I'd implement a temporary block while investigating further. Then I'd pivot to our EDR (MDE) to check the source endpoint for compromise indicators. Finally, document everything and create a permanent policy based on findings."
+                            <strong class="text-emerald-400">Specific examples:</strong><br>
+                            • Validated that security profiles (AV, IPS, URL filtering) were attached to rules for internet-bound traffic<br>
+                            • Managed TLS decryption exception lists—ensuring we didn't break banking/healthcare sites while maintaining visibility<br>
+                            • Built KQL queries in Sentinel to correlate firewall threat logs with MDE alerts for end-to-end attack chain visibility<br>
+                            • Identified rules missing security profiles during quarterly reviews (traffic allowed but not inspected = gap)<br>
+                            • Worked with network team to tune IPS signatures that were generating false positives in OT environments"
                         </p>
                     </div>
                 </div>
 
-                <div class="technical rounded-xl p-6">
-                    <p class="text-green-400 font-bold mb-3">Q3: Explain your approach to troubleshooting asymmetric routing issues that are causing firewall state table problems in a multi-site environment.</p>
+                <!-- Policy Validation Question -->
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-green-400 font-bold mb-3">Q2: How do you validate that firewall policies support your detection strategy?</p>
+                    <p class="text-gray-500 text-xs mb-3">This is YOUR comfort zone - Sentinel integration</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "Asymmetric routing is tricky because stateful firewalls expect to see both sides of a conversation. Here's how I'd troubleshoot:<br><br>
+                            "I approach firewalls as a <strong class="text-emerald-400">data source and control point</strong> that feeds into Sentinel. My validation process focuses on ensuring alignment between what the firewall allows/blocks and what we can detect.<br><br>
                             
-                            <strong>1. Identify the Problem</strong><br>
-                            First, confirm it's actually asymmetric routing. Symptoms include random connection drops, TCP resets, and firewall logs showing 'no matching session' or 'asymmetric traffic dropped.' I'd use packet captures on both the firewall and endpoints to trace the traffic path in both directions.<br><br>
+                            <strong>1. Log Coverage Validation</strong><br>
+                            I verify firewall logs are flowing into Sentinel correctly—traffic logs, threat logs, URL logs. I built a KQL dashboard that shows log volume by type, so I immediately know if something stops reporting. Gaps in firewall logs = gaps in detection.<br><br>
                             
-                            <strong>2. Analyze the Routing</strong><br>
-                            Check routing tables across all sites and network devices. In multi-site environments, this often happens when there are multiple paths to the same destination—like when you have dual ISPs or MPLS + internet backup. Traffic goes out one path but returns via another, hitting a different firewall that doesn't have the session state.<br><br>
+                            <strong>2. Security Profile Audit</strong><br>
+                            I periodically review rules to identify traffic that's allowed but <strong class="text-white">not inspected</strong>. If a rule doesn't have Threat Prevention profiles attached, we have a blind spot. I flag these for remediation with the network team.<br><br>
                             
-                            <strong>3. Solutions I'd Consider</strong><br>
-                            • <strong>Fix the routing</strong> - Adjust routing metrics so traffic is symmetric. This is the cleanest solution if feasible.<br>
-                            • <strong>Stateful failover clustering</strong> - If using HA firewall pairs, ensure session state is synchronized between them.<br>
-                            • <strong>Asymmetric routing support</strong> - Some NGFWs have settings to tolerate asymmetric traffic, though this weakens security posture.<br>
-                            • <strong>Source-based routing</strong> - Use policy-based routing to ensure return traffic follows the same path.<br><br>
+                            <strong>3. Detection Rule Correlation</strong><br>
+                            When I build Sentinel analytics rules, I consider what the firewall should have caught. For example, if I'm detecting C2 beaconing at the endpoint level (MDE), I cross-reference with firewall threat logs. If the firewall isn't alerting on the same traffic, either the signatures need updating or SSL inspection is bypassed for that flow.<br><br>
                             
-                            <strong>4. Validate & Document</strong><br>
-                            After implementing the fix, I'd test affected applications thoroughly and monitor the firewall state table for a few days to confirm the issue is resolved. Then document the root cause and solution for future reference."
+                            <strong>4. TLS Decryption Review</strong><br>
+                            Encrypted traffic is a blind spot if not decrypted. I maintain awareness of what's in the decryption exception list and ensure high-risk categories are being inspected. If marketing says 'decrypt everything except banking,' I make sure the exception list isn't overly broad.<br><br>
+                            
+                            <strong>5. Threat Intel Alignment</strong><br>
+                            Firewall threat intelligence feeds should align with what we're seeing in Sentinel. If our threat intel watchlist has IOCs that the firewall should be blocking, I validate that mapping."
                         </p>
+                    </div>
+                </div>
+
+                <!-- Log Analysis Question -->
+                <div class="technical rounded-xl p-6 mb-4">
+                    <p class="text-green-400 font-bold mb-3">Q3: How do you use firewall logs in your SIEM for detection and investigation?</p>
+                    <p class="text-gray-500 text-xs mb-3">This naturally leads to YOUR strengths (Sentinel, KQL)</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "Firewall logs are one of the most valuable data sources in Sentinel because they see all traffic—not just endpoints. Here's how I use them:<br><br>
+                            
+                            <strong>Detection Rules I've Built:</strong><br>
+                            • <strong class="text-emerald-400">Threat log correlation:</strong> When the firewall blocks something (IPS signature, malware download, C2 domain), I enrich with MDE data to see if the endpoint was compromised before/after<br>
+                            • <strong class="text-emerald-400">DNS sinkhole hits:</strong> Query firewall logs for traffic to our sinkhole IP—this identifies infected hosts attempting to reach malicious domains<br>
+                            • <strong class="text-emerald-400">Anomalous outbound traffic:</strong> Large data transfers to new destinations, especially outside business hours<br>
+                            • <strong class="text-emerald-400">Application tunneling:</strong> Traffic that the firewall identifies as tunneling or proxy-avoidance<br>
+                            • <strong class="text-emerald-400">Deny log spikes:</strong> Sudden increase in blocked traffic from a host often indicates scanning or malware<br><br>
+                            
+                            <strong>Investigation Workflows:</strong><br>
+                            When investigating an incident, I start with the endpoint (MDE) to understand what happened, then pivot to firewall logs to see:<br>
+                            • What network connections did the compromised host make?<br>
+                            • What was blocked vs allowed?<br>
+                            • Were there earlier indicators in firewall logs before the endpoint alert?<br><br>
+                            
+                            <strong>Example KQL Pattern:</strong><br>
+                            <code class='text-cyan-400'>CommonSecurityLog | where DeviceVendor == 'Palo Alto' | where Activity == 'THREAT' | join kind=inner (DeviceEvents | where ActionType == 'ConnectionFound') on $left.SourceIP == $right.RemoteIP</code><br><br>
+                            
+                            This correlates firewall threat detections with endpoint network activity—giving me the full picture across both control points."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- What they WON'T ask follow-ups on -->
+                <div class="bg-gray-800/50 rounded-xl p-6 mb-4 border border-gray-700">
+                    <h4 class="text-gray-400 font-bold mb-3"><i class="fas fa-check-circle text-green-500 mr-2"></i>WHY THIS POSITIONING WORKS</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <p class="text-green-400 font-semibold mb-2">✅ Naturally leads to follow-ups on:</p>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• Logging and SIEM integration</li>
+                                <li>• Policy validation workflows</li>
+                                <li>• Security coverage gaps</li>
+                                <li>• Risk alignment with endpoints</li>
+                                <li>• Detection engineering (YOUR STRENGTH)</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-red-400 font-semibold mb-2">❌ Avoids deep dives into:</p>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• Routing and BGP</li>
+                                <li>• HA design and failover</li>
+                                <li>• Throughput sizing</li>
+                                <li>• VPN tunnel configuration</li>
+                                <li>• NAT and network architecture</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -1929,28 +1998,28 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                     <p class="text-emerald-400 font-bold mb-4">Q: The role mentions Fortinet certifications. What's your experience with Fortinet products?</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "I want to be upfront—my primary NGFW experience is with Palo Alto, not Fortinet. However, the core concepts transfer directly, and I've made it a point to understand FortiGate because it's so prevalent in the industry.
+                            "I want to be upfront—my primary NGFW experience is with Palo Alto, not Fortinet. And to be clear about my role with firewalls: <strong class="text-emerald-400">I work with them from a security monitoring and policy validation perspective</strong>, not as the network engineer doing greenfield deployments or routing configuration.
                             <br><br>
-                            <strong class="text-emerald-400">What I know about FortiGate:</strong>
+                            <strong class="text-emerald-400">My firewall interaction model:</strong>
                             <br><br>
-                            I understand FortiGate's architecture—the FortiOS operating system, the concept of VDOMs for multi-tenancy, the Security Fabric for integrated security across Fortinet products. I know that FortiGate handles application control, IPS, antivirus, web filtering similar to Palo Alto but with different terminology and interface.
+                            I treat firewalls as upstream preventive controls that feed into Sentinel. My involvement is around reviewing security policies, validating that appropriate inspection profiles are attached to rules, managing TLS decryption exception lists, and ensuring firewall logs are correctly integrated into our SIEM for detection and investigation.
                             <br><br>
-                            I've studied the CLI structure—'config firewall policy' versus Palo Alto's 'set rulebase security rules.' The concepts are the same: you're defining source, destination, service, action, and security profiles. The syntax differs.
+                            <strong class="text-emerald-400">Transferable knowledge (applies to any NGFW):</strong>
                             <br><br>
-                            FortiGate's approach to UTM is slightly different—it bundles security features into the firewall policy directly rather than attaching separate security profiles like Palo Alto does. Both achieve the same outcome.
+                            • <strong>Policy validation</strong>—reviewing rules to ensure they follow least privilege, identifying rules missing security profiles (traffic allowed but not inspected)
+                            <br>• <strong>Log analysis</strong>—understanding firewall log formats, building KQL queries to correlate firewall events with endpoint telemetry
+                            <br>• <strong>TLS inspection management</strong>—understanding what should be decrypted vs bypassed for privacy/compatibility
+                            <br>• <strong>Threat prevention concepts</strong>—IPS signatures, URL filtering categories, DNS security—the concepts are the same across vendors
                             <br><br>
-                            <strong class="text-emerald-400">Transferable skills:</strong>
+                            <strong class="text-emerald-400">What I'd need to learn for FortiGate:</strong>
                             <br><br>
-                            • NGFW concepts—App-ID equivalent (application control), user identification, SSL inspection, threat prevention
-                            <br>• Policy design—least privilege, rule ordering, logging configuration
-                            <br>• Troubleshooting methodology—checking session tables, reviewing logs, understanding traffic flow
-                            <br>• Integration—SIEM forwarding, AD integration, API usage
+                            The specific interface and CLI syntax differ—FortiGate's 'config firewall policy' vs Palo Alto's terminology. FortiGate bundles UTM features differently. But the underlying concepts transfer directly.
                             <br><br>
-                            <strong class="text-emerald-400">My learning plan:</strong>
+                            If this role involves FortiGate, I'd familiarize myself with the GUI and CLI through Fortinet's free VM trials. I could pursue NSE 4 certification to demonstrate baseline competency. But my core value isn't in being a FortiGate expert—it's in understanding how firewalls fit into the broader security ecosystem and ensuring they support our detection and response strategy in Sentinel.
                             <br><br>
-                            If this role involves FortiGate, I'm prepared to ramp up quickly. I learn best hands-on, so I'd set up a lab environment—Fortinet offers free VM trials—and work through configuration scenarios. The NSE certification path is well-documented, and I'd pursue NSE 4 as a baseline to demonstrate competency.
+                            <strong class="text-emerald-400">Bottom line:</strong>
                             <br><br>
-                            I've done vendor transitions before—learning Palo Alto after working with different firewalls, learning Microsoft security stack after Trellix. The pattern is: understand the concepts deeply, then learn the specific implementation. I'm confident I can do this with FortiGate."
+                            I'm not positioning myself as a firewall administrator or network engineer. My interaction with firewalls is primarily from a <strong>security control and monitoring perspective</strong>, ensuring policies, inspection, and logs align with our Sentinel and endpoint detection strategy. That's where I add value."
                         </p>
                     </div>
                 </div>
