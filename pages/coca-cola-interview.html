@@ -93,9 +93,9 @@
                             
                             I then moved into a security engineering position at Infosys, working across Trellix HX/EX/NX and Symantec DLP. I handled agent deployments, upgrades, policy tuning, and malware investigation. I also participated in evaluating next-generation EDR/XDR platforms such as CrowdStrike, Carbon Black, and Cortex XDR, and contributed to the migration from Trellix to Cortex XDR.<br><br>
                             
-                            After relocating to Canada, I joined a Siemens subsidiary. I initially worked on Cortex XDR agent rollouts, VM broker deployments, and developing XSOAR automations. Later, I transitioned to a major security modernization project—a hybrid environment with on-prem Windows servers moving into Azure. I supported the migration from RSA NetWitness and ESET to a cloud-native Microsoft ecosystem. My focus was translating detections for core security controls—NGFW, endpoint/EDR, identity, email security, DLP, PAM, and vulnerability telemetry. I converted RSA correlation rules into KQL for Sentinel, onboarded MDE across endpoints and servers, and built Logic Apps automations.<br><br>
+                            After relocating to Canada, I joined a Siemens subsidiary—an environment of about <strong class="text-emerald-400">5,000 endpoints supporting 2,500 employees</strong>. I initially worked on Cortex XDR agent rollouts, VM broker deployments, and developing XSOAR automations. Later, I transitioned to a major security modernization project—migrating from RSA NetWitness and ESET to a cloud-native Microsoft ecosystem. <strong class="text-white">My role was migration and engineering support</strong>—I built the detection rules, KQL analytics, automation pipelines, and dashboards, then conducted a structured handover to the subsidiary's internal security team. The SOC remained operational throughout; I wasn't running day-to-day operations, I was enabling them with modern tooling.<br><br>
                             
-                            Currently, I'm working on the migration from Symantec DLP to Microsoft Purview Endpoint DLP. I joined during the pilot phase, helped with simulation-mode testing, reduced false positives, and now I'm part of the enforcement rollout—implementing block/warn actions and coordinating phased deployment with business teams. The project is nearing completion.<br><br>
+                            Currently, I'm completing the migration from Symantec DLP to Microsoft Purview Endpoint DLP. I joined during the pilot phase, helped with simulation-mode testing, reduced false positives, and now I'm leading the enforcement rollout—implementing block/warn actions and coordinating phased deployment with business teams. The project is nearing completion.<br><br>
                             
                             Outside of work, I'm genuinely passionate about security—I don't just clock out and forget about it. I build personal projects to deepen my skills and contribute to the people around me. I've built an email security platform that my friends, family, and colleagues now use to check suspicious emails and phishing attempts. I've created malware investigation tools for analyzing samples. And I'm currently working on a bridge tool to help GRC teams and security engineers speak the same language. For me, building things is how I learn best, and I like that these projects actually help people. It's that curiosity and drive to solve problems that I'd bring to this role."
                         </p>
@@ -108,7 +108,7 @@
                         <p class="text-gray-300 text-sm leading-relaxed">
                             "I started as a SOC Analyst at Cognizant working with Splunk, which gave me a strong foundation in incident response. I then moved into security engineering at Infosys, where I worked with Trellix EDR, Symantec DLP, and contributed to the migration from Trellix to Cortex XDR.<br><br>
                             
-                            After relocating to Canada, I joined a Siemens subsidiary. I've worked on Cortex XDR deployments, XSOAR automations, and led the migration from RSA NetWitness to Microsoft Sentinel—converting correlation rules to KQL, onboarding MDE, and building Logic Apps playbooks. Currently, I'm completing the migration from Symantec DLP to Microsoft Purview.<br><br>
+                            After relocating to Canada, I joined a Siemens subsidiary—about <strong class="text-emerald-400">5,000 endpoints, 2,500 employees</strong>. I provided migration and engineering support for their move from RSA NetWitness to Microsoft Sentinel—building detection rules, KQL analytics, and automation pipelines, then handing over to their internal team. The SOC remained operational throughout; my role was enabling them with modern tooling. Currently, I'm completing the Symantec to Purview DLP migration, now in the enforcement phase.<br><br>
                             
                             Outside of work, I build personal security projects—an email security platform that friends and family actually use to check phishing emails, malware analysis tools, and a GRC-security bridge tool I'm developing now. Building things is how I learn, and I enjoy creating tools that genuinely help people. That curiosity and hands-on approach is what I'd bring to this role."
                         </p>
@@ -451,11 +451,44 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                     RSA → Sentinel Migration
                 </h2>
 
+                <!-- Environment Scope Box -->
+                <div class="bg-emerald-500/10 border border-emerald-500/50 rounded-xl p-4 mb-4">
+                    <p class="text-emerald-400 font-bold mb-2"><i class="fas fa-building mr-2"></i>Environment Scope</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+                        <div class="bg-black/30 rounded-lg p-2">
+                            <p class="text-2xl font-bold text-emerald-400">5,000+</p>
+                            <p class="text-gray-400 text-xs">Endpoints</p>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-2">
+                            <p class="text-2xl font-bold text-emerald-400">2,500+</p>
+                            <p class="text-gray-400 text-xs">Employees</p>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-2">
+                            <p class="text-2xl font-bold text-emerald-400">Hybrid</p>
+                            <p class="text-gray-400 text-xs">On-prem + Azure</p>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-2">
+                            <p class="text-2xl font-bold text-emerald-400">Siemens</p>
+                            <p class="text-gray-400 text-xs">Subsidiary</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Role Positioning Box -->
+                <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 mb-4">
+                    <p class="text-amber-400 font-bold mb-2"><i class="fas fa-user-cog mr-2"></i>My Role: Migration & Engineering Support</p>
+                    <p class="text-gray-300 text-sm">
+                        <strong class="text-white">The SOC remained operational throughout.</strong> My role was migration and engineering support—building detection rules, KQL analytics, automation pipelines, and dashboards—followed by a <strong class="text-white">structured handover</strong> to the subsidiary's internal security team for steady-state operations. I wasn't running the SOC day-to-day; I was enabling them with modern tooling.
+                    </p>
+                </div>
+
                 <div class="technical rounded-xl p-6 mb-4">
                     <p class="text-green-400 font-bold mb-3">Q: Walk me through how you migrated RSA NetWitness correlation rules to Sentinel KQL analytics.</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "In the NetWitness-to-Sentinel migration, my focus was translating and operationalizing detections across the organization's <strong class="text-emerald-400">core security controls</strong>—NGFW, endpoint/EDR, identity (AD/Entra), email security, DLP, PAM, and vulnerability telemetry like TVM and Qualys. The priority was achieving detection parity, tuning, and incident workflow stability for the controls driving the majority of security risk and SOC volume.<br><br>
+                            "In our environment of <strong class="text-emerald-400">5,000+ endpoints supporting 2,500 employees</strong>, the NetWitness-to-Sentinel migration was a significant undertaking. My role was <strong class="text-white">migration and engineering support</strong>—the SOC remained operational throughout, and I focused on building the detection infrastructure they needed.<br><br>
+                            
+                            My focus was translating and operationalizing detections across the organization's <strong class="text-emerald-400">core security controls</strong>—NGFW, endpoint/EDR, identity (AD/Entra), email security, DLP, PAM, and vulnerability telemetry like TVM and Qualys. The priority was achieving detection parity, tuning, and incident workflow stability for the controls driving the majority of security risk and SOC volume.<br><br>
                             
                             <strong class="text-emerald-400">My Approach:</strong><br>
                             I started by breaking down each RSA correlation rule, mapping legacy meta keys to Sentinel's schema, and rewriting the logic in KQL with clean entity mapping and MITRE ATT&CK alignment. As I translated rules, I noticed significant duplication in the legacy environment, so I consolidated overlapping detections and categorized into three groups:<br>
@@ -466,11 +499,10 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                             <strong class="text-emerald-400">Handling Out-of-Scope Detections:</strong><br>
                             For detections that were out of scope for the current migration phase—like DevSecOps telemetry—we translated the RSA NetWitness rules and <strong>documented them as part of the migration backlog</strong> rather than immediately implementing them in Sentinel. This preserved detection logic and coverage intent while keeping the migration focused on high-priority controls.<br><br>
                             
-                            DevSecOps telemetry integration was planned as a later maturity step once the core migration baseline and SOC operations were stabilized.<br><br>
-                            
                             I validated each rewritten rule using historical telemetry, tuned thresholds and suppression windows, and worked closely with the SOC to confirm detections behaved as expected. I also built a Sentinel workbook monitoring ingestion health, connector status, and telemetry completeness.<br><br>
                             
-                            Between the deduplicated rule set, improved KQL logic, and visibility dashboards, we ended up with a cleaner, more accurate, and easier-to-maintain detection program than what existed in RSA. We finished about three months ahead of schedule."
+                            <strong class="text-emerald-400">Handover:</strong><br>
+                            Once we completed the baseline—log ingestion, core detections, validation—I conducted a structured handover: runbook documentation, SOC training sessions, workbook templates, and tuning guidelines. The subsidiary's internal security team took over steady-state operations. Between the deduplicated rule set, improved KQL logic, and visibility dashboards, we ended up with a cleaner, more accurate, and easier-to-maintain detection program than what existed in RSA."
                         </p>
                     </div>
                 </div>
@@ -500,6 +532,34 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                                 <li class="text-gray-500 italic">Rules translated & documented, not implemented</li>
                             </ul>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Follow-up: Why moved to DLP -->
+                <div class="behavioral rounded-xl p-6 mb-4">
+                    <p class="text-purple-400 font-bold mb-3">Follow-up: Why were you moved to DLP before fully stabilizing the Sentinel migration?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "The Sentinel migration was structured in phases. Once we completed the baseline requirements—including <strong class="text-emerald-400">log ingestion, core detections, validation, and knowledge transfer</strong>—the environment was handed over to the subsidiary's internal security team for steady-state operations.<br><br>
+                            
+                            At that point, I was reassigned to the DLP program, which had moved into <strong class="text-emerald-400">active enforcement across multiple policies</strong> and required dedicated security engineering effort. This was a <strong class="text-emerald-400">planned resource transition</strong> rather than an incomplete migration.<br><br>
+                            
+                            The migration deliverables were completed and handed off properly—detection parity achieved, SOC trained, runbooks documented, workbooks built. The subsidiary's team took over steady-state operations while I moved to where the organization needed engineering focus next. This is standard practice for migration projects—you build, validate, hand over, then move to the next priority."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Follow-up: Your role vs SOC -->
+                <div class="behavioral rounded-xl p-6 mb-4">
+                    <p class="text-purple-400 font-bold mb-3">Follow-up: What was your role versus the SOC team?</p>
+                    <div class="answer-box">
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            "The SOC remained operational throughout the migration—they continued handling alerts, investigations, and incident response. <strong class="text-white">My role was migration and engineering support</strong>, not SOC operations.<br><br>
+                            
+                            I built the detection rules, KQL analytics, correlation logic, and automation pipelines. I created the Sentinel workbooks and dashboards. I validated detections against historical data. And I conducted the structured handover—runbooks, training sessions, tuning guidelines.<br><br>
+                            
+                            Think of it as building the tooling and enabling the team, rather than running the day-to-day operations. Once the migration baseline was stable, the subsidiary's internal security team owned steady-state operations. I moved on to the next engineering priority—the DLP enforcement project."
+                        </p>
                     </div>
                 </div>
 

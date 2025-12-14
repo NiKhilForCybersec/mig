@@ -13,6 +13,8 @@
         .phase-automated { border-left: 4px solid #22c55e; }
         .phase-manual { border-left: 4px solid #f59e0b; }
         .phase-stop { border-left: 4px solid #ef4444; }
+        .phase-context { border-left: 4px solid #3b82f6; }
+        .phase-soc { border-left: 4px solid #8b5cf6; }
         pre { white-space: pre-wrap; word-wrap: break-word; }
     </style>
 </head>
@@ -27,7 +29,7 @@
                     </div>
                     <div>
                         <h1 class="text-lg font-semibold text-white">Vulnerability Management Workflows</h1>
-                        <p class="text-xs text-gray-400">End-to-End Process Diagrams</p>
+                        <p class="text-xs text-gray-400">End-to-End Enterprise Process (11 Phases)</p>
                     </div>
                 </div>
                 <a href="workflows-index.html" class="text-gray-400 hover:text-red-400 transition-colors">
@@ -38,7 +40,36 @@
     </nav>
 
     <div class="pt-24 pb-12 px-6">
-        <div class="max-w-6xl mx-auto space-y-12">
+        <div class="max-w-6xl mx-auto space-y-8">
+
+            <!-- Key Concept Box -->
+            <div class="bg-blue-500/10 border border-blue-500/50 rounded-xl p-6">
+                <h3 class="text-blue-400 font-bold text-lg mb-3"><i class="fas fa-lightbulb mr-2"></i>Key Concept: Vulnerability Management ≠ SOC Workflow</h3>
+                <p class="text-gray-300 text-sm mb-4">
+                    Vulnerability management is <strong class="text-white">NOT</strong> a SOC incident workflow. SOC only engages when vulnerabilities are actively exploited. 
+                    The vulnerability pipeline produces <strong class="text-white">prioritized findings for remediation teams</strong>, not SOC tickets.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div class="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
+                        <p class="text-green-400 font-semibold mb-1">✅ Vulnerability Management Output:</p>
+                        <ul class="text-gray-400 text-xs space-y-1">
+                            <li>• Power BI dashboards</li>
+                            <li>• CSV exports for analysts</li>
+                            <li>• ServiceNow/Jira tickets to asset owners</li>
+                            <li>• SLA tracking reports</li>
+                        </ul>
+                    </div>
+                    <div class="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3">
+                        <p class="text-purple-400 font-semibold mb-1">⚡ When SOC Gets Involved:</p>
+                        <ul class="text-gray-400 text-xs space-y-1">
+                            <li>• NGFW detects exploit traffic</li>
+                            <li>• EDR detects suspicious behavior</li>
+                            <li>• Correlation rule links activity to known vuln</li>
+                            <li>• Then → Sentinel Incident → SOC Investigation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
             <!-- Legend -->
             <div class="glass-card rounded-xl p-4">
@@ -49,6 +80,10 @@
                         <span class="text-gray-300">Automated</span>
                     </div>
                     <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 bg-blue-500 rounded"></div>
+                        <span class="text-gray-300">Enrichment/Logic</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
                         <div class="w-4 h-4 bg-yellow-500 rounded"></div>
                         <span class="text-gray-300">Manual (Human)</span>
                     </div>
@@ -56,551 +91,1013 @@
                         <div class="w-4 h-4 bg-red-500 rounded"></div>
                         <span class="text-gray-300">Stop Point / Decision</span>
                     </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 bg-purple-500 rounded"></div>
+                        <span class="text-gray-300">SOC (Only When Needed)</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- ============================================ -->
-            <!-- WORKFLOW 1: End-to-End Vuln Management -->
-            <!-- ============================================ -->
+            <!-- PHASE 1 -->
             <section>
-                <h2 class="text-2xl font-bold text-white mb-6">
-                    <span class="text-red-400">1.</span> End-to-End Vulnerability Management
+                <h2 class="text-2xl font-bold text-white mb-4">
+                    <span class="text-red-400">1.</span> Vulnerability Data Generation (Source of Truth)
                 </h2>
-
-                <!-- Phase 1 -->
                 <div class="workflow-box rounded-xl p-6 mb-4 phase-automated">
-                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-robot mr-2"></i>PHASE 1: DATA COLLECTION (Automated)</h3>
+                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-radar mr-2"></i>1.1 Qualys / TVM Scan Execution</h3>
                     <pre class="text-gray-300 text-sm">
-        ┌───────────────────┐     ┌───────────────────┐     ┌───────────────────┐
-        │   QUALYS VMDR     │     │    MDE TVM        │     │  DEFENDER FOR     │
-        │                   │     │                   │     │  CLOUD (CSPM)     │
-        │ • Authenticated   │     │ • Continuous      │     │                   │
-        │   scans           │     │   assessment      │     │ • Cloud misconfig │
-        │ • Infrastructure  │     │ • Endpoints       │     │ • Azure/AWS/GCP   │
-        │ • Servers         │     │ • Exposure score  │     │                   │
-        └─────────┬─────────┘     └─────────┬─────────┘     └─────────┬─────────┘
-                  │                         │                         │
-                  └─────────────────────────┼─────────────────────────┘
-                                            │
-                                            ▼
-                            ┌───────────────────────────────┐
-                            │    LOG ANALYTICS WORKSPACE    │
-                            │      (Microsoft Sentinel)     │
-                            └───────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                           VULNERABILITY SCANNING SOURCES                                 │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                         │
+│   ┌─────────────────────────────────┐       ┌─────────────────────────────────┐        │
+│   │           QUALYS VMDR           │       │      MICROSOFT DEFENDER TVM      │        │
+│   │                                 │       │                                 │        │
+│   │  Scheduled authenticated scans  │       │  Continuous exposure assessment │        │
+│   │  (weekly / daily)               │       │                                 │        │
+│   │                                 │       │                                 │        │
+│   │  Produces:                      │       │  Produces:                      │        │
+│   │  ├── CVE identifiers            │       │  ├── Vulnerabilities            │        │
+│   │  ├── CVSS scores                │       │  ├── Software inventory         │        │
+│   │  ├── Detection proofs           │       │  ├── Exploitability indicators  │        │
+│   │  └── Detection timestamps       │       │  └── Exposure metrics           │        │
+│   │                                 │       │                                 │        │
+│   │  Coverage:                      │       │  Coverage:                      │        │
+│   │  • Infrastructure               │       │  • Endpoints                    │        │
+│   │  • Servers                      │       │  • Servers with MDE             │        │
+│   │  • Network devices              │       │  • Workstations                 │        │
+│   └─────────────────────────────────┘       └─────────────────────────────────┘        │
+│                                                                                         │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐  │
+│   │                        THESE TOOLS ANSWER:                                       │  │
+│   │                  "What vulnerabilities exist and where?"                         │  │
+│   └─────────────────────────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
                     </pre>
                 </div>
+            </section>
 
-                <!-- Phase 2 -->
+            <!-- PHASE 2 -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-4">
+                    <span class="text-red-400">2.</span> Data Ingestion into Sentinel (Raw Signals)
+                </h2>
                 <div class="workflow-box rounded-xl p-6 mb-4 phase-automated">
-                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-robot mr-2"></i>PHASE 2: ENRICHMENT & SCORING (Automated)</h3>
+                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-database mr-2"></i>2.1 Ingestion Paths</h3>
                     <pre class="text-gray-300 text-sm">
-                            ┌───────────────────────────────────────────────────┐
-                            │                   KQL QUERY                       │
-                            │                                                   │
-                            │  JOIN with:                                       │
-                            │  ├── EPSS Watchlist (Exploit Prediction)         │
-                            │  ├── CISA KEV Watchlist (Known Exploited)        │
-                            │  ├── CMDB Watchlist (Asset Criticality)          │
-                            │  └── Azure Tags (Owner, Environment)             │
-                            │                                                   │
-                            │  CALCULATE:                                       │
-                            │  RiskScore = CVSS × ExploitMult × CriticalityMult│
-                            │                                                   │
-                            │  MULTIPLIERS:                                     │
-                            │  • CISA KEV = 2.0x                               │
-                            │  • EPSS > 0.5 = 1.5x                             │
-                            │  • Tier 1 Asset = 2.0x                           │
-                            │  • Internet-facing = 1.5x                        │
-                            └───────────────────────────────────────────────────┘
-                                                    │
-                                                    ▼
-                            ┌───────────────────────────────────────────────────┐
-                            │              PRIORITY TIERS                       │
-                            │                                                   │
-                            │  Critical (80-100): Remediate 24-48 hours        │
-                            │  High (60-79):      Remediate 7 days             │
-                            │  Medium (40-59):    Remediate 30 days            │
-                            │  Low (0-39):        Remediate 90 days            │
-                            └───────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                              DATA INGESTION INTO SENTINEL                                │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                         │
+│   ┌─────────────────────┐                      ┌─────────────────────────────────────┐ │
+│   │       QUALYS        │                      │         LOG ANALYTICS               │ │
+│   │                     │──── API Connector ──▶│                                     │ │
+│   │  Scanner Results    │     / Logic App      │  Custom Table: QualysVuln_CL        │ │
+│   └─────────────────────┘                      │                                     │ │
+│                                                │  TVM Tables (Native):               │ │
+│   ┌─────────────────────┐                      │  • DeviceTvmSoftwareVulnerabilities │ │
+│   │   DEFENDER TVM      │                      │  • DeviceTvmSecureConfigAssessment  │ │
+│   │                     │── Native Connector ─▶│  • DeviceTvmSoftwareInventory       │ │
+│   │  Continuous Data    │                      │                                     │ │
+│   └─────────────────────┘                      └─────────────────────────────────────┘ │
+│                                                                                         │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐  │
+│   │  AT THIS STAGE:                                                                  │  │
+│   │  ├── Data is RAW                                                                │  │
+│   │  ├── HIGH VOLUME (thousands of findings)                                        │  │
+│   │  └── NOT ACTIONABLE without enrichment                                          │  │
+│   │                                                                                  │  │
+│   │  ❌ NO SOC INVOLVEMENT HERE                                                      │  │
+│   └─────────────────────────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- PHASE 3 -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-4">
+                    <span class="text-red-400">3.</span> Enrichment & Contextualization (Critical Step)
+                    <span class="ml-3 px-3 py-1 bg-emerald-500/20 text-emerald-400 text-sm rounded-full">YOUR AUTOMATION</span>
+                </h2>
+                <div class="bg-emerald-500/10 border border-emerald-500/50 rounded-xl p-4 mb-4">
+                    <p class="text-emerald-400 font-bold"><i class="fas fa-star mr-2"></i>This is where YOUR automation and correlation logic lives</p>
+                </div>
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-context">
+                    <h3 class="text-blue-400 font-bold mb-4"><i class="fas fa-layer-group mr-2"></i>3.1 External Enrichment Sources</h3>
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                              ENRICHMENT DATA SOURCES                                     │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│   ┌──────────────────────────────────────────────────────────────────────────────────┐ │
+│   │ EPSS (Exploit Prediction Scoring System) - FIRST.org                             │ │
+│   │ Adds: Probability of exploitation in next 30 days (0.0 - 1.0)                    │ │
+│   └──────────────────────────────────────────────────────────────────────────────────┘ │
+│   ┌──────────────────────────────────────────────────────────────────────────────────┐ │
+│   │ CISA KEV (Known Exploited Vulnerabilities)                                        │ │
+│   │ Adds: Boolean flag - Is this CVE being actively exploited in the wild?           │ │
+│   └──────────────────────────────────────────────────────────────────────────────────┘ │
+│   ┌──────────────────────────────────────────────────────────────────────────────────┐ │
+│   │ CMDB / Asset Criticality Watchlist                                                │ │
+│   │ Adds: Asset Tier (Tier 0/1/2), Business Owner, Support Group                     │ │
+│   └──────────────────────────────────────────────────────────────────────────────────┘ │
+│   ┌──────────────────────────────────────────────────────────────────────────────────┐ │
+│   │ Exposure Context                                                                  │ │
+│   │ Adds: Internet-facing?, Firewall reachability, Network zone (DMZ/Internal/OT)    │ │
+│   └──────────────────────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
                     </pre>
                 </div>
 
-                <!-- Phase 3 -->
-                <div class="workflow-box rounded-xl p-6 mb-4 phase-automated">
-                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-robot mr-2"></i>PHASE 3: AUTO-TAGGING (Logic App)</h3>
-                    <pre class="text-gray-300 text-sm">
-                            ┌───────────────────────────────────────────────────┐
-                            │                  LOGIC APP                        │
-                            │                                                   │
-                            │  IF RiskScore >= 80 (Critical):                  │
-                            │  ├── Tag MDE Device: "VulnCritical-YYYY-MM-DD"   │
-                            │  ├── Tag Azure Resource: "SecurityPriority:Crit" │
-                            │  └── Add to Watchlist: "CriticalVulnAssets"      │
-                            │                                                   │
-                            │  IF RiskScore 60-79 (High):                      │
-                            │  ├── Tag MDE Device: "VulnHigh-YYYY-MM-DD"       │
-                            │  └── Tag Azure Resource: "SecurityPriority:High" │
-                            └───────────────────────────────────────────────────┘
-                    </pre>
+                <!-- FULL KQL CORRELATION RULE -->
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-context">
+                    <h3 class="text-blue-400 font-bold mb-4"><i class="fas fa-code mr-2"></i>3.2 Complete Correlation Rule (Production KQL)</h3>
+                    <div class="bg-black/50 rounded-lg p-4 overflow-x-auto">
+                        <pre class="text-xs text-cyan-400">
+// ============================================================================
+// VULNERABILITY RISK SCORING CORRELATION RULE
+// Scheduled Analytics Rule - Runs every 4 hours
+// Incident Creation: OFF (alerts trigger automation, not SOC)
+// ============================================================================
+
+// ----- STEP 1: Load Enrichment Watchlists -----
+let EPSS_Scores = _GetWatchlist('EPSS_Scores')
+    | project CveId = CVE, EPSS_Score = todouble(EPSS), EPSS_Percentile = todouble(Percentile);
+
+let CISA_KEV = _GetWatchlist('CISA_KEV')
+    | project CveId = CVE, KEV_DateAdded = todatetime(DateAdded), 
+              KEV_DueDate = todatetime(DueDate), KEV_Vendor = Vendor;
+
+let Asset_Criticality = _GetWatchlist('Asset_Criticality')
+    | project DeviceName = Hostname, AssetTier, BusinessUnit, 
+              AssetOwner = Owner, SupportGroup, InternetFacing = tobool(InternetFacing);
+
+let Exposure_Context = _GetWatchlist('Exposure_Context')
+    | project DeviceName = Hostname, NetworkZone, FirewallReachable = tobool(Reachable),
+              DMZ = tobool(InDMZ);
+
+// ----- STEP 2: Get TVM Vulnerabilities (Last 4 hours of new detections) -----
+let TVM_Vulns = DeviceTvmSoftwareVulnerabilities
+    | where TimeGenerated > ago(4h)
+    | project 
+        TimeGenerated,
+        DeviceId,
+        DeviceName,
+        CveId,
+        VulnerabilitySeverityLevel,
+        CvssScore,
+        SoftwareName,
+        SoftwareVersion,
+        RecommendedSecurityUpdate;
+
+// ----- STEP 3: Get Qualys Vulnerabilities (if using Qualys) -----
+let Qualys_Vulns = QualysVuln_CL
+    | where TimeGenerated > ago(4h)
+    | project
+        TimeGenerated,
+        DeviceName = Computer_s,
+        CveId = CVE_s,
+        CvssScore = CVSS_d,
+        QualysQID = QID_s,
+        Severity = Severity_s;
+
+// ----- STEP 4: Union TVM + Qualys (deduplicate by CVE+Device) -----
+let All_Vulns = TVM_Vulns
+    | union Qualys_Vulns
+    | summarize arg_max(TimeGenerated, *) by CveId, DeviceName;
+
+// ----- STEP 5: Enrich with EPSS -----
+let Enriched_EPSS = All_Vulns
+    | join kind=leftouter EPSS_Scores on CveId
+    | extend EPSS_Score = coalesce(EPSS_Score, 0.0);
+
+// ----- STEP 6: Enrich with CISA KEV -----
+let Enriched_KEV = Enriched_EPSS
+    | join kind=leftouter CISA_KEV on CveId
+    | extend 
+        InKEV = isnotempty(KEV_DateAdded),
+        KEV_Overdue = iff(isnotempty(KEV_DueDate), now() > KEV_DueDate, false);
+
+// ----- STEP 7: Enrich with Asset Criticality -----
+let Enriched_Asset = Enriched_KEV
+    | join kind=leftouter Asset_Criticality on DeviceName
+    | extend 
+        AssetTier = coalesce(AssetTier, "Tier3"),
+        InternetFacing = coalesce(InternetFacing, false);
+
+// ----- STEP 8: Enrich with Exposure Context -----
+let Enriched_Exposure = Enriched_Asset
+    | join kind=leftouter Exposure_Context on DeviceName
+    | extend 
+        NetworkZone = coalesce(NetworkZone, "Internal"),
+        InDMZ = coalesce(DMZ, false);
+
+// ----- STEP 9: Calculate Risk Score -----
+let Scored_Vulns = Enriched_Exposure
+    | extend 
+        // Base CVSS Score (0-100 scale)
+        CVSS_Points = CvssScore * 10,
+        
+        // EPSS Multiplier (high exploit probability = higher score)
+        EPSS_Points = EPSS_Score * 50,
+        
+        // CISA KEV (actively exploited = critical)
+        KEV_Points = iff(InKEV, 100, 0),
+        KEV_Overdue_Points = iff(KEV_Overdue, 50, 0),
+        
+        // Asset Criticality
+        Asset_Points = case(
+            AssetTier == "Tier0", 75,  // Domain Controllers, PKI, PAM
+            AssetTier == "Tier1", 50,  // Critical business apps
+            AssetTier == "Tier2", 25,  // Standard servers
+            10                          // Workstations, other
+        ),
+        
+        // Exposure
+        Exposure_Points = case(
+            InternetFacing and InDMZ, 50,  // Internet-facing in DMZ
+            InternetFacing, 40,             // Internet-facing
+            InDMZ, 25,                      // DMZ but not internet-facing
+            NetworkZone == "OT", 30,        // OT network (sensitive)
+            0                               // Internal only
+        )
+    | extend 
+        RiskScore = CVSS_Points + EPSS_Points + KEV_Points + KEV_Overdue_Points + Asset_Points + Exposure_Points;
+
+// ----- STEP 10: Assign Priority Tier and SLA -----
+let Prioritized_Vulns = Scored_Vulns
+    | extend 
+        PriorityTier = case(
+            RiskScore >= 200, "Critical",
+            RiskScore >= 150, "High",
+            RiskScore >= 100, "Medium",
+            "Low"
+        ),
+        SLA_Days = case(
+            RiskScore >= 200, 2,    // 48 hours
+            RiskScore >= 150, 7,    // 7 days
+            RiskScore >= 100, 30,   // 30 days
+            90                       // 90 days
+        ),
+        SLA_Deadline = case(
+            RiskScore >= 200, now() + 2d,
+            RiskScore >= 150, now() + 7d,
+            RiskScore >= 100, now() + 30d,
+            now() + 90d
+        );
+
+// ----- STEP 11: Final Output (Only High-Risk for Alerting) -----
+Prioritized_Vulns
+| where RiskScore >= 150  // Only Critical and High trigger alerts
+| project 
+    TimeGenerated,
+    DeviceName,
+    CveId,
+    CvssScore,
+    EPSS_Score,
+    InKEV,
+    KEV_Overdue,
+    AssetTier,
+    AssetOwner,
+    BusinessUnit,
+    SupportGroup,
+    InternetFacing,
+    NetworkZone,
+    RiskScore,
+    PriorityTier,
+    SLA_Days,
+    SLA_Deadline,
+    RecommendedAction = case(
+        InKEV and KEV_Overdue, "URGENT: CISA KEV overdue - patch immediately",
+        InKEV, strcat("CISA KEV - patch by ", format_datetime(KEV_DueDate, 'yyyy-MM-dd')),
+        RiskScore >= 200, "Critical risk - patch within 48 hours",
+        RiskScore >= 150, "High risk - patch within 7 days",
+        "Schedule remediation per SLA"
+    ),
+    SoftwareName,
+    RecommendedSecurityUpdate
+| sort by RiskScore desc
+                        </pre>
+                    </div>
+                    
+                    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-black/30 rounded-lg p-3">
+                            <p class="text-yellow-400 font-semibold text-sm mb-2">Risk Score Weights:</p>
+                            <ul class="text-gray-400 text-xs space-y-1">
+                                <li>• CVSS × 10 = 0-100 points</li>
+                                <li>• EPSS × 50 = 0-50 points</li>
+                                <li>• CISA KEV = +100 points</li>
+                                <li>• KEV Overdue = +50 points</li>
+                                <li>• Tier 0 Asset = +75 points</li>
+                                <li>• Internet-facing = +40-50 points</li>
+                            </ul>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-3">
+                            <p class="text-yellow-400 font-semibold text-sm mb-2">SLA Mapping:</p>
+                            <ul class="text-gray-400 text-xs space-y-1">
+                                <li>• Critical (≥200): 48 hours</li>
+                                <li>• High (150-199): 7 days</li>
+                                <li>• Medium (100-149): 30 days</li>
+                                <li>• Low (&lt;100): 90 days</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Phase 4 -->
-                <div class="workflow-box rounded-xl p-6 mb-4 phase-automated">
-                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-robot mr-2"></i>PHASE 4: GENERATE REVIEW QUEUE (Logic App)</h3>
-                    <pre class="text-gray-300 text-sm">
-                            ┌───────────────────────────────────────────────────┐
-                            │             DAILY OUTPUTS (6:00 AM)               │
-                            │                                                   │
-                            │  1. CSV Report → SharePoint                       │
-                            │     /Security/VulnMgmt/DailyReview/YYYY-MM-DD.csv│
-                            │                                                   │
-                            │     Columns: DeviceName, CVE, CVSS, RiskScore,   │
-                            │     PriorityTier, EPSS, InKEV, AssetCriticality, │
-                            │     Owner, ExposureLevel, RecommendedAction      │
-                            │                                                   │
-                            │  2. Teams Notification (Adaptive Card):          │
-                            │     "🔴 12 Critical | 🟠 34 High awaiting review" │
-                            │     [View CSV] [Open Dashboard]                   │
-                            │                                                   │
-                            │  3. Email to Security Engineer:                  │
-                            │     Subject: "Daily Vuln Review Queue"           │
-                            │     Attachment: CSV                               │
-                            └───────────────────────────────────────────────────┘
-                    </pre>
+                <!-- Watchlist Schema -->
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-context">
+                    <h3 class="text-blue-400 font-bold mb-4"><i class="fas fa-table mr-2"></i>3.3 Watchlist Schemas</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-black/30 rounded-lg p-3">
+                            <p class="text-cyan-400 font-semibold text-sm mb-2">EPSS_Scores Watchlist:</p>
+                            <pre class="text-xs text-gray-400">
+CVE,EPSS,Percentile
+CVE-2024-1234,0.92,99.5
+CVE-2024-5678,0.45,85.2
+CVE-2024-9012,0.12,45.0
+                            </pre>
+                            <p class="text-gray-500 text-xs mt-2">Updated daily via Logic App from FIRST.org API</p>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-3">
+                            <p class="text-cyan-400 font-semibold text-sm mb-2">CISA_KEV Watchlist:</p>
+                            <pre class="text-xs text-gray-400">
+CVE,DateAdded,DueDate,Vendor
+CVE-2024-1234,2024-01-15,2024-01-29,Microsoft
+CVE-2024-5678,2024-02-01,2024-02-15,Apache
+                            </pre>
+                            <p class="text-gray-500 text-xs mt-2">Updated daily via Logic App from CISA catalog</p>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-3">
+                            <p class="text-cyan-400 font-semibold text-sm mb-2">Asset_Criticality Watchlist:</p>
+                            <pre class="text-xs text-gray-400">
+Hostname,AssetTier,Owner,SupportGroup,InternetFacing
+DC-01,Tier0,john.doe,AD-Team,false
+WEB-PROD-01,Tier1,jane.smith,Web-Team,true
+APP-DEV-01,Tier2,dev.team,App-Team,false
+                            </pre>
+                            <p class="text-gray-500 text-xs mt-2">Synced weekly from ServiceNow CMDB</p>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-3">
+                            <p class="text-cyan-400 font-semibold text-sm mb-2">Exposure_Context Watchlist:</p>
+                            <pre class="text-xs text-gray-400">
+Hostname,NetworkZone,Reachable,InDMZ
+WEB-PROD-01,DMZ,true,true
+DC-01,Internal,false,false
+OT-PLC-01,OT,false,false
+                            </pre>
+                            <p class="text-gray-500 text-xs mt-2">Derived from firewall rules and network inventory</p>
+                        </div>
+                    </div>
                 </div>
+            </section>
 
-                <!-- STOP -->
-                <div class="workflow-box rounded-xl p-6 mb-4 phase-stop bg-red-500/10">
-                    <h3 class="text-red-400 font-bold text-center text-xl">
-                        <i class="fas fa-hand-paper mr-2"></i>🛑 AUTOMATION STOPS HERE
-                    </h3>
-                    <p class="text-center text-gray-400 mt-2">Human validation required before any remediation actions</p>
-                </div>
-
-                <!-- Phase 5 -->
-                <div class="workflow-box rounded-xl p-6 mb-4 phase-manual">
-                    <h3 class="text-yellow-400 font-bold mb-4"><i class="fas fa-user mr-2"></i>PHASE 5: HUMAN VALIDATION (Manual - Daily)</h3>
-                    <pre class="text-gray-300 text-sm">
-                            ┌───────────────────────────────────────────────────┐
-                            │         👤 SECURITY ENGINEER REVIEW               │
-                            │                                                   │
-                            │  For each Critical/High finding in CSV:          │
-                            │                                                   │
-                            │  □ FALSE POSITIVE CHECK                          │
-                            │    ├── Is scanner correct?                       │
-                            │    ├── Does CVE apply to our config?             │
-                            │    └── Mark as FP if confirmed                   │
-                            │                                                   │
-                            │  □ COMPENSATING CONTROLS CHECK                   │
-                            │    ├── Already mitigated by WAF?                 │
-                            │    ├── Network segmentation blocking path?       │
-                            │    └── Document controls if risk reduced         │
-                            │                                                   │
-                            │  □ PATCH IMPACT ASSESSMENT                       │
-                            │    ├── OT/ICS system? (vendor approval needed)   │
-                            │    ├── Legacy system? (may break app)            │
-                            │    └── Critical workload? (needs change window)  │
-                            │                                                   │
-                            │  □ EXCEPTION ELIGIBILITY                         │
-                            │    ├── Cannot patch? Document why                │
-                            │    └── Route to exception process if needed      │
-                            └───────────────────────────────────────────────────┘
-                                                    │
-                                                    ▼
-                            ┌───────────────────────────────────────────────────┐
-                            │              OUTPUT: DISPOSITION                  │
-                            │                                                   │
-                            │  • REMEDIATE → Open ticket                       │
-                            │  • MITIGATED → Document compensating control     │
-                            │  • FALSE POSITIVE → Mark and exclude             │
-                            │  • EXCEPTION → Route to risk governance          │
-                            └───────────────────────────────────────────────────┘
-                    </pre>
-                </div>
-
-                <!-- Phase 6 -->
-                <div class="workflow-box rounded-xl p-6 mb-4 phase-manual">
-                    <h3 class="text-yellow-400 font-bold mb-4"><i class="fas fa-user mr-2"></i>PHASE 6: ACTION EXECUTION (Manual)</h3>
-                    <pre class="text-gray-300 text-sm">
-        ┌─────────────────────┐   ┌─────────────────────┐   ┌─────────────────────┐
-        │     REMEDIATE       │   │     EXCEPTION       │   │   FALSE POSITIVE    │
-        │                     │   │                     │   │                     │
-        │ • Create ServiceNow │   │ • Submit exception  │   │ • Mark in scanner   │
-        │   ticket with:      │   │   request form      │   │ • Add to exclusion  │
-        │   - CVE details     │   │ • Document:         │   │   list              │
-        │   - Risk score      │   │   - Business reason │   │ • Update KQL query  │
-        │   - Asset owner     │   │   - Compensating    │   │   to filter         │
-        │   - SLA deadline    │   │     controls        │   │                     │
-        │   - Remediation     │   │   - Target date     │   │                     │
-        │     steps           │   │   - Risk accepted   │   │                     │
-        │                     │   │     by (name)       │   │                     │
-        │ • Assign to system  │   │                     │   │                     │
-        │   owner             │   │ • Route to risk     │   │                     │
-        │                     │   │   governance        │   │                     │
-        │ • For CISA KEV:     │   │                     │   │                     │
-        │   Create Sentinel   │   │ • Track in register │   │                     │
-        │   Incident for SOC  │   │                     │   │                     │
-        └─────────────────────┘   └─────────────────────┘   └─────────────────────┘
-                    </pre>
-                </div>
-
-                <!-- Phase 7 -->
-                <div class="workflow-box rounded-xl p-6 mb-4 phase-automated">
-                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-robot mr-2"></i>PHASE 7: REMEDIATION TRACKING (ServiceNow - Automated SLAs)</h3>
-                    <pre class="text-gray-300 text-sm">
-                            ┌───────────────────────────────────────────────────┐
-                            │              SERVICENOW WORKFLOW                  │
-                            │                                                   │
-                            │  Ticket Status Flow:                             │
-                            │  NEW → ASSIGNED → IN PROGRESS → PENDING → RESOLVED│
-                            │                                                   │
-                            │  SLA Tracking (Auto-Escalation):                 │
-                            │  • Critical: 24-48 hours                         │
-                            │  • High: 7 days                                  │
-                            │  • Medium: 30 days                               │
-                            │  • Low: 90 days                                  │
-                            │                                                   │
-                            │  Escalation Path:                                │
-                            │  SLA Breach → Manager → 24hr → Director → CISO  │
-                            └───────────────────────────────────────────────────┘
-                    </pre>
-                </div>
-
-                <!-- Phase 8 -->
-                <div class="workflow-box rounded-xl p-6 mb-4 phase-manual">
-                    <h3 class="text-yellow-400 font-bold mb-4"><i class="fas fa-user mr-2"></i>PHASE 8: VERIFICATION & CLOSURE (Manual)</h3>
-                    <pre class="text-gray-300 text-sm">
-                            ┌───────────────────────────────────────────────────┐
-                            │      👤 SECURITY ENGINEER VERIFICATION            │
-                            │                                                   │
-                            │  After system owner marks ticket "Resolved":     │
-                            │                                                   │
-                            │  □ RESCAN VERIFICATION                           │
-                            │    ├── Trigger targeted scan on asset            │
-                            │    ├── Confirm CVE no longer detected            │
-                            │    └── Check for regression (new vulns?)         │
-                            │                                                   │
-                            │  □ TAG REMOVAL                                   │
-                            │    ├── Remove "VulnCritical" tag                 │
-                            │    ├── Remove from Sentinel watchlist            │
-                            │    └── Update Azure resource tags                │
-                            │                                                   │
-                            │  □ DOCUMENTATION                                 │
-                            │    ├── Record remediation date                   │
-                            │    ├── Note actual remediation method            │
-                            │    └── Calculate time-to-remediate               │
-                            │                                                   │
-                            │  □ CLOSE TICKET                                  │
-                            │    └── Mark as "Verified Closed" in ServiceNow   │
-                            └───────────────────────────────────────────────────┘
-                    </pre>
-                </div>
-
-                <!-- Phase 9 -->
-                <div class="workflow-box rounded-xl p-6 mb-4 phase-automated">
-                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-robot mr-2"></i>PHASE 9: REPORTING & METRICS (Power BI - Automated)</h3>
-                    <pre class="text-gray-300 text-sm">
-                            ┌───────────────────────────────────────────────────┐
-                            │              POWER BI DASHBOARD                   │
-                            │                                                   │
-                            │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ │
-                            │  │ Open Vulns  │ │ MTTR        │ │ SLA         │ │
-                            │  │ by Severity │ │ (Mean Time  │ │ Compliance  │ │
-                            │  │             │ │ to Remediate│ │     %       │ │
-                            │  │ 🔴 12 Crit  │ │             │ │             │ │
-                            │  │ 🟠 34 High  │ │ Crit: 36hr  │ │ Crit: 92%   │ │
-                            │  │ 🟡 156 Med  │ │ High: 5.2d  │ │ High: 87%   │ │
-                            │  │ 🟢 412 Low  │ │ Med: 22d    │ │ Med: 78%    │ │
-                            │  └─────────────┘ └─────────────┘ └─────────────┘ │
-                            │                                                   │
-                            │  STAKEHOLDER REPORTS:                            │
-                            │  • Weekly: Detailed CSV to Security Team         │
-                            │  • Monthly: Executive PDF to Leadership          │
-                            │  • Quarterly: Exception review to Risk Committee │
-                            └───────────────────────────────────────────────────┘
-                    </pre>
-                </div>
+            <!-- PHASE 4 -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-4">
+                    <span class="text-red-400">4.</span> Threshold Evaluation → Alerts (Not Incidents)
+                </h2>
                 
-                <!-- YOUR EXPERIENCE CALLOUT -->
-                <div class="glass-card rounded-xl p-6 mt-6 border-2 border-green-500/50 bg-gradient-to-r from-green-500/10 to-transparent">
-                    <h4 class="text-green-400 font-bold mb-3"><i class="fas fa-star mr-2"></i>YOUR MAJOR INITIATIVE (Interview Talking Point)</h4>
-                    <p class="text-gray-300 text-sm leading-relaxed mb-3">
-                        "In my current role, I took a major initiative to optimize and automate this prioritization process. Instead of replaying native risk scores from individual tools, I built a <strong class="text-white">unified risk-prioritization pipeline using Sentinel and Logic Apps</strong>."
-                    </p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                        <div class="bg-black/20 rounded-lg p-3">
-                            <p class="text-cyan-400 font-semibold mb-2">Data Sources Correlated:</p>
-                            <ul class="text-gray-400 space-y-1">
-                                <li>• Qualys VMDR + Defender TVM</li>
-                                <li>• FIRST EPSS (Exploit Prediction)</li>
-                                <li>• CISA KEV (Known Exploited)</li>
-                                <li>• CMDB (Asset Criticality)</li>
-                            </ul>
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-automated">
+                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-bell mr-2"></i>4.1 Sentinel Analytics Rule Configuration</h3>
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                         ANALYTICS RULE CONFIGURATION                                     │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                         │
+│   Rule Name:        "High-Risk Vulnerability Detected"                                  │
+│   Description:      "Prioritized vulnerability requiring remediation action"            │
+│   Severity:         Medium (this is for automation, not SOC priority)                  │
+│   MITRE ATT&CK:     Initial Access (T1190 - Exploit Public-Facing Application)         │
+│                                                                                         │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐  │
+│   │  RULE LOGIC (uses the KQL from Phase 3)                                         │  │
+│   │                                                                                  │  │
+│   │  Frequency:        Every 4 hours                                                │  │
+│   │  Lookback:         4 hours                                                      │  │
+│   │  Alert Threshold:  Greater than 0 results                                       │  │
+│   │                                                                                  │  │
+│   │  Event Grouping:   Group all events into a single alert                         │  │
+│   │                    (Logic App will process individual findings)                 │  │
+│   └─────────────────────────────────────────────────────────────────────────────────┘  │
+│                                                                                         │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐  │
+│   │  ⚠️  CRITICAL SETTINGS:                                                          │  │
+│   │                                                                                  │  │
+│   │  ┌───────────────────────────────────────────────────────────────────────────┐  │  │
+│   │  │  Incident Settings:                                                       │  │  │
+│   │  │                                                                           │  │  │
+│   │  │  Create incidents from alerts = ❌ DISABLED                               │  │  │
+│   │  │                                                                           │  │  │
+│   │  │  WHY: These alerts are NOT for SOC triage. They trigger automation       │  │  │
+│   │  │       that routes findings to vulnerability analysts via Power BI/CSV.   │  │  │
+│   │  └───────────────────────────────────────────────────────────────────────────┘  │  │
+│   │                                                                                  │  │
+│   │  ┌───────────────────────────────────────────────────────────────────────────┐  │  │
+│   │  │  Automated Response:                                                      │  │  │
+│   │  │                                                                           │  │  │
+│   │  │  Run Playbook = ✅ ENABLED                                                │  │  │
+│   │  │  Playbook:     "Vuln-ProcessHighRiskFindings"                             │  │  │
+│   │  └───────────────────────────────────────────────────────────────────────────┘  │  │
+│   └─────────────────────────────────────────────────────────────────────────────────┘  │
+│                                                                                         │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-automated">
+                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-cog mr-2"></i>4.2 Entity Mapping</h3>
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                              ENTITY MAPPING                                              │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                         │
+│   Entity Type         Column                    Purpose                                 │
+│   ─────────────────────────────────────────────────────────────────────────────────────│
+│   Host                DeviceName                Links to device entity graph           │
+│   IP                  DeviceId                  Network correlation                    │
+│                                                                                         │
+│   Custom Details (passed to Logic App):                                                │
+│   ─────────────────────────────────────────────────────────────────────────────────────│
+│   CveId               CVE identifier                                                   │
+│   RiskScore           Calculated priority score                                        │
+│   PriorityTier        Critical/High/Medium/Low                                         │
+│   SLA_Days            Remediation deadline                                             │
+│   AssetOwner          From CMDB                                                        │
+│   BusinessUnit        For routing                                                      │
+│   InKEV               CISA KEV flag                                                    │
+│   RecommendedAction   Human-readable guidance                                          │
+│                                                                                         │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- PHASE 5 -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-4">
+                    <span class="text-red-400">5.</span> Automation Trigger (Logic Apps)
+                    <span class="ml-3 px-3 py-1 bg-emerald-500/20 text-emerald-400 text-sm rounded-full">YOUR AUTOMATION</span>
+                </h2>
+
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-automated">
+                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-project-diagram mr-2"></i>5.1 Logic App Workflow Diagram</h3>
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                    LOGIC APP: Vuln-ProcessHighRiskFindings                               │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                         │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐  │
+│   │  TRIGGER: When Azure Sentinel alert is triggered                                │  │
+│   │           Alert Rule: "High-Risk Vulnerability Detected"                        │  │
+│   └───────────────────────────────────┬─────────────────────────────────────────────┘  │
+│                                       │                                                 │
+│                                       ▼                                                 │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐  │
+│   │  STEP 1: Parse Alert Entities                                                   │  │
+│   │                                                                                  │  │
+│   │  • Extract custom details from alert                                            │  │
+│   │  • Get list of all vulnerability findings                                       │  │
+│   │  • Parse JSON array of results                                                  │  │
+│   └───────────────────────────────────┬─────────────────────────────────────────────┘  │
+│                                       │                                                 │
+│                                       ▼                                                 │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐  │
+│   │  STEP 2: De-duplication Check                                                   │  │
+│   │                                                                                  │  │
+│   │  For each finding:                                                              │  │
+│   │  • Query SharePoint list: "Was this CVE+Device processed in last 24h?"          │  │
+│   │  • If YES → Skip (already in pipeline)                                          │  │
+│   │  • If NO → Continue processing                                                  │  │
+│   └───────────────────────────────────┬─────────────────────────────────────────────┘  │
+│                                       │                                                 │
+│                                       ▼                                                 │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐  │
+│   │  STEP 3: Group by Business Unit / Owner                                         │  │
+│   │                                                                                  │  │
+│   │  • Group findings by BusinessUnit                                               │  │
+│   │  • Group findings by AssetOwner                                                 │  │
+│   │  • Prepare summary counts                                                       │  │
+│   └───────────────────────────────────┬─────────────────────────────────────────────┘  │
+│                                       │                                                 │
+│                                       ▼                                                 │
+│           ┌───────────────────────────┼───────────────────────────┐                    │
+│           │                           │                           │                    │
+│           ▼                           ▼                           ▼                    │
+│   ┌───────────────┐           ┌───────────────┐           ┌───────────────┐           │
+│   │ OUTPUT 1:     │           │ OUTPUT 2:     │           │ OUTPUT 3:     │           │
+│   │ CSV to        │           │ Power BI      │           │ ServiceNow    │           │
+│   │ SharePoint    │           │ Dataset       │           │ Tickets       │           │
+│   │               │           │               │           │               │           │
+│   │ Path:         │           │ Push rows to  │           │ For Critical  │           │
+│   │ /Security/    │           │ streaming     │           │ only:         │           │
+│   │ VulnMgmt/     │           │ dataset       │           │ Auto-create   │           │
+│   │ Daily/        │           │               │           │ ticket        │           │
+│   │ YYYY-MM-DD.csv│           │               │           │               │           │
+│   └───────────────┘           └───────────────┘           └───────────────┘           │
+│           │                           │                           │                    │
+│           └───────────────────────────┼───────────────────────────┘                    │
+│                                       │                                                 │
+│                                       ▼                                                 │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐  │
+│   │  STEP 4: Send Notifications                                                     │  │
+│   │                                                                                  │  │
+│   │  Teams Adaptive Card to #vuln-management channel:                               │  │
+│   │  ┌────────────────────────────────────────────────────────────────────────────┐ │  │
+│   │  │  🔴 12 Critical | 🟠 34 High vulnerabilities require review                 │ │  │
+│   │  │                                                                            │ │  │
+│   │  │  Top Impacted Assets:                                                      │ │  │
+│   │  │  • DC-01 (5 critical)                                                      │ │  │
+│   │  │  • WEB-PROD-01 (3 critical, 2 high)                                        │ │  │
+│   │  │                                                                            │ │  │
+│   │  │  [View Dashboard]  [Download CSV]  [Open ServiceNow Queue]                 │ │  │
+│   │  └────────────────────────────────────────────────────────────────────────────┘ │  │
+│   │                                                                                  │  │
+│   │  Email to vuln-team@company.com:                                                │  │
+│   │  Subject: "Daily Vulnerability Review Queue - {date}"                           │  │
+│   │  Attachment: CSV file                                                           │  │
+│   └─────────────────────────────────────────────────────────────────────────────────┘  │
+│                                                                                         │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <!-- Logic App JSON Definition -->
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-automated">
+                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-code mr-2"></i>5.2 Logic App Actions (Pseudo-Code)</h3>
+                    <div class="bg-black/50 rounded-lg p-4 overflow-x-auto">
+                        <pre class="text-xs text-cyan-400">
+// ============================================================================
+// LOGIC APP: Vuln-ProcessHighRiskFindings
+// Trigger: Sentinel Alert
+// ============================================================================
+
+// ----- TRIGGER -----
+{
+  "trigger": "Microsoft_Sentinel_alert",
+  "alert_rule": "High-Risk Vulnerability Detected"
+}
+
+// ----- STEP 1: Initialize Variables -----
+Initialize_CriticalCount = 0
+Initialize_HighCount = 0
+Initialize_FindingsArray = []
+Initialize_ProcessedItems = []
+
+// ----- STEP 2: Parse Alert Custom Details -----
+Parse_JSON: @{triggerBody()?['ExtendedProperties']}
+// Contains: Array of {DeviceName, CveId, RiskScore, PriorityTier, AssetOwner, etc.}
+
+// ----- STEP 3: For Each Finding -----
+For_Each_Finding:
+  
+  // Check deduplication (SharePoint list query)
+  Check_Processed = SharePoint_GetItems(
+    Site: "SecurityOperations",
+    List: "VulnProcessingLog",
+    Filter: "CVE eq '@{item().CveId}' and Device eq '@{item().DeviceName}' 
+             and ProcessedDate ge '@{addDays(utcNow(), -1)}'"
+  )
+  
+  If (length(Check_Processed) == 0):  // Not processed in last 24h
+    
+    // Add to findings array
+    Append_To_Array(FindingsArray, {
+      DeviceName: item().DeviceName,
+      CveId: item().CveId,
+      RiskScore: item().RiskScore,
+      PriorityTier: item().PriorityTier,
+      SLA_Days: item().SLA_Days,
+      AssetOwner: item().AssetOwner,
+      BusinessUnit: item().BusinessUnit,
+      InKEV: item().InKEV,
+      RecommendedAction: item().RecommendedAction,
+      ProcessedDate: utcNow()
+    })
+    
+    // Increment counters
+    If (item().PriorityTier == "Critical"):
+      Increment_CriticalCount
+    If (item().PriorityTier == "High"):
+      Increment_HighCount
+    
+    // Log to dedup list
+    SharePoint_CreateItem(
+      Site: "SecurityOperations",
+      List: "VulnProcessingLog",
+      CVE: item().CveId,
+      Device: item().DeviceName,
+      ProcessedDate: utcNow()
+    )
+
+// ----- STEP 4: Generate CSV -----
+Create_CSV_Table = createCsvTable(FindingsArray)
+
+SharePoint_CreateFile(
+  Site: "SecurityOperations",
+  FolderPath: "/Security/VulnMgmt/DailyReview",
+  FileName: "@{formatDateTime(utcNow(), 'yyyy-MM-dd')}_VulnReview.csv",
+  FileContent: Create_CSV_Table
+)
+
+// ----- STEP 5: Push to Power BI -----
+For_Each_Finding_In_Array:
+  PowerBI_AddRowsToDataset(
+    Dataset: "VulnerabilityDashboard",
+    Table: "DailyFindings",
+    Row: current_finding
+  )
+
+// ----- STEP 6: Create ServiceNow Tickets (Critical Only) -----
+Filter_Critical = Filter(FindingsArray, PriorityTier == "Critical")
+
+For_Each_Critical:
+  ServiceNow_CreateIncident(
+    ShortDescription: "Critical Vulnerability: @{item().CveId} on @{item().DeviceName}",
+    Description: "Risk Score: @{item().RiskScore}\n
+                  CISA KEV: @{item().InKEV}\n
+                  SLA: @{item().SLA_Days} days\n
+                  Action: @{item().RecommendedAction}",
+    AssignmentGroup: item().SupportGroup,
+    AssignedTo: item().AssetOwner,
+    Priority: 2,  // High
+    Category: "Vulnerability",
+    DueDate: addDays(utcNow(), item().SLA_Days)
+  )
+
+// ----- STEP 7: Send Teams Notification -----
+Teams_PostAdaptiveCard(
+  Channel: "#vuln-management",
+  Card: {
+    Title: "Daily Vulnerability Review Queue",
+    Body: [
+      {
+        type: "ColumnSet",
+        columns: [
+          { header: "🔴 Critical", value: CriticalCount },
+          { header: "🟠 High", value: HighCount }
+        ]
+      },
+      {
+        type: "TextBlock",
+        text: "Review required for prioritized vulnerabilities"
+      }
+    ],
+    Actions: [
+      { type: "OpenUrl", title: "View Dashboard", url: PowerBI_Dashboard_URL },
+      { type: "OpenUrl", title: "Download CSV", url: SharePoint_CSV_URL },
+      { type: "OpenUrl", title: "ServiceNow Queue", url: ServiceNow_Queue_URL }
+    ]
+  }
+)
+
+// ----- STEP 8: Send Email Summary -----
+Outlook_SendEmail(
+  To: "vuln-team@company.com",
+  Subject: "Daily Vulnerability Review - @{formatDateTime(utcNow(), 'yyyy-MM-dd')}",
+  Body: "
+    <h2>Vulnerability Review Queue</h2>
+    <p>Critical: @{CriticalCount} | High: @{HighCount}</p>
+    <p>Please review the attached CSV and take appropriate action.</p>
+    <p><a href='@{PowerBI_Dashboard_URL}'>Open Dashboard</a></p>
+  ",
+  Attachments: [SharePoint_CSV_File]
+)
+                        </pre>
+                    </div>
+                </div>
+
+                <!-- Output Examples -->
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-automated">
+                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-file-export mr-2"></i>5.3 Output Examples</h3>
+                    
+                    <div class="grid grid-cols-1 gap-4">
+                        <!-- CSV Output -->
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-yellow-400 font-semibold text-sm mb-2">CSV Output (SharePoint):</p>
+                            <pre class="text-xs text-gray-400 overflow-x-auto">
+DeviceName,CveId,CvssScore,EPSS,InKEV,RiskScore,PriorityTier,SLA_Days,AssetOwner,BusinessUnit,RecommendedAction
+DC-01,CVE-2024-1234,9.8,0.92,TRUE,325,Critical,2,john.doe@company.com,IT-Infrastructure,"URGENT: CISA KEV overdue - patch immediately"
+WEB-PROD-01,CVE-2024-5678,8.5,0.75,TRUE,280,Critical,2,jane.smith@company.com,Web-Services,"CISA KEV - patch by 2024-02-15"
+APP-SERVER-03,CVE-2024-9012,7.5,0.45,FALSE,165,High,7,dev.team@company.com,Applications,"High risk - patch within 7 days"
+                            </pre>
                         </div>
-                        <div class="bg-black/20 rounded-lg p-3">
-                            <p class="text-purple-400 font-semibold mb-2">Weighted Dimensions:</p>
-                            <ul class="text-gray-400 space-y-1">
-                                <li>• Technical Severity (CVSS)</li>
-                                <li>• Exploitability (EPSS + KEV)</li>
-                                <li>• Asset Criticality (CMDB)</li>
-                                <li>• Exposure (Network Position)</li>
-                            </ul>
+
+                        <!-- Teams Notification -->
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-yellow-400 font-semibold text-sm mb-2">Teams Adaptive Card:</p>
+                            <div class="bg-gray-800 rounded-lg p-3 text-sm">
+                                <p class="text-white font-bold">🛡️ Daily Vulnerability Review Queue</p>
+                                <div class="flex gap-4 my-2">
+                                    <span class="text-red-400">🔴 Critical: 12</span>
+                                    <span class="text-orange-400">🟠 High: 34</span>
+                                </div>
+                                <p class="text-gray-400 text-xs mb-2">Top Impacted Assets:</p>
+                                <ul class="text-gray-400 text-xs">
+                                    <li>• DC-01 (5 critical) - IT-Infrastructure</li>
+                                    <li>• WEB-PROD-01 (3 critical, 2 high) - Web-Services</li>
+                                </ul>
+                                <div class="flex gap-2 mt-3">
+                                    <span class="px-2 py-1 bg-blue-500/20 text-blue-400 text-xs rounded">View Dashboard</span>
+                                    <span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded">Download CSV</span>
+                                    <span class="px-2 py-1 bg-purple-500/20 text-purple-400 text-xs rounded">ServiceNow Queue</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ServiceNow Ticket -->
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-yellow-400 font-semibold text-sm mb-2">ServiceNow Ticket (Auto-Created for Critical):</p>
+                            <div class="bg-gray-800 rounded-lg p-3 text-xs">
+                                <p class="text-white font-bold">INC0012345: Critical Vulnerability: CVE-2024-1234 on DC-01</p>
+                                <div class="grid grid-cols-2 gap-2 mt-2 text-gray-400">
+                                    <p><span class="text-gray-500">Priority:</span> 2 - High</p>
+                                    <p><span class="text-gray-500">Category:</span> Vulnerability</p>
+                                    <p><span class="text-gray-500">Assigned To:</span> john.doe@company.com</p>
+                                    <p><span class="text-gray-500">Due Date:</span> 2024-01-17 (48h SLA)</p>
+                                </div>
+                                <p class="text-gray-400 mt-2">
+                                    <span class="text-gray-500">Description:</span><br>
+                                    Risk Score: 325<br>
+                                    CISA KEV: Yes (actively exploited)<br>
+                                    EPSS: 0.92 (92% exploit probability)<br>
+                                    Action: URGENT - Apply patch KB5001234 immediately
+                                </p>
+                            </div>
                         </div>
                     </div>
-                    <p class="text-gray-400 text-sm mt-3">
-                        <strong class="text-yellow-400">Key Point:</strong> "The weights were manager-approved to reflect business risk. Output was a normalized score used for prioritization, with <strong class="text-white">manual validation before remediation decisions</strong>: Remediate, Mitigate, Accept Risk, or Close as False Positive."
-                    </p>
                 </div>
             </section>
 
-            <!-- ============================================ -->
-            <!-- WORKFLOW 2: Risk Scoring Formula -->
-            <!-- ============================================ -->
+            <!-- PHASE 6 -->
             <section>
-                <h2 class="text-2xl font-bold text-white mb-6">
-                    <span class="text-red-400">2.</span> Risk-Based Prioritization Formula
+                <h2 class="text-2xl font-bold text-white mb-4">
+                    <span class="text-red-400">6.</span> Vulnerability Analyst Consumption (Human Review)
                 </h2>
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-manual">
+                    <h3 class="text-yellow-400 font-bold mb-4"><i class="fas fa-user mr-2"></i>6.1 What Analysts Actually See</h3>
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                         VULNERABILITY ANALYST WORKSPACE                                  │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│   ❌ ANALYSTS DO NOT:                                                                   │
+│      • Open Sentinel incidents                                                          │
+│      • Work from SOC queue                                                              │
+│                                                                                         │
+│   ✅ ANALYSTS WORK FROM:                                                                │
+│      • Power BI Dashboards (interactive, drill-down)                                   │
+│      • CSV Exports (filterable, bulk actions)                                          │
+│      • Ticket Queues (ServiceNow/Jira)                                                 │
+│                                                                                         │
+│   VIEW CONTAINS:                                                                        │
+│   ┌─────────┬──────────┬───────────┬──────┬─────┬──────────┬────────────────┐          │
+│   │ Asset   │ CVE      │ RiskScore │ EPSS │ KEV │ Exposure │ Recommended    │          │
+│   ├─────────┼──────────┼───────────┼──────┼─────┼──────────┼────────────────┤          │
+│   │ DC-01   │ 2024-123 │ 285       │ 0.92 │ ✓   │ Internal │ Patch ASAP     │          │
+│   │ WEB-03  │ 2024-456 │ 210       │ 0.75 │ ✓   │ Internet │ Patch + WAF    │          │
+│   └─────────┴──────────┴───────────┴──────┴─────┴──────────┴────────────────┘          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
 
+            <!-- PHASE 7 -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-4">
+                    <span class="text-red-400">7.</span> Manual Analyst Workflow (Validation Phase)
+                </h2>
+                <div class="bg-yellow-500/10 border border-yellow-500/50 rounded-xl p-4 mb-4">
+                    <p class="text-yellow-400 font-bold"><i class="fas fa-exclamation-triangle mr-2"></i>This step is mandatory and expected. Not every finding becomes a ticket.</p>
+                </div>
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-manual">
+                    <h3 class="text-yellow-400 font-bold mb-4"><i class="fas fa-clipboard-check mr-2"></i>7.1 Analyst Review Steps</h3>
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                           ANALYST VALIDATION WORKFLOW                                    │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│   FOR EACH ITEM:                                                                        │
+│                                                                                         │
+│   1. VALIDATE VULNERABILITY ACCURACY                                                    │
+│      □ Is the scanner detection correct?                                               │
+│      □ Does the CVE apply to our config?                                               │
+│                                                                                         │
+│   2. CHECK COMPENSATING CONTROLS                                                        │
+│      □ Mitigated by NGFW rules?                                                        │
+│      □ Mitigated by EDR protection?                                                    │
+│      □ Network segmentation blocking attack path?                                      │
+│                                                                                         │
+│   3. ASSESS PATCH IMPACT                                                                │
+│      □ OT/ICS system? → Vendor approval required                                       │
+│      □ Legacy system? → May break application                                          │
+│      □ Critical workload? → Needs change window                                        │
+│                                                                                         │
+│   4. DISPOSITION DECISION                                                               │
+│      ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐                │
+│      │  FIX NOW    │  │   DEFER     │  │ ACCEPT RISK │  │  CLOSE FP   │                │
+│      │  → Ticket   │  │  → Schedule │  │  → Document │  │  → Exclude  │                │
+│      └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘                │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- PHASE 8 -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-4">
+                    <span class="text-red-400">8.</span> Ticket Creation & Assignment
+                </h2>
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-automated">
+                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-ticket-alt mr-2"></i>8.1 Ticket Creation Methods</h3>
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│   OPTION A: AUTOMATED - Logic App creates tickets automatically                         │
+│   OPTION B: SEMI-AUTOMATED - Analyst approves in dashboard, triggers ticket            │
+│   OPTION C: BULK IMPORT - Analyst filters CSV, imports to ServiceNow/Jira              │
+│                                                                                         │
+│   TICKET INCLUDES: CVE, Asset, RiskScore, SLA, Owner, Remediation steps                │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- PHASE 9 -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-4">
+                    <span class="text-red-400">9.</span> Ticket Routing to Owners
+                </h2>
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-automated">
+                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-route mr-2"></i>9.1 CMDB Ownership Mapping</h3>
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│   CMDB MAPPING: Asset → Application Owner / Infrastructure Owner / Support Group        │
+│                                                                                         │
+│   OWNERS RECEIVE:                                                                       │
+│   ✓ Clear remediation instructions                                                      │
+│   ✓ SLA expectations                                                                    │
+│   ✓ Risk context (KEV, EPSS, exposure)                                                 │
+│   ✓ Escalation path                                                                     │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- PHASE 10 -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-4">
+                    <span class="text-red-400">10.</span> Closure, Feedback & Continuous Improvement
+                </h2>
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-automated">
+                    <h3 class="text-green-400 font-bold mb-4"><i class="fas fa-sync-alt mr-2"></i>10.1 Feedback Loop</h3>
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│   TICKET OUTCOMES FEED BACK INTO:                                                       │
+│   • Risk Scoring Logic (adjust weights)                                                │
+│   • Prioritization Thresholds (raise/lower based on capacity)                          │
+│   • Exception Handling (auto-approval rules for known exceptions)                      │
+│                                                                                         │
+│   THIS CONTINUOUSLY:                                                                    │
+│   ✓ Reduces false positives over time                                                  │
+│   ✓ Improves prioritization accuracy                                                   │
+│   ✓ Adjusts SLAs based on actual remediation capacity                                 │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- PHASE 11 -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-4">
+                    <span class="text-red-400">11.</span> SOC Involvement (Only When Needed)
+                    <span class="ml-3 px-3 py-1 bg-purple-500/20 text-purple-400 text-sm rounded-full">SEPARATE WORKFLOW</span>
+                </h2>
+                <div class="workflow-box rounded-xl p-6 mb-4 phase-soc">
+                    <h3 class="text-purple-400 font-bold mb-4"><i class="fas fa-shield-alt mr-2"></i>11.1 When SOC Engages</h3>
+                    <pre class="text-gray-300 text-sm">
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                         SOC INVOLVEMENT (SEPARATE WORKFLOW)                              │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│   SOC ONLY ENGAGES IF a SEPARATE correlation rule detects:                              │
+│                                                                                         │
+│   • NGFW detects exploit traffic matching a known CVE                                  │
+│   • EDR detects suspicious endpoint behavior (exploitation attempt)                    │
+│   • IDS/IPS signature triggers for vulnerability exploitation                          │
+│                                                                                         │
+│   THEN:                                                                                 │
+│   ├── Correlation rule creates Sentinel INCIDENT (not just alert)                      │
+│   ├── Incident assigned to SOC queue                                                   │
+│   └── SOC investigates active exploitation attempt                                     │
+│                                                                                         │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐  │
+│   │  Vulnerability data = CONTEXT for investigation, not the driver                 │  │
+│   │  Exploit detection = DRIVER of SOC investigation                                │  │
+│   └─────────────────────────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- Summary Flow -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-4">Complete 11-Phase Flow</h2>
                 <div class="workflow-box rounded-xl p-6">
-                    <pre class="text-gray-300 text-sm">
-                    ┌─────────────────────────────────────────────────────────────────┐
-                    │                    RISK SCORE CALCULATION                       │
-                    └─────────────────────────────────────────────────────────────────┘
-
-                    RiskScore = BaseScore × ExploitMult × CriticalityMult × ExposureMult
-
-                    ┌─────────────────────────────────────────────────────────────────┐
-                    │ BASE SCORE (from CVSS)                                          │
-                    │                                                                 │
-                    │   CVSS 9.0-10.0  →  Base = 90-100                              │
-                    │   CVSS 7.0-8.9   →  Base = 70-89                               │
-                    │   CVSS 4.0-6.9   →  Base = 40-69                               │
-                    │   CVSS 0.1-3.9   →  Base = 10-39                               │
-                    └─────────────────────────────────────────────────────────────────┘
-                                                    │
-                                                    ▼
-                    ┌─────────────────────────────────────────────────────────────────┐
-                    │ EXPLOIT MULTIPLIER                                              │
-                    │                                                                 │
-                    │   In CISA KEV (actively exploited)    →  × 2.0                 │
-                    │   EPSS > 0.7 (high exploit prob)      →  × 1.75                │
-                    │   EPSS 0.5-0.7 (medium exploit prob)  →  × 1.5                 │
-                    │   EPSS 0.3-0.5 (some exploit prob)    →  × 1.25                │
-                    │   EPSS < 0.3 (low exploit prob)       →  × 1.0                 │
-                    └─────────────────────────────────────────────────────────────────┘
-                                                    │
-                                                    ▼
-                    ┌─────────────────────────────────────────────────────────────────┐
-                    │ CRITICALITY MULTIPLIER (from CMDB/Azure Tags)                   │
-                    │                                                                 │
-                    │   Tier 1 (Mission Critical)           →  × 2.0                 │
-                    │   Tier 2 (Business Critical)          →  × 1.5                 │
-                    │   Tier 3 (Standard)                   →  × 1.0                 │
-                    │   Tier 4 (Development/Test)           →  × 0.75                │
-                    └─────────────────────────────────────────────────────────────────┘
-                                                    │
-                                                    ▼
-                    ┌─────────────────────────────────────────────────────────────────┐
-                    │ EXPOSURE MULTIPLIER                                             │
-                    │                                                                 │
-                    │   Internet-facing (public IP/DMZ)     →  × 1.5                 │
-                    │   Partner-accessible                  →  × 1.25                │
-                    │   Internal-only                       →  × 1.0                 │
-                    │   Isolated/Air-gapped                 →  × 0.75                │
-                    └─────────────────────────────────────────────────────────────────┘
-                                                    │
-                                                    ▼
-                    ┌─────────────────────────────────────────────────────────────────┐
-                    │ EXAMPLE CALCULATION                                             │
-                    │                                                                 │
-                    │   CVE-2024-1234 on Production SQL Server                       │
-                    │                                                                 │
-                    │   • CVSS: 9.8 (Critical)           → Base = 98                 │
-                    │   • In CISA KEV                    → × 2.0                     │
-                    │   • Tier 1 Asset (Database)        → × 2.0                     │
-                    │   • Internal-only                  → × 1.0                     │
-                    │                                                                 │
-                    │   RiskScore = 98 × 2.0 × 2.0 × 1.0 = 392 (capped at 100)      │
-                    │   Priority: CRITICAL (24-48 hour SLA)                          │
-                    └─────────────────────────────────────────────────────────────────┘
+                    <pre class="text-gray-300 text-xs overflow-x-auto">
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ 1.SCAN → 2.INGEST → 3.ENRICH → 4.ALERT → 5.AUTOMATE → 6.CONSUME → 7.VALIDATE → 8.TICKET → 9.ROUTE → 10.CLOSE │
+│ Qualys   Sentinel   EPSS/KEV   (no      Logic App   Power BI   Manual FP   ServiceNow  CMDB→     Feedback  │
+│ TVM      Raw data   CMDB join  incident)            CSV        check       Jira        Owner     Loop      │
+│                                                                                                            │
+│ ═══════════════════════════════════════════════════════════════════════════════════════════════════════════│
+│ 11. SOC (SEPARATE) - Only when NGFW/EDR detects active exploitation → Creates INCIDENT → SOC investigates │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
                     </pre>
                 </div>
             </section>
 
-            <!-- ============================================ -->
-            <!-- WORKFLOW 3: Exception Management -->
-            <!-- ============================================ -->
-            <section>
-                <h2 class="text-2xl font-bold text-white mb-6">
-                    <span class="text-red-400">3.</span> Exception Management Process
-                </h2>
-
-                <div class="workflow-box rounded-xl p-6 phase-manual">
-                    <pre class="text-gray-300 text-sm">
-                    ┌─────────────────────────────────────────────────────────────────┐
-                    │              EXCEPTION REQUEST WORKFLOW                         │
-                    └─────────────────────────────────────────────────────────────────┘
-
-        ┌───────────────────┐
-        │ Vulnerability     │
-        │ Cannot Be Patched │
-        └─────────┬─────────┘
-                  │
-                  ▼
-        ┌───────────────────────────────────────────────────────────────────────────┐
-        │                    EXCEPTION REQUEST FORM                                 │
-        │                                                                           │
-        │  Required Fields:                                                         │
-        │  ├── CVE ID and affected asset(s)                                        │
-        │  ├── Business justification (why can't patch?)                           │
-        │  │   • Vendor doesn't support patched version                            │
-        │  │   • Application breaks with patch                                     │
-        │  │   • No maintenance window available                                   │
-        │  │   • OT system requires vendor approval                                │
-        │  ├── Compensating controls in place                                      │
-        │  │   • Network segmentation                                              │
-        │  │   • WAF rules                                                         │
-        │  │   • Enhanced monitoring/detection                                     │
-        │  │   • Disabled vulnerable service                                       │
-        │  ├── Target remediation date (cannot be indefinite)                      │
-        │  └── Business owner name (who accepts risk)                              │
-        └───────────────────────────────────────────────────────────────────────────┘
-                  │
-                  ▼
-        ┌───────────────────────────────────────────────────────────────────────────┐
-        │              👤 SECURITY ENGINEER REVIEW                                  │
-        │                                                                           │
-        │  Validate:                                                               │
-        │  □ Are compensating controls adequate?                                   │
-        │  □ Is residual risk acceptable?                                          │
-        │  □ Is target date reasonable?                                            │
-        │  □ Are there alternative mitigations?                                    │
-        └───────────────────────────────────────────────────────────────────────────┘
-                  │
-          ┌───────┴───────┐
-          ▼               ▼
-    ┌───────────┐   ┌───────────┐
-    │ APPROVED  │   │ REJECTED  │
-    └─────┬─────┘   └─────┬─────┘
-          │               │
-          ▼               ▼
-    ┌───────────────┐   ┌───────────────────────────────┐
-    │ Add to        │   │ Return to requestor with:     │
-    │ Exception     │   │ • Reason for rejection        │
-    │ Register      │   │ • Required additional controls│
-    │               │   │ • Alternative solutions       │
-    │ • Track in    │   └───────────────────────────────┘
-    │   ServiceNow  │
-    │ • Set review  │
-    │   date (90d)  │
-    │ • Document    │
-    │   risk owner  │
-    └───────┬───────┘
-            │
-            ▼
-    ┌───────────────────────────────────────────────────────────────────────────┐
-    │                    QUARTERLY EXCEPTION REVIEW                             │
-    │                                                                           │
-    │  For each exception in register:                                         │
-    │  □ Is exception still valid? (circumstances changed?)                    │
-    │  □ Is target date approaching? (push for remediation)                    │
-    │  □ Are compensating controls still effective?                            │
-    │  □ Has risk profile changed? (new exploits?)                             │
-    │  □ Renew or close exception                                              │
-    │                                                                           │
-    │  Report to Risk Committee:                                               │
-    │  • Total active exceptions                                               │
-    │  • Aging exceptions (>6 months)                                          │
-    │  • Risk exposure from exceptions                                         │
-    └───────────────────────────────────────────────────────────────────────────┘
-                    </pre>
-                </div>
-            </section>
-
-            <!-- ============================================ -->
-            <!-- WORKFLOW 4: Tools Comparison -->
-            <!-- ============================================ -->
-            <section>
-                <h2 class="text-2xl font-bold text-white mb-6">
-                    <span class="text-red-400">4.</span> Qualys VMDR vs MDE TVM Integration
-                </h2>
-
-                <div class="workflow-box rounded-xl p-6">
-                    <pre class="text-gray-300 text-sm">
-        ┌─────────────────────────────────────────────────────────────────────────────┐
-        │                        DUAL-TOOL ARCHITECTURE                               │
-        └─────────────────────────────────────────────────────────────────────────────┘
-
-        ┌───────────────────────────────┐     ┌───────────────────────────────┐
-        │         QUALYS VMDR           │     │          MDE TVM              │
-        │                               │     │                               │
-        │  BEST FOR:                    │     │  BEST FOR:                    │
-        │  • Infrastructure (servers)   │     │  • Endpoints (workstations)   │
-        │  • Network devices            │     │  • Continuous assessment      │
-        │  • Compliance reporting       │     │  • Configuration weaknesses   │
-        │  • Authenticated scans        │     │  • Exposure scoring           │
-        │  • Audit evidence             │     │  • Tight MDE integration      │
-        │                               │     │                               │
-        │  SCAN TYPE:                   │     │  SCAN TYPE:                   │
-        │  Scheduled (weekly/monthly)   │     │  Continuous (real-time)       │
-        │                               │     │                               │
-        │  OUTPUT:                      │     │  OUTPUT:                      │
-        │  QID-based findings           │     │  Exposure score + CVEs        │
-        │  Detailed CVE mapping         │     │  Security recommendations     │
-        └───────────────┬───────────────┘     └───────────────┬───────────────┘
-                        │                                     │
-                        │      ┌─────────────────────┐        │
-                        └─────▶│  MICROSOFT SENTINEL │◀───────┘
-                               │                     │
-                               │  • Unified view     │
-                               │  • Enrichment       │
-                               │  • Correlation      │
-                               │  • Risk scoring     │
-                               │  • Alerting         │
-                               └──────────┬──────────┘
-                                          │
-                                          ▼
-                               ┌─────────────────────┐
-                               │    LOGIC APPS       │
-                               │                     │
-                               │  • Auto-tagging     │
-                               │  • CSV generation   │
-                               │  • Notifications    │
-                               └──────────┬──────────┘
-                                          │
-                                          ▼
-                               ┌─────────────────────┐
-                               │  👤 HUMAN VALIDATION │
-                               └─────────────────────┘
-                    </pre>
-                </div>
-            </section>
-
-            <!-- Summary Box -->
+            <!-- Environment Scope -->
             <div class="glass-card rounded-xl p-6 mt-8">
-                <h3 class="text-xl font-bold text-white mb-4"><i class="fas fa-key text-red-400 mr-2"></i>Key Takeaways for Interviews</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                <h3 class="text-xl font-bold text-white mb-4"><i class="fas fa-building text-blue-400 mr-2"></i>Environment Scope & Metrics</h3>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 text-center">
+                        <p class="text-3xl font-bold text-blue-400">5,000+</p>
+                        <p class="text-gray-400 text-sm">Endpoints</p>
+                    </div>
+                    <div class="bg-green-500/10 border border-green-500/30 rounded-lg p-4 text-center">
+                        <p class="text-3xl font-bold text-green-400">2,500+</p>
+                        <p class="text-gray-400 text-sm">Employees</p>
+                    </div>
+                    <div class="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4 text-center">
+                        <p class="text-3xl font-bold text-purple-400">~50K</p>
+                        <p class="text-gray-400 text-sm">Raw Findings/Week</p>
+                    </div>
+                    <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-center">
+                        <p class="text-3xl font-bold text-red-400">~200</p>
+                        <p class="text-gray-400 text-sm">Actionable/Week</p>
+                    </div>
+                </div>
+
+                <div class="bg-black/30 rounded-lg p-4">
+                    <p class="text-yellow-400 font-semibold mb-2"><i class="fas fa-filter mr-2"></i>Noise Reduction Impact:</p>
+                    <p class="text-gray-300 text-sm">
+                        Raw vulnerability scans across 5,000+ endpoints generated approximately <strong class="text-white">50,000+ findings per week</strong>. 
+                        After risk-scoring with EPSS, CISA KEV, asset criticality, and exposure context, the pipeline filtered this down to 
+                        approximately <strong class="text-white">200 actionable Critical/High findings</strong>—a <strong class="text-emerald-400">99.6% noise reduction</strong> 
+                        that allowed vulnerability analysts to focus on what actually mattered.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Role Positioning -->
+            <div class="bg-amber-500/10 border border-amber-500/50 rounded-xl p-6 mt-6">
+                <h3 class="text-amber-400 font-bold mb-3"><i class="fas fa-user-cog mr-2"></i>My Role: Migration & Engineering Support</h3>
+                <p class="text-gray-300 text-sm mb-4">
+                    The subsidiary's SOC remained operational throughout the RSA NetWitness to Microsoft Sentinel migration. 
+                    My role was <strong class="text-white">migration and engineering support</strong>—building the detection rules, 
+                    correlation logic, automation pipelines, and dashboards—followed by a <strong class="text-white">structured handover</strong> 
+                    to the subsidiary's internal security team for steady-state operations.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                     <div>
-                        <p class="text-red-400 font-semibold mb-2">What's Automated:</p>
+                        <p class="text-amber-400 font-semibold mb-2">What I Built:</p>
                         <ul class="text-gray-400 space-y-1">
-                            <li>• Data collection (Qualys, TVM)</li>
-                            <li>• Enrichment & scoring (KQL)</li>
-                            <li>• Tagging high-risk assets (Logic Apps)</li>
-                            <li>• CSV/report generation</li>
-                            <li>• SLA tracking & escalation</li>
-                            <li>• Dashboards & metrics</li>
+                            <li>• Vulnerability risk-scoring correlation rules</li>
+                            <li>• Logic App automation pipelines</li>
+                            <li>• Power BI dashboards</li>
+                            <li>• Watchlist ingestion workflows</li>
+                            <li>• ServiceNow integration</li>
                         </ul>
                     </div>
                     <div>
-                        <p class="text-yellow-400 font-semibold mb-2">What's Manual (Human Judgment):</p>
+                        <p class="text-amber-400 font-semibold mb-2">Handover Deliverables:</p>
                         <ul class="text-gray-400 space-y-1">
-                            <li>• False positive validation</li>
-                            <li>• Compensating control assessment</li>
-                            <li>• Patch impact analysis</li>
-                            <li>• Ticket creation & assignment</li>
-                            <li>• Exception decisions</li>
-                            <li>• Verification & closure</li>
+                            <li>• Runbook documentation</li>
+                            <li>• SOC training sessions</li>
+                            <li>• Workbook templates</li>
+                            <li>• Tuning guidelines</li>
+                            <li>• Escalation procedures</li>
                         </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interview Talking Points -->
+            <div class="glass-card rounded-xl p-6 mt-8">
+                <h3 class="text-xl font-bold text-white mb-4"><i class="fas fa-microphone text-red-400 mr-2"></i>Interview Talking Points</h3>
+                <div class="space-y-4 text-sm">
+                    <div class="bg-black/30 rounded-lg p-4">
+                        <p class="text-yellow-400 font-semibold mb-2">Q: "How do you prioritize vulnerabilities?"</p>
+                        <p class="text-gray-300">"In our environment of 5,000+ endpoints supporting 2,500 employees, raw vulnerability scans generated around 50,000 findings per week. I built a risk-scoring pipeline in Sentinel that joined TVM and Qualys data with EPSS, CISA KEV, CMDB asset criticality, and exposure context. The calculated risk score—not just CVSS—determined priority and SLA. This filtered 50,000 findings down to about 200 actionable Critical/High items per week, a 99%+ noise reduction."</p>
+                    </div>
+                    <div class="bg-black/30 rounded-lg p-4">
+                        <p class="text-yellow-400 font-semibold mb-2">Q: "Does SOC triage vulnerability alerts?"</p>
+                        <p class="text-gray-300">"No—vulnerability management is a separate workflow from SOC incident response. My pipeline produces prioritized findings that go to Power BI dashboards and CSV exports for vulnerability analysts, not the SOC queue. SOC only gets involved when a separate correlation rule detects active exploitation—like NGFW threat logs showing exploit traffic to an unpatched system. At that point, vulnerability data becomes context for the investigation, not the trigger."</p>
+                    </div>
+                    <div class="bg-black/30 rounded-lg p-4">
+                        <p class="text-yellow-400 font-semibold mb-2">Q: "What was your role versus the SOC team?"</p>
+                        <p class="text-gray-300">"The SOC remained operational throughout; my role was migration and engineering support. I built the correlation rules, automation pipelines, dashboards, and integrations—then conducted a structured handover to the subsidiary's internal security team. I delivered runbooks, training, workbook templates, and tuning guidelines so they could own steady-state operations. I wasn't running the SOC day-to-day; I was enabling it with modern tooling."</p>
+                    </div>
+                    <div class="bg-black/30 rounded-lg p-4">
+                        <p class="text-yellow-400 font-semibold mb-2">Q: "How did you measure success of the vulnerability pipeline?"</p>
+                        <p class="text-gray-300">"Three key metrics: First, noise reduction—going from 50K to 200 actionable findings per week. Second, SLA compliance—tracking what percentage of Critical vulnerabilities were remediated within 48 hours. Third, false positive rate—feeding analyst dispositions back into the scoring logic to continuously improve prioritization accuracy. We also tracked CISA KEV compliance separately since those have federal deadlines."</p>
                     </div>
                 </div>
             </div>
@@ -608,10 +1105,10 @@
             <!-- Navigation -->
             <div class="flex justify-between mt-8">
                 <a href="workflows-index.html" class="px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg text-gray-300 transition-colors">
-                    <i class="fas fa-th-large mr-2"></i>All Workflows
+                    <i class="fas fa-arrow-left mr-2"></i>All Workflows
                 </a>
                 <a href="workflows-ngfw.html" class="px-6 py-3 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 rounded-lg text-red-400 transition-colors">
-                    Next: NGFW Workflows<i class="fas fa-arrow-right ml-2"></i>
+                    Next: Firewall Workflows<i class="fas fa-arrow-right ml-2"></i>
                 </a>
             </div>
 

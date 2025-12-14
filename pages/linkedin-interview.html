@@ -516,7 +516,7 @@
                                 <br><br>
                                 I began my career as a SOC Analyst, which gave me a strong foundation in detection and incident response. From there, I moved into engineering-focused roles—managing EDR, DLP, and SIEM platforms at scale.
                                 <br><br>
-                                Currently at Siemens, I've contributed to two major initiatives: a SIEM modernization from RSA NetWitness to Microsoft Sentinel, and an endpoint DLP migration from Symantec to Microsoft Purview, which is now in enforcement.
+                                Currently at a Siemens subsidiary—about <strong class="text-emerald-400">5,000 endpoints, 2,500 employees</strong>—I've provided migration and engineering support for two major initiatives: RSA NetWitness to Microsoft Sentinel, and Symantec to Microsoft Purview DLP, which is now in enforcement. My role is building the tooling and enabling the security team, then handing over for steady-state operations.
                                 <br><br>
                                 I bring hands-on security engineering experience, enterprise migration expertise, and a focus on ensuring security controls are not only deployed but consistently enforced and delivering measurable value."
                             </p>
@@ -524,7 +524,7 @@
                         
                         <div class="mt-4 bg-black/30 rounded-lg p-3">
                             <p class="text-yellow-400 text-xs font-bold mb-1"><i class="fas fa-clock mr-1"></i> MEMORY STRUCTURE (30 sec)</p>
-                            <p class="text-gray-400 text-xs">Intro (5 yrs) → SOC foundation → Engineering at scale → Siemens (2 migrations) → Value prop</p>
+                            <p class="text-gray-400 text-xs">Intro (5 yrs) → SOC foundation → Engineering at scale → Siemens (5K endpoints, 2 migrations, engineering support) → Value prop</p>
                         </div>
                     </div>
 
@@ -539,13 +539,13 @@
                             <p class="text-gray-300 text-sm leading-relaxed">
                                 "My name is Nikhileswar Reddy, and I have around five years of experience in cybersecurity, with a strong focus on security engineering and modernizing enterprise security stacks.
                                 <br><br>
-                                <strong class="text-orange-400">I began my career as a SOC Analyst</strong>, working heavily in detection and incident response. That foundation gave me a strong understanding on incident response.
+                                <strong class="text-orange-400">I began my career as a SOC Analyst</strong>, working heavily in detection and incident response. That foundation gave me a strong understanding of incident response workflows and attacker behavior.
                                 <br><br>
                                 <strong class="text-orange-400">I moved quickly into engineering-focused roles</strong> where I could design, deploy, and mature security controls at scale. At Infosys, I worked extensively with Trellix EDR/NDR and Symantec DLP—managing agents, tuning policies, improving detection fidelity, and supporting platform evaluations for next-generation EDR/XDR solutions. That experience strengthened my understanding of architectural decision-making and tool rationalization.
                                 <br><br>
-                                <strong class="text-orange-400">After relocating to Canada, I joined Siemens</strong>, where I supported a major security modernization program transitioning from RSA NetWitness and ESET to a cloud-native Microsoft security ecosystem using Sentinel, MDE, and Azure services. My focus was translating and operationalizing detections across core security controls—NGFW, endpoint/EDR, identity, email security, DLP, PAM, and vulnerability telemetry. I converted RSA correlation rules into KQL, validated telemetry pipelines, onboarded endpoints at scale, and developed Logic Apps automations.
+                                <strong class="text-orange-400">After relocating to Canada, I joined a Siemens subsidiary</strong>—an environment of about <strong class="text-emerald-400">5,000 endpoints supporting 2,500 employees</strong>. I provided <strong class="text-white">migration and engineering support</strong> for a major security modernization program—transitioning from RSA NetWitness and ESET to a cloud-native Microsoft ecosystem using Sentinel, MDE, and Azure services. The SOC remained operational throughout; my role was building the detection rules, KQL analytics, automation pipelines, and dashboards, then conducting a structured handover to the subsidiary's internal security team. I converted RSA correlation rules into KQL, validated telemetry pipelines, onboarded endpoints at scale, and developed Logic Apps automations.
                                 <br><br>
-                                <strong class="text-orange-400">More recently, I've been heavily involved in the enterprise-wide migration</strong> from Symantec DLP to Microsoft Purview Endpoint DLP. I joined during the pilot phase and contributed through simulation-mode testing, false-positive reduction, enforcement strategy design, and coordinating phased rollouts with various business units. It has been a full lifecycle engineering project—from design and testing to pilot, enforcement, and stabilization.
+                                <strong class="text-orange-400">More recently, I've been leading the migration</strong> from Symantec DLP to Microsoft Purview Endpoint DLP. I joined during the pilot phase and contributed through simulation-mode testing, false-positive reduction, enforcement strategy design, and coordinating phased rollouts with various business units. It has been a full lifecycle engineering project—from design and testing to pilot, enforcement, and stabilization.
                                 <br><br>
                                 <strong class="text-orange-400">Outside of my formal roles</strong>, I'm someone who genuinely enjoys building solutions. I've developed an email security analyzer, malware investigation utilities, and a GRC–engineering mapping tool. These projects help me deepen my technical skills and create real value for people around me.
                                 <br><br>
@@ -556,7 +556,7 @@
                         <div class="mt-4 bg-black/30 rounded-lg p-3">
                             <p class="text-orange-400 text-xs font-bold mb-1"><i class="fas fa-list-ol mr-1"></i> MEMORY STRUCTURE (2 min)</p>
                             <p class="text-gray-400 text-xs">
-                                1. Intro (5 yrs, security engineering) → 2. SOC foundation → 3. Infosys (EDR/DLP at scale) → 4. Siemens modernization (RSA→Sentinel) → 5. DLP migration (full lifecycle) → 6. Personal projects → 7. Value prop
+                                1. Intro (5 yrs, security engineering) → 2. SOC foundation → 3. Infosys (EDR/DLP at scale) → 4. Siemens (5K endpoints, migration & engineering support, handover) → 5. DLP migration (full lifecycle) → 6. Personal projects → 7. Value prop
                             </p>
                         </div>
                     </div>
@@ -856,6 +856,28 @@
                                 <p class="text-purple-300 text-sm font-medium mb-2">How do you evaluate if a DLP alert should move from Audit → Enforcement?</p>
                                 <p class="text-gray-400 text-sm">
                                     "Data-driven decision. I track metrics in audit mode: how many alerts per day, what percentage are true positives, what's the user impact if we blocked these? If we're seeing 100 alerts/day with 80% false positives, we're not ready to enforce—we'd destroy productivity. Tune until false positive rate is acceptable (I aim for under 10%). Then move to Warn mode—user sees a prompt but can override with justification. Monitor override reasons—are they legitimate exceptions we should codify? Only move to Block when we're confident we won't break legitimate business processes. For my Purview migration, we spent months in audit mode before enabling warn, and we're carefully rolling out block actions."
+                                </p>
+                            </div>
+
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">Why were you moved from the Sentinel migration to DLP?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "The Sentinel migration was structured in phases. In our environment of <strong>5,000+ endpoints supporting 2,500 employees</strong>, once we completed the baseline requirements—including <strong>log ingestion, core detections, validation, and knowledge transfer</strong>—the environment was handed over to the subsidiary's internal security team for steady-state operations.
+                                    <br><br>
+                                    At that point, I was reassigned to the DLP program, which had moved into <strong>active enforcement across multiple policies</strong> and required dedicated security engineering effort. This was a <strong>planned resource transition</strong> rather than an incomplete migration.
+                                    <br><br>
+                                    The migration deliverables were completed and handed off properly—detection parity achieved, SOC trained, runbooks documented, workbooks built. The subsidiary's team took over steady-state operations while I moved to where the organization needed engineering focus next. This is standard practice for migration projects—you build, validate, hand over, then move to the next priority."
+                                </p>
+                            </div>
+
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">What was your role versus the SOC team?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "The SOC remained operational throughout the migration—they continued handling alerts, investigations, and incident response. <strong>My role was migration and engineering support</strong>, not SOC operations.
+                                    <br><br>
+                                    I built the detection rules, KQL analytics, correlation logic, and automation pipelines. I created the Sentinel workbooks and dashboards. I validated detections against historical data. And I conducted the structured handover—runbooks, training sessions, tuning guidelines.
+                                    <br><br>
+                                    Think of it as building the tooling and enabling the team, rather than running the day-to-day operations. Once the migration baseline was stable, the subsidiary's internal security team owned steady-state operations. I moved on to the next engineering priority—the DLP enforcement project."
                                 </p>
                             </div>
                         </div>
