@@ -2369,11 +2369,11 @@ CommonSecurityLog
                         <div class="bg-black/30 rounded-lg p-4">
                             <p class="text-yellow-400 font-semibold mb-2">Q: "How do you integrate firewall logs with your SIEM?"</p>
                             <p class="text-gray-300">
-                                <span class="text-emerald-400 font-bold text-base">"We ingested firewall logs via Panorama to a central syslog collector using AMA, primarily for visibility and correlation in Sentinel."</span>
+                                <span class="text-emerald-400 font-bold text-base">"We standardized firewall ingestion using CEF over Syslog. Firewalls and Panorama forwarded logs to a Linux syslog collector VM in Azure running the Azure Monitor Agent. AMA collected the CEF stream via a Data Collection Rule and the events landed in Sentinel's CommonSecurityLog table."</span>
                                 <br><br>
-                                <span class="text-gray-500 text-xs">(If they ask for more detail, you can expand:)</span>
+                                <span class="text-gray-500 text-xs">(If they ask why CEF specifically:)</span>
                                 <br><br>
-                                "The logs land in CommonSecurityLog in CEF format. From there, I built detection rules correlating firewall threat logs with MDE endpoint telemetry—when the firewall blocks something, I can see which endpoint process initiated it. I also monitor log health to catch gaps when a firewall stops reporting."
+                                "CEF gives us structured, parseable fields out of the box. Raw syslog events are harder to parse—you end up writing custom regex or parsers for each vendor. With CEF, fields like SourceIP, DestinationIP, DeviceAction, and ThreatCategory are already normalized, so my KQL queries work immediately."
                             </p>
                         </div>
 

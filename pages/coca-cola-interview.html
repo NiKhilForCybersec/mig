@@ -763,9 +763,9 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                     <p class="text-gray-500 text-xs mb-3">This naturally leads to YOUR strengths (Sentinel, KQL)</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            <span class="text-emerald-400 font-bold text-base">"We ingested firewall logs via Panorama to a central syslog collector using AMA, primarily for visibility and correlation in Sentinel."</span><br><br>
+                            <span class="text-emerald-400 font-bold text-base">"We standardized firewall ingestion using CEF over Syslog. Firewalls and Panorama forwarded logs to a Linux syslog collector VM in Azure running Azure Monitor Agent. AMA collected the CEF stream via a Data Collection Rule and events landed in Sentinel's CommonSecurityLog table."</span><br><br>
                             
-                            <span class="text-gray-500 text-xs">(If they want more detail on what you do with those logs:)</span><br><br>
+                            <span class="text-gray-500 text-xs">(Why CEF? Raw syslog is harder to parse—CEF gives normalized fields out of the box.)</span><br><br>
                             
                             <strong>Detection Rules I've Built:</strong><br>
                             • <strong class="text-emerald-400">DNS sinkhole hits:</strong> Identifies infected hosts trying to reach malicious domains<br>
@@ -927,23 +927,20 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                     <p class="text-purple-400 font-bold mb-3">Q7: How would you integrate security scanning into a CI/CD pipeline without significantly impacting deployment velocity?</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "I'll be honest—DevSecOps is an area I'm actively building experience in. I understand the principles and have implemented some aspects, but I'm eager to go deeper at Coke Canada. Here's my approach:<br><br>
+                            "I'll be upfront—my DevSecOps experience comes from personal projects, not enterprise-scale pipelines. For my <strong>email security platform</strong> (code on GitHub, deployed on Railway), I implemented security scanning in <strong>GitHub Actions</strong> using open-source tools: Gitleaks for secrets, Semgrep for SAST, npm audit for dependencies, and Trivy for container scanning.<br><br>
                             
-                            <strong>Shift Left Without Breaking Flow</strong><br>
-                            The key is running the right scans at the right stages:<br>
-                            • <strong>Pre-commit</strong> - IDE plugins for developers to catch issues before code even hits the repo. Fast, immediate feedback.<br>
-                            • <strong>Pull Request</strong> - SAST (Static Analysis) runs automatically. Block merge only for critical/high findings; warn on medium/low.<br>
-                            • <strong>Build Stage</strong> - Dependency scanning (SCA) to catch vulnerable libraries. This is fast and catches most third-party risks.<br>
-                            • <strong>Staging</strong> - DAST (Dynamic) scans run against deployed app. These take longer, so run in parallel or off-hours.<br><br>
+                            <strong>The Principle: Right Scans at Right Stages</strong><br>
+                            • <strong>Pre-commit/Push</strong> - Gitleaks catches secrets immediately. Blocks if found.<br>
+                            • <strong>Pull Request</strong> - Semgrep SAST runs automatically. Block on critical/high; warn on medium/low.<br>
+                            • <strong>Build Stage</strong> - Dependency scanning (npm audit, pip-audit). Fast and catches third-party risks.<br>
+                            • <strong>Pre-Deploy</strong> - Trivy container scanning. Catches base image vulnerabilities.<br><br>
                             
                             <strong>Balancing Speed and Security</strong><br>
-                            • Use risk-based thresholds—don't block everything. Critical vulnerabilities block deployment; medium/low get tracked and fixed on schedule.<br>
-                            • Cache scan results to avoid redundant scanning of unchanged code.<br>
-                            • Run expensive scans in parallel with other pipeline stages, not serially.<br>
-                            • Give developers clear, actionable feedback—not just 'vulnerability found' but 'here's how to fix it.'<br><br>
+                            • Run scans in <strong>parallel</strong> where possible, not serially<br>
+                            • <strong>Risk-based thresholds</strong>—critical blocks deployment; medium/low gets logged<br>
+                            • <strong>Actionable feedback</strong>—not just 'vulnerability found' but fix guidance<br><br>
                             
-                            <strong>What I'd Want to Learn at Coke Canada</strong><br>
-                            I'd be interested in how your DevSecOps maturity is structured—what tools are in place, where the gaps are, and how I can contribute to improving the program."
+                            I understand this is smaller scale than enterprise DevSecOps. For enterprise, I'd expect tools like Snyk, Checkmarx, or GitHub Advanced Security with better reporting and compliance features—but the principles transfer."
                         </p>
                     </div>
                 </div>
@@ -1666,42 +1663,36 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                     <p class="text-emerald-400 font-bold mb-4">Q: How would you approach securing a CI/CD pipeline? What are the key risks?</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "I want to be upfront—I haven't directly managed CI/CD pipelines in a production enterprise environment. My work experience has been more on the security operations side, where I've integrated log sources from custom applications and DevOps tools into our SIEM, giving me visibility into what happens in those environments. But my <strong class="text-emerald-400">hands-on CI/CD security experience comes from my personal projects</strong>, specifically my email security platform.
+                            "I want to be upfront—my DevSecOps experience is from personal projects, not enterprise-scale pipelines. But I've implemented the core concepts hands-on and understand how to scale them.
                             <br><br>
-                            <strong class="text-emerald-400">What I built for my personal project:</strong>
+                            <strong class="text-emerald-400">My Personal Project: Email Security Platform</strong>
                             <br><br>
-                            For my email security platform, I designed the entire CI/CD workflow using <strong>GitHub Actions</strong>. I wanted to practice DevSecOps principles properly, so I implemented security scanning at multiple stages:
+                            I built an email security analysis platform—code hosted on <strong>GitHub</strong>, deployed on <strong>Railway</strong>. I designed the CI/CD workflow using <strong>GitHub Actions</strong> with security scanning at multiple stages using open-source tools:
                             <br><br>
-                            <strong>Pre-build scanning:</strong>
-                            <br>• Secret scanning to catch any accidentally committed credentials before they hit the repo
-                            <br>• Dependency scanning using free tools from the GitHub Actions marketplace to identify vulnerable packages
+                            • <strong class="text-cyan-400">Gitleaks</strong> — Secrets scanning on every push. Blocks the pipeline if credentials, API keys, or tokens are detected.
+                            <br>• <strong class="text-cyan-400">Semgrep</strong> — SAST with community rulesets for Python/JavaScript. Catches injection vulnerabilities, insecure patterns.
+                            <br>• <strong class="text-cyan-400">npm audit / pip-audit</strong> — Dependency scanning for known CVEs in third-party packages.
+                            <br>• <strong class="text-cyan-400">Trivy</strong> — Container image scanning for vulnerabilities in base images and packages.
                             <br><br>
-                            <strong>Build-level scanning:</strong>
-                            <br>• SAST (Static Application Security Testing) to analyze my Python code for security issues
-                            <br>• DAST (Dynamic Application Security Testing) against the running application
-                            <br>• IaC scanning for any infrastructure configuration files
+                            The workflow fails the build if critical vulnerabilities are found. I maintain this myself—updating scanner versions, tuning rules to reduce false positives, and learning when things break.
                             <br><br>
-                            I used open-source scanners available in the GitHub marketplace—tools like Trivy for container scanning, Bandit for Python security linting, and others. The workflow fails the build if critical vulnerabilities are found, so I can't accidentally deploy insecure code.
+                            <strong class="text-emerald-400">Key CI/CD Security Risks I Understand:</strong>
                             <br><br>
-                            I maintain this entire workflow myself—updating scanner versions, tuning rules to reduce false positives, and adding new checks as I learn about different vulnerability types. It's been a great learning experience because when something breaks or a scan flags an issue, I have to actually understand why and fix it.
+                            <strong>1. Secrets Exposure</strong> — Pipelines need credentials to deploy. If stored insecurely—plain text, logged environment variables—attackers steal them. I use GitHub Secrets and ensure nothing sensitive echoes to logs.
                             <br><br>
-                            <strong class="text-emerald-400">The key risks I understand:</strong>
+                            <strong>2. Dependency/Supply Chain Risks</strong> — SolarWinds and Codecov showed how compromised dependencies inject malicious code into deployments. I pin dependency versions and scan for known vulnerabilities.
                             <br><br>
-                            <strong>1. Secrets Exposure</strong> — Pipelines need credentials to deploy, and if they're stored insecurely—plain text in configs, environment variables that get logged—attackers can steal them. In my project, I use GitHub Secrets and make sure nothing sensitive is echoed to logs.
+                            <strong>3. Pipeline-as-Code Vulnerabilities</strong> — If someone modifies the pipeline definition, they can inject malicious steps. Pipeline configs need the same PR review scrutiny as application code.
                             <br><br>
-                            <strong>2. Dependency Risks</strong> — Supply chain attacks like what happened with SolarWinds and Codecov show how compromised dependencies can inject malicious code into every deployment. That's why I pin dependency versions and scan for known vulnerabilities.
+                            <strong>4. Build Environment Security</strong> — Build agents often have broad permissions. Ephemeral environments that spin up fresh and tear down after are more secure than persistent servers.
                             <br><br>
-                            <strong>3. Pipeline-as-Code Vulnerabilities</strong> — If someone can modify the pipeline definition, they can inject malicious steps. Pipeline configs should get the same PR review scrutiny as application code.
+                            <strong class="text-emerald-400">From My Work Experience:</strong>
                             <br><br>
-                            <strong>4. Build Environment Security</strong> — Build agents often have broad permissions. Ephemeral environments that spin up fresh for each job and tear down after are more secure than persistent build servers.
+                            While I haven't owned CI/CD security at work, I've been on the receiving end—integrating DevOps telemetry into Sentinel, building detection rules for deployment anomalies, helping remediate when scans identified issues. I understand how CI/CD fits into the broader security ecosystem.
                             <br><br>
-                            <strong class="text-emerald-400">From my work experience:</strong>
+                            <strong class="text-emerald-400">What I'd Bring:</strong>
                             <br><br>
-                            While I haven't owned CI/CD security at work, I've been on the receiving end—integrating application logs and DevOps telemetry into Sentinel, building detection rules for anomalies in deployment patterns, and helping remediate when scans identified issues in the codebase. I understand how CI/CD fits into the broader security ecosystem.
-                            <br><br>
-                            <strong class="text-emerald-400">What I'd bring:</strong>
-                            <br><br>
-                            I have the foundational knowledge and hands-on experience from my personal project. I understand the concepts, the tools, and the risks. If this role involves CI/CD security, I'd ramp up quickly because I've already done it at a smaller scale—scaling up to enterprise would be about learning the specific tools and processes, not learning the principles from scratch."
+                            I have foundational knowledge and hands-on experience. I understand the concepts, tools, and risks. Scaling to enterprise would be about learning specific tools (Snyk, Checkmarx, GitHub Advanced Security) and processes—not learning principles from scratch."
                         </p>
                     </div>
                 </div>

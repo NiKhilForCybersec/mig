@@ -328,8 +328,8 @@
                                 <div class="space-y-3 text-sm">
                                     <div class="bg-black/20 rounded-lg p-3">
                                         <p class="text-white font-medium">Q8: CI/CD security</p>
-                                        <p class="text-yellow-400 font-bold">🔑 "Layered: Pre-commit → Build → Post-build | Parallel + Incremental"</p>
-                                        <p class="text-gray-400 text-xs mt-1">Secrets scanning blocks, SAST/SCA in parallel, DAST post-deploy</p>
+                                        <p class="text-yellow-400 font-bold">🔑 "Personal project: Email security platform + GitHub Actions + Open source tools"</p>
+                                        <p class="text-gray-400 text-xs mt-1">Gitleaks, Semgrep, npm audit, Trivy. Hosted on Railway. Not enterprise scale, but hands-on.</p>
                                     </div>
                                     <div class="bg-black/20 rounded-lg p-3">
                                         <p class="text-white font-medium">Q9: Python/PowerShell automation</p>
@@ -705,9 +705,9 @@
                         
                         <div class="answer-box">
                             <p class="text-gray-300 text-sm leading-relaxed">
-                                <span class="text-emerald-400 font-bold text-base">"We ingested firewall logs via Panorama to a central syslog collector using AMA, primarily for visibility and correlation in Sentinel."</span>
+                                <span class="text-emerald-400 font-bold text-base">"We standardized firewall ingestion using CEF over Syslog. Firewalls and Panorama forwarded logs to a Linux syslog collector VM in Azure running Azure Monitor Agent. AMA collected the CEF stream via a Data Collection Rule and events landed in Sentinel's CommonSecurityLog table."</span>
                                 <br><br>
-                                <span class="text-gray-500 text-xs">(If they want more detail:)</span>
+                                <span class="text-gray-500 text-xs">(Why CEF? Raw syslog is harder to parse—CEF gives normalized fields out of the box.)</span>
                                 <br><br>
                                 <strong class="text-emerald-400">Detection Rules I've Built:</strong>
                                 <br><br>
@@ -1007,6 +1007,14 @@
                         </div>
                     </div>
 
+                    <!-- Positioning Callout -->
+                    <div class="bg-yellow-500/10 border border-yellow-500/50 rounded-xl p-4 mb-6">
+                        <p class="text-yellow-400 font-bold"><i class="fas fa-exclamation-triangle mr-2"></i>YOUR POSITIONING (Be Honest)</p>
+                        <p class="text-gray-300 text-sm mt-2">
+                            Your DevSecOps experience comes from <strong class="text-white">personal projects</strong>, not enterprise-scale implementations. This is still valuable—it shows you understand the concepts, have hands-on experience with the tools, and can grow into enterprise DevSecOps. Don't overclaim, but don't undersell either.
+                        </p>
+                    </div>
+
                     <!-- Q8 -->
                     <div class="question-card rounded-xl p-6 mb-6">
                         <div class="flex items-start space-x-3 mb-4">
@@ -1016,40 +1024,38 @@
                         
                         <div class="answer-box">
                             <p class="text-gray-300 text-sm leading-relaxed">
-                                "The goal is <strong class="text-emerald-400">fast feedback on security issues without becoming a deployment bottleneck</strong>. I approach this by layering security checks strategically throughout the pipeline—right checks at the right time.
+                                <span class="text-yellow-400 font-bold">"I want to be upfront—my DevSecOps experience is from personal projects, not enterprise-scale pipelines. But I've implemented the core concepts hands-on."</span>
                                 <br><br>
-                                <strong class="text-emerald-400">Pre-Commit / Developer Workstation:</strong>
+                                <strong class="text-emerald-400">My Personal Project: Email Security Platform</strong>
                                 <br><br>
-                                • <strong>Secrets scanning:</strong> Git hooks that block commits containing credentials—catches mistakes before they hit version control
-                                <br>• <strong>IDE security plugins:</strong> Real-time SAST feedback as developers write code
-                                <br>• <strong>Linting:</strong> Basic security patterns caught immediately
+                                I built an email security analysis platform as a personal project—code hosted on <strong>GitHub</strong>, deployed on <strong>Railway</strong>. For this project, I integrated security checks into my <strong>GitHub Actions</strong> workflow using open-source tools:
                                 <br><br>
-                                These are <strong>instant feedback loops</strong>—developers fix issues while the code is fresh in their mind.
+                                • <strong>Secrets Scanning:</strong> <strong class="text-cyan-400">Gitleaks</strong> runs on every push to catch any accidentally committed credentials, API keys, or tokens. Blocks the pipeline if found.
                                 <br><br>
-                                <strong class="text-emerald-400">PR / Build Stage:</strong>
+                                • <strong>SAST (Static Analysis):</strong> <strong class="text-cyan-400">Semgrep</strong> with community rulesets for Python/JavaScript security patterns—catches injection vulnerabilities, insecure configurations, and common security anti-patterns.
                                 <br><br>
-                                • <strong>Full SAST analysis:</strong> Static code analysis for injection vulnerabilities, insecure patterns
-                                <br>• <strong>Dependency scanning:</strong> Check for known CVEs in third-party libraries (SCA)
-                                <br>• <strong>Container image scanning:</strong> Vulnerabilities in base images and layers
-                                <br>• <strong>IaC security scanning:</strong> Terraform, CloudFormation, ARM templates checked for misconfigurations
+                                • <strong>Dependency Scanning:</strong> <strong class="text-cyan-400">npm audit</strong> for JavaScript dependencies, <strong class="text-cyan-400">pip-audit</strong> for Python packages. Flags known CVEs in third-party libraries before deployment.
                                 <br><br>
-                                These run in <strong>parallel</strong> with unit tests—security shouldn't add sequential time.
+                                • <strong>Container Scanning:</strong> <strong class="text-cyan-400">Trivy</strong> scans the Docker image for vulnerabilities in the base image and installed packages.
                                 <br><br>
-                                <strong class="text-emerald-400">Post-Build / Staging:</strong>
+                                <strong class="text-emerald-400">My GitHub Actions Workflow:</strong>
                                 <br><br>
-                                • <strong>DAST:</strong> Dynamic scanning against running application—catches runtime vulnerabilities
-                                <br>• <strong>API security testing:</strong> Fuzzing, authentication testing
-                                <br>• <strong>Integration security tests:</strong> Verify security controls work end-to-end
+                                <code class='text-cyan-400 text-xs'>
+                                on: [push, pull_request]<br>
+                                jobs:<br>
+                                &nbsp;&nbsp;security-scan:<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;steps:<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- uses: gitleaks/gitleaks-action@v2<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- uses: returntocorp/semgrep-action@v1<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- run: npm audit --audit-level=high<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- uses: aquasecurity/trivy-action@master
+                                </code>
                                 <br><br>
-                                <strong class="text-emerald-400">Making It Fast:</strong>
+                                <strong class="text-emerald-400">What I Learned:</strong>
                                 <br><br>
-                                • <strong>Parallelize:</strong> Run SAST, SCA, and container scanning simultaneously
-                                <br>• <strong>Incremental scanning:</strong> Only scan changed files, not entire codebase
-                                <br>• <strong>Caching:</strong> Cache dependency analysis, only re-scan on changes
-                                <br>• <strong>Tiered severity:</strong> Block on critical/high, warn on medium, log low
-                                <br>• <strong>Baseline comparison:</strong> Only alert on new findings, not existing technical debt
+                                The key is layering checks without making the pipeline painfully slow. I run scans in <strong>parallel</strong> where possible, and only <strong>block on critical/high severity</strong>—medium/low findings get logged but don't fail the build. This keeps the feedback loop fast while still catching real security issues.
                                 <br><br>
-                                I've implemented this pattern using GitHub Actions with SAST, DAST, dependency scanning, and secrets detection—each check optimized to minimize pipeline impact while maximizing security coverage."
+                                <span class="text-gray-400 text-xs">I understand this is smaller scale than enterprise DevSecOps, but the principles transfer—layered security checks, automated gates, fast feedback loops. I'm comfortable with these tools and ready to work with enterprise solutions like GitHub Advanced Security, Snyk, or Checkmarx.</span>"
                             </p>
                         </div>
 
@@ -1059,28 +1065,35 @@
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">Which checks should be blocking vs non-blocking?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "<strong>Blocking (fail the build):</strong> Secrets in code—never acceptable, no exceptions. Critical CVEs in dependencies with known exploits. SAST findings indicating clear vulnerabilities (SQL injection, command injection, hardcoded credentials). <strong>Non-blocking (warn but proceed):</strong> Medium/low vulnerabilities that need human risk assessment. SAST findings that need context to evaluate. Code quality issues. <strong>Post-deployment/async:</strong> DAST results, penetration testing findings, compliance verification. The principle: block on clear, immediate risks. Warn on issues requiring judgment. Everything else feeds into the backlog with appropriate prioritization."
+                                    "In my project: <strong>Blocking (fail the build):</strong> Secrets detected by Gitleaks—never acceptable. Critical/high CVEs in dependencies with known exploits. High-severity SAST findings like hardcoded credentials or SQL injection patterns. <strong>Non-blocking (warn but proceed):</strong> Medium/low vulnerabilities that need context. SAST findings that might be false positives. The principle: block on clear, immediate risks. Warn on issues requiring judgment. At enterprise scale, I'd expect more sophisticated triage with security team review for edge cases."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
-                                <p class="text-purple-300 text-sm font-medium mb-2">How do you handle secrets scanning at pre-commit?</p>
+                                <p class="text-purple-300 text-sm font-medium mb-2">Why did you choose those specific tools?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "Pre-commit hooks using tools like <strong>git-secrets, detect-secrets, or gitleaks</strong>. When a developer tries to commit, the hook scans for patterns matching credentials—API keys, passwords, AWS secrets, private keys. If found, commit is blocked before it reaches the repo. This is the cheapest place to catch secrets—before they're in version history where they live forever. I also enable <strong>repository-level secret scanning</strong> (GitHub Advanced Security, GitLab) as a backup. Custom patterns can catch company-specific credential formats. The key is immediate feedback: 'This commit contains what looks like an API key. Remove it and try again.'"
+                                    "Mostly practical reasons—they're open source, well-documented, and have good GitHub Actions integrations. <strong>Gitleaks</strong> is fast and has comprehensive regex patterns for secrets. <strong>Semgrep</strong> has a great community ruleset and lets me write custom rules if needed. <strong>Trivy</strong> is widely used and scans both container images and filesystem. For an enterprise environment, I'd expect to use commercial tools like Snyk, Checkmarx, or GitHub Advanced Security that offer better reporting, compliance features, and support—but the concepts are the same."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">How would you tune SAST rules to avoid noise?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "Start by understanding the noise sources. Common false positives: test code flagged as vulnerable (intentional test cases), internal APIs flagged as injection points, patterns that match signatures but aren't exploitable in context. My tuning approach: <strong>Document and suppress known false positives</strong>—with clear justification of why they're safe. <strong>Adjust severity thresholds</strong>—some rule categories are informational, not actionable. <strong>Baseline comparison</strong>—only alert on new findings, not 500 existing issues. <strong>Context-aware rules</strong>—if the framework provides built-in protection, adjust detection accordingly. The goal: actionable output that developers trust. If they learn to ignore SAST, it provides zero value."
+                                    "I've dealt with this in Semgrep. Common false positives: test code flagged as vulnerable, patterns that match signatures but aren't exploitable in context. My approach: <strong>Exclude test directories</strong> from scanning. <strong>Suppress known false positives</strong> with inline comments and documented justification. <strong>Adjust severity thresholds</strong>—only alert on high-confidence findings. <strong>Baseline comparison</strong>—focus on new findings, not existing technical debt. The goal: developers trust the output. If they learn to ignore security warnings, the tool provides zero value."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">What's your approach to shift-left security?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "Shift-left means finding issues earlier when they're cheaper to fix. Cost escalation: writing code (cheapest) → PR review (cheap) → testing (moderate) → production (expensive) → post-breach (catastrophic). My approach: <strong>Developer enablement:</strong> Security feedback in their IDE—real-time SAST, dependency warnings. <strong>Pre-commit gates:</strong> Block secrets before they hit the repo. <strong>PR security review:</strong> Automated checks plus human review for security-sensitive changes. <strong>Security training:</strong> Developers write secure code the first time, not relying on tools to catch mistakes. <strong>Threat modeling:</strong> Security considered during design, not discovered after deployment. Shift-left is a culture shift: security is everyone's responsibility, integrated into the development process, not bolted on at the end."
+                                    "Shift-left means finding issues earlier when they're cheaper to fix. In my project, I integrated security into the development flow: <strong>Pre-commit:</strong> Gitleaks catches secrets before they hit the repo. <strong>PR checks:</strong> SAST and dependency scans run automatically, blocking merge if critical issues found. <strong>Continuous monitoring:</strong> Dependabot alerts me to new CVEs in existing dependencies. The cultural principle applies at any scale: security is part of development, not an afterthought bolted on before release."
+                                </p>
+                            </div>
+
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">Have you worked with enterprise DevSecOps tools?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Not hands-on in production, but I understand the landscape. Enterprise tools like <strong>Snyk, Checkmarx, Veracode, GitHub Advanced Security</strong> offer features beyond open-source: centralized dashboards, compliance reporting, policy enforcement across repositories, SLA tracking, and integration with ticketing systems. My experience is with the open-source equivalents, but the security concepts transfer—I'd need to learn the specific tooling and enterprise workflows, but I'm confident I can ramp up quickly."
                                 </p>
                             </div>
                         </div>
