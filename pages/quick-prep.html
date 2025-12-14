@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Interview Prep | Last Minute Reference</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+        .answer-text { line-height: 1.7; }
+        .section-card { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(99, 102, 241, 0.2); }
+        .highlight { background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10b981; padding-left: 12px; }
+        .warning { background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b; padding-left: 12px; }
+        .danger { background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444; padding-left: 12px; }
+        @media print { body { background: white; color: black; } }
+    </style>
+</head>
+<body class="text-gray-300 min-h-screen p-4 md:p-8">
+    
+    <div class="max-w-4xl mx-auto">
+        
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-white mb-2">⚡ Quick Interview Prep</h1>
+            <p class="text-gray-400">Last minute reference • 15-20 min read</p>
+            <p class="text-emerald-400 text-sm mt-2">For deep-dive details, see <a href="detailed-prep.html" class="underline">Detailed Prep Guide</a></p>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- INTRO -->
+        <!-- ============================================ -->
+        <section class="section-card rounded-xl p-6 mb-6">
+            <h2 class="text-xl font-bold text-emerald-400 mb-4 flex items-center gap-2">
+                <span class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-sm">1</span>
+                Tell Me About Yourself (60-75 seconds)
+            </h2>
+            
+            <div class="answer-text text-sm space-y-3">
+                <p><strong class="text-white">Opening:</strong> "I have about five years of experience in cybersecurity, primarily focused on detection engineering, endpoint security, and SIEM operations."</p>
+                
+                <div class="bg-gray-800/50 rounded-lg p-3 space-y-2">
+                    <p><strong class="text-yellow-400">① Cognizant (SOC Analyst):</strong></p>
+                    <p class="text-gray-400 ml-4">Splunk • Alert triage • Incident investigations • "Gave me strong foundation in detection logic and attacker behavior"</p>
+                    
+                    <p><strong class="text-yellow-400">② Infosys (Security Engineering):</strong></p>
+                    <p class="text-gray-400 ml-4">FireEye HX/NX/EX + Symantec DLP • Agent deployments, troubleshooting, operational support • Security evaluations & POCs • <strong class="text-white">Key role in Trellix → Cortex XDR migration</strong></p>
+                    
+                    <p><strong class="text-yellow-400">③ Siemens Subsidiary (Current):</strong></p>
+                    <p class="text-gray-400 ml-4"><strong class="text-emerald-400">Primary: MDE</strong> — configs, policy management, operational support, onboarding runbooks</p>
+                    <p class="text-gray-400 ml-4"><strong class="text-blue-400">Supported:</strong> RSA NetWitness → Sentinel migration (detection rules for MDE, TVM, Qualys, DLP, NGFW)</p>
+                    
+                    <p><strong class="text-yellow-400">④ DLP Migration (Current):</strong></p>
+                    <p class="text-gray-400 ml-4">Supporting Symantec → Purview DLP • Policy translation, simulation, enforcement • Now in final handover phase</p>
+                    
+                    <p><strong class="text-yellow-400">⑤ Personal Projects:</strong></p>
+                    <p class="text-gray-400 ml-4">Email security & malware analysis tools • Standalone • Directly help people protect from phishing/malware/spyware</p>
+                </div>
+                
+                <div class="highlight mt-4">
+                    <p class="text-yellow-400 font-semibold">"I'm being selective about my next move, and this role aligned closely with what I'm looking for."</p>
+                    <p class="text-gray-500 text-xs mt-1">↑ CLIFFHANGER — Wait for them to ask "Why?" → Then deliver your prepared answer</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- MDE SECTION -->
+        <!-- ============================================ -->
+        <section class="section-card rounded-xl p-6 mb-6">
+            <h2 class="text-xl font-bold text-blue-400 mb-4 flex items-center gap-2">
+                <span class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-sm">2</span>
+                MDE Experience (Primary Responsibility)
+            </h2>
+            
+            <div class="answer-text text-sm space-y-4">
+                <div>
+                    <p class="text-purple-300 font-medium mb-2">Q: Walk me through your MDE experience.</p>
+                    <p>"MDE is my primary responsibility at the Siemens subsidiary. I handle configurations, policy management, and operational support across <strong class="text-white">5,000 endpoints supporting 2,500 employees</strong>."</p>
+                </div>
+                
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <p class="text-white font-medium mb-2">Key Areas:</p>
+                    <div class="space-y-2">
+                        <div>
+                            <p class="text-emerald-400 font-medium">Onboarding & Deployment:</p>
+                            <p class="text-gray-400 ml-4">• Windows servers and workstations onboarding</p>
+                            <p class="text-gray-400 ml-4">• Created runbooks: prerequisites, step-by-step procedures, troubleshooting, validation checklists</p>
+                            <p class="text-gray-400 ml-4">• Verified successful onboarding: device in console, telemetry flowing, correct policies applied</p>
+                        </div>
+                        
+                        <div>
+                            <p class="text-emerald-400 font-medium">Policy Management:</p>
+                            <p class="text-gray-400 ml-4">• ASR (Attack Surface Reduction) rules via Intune</p>
+                            <p class="text-gray-400 ml-4">• Network protection, controlled folder access</p>
+                            <p class="text-gray-400 ml-4">• Web content filtering, SmartScreen policies</p>
+                        </div>
+                        
+                        <div>
+                            <p class="text-emerald-400 font-medium">Troubleshooting:</p>
+                            <p class="text-gray-400 ml-4">• Agent health issues, service status validation</p>
+                            <p class="text-gray-400 ml-4">• Connectivity issues (Microsoft endpoint reachability)</p>
+                            <p class="text-gray-400 ml-4">• AV conflicts resolution</p>
+                        </div>
+                        
+                        <div>
+                            <p class="text-emerald-400 font-medium">Sentinel Integration:</p>
+                            <p class="text-gray-400 ml-4">• M365 Defender connector for advanced hunting</p>
+                            <p class="text-gray-400 ml-4">• Custom KQL detection rules using DeviceProcessEvents, DeviceNetworkEvents</p>
+                            <p class="text-gray-400 ml-4">• Incident correlation across endpoint + identity + email</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="highlight">
+                    <p class="text-emerald-400 text-xs font-bold mb-1">🎯 ESET Conflict Story (Ready to Use):</p>
+                    <p class="text-gray-300 text-sm">"We had devices showing 'No sensor data' in the MDE console. I investigated and found ESET Endpoint Security's real-time protection was conflicting with MDE's EDR sensor. Worked with the team to configure ESET in passive mode with proper exclusions. Telemetry was restored, and I documented the resolution for future reference."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- RSA → SENTINEL -->
+        <!-- ============================================ -->
+        <section class="section-card rounded-xl p-6 mb-6">
+            <h2 class="text-xl font-bold text-green-400 mb-4 flex items-center gap-2">
+                <span class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-sm">3</span>
+                RSA NetWitness → Sentinel Migration
+            </h2>
+            
+            <div class="answer-text text-sm space-y-4">
+                <div>
+                    <p class="text-purple-300 font-medium mb-2">Q: How did you migrate detection rules to Sentinel?</p>
+                    <p>"I supported the <strong class="text-white">translation phase</strong> of the migration. We used a <strong class="text-emerald-400">translation catalog</strong>—a reference mapping that documented how NetWitness meta keys, operators, and logic translate to Sentinel KQL."</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
+                        <p class="text-green-400 font-medium mb-2">✅ MY SCOPE:</p>
+                        <ul class="text-gray-400 space-y-1 text-xs">
+                            <li>• MDE telemetry detections</li>
+                            <li>• TVM (Threat & Vulnerability Management)</li>
+                            <li>• Qualys VMDR integration</li>
+                            <li>• DLP telemetry</li>
+                            <li>• NGFW / Firewall logs</li>
+                        </ul>
+                    </div>
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+                        <p class="text-yellow-400 font-medium mb-2">⚠️ NOT MY SCOPE:</p>
+                        <ul class="text-gray-400 space-y-1 text-xs">
+                            <li>• Identity / Entra ID rules</li>
+                            <li>• PAM / Privileged Access rules</li>
+                            <li>• Email Security rules</li>
+                            <li>• DevSecOps / CI/CD telemetry</li>
+                            <li class="text-gray-500 italic">→ Handled by other team members</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800/50 rounded-lg p-3">
+                    <p class="text-white font-medium mb-2">Translation Catalog Includes:</p>
+                    <p class="text-gray-400 text-sm">Table mappings (which Sentinel table = which NetWitness source) • Field equivalence • Operator differences • Normalization assumptions • Ensures consistent, repeatable translations</p>
+                </div>
+                
+                <div class="highlight">
+                    <p class="text-emerald-400 text-xs font-bold mb-1">If asked about evaluation approach:</p>
+                    <p class="text-gray-300 text-sm">"NetWitness had been in use for years, so not every detection was treated equally. Mature, high-value rules were translated directly. Noisy or legacy ones were tuned, consolidated, or replaced with behavior-based approaches. The goal wasn't one-to-one rule parity—it was functional coverage and improved signal quality."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- DLP -->
+        <!-- ============================================ -->
+        <section class="section-card rounded-xl p-6 mb-6">
+            <h2 class="text-xl font-bold text-purple-400 mb-4 flex items-center gap-2">
+                <span class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-sm">4</span>
+                DLP Migration (Symantec → Purview)
+            </h2>
+            
+            <div class="answer-text text-sm space-y-4">
+                <div>
+                    <p class="text-purple-300 font-medium mb-2">Q: Tell me about the DLP migration.</p>
+                    <p>"I'm <strong class="text-white">supporting</strong> the migration from Symantec DLP to Microsoft Purview Endpoint DLP. I joined during the pilot phase."</p>
+                </div>
+                
+                <div class="bg-gray-800/50 rounded-lg p-4 space-y-3">
+                    <div>
+                        <p class="text-emerald-400 font-medium">What Was Already In Place:</p>
+                        <p class="text-gray-400 ml-4">• Data classification framework</p>
+                        <p class="text-gray-400 ml-4">• Sensitive Information Types (SITs) — built-in + custom</p>
+                        <p class="text-gray-400 ml-4">• Exact Data Match (EDM) tables</p>
+                        <p class="text-gray-500 ml-4 text-xs italic">→ I worked WITH existing classifiers, didn't configure them</p>
+                    </div>
+                    
+                    <div>
+                        <p class="text-emerald-400 font-medium">My Work:</p>
+                        <p class="text-gray-400 ml-4">• <strong class="text-white">Policy translation:</strong> Symantec rule-based → Purview condition-based</p>
+                        <p class="text-gray-400 ml-4">• <strong class="text-white">Parallel running:</strong> Symantec (enforcement) + Purview (simulation/audit)</p>
+                        <p class="text-gray-400 ml-4">• <strong class="text-white">Alert comparison:</strong> Validated detection parity between platforms</p>
+                        <p class="text-gray-400 ml-4">• <strong class="text-white">Enforcement rollout:</strong> Audit → Warn → Block progression</p>
+                    </div>
+                    
+                    <div>
+                        <p class="text-emerald-400 font-medium">Current Status:</p>
+                        <p class="text-gray-400 ml-4">• Purview in enforcement mode</p>
+                        <p class="text-gray-400 ml-4">• Symantec switched to alert-only</p>
+                        <p class="text-gray-400 ml-4">• Final knowledge transfer and handover to internal SOC</p>
+                    </div>
+                </div>
+                
+                <div class="danger">
+                    <p class="text-red-400 text-xs font-bold mb-1">⚠️ DON'T OVERCLAIM:</p>
+                    <ul class="text-gray-400 text-xs space-y-1">
+                        <li>• Don't say you "led" the migration — you <strong>supported</strong> it</li>
+                        <li>• Don't say you "designed" the classification framework — it was <strong>already in place</strong></li>
+                        <li>• Don't say you "configured" SITs/EDMs — you <strong>worked with</strong> existing ones</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- VULNERABILITY -->
+        <!-- ============================================ -->
+        <section class="section-card rounded-xl p-6 mb-6">
+            <h2 class="text-xl font-bold text-orange-400 mb-4 flex items-center gap-2">
+                <span class="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center text-sm">5</span>
+                Vulnerability Management
+            </h2>
+            
+            <div class="answer-text text-sm space-y-4">
+                <div>
+                    <p class="text-purple-300 font-medium mb-2">Q: How do you prioritize vulnerabilities?</p>
+                    <p>"Not just CVSS. I factor in <strong class="text-emerald-400">EPSS</strong> (Exploit Prediction Scoring System), asset criticality, and compensating controls."</p>
+                </div>
+                
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <p class="text-white font-medium mb-2">Prioritization Framework:</p>
+                    <div class="space-y-2 text-sm">
+                        <p><strong class="text-orange-400">CVSS:</strong> Tells you <strong class="text-white">severity</strong> (how bad IF exploited)</p>
+                        <p><strong class="text-orange-400">EPSS:</strong> Tells you <strong class="text-white">urgency</strong> (likelihood of exploitation in next 30 days)</p>
+                        <p><strong class="text-orange-400">Asset Context:</strong> Tells you <strong class="text-white">impact</strong> (crown jewel vs test server)</p>
+                        <p><strong class="text-orange-400">Compensating Controls:</strong> Network segmentation, WAF, EDR coverage that reduce risk</p>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <p class="text-white font-medium mb-2">TVM + Qualys Integration:</p>
+                    <p class="text-gray-400"><strong class="text-emerald-400">TVM:</strong> Microsoft ecosystem, real-time, integrated with MDE, software inventory, security recommendations</p>
+                    <p class="text-gray-400"><strong class="text-emerald-400">Qualys VMDR:</strong> Broader coverage (Linux, network devices, non-Microsoft), scheduled scans, compliance reporting</p>
+                    <p class="text-gray-400 mt-2"><strong class="text-white">Both feed into Sentinel</strong> for unified visibility and correlation with threat detections</p>
+                </div>
+                
+                <div class="highlight">
+                    <p class="text-emerald-400 text-xs font-bold">💎 Gold Phrase:</p>
+                    <p class="text-white text-sm">"CVSS tells you severity. EPSS tells you urgency. Asset context tells you impact."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- FIREWALL/NGFW -->
+        <!-- ============================================ -->
+        <section class="section-card rounded-xl p-6 mb-6">
+            <h2 class="text-xl font-bold text-red-400 mb-4 flex items-center gap-2">
+                <span class="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center text-sm">6</span>
+                NGFW / Firewall
+            </h2>
+            
+            <div class="answer-text text-sm space-y-4">
+                <div>
+                    <p class="text-purple-300 font-medium mb-2">Q: What's your firewall experience?</p>
+                    <p>"My focus is <strong class="text-white">log engineering and detection engineering</strong> from firewall data, not firewall ownership or configuration."</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
+                        <p class="text-green-400 font-medium mb-2">✅ WHAT I DO:</p>
+                        <ul class="text-gray-400 space-y-1 text-xs">
+                            <li>• Validate firewall logs flowing to SIEM</li>
+                            <li>• Monitor ingestion health</li>
+                            <li>• Build KQL detection rules from NGFW data</li>
+                            <li>• Verify security profiles are applied</li>
+                            <li>• Identify gaps → Report to network team</li>
+                        </ul>
+                    </div>
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+                        <p class="text-yellow-400 font-medium mb-2">⚠️ NETWORK TEAM OWNS:</p>
+                        <ul class="text-gray-400 space-y-1 text-xs">
+                            <li>• Firewall configuration</li>
+                            <li>• Rule creation/modification</li>
+                            <li>• IPS signature tuning</li>
+                            <li>• TLS decryption configuration</li>
+                            <li>• Security profile definitions</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="warning">
+                    <p class="text-yellow-400 text-xs font-bold mb-1">⚠️ SAFE LANGUAGE:</p>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div>
+                            <p class="text-green-400">✓ USE:</p>
+                            <p class="text-gray-400">"verify," "validate," "identify gaps," "flag to network team," "review"</p>
+                        </div>
+                        <div>
+                            <p class="text-red-400">✗ AVOID:</p>
+                            <p class="text-gray-400">"manage," "configure," "own," "tune," "implement"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- BEHAVIORAL -->
+        <!-- ============================================ -->
+        <section class="section-card rounded-xl p-6 mb-6">
+            <h2 class="text-xl font-bold text-cyan-400 mb-4 flex items-center gap-2">
+                <span class="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-sm">7</span>
+                Behavioral Questions (STAR Format)
+            </h2>
+            
+            <div class="answer-text text-sm space-y-4">
+                
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <p class="text-purple-300 font-medium mb-2">Q: Challenging technical problem you solved?</p>
+                    <p class="text-white font-medium">→ ESET + MDE Conflict</p>
+                    <div class="text-gray-400 text-sm mt-2 space-y-1">
+                        <p><strong class="text-cyan-400">S:</strong> Devices showing "No sensor data" in MDE console after deployment</p>
+                        <p><strong class="text-cyan-400">T:</strong> Identify root cause and restore telemetry</p>
+                        <p><strong class="text-cyan-400">A:</strong> Investigated service status, logs, found ESET real-time protection conflicting. Configured ESET passive mode + exclusions</p>
+                        <p><strong class="text-cyan-400">R:</strong> Telemetry restored, documented resolution, no recurrence</p>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <p class="text-purple-300 font-medium mb-2">Q: Disagreement with a team member?</p>
+                    <p class="text-white font-medium">→ Detection Tuning Approach</p>
+                    <div class="text-gray-400 text-sm mt-2 space-y-1">
+                        <p><strong class="text-cyan-400">S:</strong> Noisy detection rule generating too many false positives</p>
+                        <p><strong class="text-cyan-400">T:</strong> Colleague wanted to disable it; I thought we'd lose visibility</p>
+                        <p><strong class="text-cyan-400">A:</strong> Proposed tuning thresholds instead. Tested both approaches in parallel</p>
+                        <p><strong class="text-cyan-400">R:</strong> Tuned version caught real incidents with 80% less noise. Compromise worked better</p>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <p class="text-purple-300 font-medium mb-2">Q: Automation you built?</p>
+                    <p class="text-white font-medium">→ FireEye HX Compliance Tracker (Infosys)</p>
+                    <div class="text-gray-400 text-sm mt-2 space-y-1">
+                        <p><strong class="text-cyan-400">S:</strong> 14 HX consoles, manual compliance tracking took hours weekly</p>
+                        <p><strong class="text-cyan-400">T:</strong> Identify endpoints missing EDR coverage</p>
+                        <p><strong class="text-cyan-400">A:</strong> Built Python automation—pull device lists, merge, compare against asset inventory</p>
+                        <p><strong class="text-cyan-400">R:</strong> Ran regularly, identified gaps automatically. Still in use today</p>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <p class="text-purple-300 font-medium mb-2">Q: Runbook/documentation you created?</p>
+                    <p class="text-white font-medium">→ MDE Onboarding Runbook</p>
+                    <div class="text-gray-400 text-sm mt-2">
+                        <p><strong class="text-cyan-400">Sections:</strong> Purpose & Scope • Prerequisites • Step-by-step with screenshots • Troubleshooting • Validation checklist • Revision history</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- WHY THIS ROLE -->
+        <!-- ============================================ -->
+        <section class="section-card rounded-xl p-6 mb-6">
+            <h2 class="text-xl font-bold text-pink-400 mb-4 flex items-center gap-2">
+                <span class="w-8 h-8 rounded-full bg-pink-500/20 flex items-center justify-center text-sm">8</span>
+                Why This Role / Why Coca-Cola?
+            </h2>
+            
+            <div class="answer-text text-sm space-y-3">
+                <div class="bg-gray-800/50 rounded-lg p-4 space-y-3">
+                    <div>
+                        <p class="text-pink-400 font-medium">① Technology Alignment:</p>
+                        <p class="text-gray-400">"Microsoft security stack—MDE, Sentinel, Purview—is central to my experience. This role lets me go deeper."</p>
+                    </div>
+                    
+                    <div>
+                        <p class="text-pink-400 font-medium">② Scale & Complexity:</p>
+                        <p class="text-gray-400">"Global manufacturing with IT/OT convergence. Plants, bottling, distribution—complex, high-stakes environment."</p>
+                    </div>
+                    
+                    <div>
+                        <p class="text-pink-400 font-medium">③ Engineering Focus:</p>
+                        <p class="text-gray-400">"Building—detection rules, automation, integrations—not just operations. That's where I thrive."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- QUESTIONS TO ASK -->
+        <!-- ============================================ -->
+        <section class="section-card rounded-xl p-6 mb-6">
+            <h2 class="text-xl font-bold text-indigo-400 mb-4 flex items-center gap-2">
+                <span class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-sm">9</span>
+                Questions to Ask Them
+            </h2>
+            
+            <div class="answer-text text-sm">
+                <ul class="space-y-2">
+                    <li class="bg-gray-800/50 rounded-lg p-2">• "How does security collaborate with OT/plant teams?"</li>
+                    <li class="bg-gray-800/50 rounded-lg p-2">• "Detection maturity—custom rules or mostly built-ins?"</li>
+                    <li class="bg-gray-800/50 rounded-lg p-2">• "What does success look like in first 6 months?"</li>
+                    <li class="bg-gray-800/50 rounded-lg p-2">• "Biggest security challenge the team faces right now?"</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- FINAL CHECKLIST -->
+        <!-- ============================================ -->
+        <section class="bg-gradient-to-r from-emerald-500/10 to-blue-500/10 border border-emerald-500/30 rounded-xl p-6">
+            <h2 class="text-xl font-bold text-emerald-400 mb-4">✅ Final Checklist</h2>
+            <div class="grid md:grid-cols-2 gap-6 text-sm">
+                <div>
+                    <p class="text-white font-medium mb-3">DO:</p>
+                    <ul class="text-gray-300 space-y-1">
+                        <li><span class="text-green-400">✓</span> Lead with MDE as primary responsibility</li>
+                        <li><span class="text-green-400">✓</span> Say "supported" for migration work</li>
+                        <li><span class="text-green-400">✓</span> Use numbers (5K endpoints, 2.5K employees)</li>
+                        <li><span class="text-green-400">✓</span> End intro with cliffhanger</li>
+                        <li><span class="text-green-400">✓</span> Mention runbooks/documentation</li>
+                        <li><span class="text-green-400">✓</span> Use STAR format for behavioral</li>
+                    </ul>
+                </div>
+                <div>
+                    <p class="text-white font-medium mb-3">DON'T:</p>
+                    <ul class="text-gray-300 space-y-1">
+                        <li><span class="text-red-400">✗</span> Say "led" the migration or DLP project</li>
+                        <li><span class="text-red-400">✗</span> Claim firewall ownership/configuration</li>
+                        <li><span class="text-red-400">✗</span> Say you configured SITs/EDMs</li>
+                        <li><span class="text-red-400">✗</span> Overclaim identity/PAM/email scope</li>
+                        <li><span class="text-red-400">✗</span> Use "manage," "own" for firewall</li>
+                        <li><span class="text-red-400">✗</span> Ramble — keep answers focused</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <div class="text-center mt-8 text-gray-500 text-sm">
+            <p class="mb-2">For comprehensive details, see <a href="detailed-prep.html" class="text-emerald-400 underline">Detailed Prep Guide</a></p>
+            <p>Good luck! 🎯</p>
+        </div>
+
+    </div>
+</body>
+</html>

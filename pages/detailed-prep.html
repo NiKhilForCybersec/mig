@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detailed Interview Prep | Deep Dive Reference</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+        .section-card { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(99, 102, 241, 0.2); }
+        .concept-box { background: rgba(30, 41, 59, 0.8); }
+        .highlight { background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10b981; padding-left: 12px; }
+        .warning { background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b; padding-left: 12px; }
+        .code-block { background: #1e293b; font-family: 'Courier New', monospace; }
+        @media print { body { background: white; color: black; } }
+    </style>
+</head>
+<body class="text-gray-300 min-h-screen p-4 md:p-8">
+    
+    <div class="max-w-5xl mx-auto">
+        
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-white mb-2">📚 Detailed Interview Prep</h1>
+            <p class="text-gray-400">Deep dive reference with low-level explanations</p>
+            <p class="text-emerald-400 text-sm mt-2">For quick reference, see <a href="quick-prep.html" class="underline">Quick Prep Guide</a></p>
+        </div>
+
+        <!-- TABLE OF CONTENTS -->
+        <section class="section-card rounded-xl p-6 mb-8">
+            <h2 class="text-xl font-bold text-white mb-4">📋 Table of Contents</h2>
+            <div class="grid md:grid-cols-2 gap-2 text-sm">
+                <a href="#mde" class="text-blue-400 hover:text-blue-300">1. Microsoft Defender for Endpoint (MDE)</a>
+                <a href="#sentinel" class="text-green-400 hover:text-green-300">2. RSA NetWitness → Sentinel Migration</a>
+                <a href="#dlp" class="text-purple-400 hover:text-purple-300">3. DLP Migration (Symantec → Purview)</a>
+                <a href="#vuln" class="text-orange-400 hover:text-orange-300">4. Vulnerability Management</a>
+                <a href="#ngfw" class="text-red-400 hover:text-red-300">5. NGFW / Firewall</a>
+                <a href="#kql" class="text-cyan-400 hover:text-cyan-300">6. KQL Detection Examples</a>
+                <a href="#infosys" class="text-yellow-400 hover:text-yellow-300">7. Infosys Experience Details</a>
+                <a href="#behavioral" class="text-pink-400 hover:text-pink-300">8. Behavioral Deep Dives</a>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- MDE DETAILED -->
+        <!-- ============================================ -->
+        <section id="mde" class="section-card rounded-xl p-6 mb-8">
+            <h2 class="text-2xl font-bold text-blue-400 mb-6 flex items-center gap-3">
+                <i class="fas fa-shield-alt"></i>
+                1. Microsoft Defender for Endpoint (MDE) — Deep Dive
+            </h2>
+            
+            <!-- What is MDE -->
+            <div class="concept-box rounded-lg p-4 mb-6">
+                <h3 class="text-lg font-bold text-white mb-3">What is MDE?</h3>
+                <p class="text-gray-300 text-sm mb-3">Microsoft Defender for Endpoint is an enterprise endpoint security platform that provides:</p>
+                <ul class="text-gray-400 text-sm space-y-1 ml-4">
+                    <li>• <strong class="text-white">EDR (Endpoint Detection & Response):</strong> Behavioral detection, threat investigation, response actions</li>
+                    <li>• <strong class="text-white">Next-gen AV:</strong> Cloud-delivered protection, machine learning-based detection</li>
+                    <li>• <strong class="text-white">Attack Surface Reduction:</strong> Rules to block risky behaviors before execution</li>
+                    <li>• <strong class="text-white">TVM:</strong> Built-in vulnerability management integrated with endpoint data</li>
+                    <li>• <strong class="text-white">Automated Investigation:</strong> AI-driven investigation and remediation</li>
+                </ul>
+            </div>
+
+            <!-- Onboarding Process -->
+            <div class="mb-6">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">Onboarding Process (What I Do)</h3>
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <p class="text-white font-medium mb-2">Step-by-Step:</p>
+                    <ol class="text-gray-400 text-sm space-y-2 ml-4">
+                        <li><strong class="text-emerald-400">1. Prerequisites Check:</strong>
+                            <ul class="ml-4 mt-1 space-y-1">
+                                <li>- Windows 10/11 or Server 2016+ (supported OS versions)</li>
+                                <li>- Required permissions (Global Admin or Security Admin for portal)</li>
+                                <li>- Network connectivity to Microsoft endpoints (*.securitycenter.windows.com, etc.)</li>
+                            </ul>
+                        </li>
+                        <li><strong class="text-emerald-400">2. Check Existing Status:</strong>
+                            <ul class="ml-4 mt-1 space-y-1">
+                                <li>- Query: <code class="text-cyan-300 bg-gray-900 px-1 rounded">sc query sense</code> (MDE service)</li>
+                                <li>- Check if device already appears in portal</li>
+                            </ul>
+                        </li>
+                        <li><strong class="text-emerald-400">3. Run Onboarding Package:</strong>
+                            <ul class="ml-4 mt-1 space-y-1">
+                                <li>- Download from Security.microsoft.com → Settings → Endpoints → Onboarding</li>
+                                <li>- Run script (.cmd for local, Intune for scale, GPO for domain)</li>
+                                <li>- Script registers device with tenant, starts SENSE service</li>
+                            </ul>
+                        </li>
+                        <li><strong class="text-emerald-400">4. Validate Success:</strong>
+                            <ul class="ml-4 mt-1 space-y-1">
+                                <li>- Device appears in Device Inventory (within ~5-30 minutes)</li>
+                                <li>- Health status shows "Active" / no sensor issues</li>
+                                <li>- Run detection test: <code class="text-cyan-300 bg-gray-900 px-1 rounded">powershell.exe -NoExit -ExecutionPolicy Bypass -WindowStyle Hidden $ErrorActionPreference= 'silentlycontinue'</code></li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Policy Management -->
+            <div class="mb-6">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">Policy Management via Intune</h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <p class="text-white font-medium mb-2">ASR Rules I Configure:</p>
+                        <ul class="text-gray-400 text-xs space-y-1">
+                            <li>• Block Office apps from creating child processes</li>
+                            <li>• Block credential stealing from LSASS</li>
+                            <li>• Block executable content from email/webmail</li>
+                            <li>• Block JavaScript/VBScript from launching executables</li>
+                            <li>• Block process creations from WMI/PSExec</li>
+                        </ul>
+                        <p class="text-gray-500 text-xs mt-2 italic">Modes: Audit → Warn → Block (progressive rollout)</p>
+                    </div>
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <p class="text-white font-medium mb-2">Other Policies:</p>
+                        <ul class="text-gray-400 text-xs space-y-1">
+                            <li>• <strong>Network Protection:</strong> Block connections to malicious domains</li>
+                            <li>• <strong>Controlled Folder Access:</strong> Ransomware protection for key folders</li>
+                            <li>• <strong>Web Content Filtering:</strong> Category-based blocking</li>
+                            <li>• <strong>SmartScreen:</strong> Reputation-based file/URL blocking</li>
+                            <li>• <strong>Exploit Protection:</strong> DEP, ASLR, SEHOP enforcement</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Troubleshooting -->
+            <div class="mb-6">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">Troubleshooting (Real Examples)</h3>
+                
+                <div class="space-y-4">
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <p class="text-red-400 font-medium mb-2">Issue: "No sensor data" in console</p>
+                        <p class="text-gray-400 text-sm mb-2"><strong>Root Causes:</strong></p>
+                        <ul class="text-gray-400 text-xs space-y-1 ml-4">
+                            <li>1. SENSE service not running → <code class="text-cyan-300 bg-gray-900 px-1 rounded">net start sense</code></li>
+                            <li>2. Network connectivity blocked → Verify firewall allows *.securitycenter.windows.com</li>
+                            <li>3. <strong class="text-yellow-400">AV Conflict (ESET case):</strong> Third-party AV blocking MDE sensor
+                                <ul class="ml-4 mt-1">
+                                    <li>→ Configure third-party AV in passive mode</li>
+                                    <li>→ Add MDE exclusions for MsSense.exe, SenseCncProxy.exe</li>
+                                    <li>→ Or fully uninstall if migrating to MDE AV</li>
+                                </ul>
+                            </li>
+                            <li>4. Onboarding package from wrong tenant → Re-run correct package</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <p class="text-red-400 font-medium mb-2">Issue: Device not appearing in portal</p>
+                        <ul class="text-gray-400 text-xs space-y-1 ml-4">
+                            <li>• Wait 5-30 minutes (propagation time)</li>
+                            <li>• Check Event Viewer: Applications and Services → Microsoft → Windows → SENSE</li>
+                            <li>• Verify onboarding blob exists: <code class="text-cyan-300 bg-gray-900 px-1 rounded">reg query "HKLM\SOFTWARE\Microsoft\Windows Advanced Threat Protection\Status"</code></li>
+                            <li>• OnboardingState should = 1</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sentinel Integration -->
+            <div class="mb-6">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">Sentinel Integration</h3>
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <p class="text-white font-medium mb-2">How It Works:</p>
+                    <ul class="text-gray-400 text-sm space-y-1 ml-4">
+                        <li>• <strong class="text-white">M365 Defender Connector:</strong> Streams incidents + raw data to Sentinel</li>
+                        <li>• <strong class="text-white">Tables Available:</strong> DeviceProcessEvents, DeviceNetworkEvents, DeviceFileEvents, DeviceLogonEvents, DeviceRegistryEvents</li>
+                        <li>• <strong class="text-white">Advanced Hunting:</strong> Cross-product queries (endpoint + identity + email + cloud apps)</li>
+                        <li>• <strong class="text-white">Bi-directional Sync:</strong> Incidents sync between M365 Defender and Sentinel</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- SENTINEL MIGRATION DETAILED -->
+        <!-- ============================================ -->
+        <section id="sentinel" class="section-card rounded-xl p-6 mb-8">
+            <h2 class="text-2xl font-bold text-green-400 mb-6 flex items-center gap-3">
+                <i class="fas fa-exchange-alt"></i>
+                2. RSA NetWitness → Sentinel Migration — Deep Dive
+            </h2>
+
+            <!-- What is NetWitness -->
+            <div class="concept-box rounded-lg p-4 mb-6">
+                <h3 class="text-lg font-bold text-white mb-3">RSA NetWitness vs Microsoft Sentinel</h3>
+                <div class="grid md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <p class="text-red-400 font-medium mb-2">RSA NetWitness:</p>
+                        <ul class="text-gray-400 space-y-1">
+                            <li>• On-premises SIEM + NDR</li>
+                            <li>• Meta key-based correlation rules</li>
+                            <li>• ESA (Event Stream Analysis) for rules</li>
+                            <li>• Proprietary query language</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-blue-400 font-medium mb-2">Microsoft Sentinel:</p>
+                        <ul class="text-gray-400 space-y-1">
+                            <li>• Cloud-native SIEM + SOAR</li>
+                            <li>• KQL-based analytics rules</li>
+                            <li>• Log Analytics workspace backend</li>
+                            <li>• Native M365/Azure integration</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Translation Catalog -->
+            <div class="mb-6">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">Translation Catalog — What It Contains</h3>
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <p class="text-gray-300 text-sm mb-3">A translation catalog is a reference document that maps NetWitness concepts to Sentinel equivalents:</p>
+                    
+                    <div class="space-y-3">
+                        <div>
+                            <p class="text-white font-medium">Table Mappings:</p>
+                            <div class="code-block rounded p-2 text-xs mt-1">
+                                <p>NetWitness: endpoint_logs → Sentinel: DeviceProcessEvents, DeviceFileEvents</p>
+                                <p>NetWitness: netflow → Sentinel: CommonSecurityLog, AzureNetworkAnalytics</p>
+                                <p>NetWitness: windows_logs → Sentinel: SecurityEvent, Event</p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <p class="text-white font-medium">Field Equivalence:</p>
+                            <div class="code-block rounded p-2 text-xs mt-1">
+                                <p>NetWitness: user.dst → Sentinel: TargetUserName</p>
+                                <p>NetWitness: ip.src → Sentinel: SourceIP</p>
+                                <p>NetWitness: filename → Sentinel: FileName</p>
+                                <p>NetWitness: action → Sentinel: Activity or ActionType</p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <p class="text-white font-medium">Operator Differences:</p>
+                            <div class="code-block rounded p-2 text-xs mt-1">
+                                <p>NetWitness: contains() → Sentinel: has or contains</p>
+                                <p>NetWitness: regex() → Sentinel: matches regex</p>
+                                <p>NetWitness: count() > 5 → Sentinel: | summarize count() | where count_ > 5</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Scope -->
+            <div class="mb-6">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">My Detection Scope — Examples</h3>
+                
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <p class="text-blue-400 font-medium mb-2">MDE Detections:</p>
+                        <ul class="text-gray-400 text-xs space-y-1">
+                            <li>• Suspicious PowerShell execution</li>
+                            <li>• LSASS memory access (credential dumping)</li>
+                            <li>• Unusual parent-child process relationships</li>
+                            <li>• Lateral movement indicators</li>
+                            <li>• Persistence mechanisms (registry, scheduled tasks)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <p class="text-orange-400 font-medium mb-2">Vulnerability Detections (TVM/Qualys):</p>
+                        <ul class="text-gray-400 text-xs space-y-1">
+                            <li>• Critical CVE exposure alerts</li>
+                            <li>• Unpatched systems with active exploitation (EPSS correlation)</li>
+                            <li>• Vulnerability age tracking</li>
+                            <li>• Compliance drift alerts</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <p class="text-red-400 font-medium mb-2">NGFW Detections:</p>
+                        <ul class="text-gray-400 text-xs space-y-1">
+                            <li>• Outbound connections to threat intel IOCs</li>
+                            <li>• Port scan detection</li>
+                            <li>• Geographic anomaly (connections to unusual countries)</li>
+                            <li>• Data exfiltration patterns (high outbound volume)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <p class="text-purple-400 font-medium mb-2">DLP Detections:</p>
+                        <ul class="text-gray-400 text-xs space-y-1">
+                            <li>• Sensitive data to USB</li>
+                            <li>• Cloud upload of classified files</li>
+                            <li>• Email attachment policy violations</li>
+                            <li>• Bulk data access patterns</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Evaluation Approach -->
+            <div class="highlight p-4 rounded-lg mb-6">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">Detection Evaluation Approach</h3>
+                <p class="text-gray-300 text-sm mb-3">"NetWitness had been in use for years, so not every detection was treated equally..."</p>
+                <div class="grid md:grid-cols-3 gap-3 text-sm">
+                    <div class="bg-green-500/10 rounded p-2">
+                        <p class="text-green-400 font-medium">Translate Directly:</p>
+                        <p class="text-gray-400 text-xs">Mature, high-value rules with proven detection history</p>
+                    </div>
+                    <div class="bg-yellow-500/10 rounded p-2">
+                        <p class="text-yellow-400 font-medium">Tune/Consolidate:</p>
+                        <p class="text-gray-400 text-xs">Noisy rules, overlapping detections, legacy logic</p>
+                    </div>
+                    <div class="bg-blue-500/10 rounded p-2">
+                        <p class="text-blue-400 font-medium">Replace:</p>
+                        <p class="text-gray-400 text-xs">Outdated rules → behavior-based or correlation-driven</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- DLP DETAILED -->
+        <!-- ============================================ -->
+        <section id="dlp" class="section-card rounded-xl p-6 mb-8">
+            <h2 class="text-2xl font-bold text-purple-400 mb-6 flex items-center gap-3">
+                <i class="fas fa-lock"></i>
+                3. DLP Migration — Deep Dive
+            </h2>
+
+            <!-- DLP Concepts -->
+            <div class="concept-box rounded-lg p-4 mb-6">
+                <h3 class="text-lg font-bold text-white mb-3">Key DLP Concepts</h3>
+                <div class="space-y-3 text-sm">
+                    <div>
+                        <p class="text-purple-400 font-medium">Sensitive Information Types (SITs):</p>
+                        <p class="text-gray-400">Pattern-based classifiers that identify sensitive data. Examples: Credit card numbers (regex + checksum), Social Insurance Numbers, custom patterns for internal IDs.</p>
+                    </div>
+                    <div>
+                        <p class="text-purple-400 font-medium">Exact Data Match (EDM):</p>
+                        <p class="text-gray-400">Hash-based matching against actual sensitive data (e.g., employee database, customer list). More accurate than patterns, requires data upload and hashing.</p>
+                    </div>
+                    <div>
+                        <p class="text-purple-400 font-medium">Sensitivity Labels:</p>
+                        <p class="text-gray-400">Classification tags (Public, Internal, Confidential, Highly Confidential) that can trigger DLP policies and apply protection (encryption, watermarks).</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Symantec vs Purview -->
+            <div class="mb-6">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">Symantec DLP vs Microsoft Purview</h3>
+                <div class="grid md:grid-cols-2 gap-4 text-sm">
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <p class="text-yellow-400 font-medium mb-2">Symantec DLP:</p>
+                        <ul class="text-gray-400 space-y-1 text-xs">
+                            <li>• Rule-based policies (IF condition THEN action)</li>
+                            <li>• Separate detection servers</li>
+                            <li>• Agent-based endpoint DLP</li>
+                            <li>• Network DLP via proxy integration</li>
+                            <li>• Complex policy hierarchy</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <p class="text-blue-400 font-medium mb-2">Microsoft Purview:</p>
+                        <ul class="text-gray-400 space-y-1 text-xs">
+                            <li>• Condition-based policies (Conditions + Actions)</li>
+                            <li>• Cloud-native, integrated with M365</li>
+                            <li>• Endpoint DLP built into Windows/MDE</li>
+                            <li>• Unified with sensitivity labels</li>
+                            <li>• Activity Explorer for visibility</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Migration Phases -->
+            <div class="mb-6">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">Migration Phases (What I Worked On)</h3>
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3">
+                            <span class="w-8 h-8 rounded-full bg-purple-500/30 flex items-center justify-center text-purple-400 text-sm font-bold shrink-0">1</span>
+                            <div>
+                                <p class="text-white font-medium">Pilot Phase (When I Joined)</p>
+                                <p class="text-gray-400 text-xs">Framework already configured: SITs, EDMs, sensitivity labels defined. Initial policies in simulation mode.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-3">
+                            <span class="w-8 h-8 rounded-full bg-purple-500/30 flex items-center justify-center text-purple-400 text-sm font-bold shrink-0">2</span>
+                            <div>
+                                <p class="text-white font-medium">Policy Translation (My Work)</p>
+                                <p class="text-gray-400 text-xs">Mapped Symantec rules to Purview conditions. Translated detection logic. Used existing SITs/EDMs in policy conditions.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-3">
+                            <span class="w-8 h-8 rounded-full bg-purple-500/30 flex items-center justify-center text-purple-400 text-sm font-bold shrink-0">3</span>
+                            <div>
+                                <p class="text-white font-medium">Parallel Running</p>
+                                <p class="text-gray-400 text-xs">Symantec in enforcement, Purview in simulation/audit. Compared alert volumes and accuracy.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-3">
+                            <span class="w-8 h-8 rounded-full bg-purple-500/30 flex items-center justify-center text-purple-400 text-sm font-bold shrink-0">4</span>
+                            <div>
+                                <p class="text-white font-medium">Enforcement Rollout</p>
+                                <p class="text-gray-400 text-xs">Audit → Warn (user notification) → Block (enforcement). Progressive rollout by policy priority.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-3">
+                            <span class="w-8 h-8 rounded-full bg-emerald-500/30 flex items-center justify-center text-emerald-400 text-sm font-bold shrink-0">5</span>
+                            <div>
+                                <p class="text-white font-medium">Current: Handover (Now)</p>
+                                <p class="text-gray-400 text-xs">Purview in enforcement. Symantec in alert-only. Knowledge transfer and documentation to internal SOC.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- VULNERABILITY DETAILED -->
+        <!-- ============================================ -->
+        <section id="vuln" class="section-card rounded-xl p-6 mb-8">
+            <h2 class="text-2xl font-bold text-orange-400 mb-6 flex items-center gap-3">
+                <i class="fas fa-bug"></i>
+                4. Vulnerability Management — Deep Dive
+            </h2>
+
+            <!-- EPSS Explained -->
+            <div class="concept-box rounded-lg p-4 mb-6">
+                <h3 class="text-lg font-bold text-white mb-3">EPSS (Exploit Prediction Scoring System)</h3>
+                <p class="text-gray-300 text-sm mb-3">EPSS is a data-driven model that estimates the probability a vulnerability will be exploited in the wild in the next 30 days.</p>
+                <div class="grid md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <p class="text-orange-400 font-medium mb-2">CVSS vs EPSS:</p>
+                        <ul class="text-gray-400 space-y-1 text-xs">
+                            <li><strong>CVSS:</strong> Severity (how bad if exploited) — static</li>
+                            <li><strong>EPSS:</strong> Likelihood (will it be exploited?) — dynamic, updated daily</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-orange-400 font-medium mb-2">Example:</p>
+                        <ul class="text-gray-400 space-y-1 text-xs">
+                            <li>CVE-2024-XXXX: CVSS 9.8, EPSS 0.02 → High severity, low likelihood</li>
+                            <li>CVE-2024-YYYY: CVSS 7.5, EPSS 0.85 → Medium severity, actively exploited</li>
+                            <li class="text-yellow-400 italic">→ Prioritize CVE-2024-YYYY!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TVM vs Qualys -->
+            <div class="mb-6">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">TVM vs Qualys — Why Both?</h3>
+                <div class="grid md:grid-cols-2 gap-4 text-sm">
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <p class="text-blue-400 font-medium mb-2">Microsoft TVM (Defender Vulnerability Management):</p>
+                        <ul class="text-gray-400 space-y-1 text-xs">
+                            <li>✓ Real-time (always-on via MDE agent)</li>
+                            <li>✓ Native M365/Sentinel integration</li>
+                            <li>✓ Software inventory + security recommendations</li>
+                            <li>✓ Attack surface insights</li>
+                            <li>✗ Windows/macOS focused</li>
+                            <li>✗ Limited network device coverage</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <p class="text-green-400 font-medium mb-2">Qualys VMDR:</p>
+                        <ul class="text-gray-400 space-y-1 text-xs">
+                            <li>✓ Broad coverage (Linux, network devices, containers)</li>
+                            <li>✓ Compliance scanning (PCI, CIS benchmarks)</li>
+                            <li>✓ Authenticated + unauthenticated scans</li>
+                            <li>✓ Detailed remediation guidance</li>
+                            <li>✗ Scheduled scans (not real-time)</li>
+                            <li>✗ Separate console</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="highlight mt-4 p-3 rounded">
+                    <p class="text-emerald-400 text-sm font-medium">Integration:</p>
+                    <p class="text-gray-400 text-xs">Both feed into Sentinel. TVM via M365 connector. Qualys via API integration or Qualys connector. Unified dashboards show vulnerability posture across all assets.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- NGFW DETAILED -->
+        <!-- ============================================ -->
+        <section id="ngfw" class="section-card rounded-xl p-6 mb-8">
+            <h2 class="text-2xl font-bold text-red-400 mb-6 flex items-center gap-3">
+                <i class="fas fa-fire"></i>
+                5. NGFW / Firewall — Deep Dive
+            </h2>
+
+            <!-- What is NGFW -->
+            <div class="concept-box rounded-lg p-4 mb-6">
+                <h3 class="text-lg font-bold text-white mb-3">Next-Generation Firewall Features</h3>
+                <div class="grid md:grid-cols-2 gap-4 text-sm">
+                    <ul class="text-gray-400 space-y-1">
+                        <li>• <strong class="text-white">App-ID:</strong> Application identification beyond port/protocol</li>
+                        <li>• <strong class="text-white">User-ID:</strong> User-based policies (integrates with AD)</li>
+                        <li>• <strong class="text-white">Content-ID:</strong> Threat prevention (IPS, AV, anti-spyware)</li>
+                    </ul>
+                    <ul class="text-gray-400 space-y-1">
+                        <li>• <strong class="text-white">URL Filtering:</strong> Category-based web filtering</li>
+                        <li>• <strong class="text-white">SSL/TLS Decryption:</strong> Inspect encrypted traffic</li>
+                        <li>• <strong class="text-white">WildFire:</strong> Cloud-based sandboxing</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- My Role vs Network Team -->
+            <div class="mb-6">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">Role Boundaries</h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
+                        <p class="text-green-400 font-medium mb-2">MY ROLE (Log/Detection Engineering):</p>
+                        <ul class="text-gray-400 text-xs space-y-1">
+                            <li>• Ensure logs flow to Sentinel (CEF/syslog)</li>
+                            <li>• Monitor ingestion health and completeness</li>
+                            <li>• Build KQL analytics from firewall data</li>
+                            <li>• Correlate NGFW events with endpoint/identity</li>
+                            <li>• Identify security gaps → Report findings</li>
+                            <li>• Verify security profiles are attached to rules</li>
+                        </ul>
+                    </div>
+                    <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+                        <p class="text-red-400 font-medium mb-2">NETWORK TEAM OWNS:</p>
+                        <ul class="text-gray-400 text-xs space-y-1">
+                            <li>• Firewall architecture and deployment</li>
+                            <li>• Security policy and rule creation</li>
+                            <li>• IPS signature tuning and updates</li>
+                            <li>• SSL decryption configuration</li>
+                            <li>• Zone design and segmentation</li>
+                            <li>• Implementing changes I recommend</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- KQL EXAMPLES -->
+        <!-- ============================================ -->
+        <section id="kql" class="section-card rounded-xl p-6 mb-8">
+            <h2 class="text-2xl font-bold text-cyan-400 mb-6 flex items-center gap-3">
+                <i class="fas fa-code"></i>
+                6. KQL Detection Examples
+            </h2>
+
+            <div class="space-y-4">
+                <!-- Example 1 -->
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <p class="text-cyan-400 font-medium mb-2">Suspicious PowerShell Execution:</p>
+                    <div class="code-block rounded p-3 text-xs overflow-x-auto">
+                        <pre class="text-green-400">DeviceProcessEvents
+| where Timestamp > ago(1h)
+| where FileName == "powershell.exe" or FileName == "pwsh.exe"
+| where ProcessCommandLine has_any ("-enc", "-encodedcommand", "bypass", "hidden", "downloadstring", "iex")
+| project Timestamp, DeviceName, AccountName, ProcessCommandLine
+| sort by Timestamp desc</pre>
+                    </div>
+                </div>
+
+                <!-- Example 2 -->
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <p class="text-cyan-400 font-medium mb-2">LSASS Access Detection (Credential Dumping):</p>
+                    <div class="code-block rounded p-3 text-xs overflow-x-auto">
+                        <pre class="text-green-400">DeviceProcessEvents
+| where Timestamp > ago(24h)
+| where FileName in~ ("procdump.exe", "mimikatz.exe", "lsass.dmp")
+   or ProcessCommandLine has "lsass"
+| where InitiatingProcessFileName != "MsMpEng.exe" // Exclude Defender
+| project Timestamp, DeviceName, FileName, ProcessCommandLine, AccountName</pre>
+                    </div>
+                </div>
+
+                <!-- Example 3 -->
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <p class="text-cyan-400 font-medium mb-2">Outbound Connection to Threat Intel IOC:</p>
+                    <div class="code-block rounded p-3 text-xs overflow-x-auto">
+                        <pre class="text-green-400">let ThreatIPs = externaldata(ip:string) [@"https://example.com/threat-ips.csv"];
+DeviceNetworkEvents
+| where Timestamp > ago(1h)
+| where RemoteIP in (ThreatIPs)
+| project Timestamp, DeviceName, RemoteIP, RemotePort, InitiatingProcessFileName</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- INFOSYS EXPERIENCE -->
+        <!-- ============================================ -->
+        <section id="infosys" class="section-card rounded-xl p-6 mb-8">
+            <h2 class="text-2xl font-bold text-yellow-400 mb-6 flex items-center gap-3">
+                <i class="fas fa-building"></i>
+                7. Infosys Experience — Deep Dive
+            </h2>
+
+            <!-- FireEye Stack -->
+            <div class="mb-6">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">FireEye Security Stack</h3>
+                <div class="grid md:grid-cols-3 gap-4 text-sm">
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <p class="text-red-400 font-medium mb-2">FireEye HX (Endpoint):</p>
+                        <ul class="text-gray-400 text-xs space-y-1">
+                            <li>• EDR capabilities</li>
+                            <li>• IOC-based detection</li>
+                            <li>• Triage and containment</li>
+                            <li>• <strong class="text-white">My work:</strong> 14 consoles, agent deployments, compliance tracking</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <p class="text-blue-400 font-medium mb-2">FireEye NX (Network):</p>
+                        <ul class="text-gray-400 text-xs space-y-1">
+                            <li>• Network traffic analysis</li>
+                            <li>• Malware detection in transit</li>
+                            <li>• Callback detection</li>
+                            <li>• <strong class="text-white">My work:</strong> Alert triage, integration with HX</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <p class="text-purple-400 font-medium mb-2">FireEye EX (Email):</p>
+                        <ul class="text-gray-400 text-xs space-y-1">
+                            <li>• Email threat protection</li>
+                            <li>• Attachment sandboxing</li>
+                            <li>• URL analysis</li>
+                            <li>• <strong class="text-white">My work:</strong> Alert review, policy tuning</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Automation Story -->
+            <div class="highlight p-4 rounded-lg">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">Python Automation — Full Story</h3>
+                <div class="text-sm space-y-2">
+                    <p><strong class="text-white">Problem:</strong> 14 FireEye HX consoles. Manual compliance tracking: log into each console, download device list, copy-paste into Excel, VLOOKUP against asset inventory. Took hours weekly. Error-prone.</p>
+                    <p><strong class="text-white">Solution:</strong> Python script using FireEye HX API to pull device lists from all 14 consoles, merge into single dataset, compare against CMDB/asset inventory, generate gap report.</p>
+                    <p><strong class="text-white">Result:</strong> Automated weekly runs. Identified coverage gaps instantly. Still in use today. Freed up hours of manual work.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- BEHAVIORAL DEEP DIVES -->
+        <!-- ============================================ -->
+        <section id="behavioral" class="section-card rounded-xl p-6 mb-8">
+            <h2 class="text-2xl font-bold text-pink-400 mb-6 flex items-center gap-3">
+                <i class="fas fa-comments"></i>
+                8. Behavioral Deep Dives
+            </h2>
+
+            <!-- ESET Story Full -->
+            <div class="bg-gray-800/50 rounded-lg p-4 mb-4">
+                <h3 class="text-lg font-bold text-white mb-3">ESET + MDE Conflict — Full STAR</h3>
+                <div class="space-y-3 text-sm">
+                    <div>
+                        <p class="text-cyan-400 font-medium">Situation:</p>
+                        <p class="text-gray-400">After MDE deployment, multiple devices showing "No sensor data" in the M365 Defender console. Security team concerned about blind spots. Affected ~50 devices initially.</p>
+                    </div>
+                    <div>
+                        <p class="text-cyan-400 font-medium">Task:</p>
+                        <p class="text-gray-400">Identify root cause. Restore telemetry. Prevent recurrence. Document resolution for future deployments.</p>
+                    </div>
+                    <div>
+                        <p class="text-cyan-400 font-medium">Action:</p>
+                        <ul class="text-gray-400 ml-4 space-y-1">
+                            <li>1. Checked SENSE service status → Running but telemetry not flowing</li>
+                            <li>2. Reviewed Event Viewer (SENSE logs) → Communication errors</li>
+                            <li>3. Compared affected vs healthy devices → All affected had ESET Endpoint Security</li>
+                            <li>4. Researched known conflicts → ESET real-time protection can interfere with MDE EDR sensor</li>
+                            <li>5. Worked with team to configure ESET in passive mode</li>
+                            <li>6. Added MDE process exclusions to ESET (MsSense.exe, SenseCncProxy.exe)</li>
+                            <li>7. Tested on pilot group → Telemetry restored</li>
+                            <li>8. Rolled out fix to all affected devices</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-cyan-400 font-medium">Result:</p>
+                        <p class="text-gray-400">Telemetry restored on all 50+ devices. Created documentation for future deployments. Added AV conflict check to onboarding runbook. No recurrence since.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detection Tuning Story Full -->
+            <div class="bg-gray-800/50 rounded-lg p-4">
+                <h3 class="text-lg font-bold text-white mb-3">Detection Tuning Disagreement — Full STAR</h3>
+                <div class="space-y-3 text-sm">
+                    <div>
+                        <p class="text-cyan-400 font-medium">Situation:</p>
+                        <p class="text-gray-400">A detection rule for "suspicious PowerShell activity" was generating 200+ alerts daily. Most were false positives from legitimate admin scripts. SOC was experiencing alert fatigue.</p>
+                    </div>
+                    <div>
+                        <p class="text-cyan-400 font-medium">Task:</p>
+                        <p class="text-gray-400">Colleague wanted to disable the rule entirely. I was concerned we'd lose visibility into real PowerShell-based attacks. Needed to find a solution that reduced noise without losing coverage.</p>
+                    </div>
+                    <div>
+                        <p class="text-cyan-400 font-medium">Action:</p>
+                        <ul class="text-gray-400 ml-4 space-y-1">
+                            <li>1. Analyzed alert data → 90% came from 3 admin service accounts running scheduled scripts</li>
+                            <li>2. Proposed tuning: Add exclusions for known-good service accounts + specific script paths</li>
+                            <li>3. Tested both approaches in parallel for 1 week</li>
+                            <li>4. Disabled rule: 0 alerts, but also missed 2 test attacks we simulated</li>
+                            <li>5. Tuned rule: 40 alerts/day (80% reduction), caught both test attacks</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-cyan-400 font-medium">Result:</p>
+                        <p class="text-gray-400">Implemented tuned version. 80% noise reduction while maintaining detection coverage. Colleague agreed the compromise was better than either extreme. Used this as template for future rule tuning.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <div class="text-center mt-8 text-gray-500 text-sm">
+            <p class="mb-2">For quick review, see <a href="quick-prep.html" class="text-emerald-400 underline">Quick Prep Guide</a></p>
+            <p>Good luck! 🎯</p>
+        </div>
+
+    </div>
+</body>
+</html>
