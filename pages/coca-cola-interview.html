@@ -563,6 +563,47 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                     </div>
                 </div>
 
+                <!-- Migration Scope Clarification - GOLD ANSWERS -->
+                <div class="bg-yellow-500/10 border border-yellow-500/50 rounded-xl p-6 mb-4">
+                    <h4 class="text-yellow-400 font-bold mb-4"><i class="fas fa-star mr-2"></i>Migration Scope Clarification (Interviewer Push-Back Answers)</h4>
+                    <p class="text-gray-400 text-xs mb-4">Use these when interviewers probe deeper about what "migration complete" actually means:</p>
+                    
+                    <div class="space-y-4">
+                        <!-- Primary Answer -->
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-emerald-400 font-semibold mb-2">Q: "What exactly was the migration scope?"</p>
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "The migration scope was <strong class="text-white">detection parity and platform readiness</strong>, not full workload migration. We translated and validated detection logic in Sentinel so that as workloads onboarded, detections would automatically apply. Once the SOC had a stable, validated detection framework and documentation, the project was considered complete."
+                            </p>
+                        </div>
+
+                        <!-- Testing Question -->
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-emerald-400 font-semibold mb-2">Q: "But how did you test without all workloads migrated?"</p>
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "We validated detections using <strong class="text-white">historical data, controlled test events, and pilot workloads</strong>. Detection logic does not depend on the number of workloads—only on the availability of telemetry. Once telemetry flows and detections fire correctly against known patterns, the logic is validated."
+                            </p>
+                        </div>
+
+                        <!-- New Workloads Question -->
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-emerald-400 font-semibold mb-2">Q: "What happens when new workloads come online?"</p>
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                "New workloads <strong class="text-white">inherit the existing detection framework automatically</strong> as part of onboarding. No rule redesign is required unless new technologies introduce new telemetry types. That's the whole point of building a scalable detection architecture."
+                            </p>
+                        </div>
+
+                        <!-- Gold Phrase -->
+                        <div class="bg-emerald-500/20 border border-emerald-500/50 rounded-lg p-4">
+                            <p class="text-emerald-400 font-bold mb-2"><i class="fas fa-gem mr-2"></i>Gold Phrase to Memorize:</p>
+                            <p class="text-white text-lg font-semibold italic">
+                                "Detection engineering prepares the logic; workload migration activates it."
+                            </p>
+                            <p class="text-gray-400 text-xs mt-2">This single sentence demonstrates architectural maturity and shuts down follow-up probing.</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="technical rounded-xl p-6">
                     <p class="text-green-400 font-bold mb-3">Q: How do you design a high-fidelity detection rule in Sentinel?</p>
                     <div class="answer-box">
