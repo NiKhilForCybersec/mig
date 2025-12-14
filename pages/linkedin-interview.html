@@ -650,21 +650,21 @@
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">How do you validate that firewall policies support your detection strategy?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "I approach firewalls as a data source and control point feeding Sentinel. <strong>Log coverage validation:</strong> I verify firewall logs flow correctly—traffic, threat, URL logs. I built a KQL dashboard showing log volume by type, so gaps are immediately visible. <strong>Security profile audit:</strong> I review rules to identify traffic that's allowed but not inspected. If a rule doesn't have Threat Prevention profiles attached, we have a blind spot. <strong>Detection correlation:</strong> When I build Sentinel analytics rules, I consider what the firewall should have caught. If I'm detecting C2 at the endpoint level but the firewall isn't alerting, either signatures need updating or SSL inspection is bypassed."
+                                    "I approach firewalls as a data source feeding Sentinel. <strong>Log coverage validation:</strong> I verify firewall logs flow correctly—traffic, threat, URL logs. I built a KQL dashboard showing log volume by type, so gaps are immediately visible. <strong>Detection correlation:</strong> When I build Sentinel analytics rules, I consider what the firewall should have caught. If I'm detecting C2 at the endpoint level but the firewall isn't alerting on the same traffic, I flag it for the network team to investigate—either signatures need updating or SSL inspection is bypassed for that category."
                                 </p>
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">What's the difference between your role and the network team's role with firewalls?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "Clear separation. <strong>Network team owns:</strong> Routing, NAT, VPN configuration, HA clustering, physical deployment, Panorama/FMC administration, interface configuration, performance tuning. <strong>I own:</strong> Security policy validation, ensuring inspection profiles are applied, TLS decryption scope, reviewing rules for overly permissive access, SIEM integration and log validation, building detection rules based on firewall telemetry, quarterly security audits of rule effectiveness. I don't configure the network infrastructure—I ensure the security controls on top of it are properly configured and aligned with our detection strategy."
+                                    "Clear separation. <strong>Network team owns:</strong> Routing, NAT, VPN configuration, HA clustering, physical deployment, Panorama administration, interface configuration, rule creation and modification, performance tuning. <strong>I own:</strong> SIEM integration, log validation, building detection rules from firewall telemetry, participating in security reviews, flagging gaps to the network team. I don't configure the firewall—I consume its telemetry and provide security oversight."
                                 </p>
                             </div>
 
                             <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">Did you deploy firewalls? Did you design the architecture?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "No, and that's intentionally scoped. The firewall architecture was already mature when I joined—standardized baselines existed. My ownership was security controls, visibility, logging, and detection use cases. I ensured firewalls were effectively integrated into the broader security monitoring ecosystem, not the physical or network design."
+                                    "No. The firewall architecture was already mature when I joined—standardized baselines existed, managed by the network team. My focus was security monitoring, log validation, and detection engineering. I ensured firewall telemetry was effectively integrated into Sentinel for detection and investigation, not the firewall infrastructure itself."
                                 </p>
                             </div>
                         </div>
@@ -679,28 +679,28 @@
                         
                         <div class="answer-box">
                             <p class="text-gray-300 text-sm leading-relaxed">
-                                "My focus is ensuring the 'next-gen' features are actually enabled and effective—not just having an NGFW deployed but having it configured to provide real security value.
+                                "My focus is on <strong class="text-white">validating</strong> that next-gen features are enabled and effective—not just having an NGFW deployed but verifying it's configured to provide real security value.
                                 <br><br>
-                                <strong class="text-emerald-400">Security Profile Validation:</strong>
+                                <strong class="text-emerald-400">Security Profile Validation (What I Verify):</strong>
                                 <br><br>
-                                • <strong>Threat Prevention Profiles:</strong> I validate IPS signatures are enabled and tuned, anti-malware scanning is active, vulnerability protection aligns with our asset criticality
-                                <br>• <strong>URL Filtering:</strong> High-risk categories blocked (malware, phishing, C2), appropriate business categories allowed, logging enabled for visibility
-                                <br>• <strong>SSL Decryption:</strong> Enabled where we need visibility, with appropriate exceptions for privacy-sensitive and certificate-pinned applications
-                                <br>• <strong>DNS Security:</strong> Sinkhole configured to identify infected hosts calling malicious domains
+                                • <strong>Threat Prevention Profiles:</strong> I verify IPS signatures are enabled, anti-malware scanning is active, and profiles are attached to rules
+                                <br>• <strong>URL Filtering:</strong> I verify high-risk categories (malware, phishing, C2) are blocked and logging is enabled
+                                <br>• <strong>SSL Decryption:</strong> I review which traffic categories are decrypted and which have documented exceptions
+                                <br>• <strong>DNS Security:</strong> I verify sinkhole is configured and alerts are flowing to Sentinel
                                 <br><br>
-                                <strong class="text-emerald-400">Quarterly Security Audits:</strong>
+                                <strong class="text-emerald-400">Periodic Security Reviews (What I Look For):</strong>
                                 <br><br>
-                                I conduct periodic reviews focused on security gaps:
+                                I participate in periodic reviews looking for security gaps:
                                 <br><br>
-                                • <strong>Rules missing security profiles:</strong> Traffic allowed but not inspected—defeats the purpose of NGFW
-                                <br>• <strong>Overly permissive rules:</strong> 'Any-any' rules or broader than necessary
-                                <br>• <strong>Stale rules:</strong> Zero hits in 90 days—work with owners to validate or remove
+                                • <strong>Rules missing security profiles:</strong> Traffic allowed but not inspected—defeats NGFW purpose
+                                <br>• <strong>Overly permissive rules:</strong> 'Any-any' or broader than necessary
+                                <br>• <strong>Stale rules:</strong> Zero hits in 90 days—flag for owner validation
                                 <br>• <strong>TLS decryption gaps:</strong> Categories that should be inspected but are bypassed
-                                <br>• <strong>Logging gaps:</strong> Rules without logging—no visibility for incident response
+                                <br>• <strong>Logging gaps:</strong> Rules without logging—no visibility for investigation
                                 <br><br>
-                                <strong class="text-emerald-400">Documentation & Governance:</strong>
+                                <strong class="text-emerald-400">My Role:</strong>
                                 <br><br>
-                                I maintain security baseline documentation—what profiles should be applied, what categories blocked. Deviations are documented with risk acceptance. This ensures compliance during audits and provides clear standards for the network team to follow."
+                                I identify gaps and report findings to the network team who owns the firewall configuration. I provide security recommendations; they implement the changes. This separation ensures proper change control while maintaining security oversight."
                             </p>
                         </div>
 
@@ -708,9 +708,9 @@
                             <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
                             
                             <div class="followup-card rounded-lg p-4">
-                                <p class="text-purple-300 text-sm font-medium mb-2">What are common security misconfigurations you find on firewalls?</p>
+                                <p class="text-purple-300 text-sm font-medium mb-2">What are common security gaps you find during reviews?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "From my reviews: (1) <strong>Security profiles not attached:</strong> Rules allowing traffic but no threat prevention—traffic flows but isn't inspected. This defeats NGFW purpose. (2) <strong>SSL decryption disabled:</strong> 'Too complicated' but without it, you're blind to 80%+ of encrypted traffic. (3) <strong>Overly permissive rules:</strong> 'Temporary' rules that became permanent, or entire subnets allowed when only specific hosts needed access. (4) <strong>Stale rules:</strong> Rules for decommissioned servers or former projects. (5) <strong>Logging disabled:</strong> No visibility when something goes wrong."
+                                    "From my reviews: (1) <strong>Security profiles not attached:</strong> Rules allowing traffic but no threat prevention—traffic flows but isn't inspected. (2) <strong>SSL decryption exceptions too broad:</strong> Started narrow but expanded over time without review. (3) <strong>Stale rules:</strong> Rules for decommissioned servers or former projects still active. (4) <strong>Logging inconsistency:</strong> Some rules log, some don't—creates visibility gaps during investigations. I document these findings and work with the network team on remediation priorities."
                                 </p>
                             </div>
                         </div>
@@ -725,22 +725,26 @@
                         
                         <div class="answer-box">
                             <p class="text-gray-300 text-sm leading-relaxed">
-                                <span class="text-emerald-400 font-bold text-base">"We standardized firewall ingestion using CEF over Syslog. Firewalls and Panorama forwarded logs to a Linux syslog collector VM in Azure running Azure Monitor Agent. AMA collected the CEF stream via a Data Collection Rule and events landed in Sentinel's CommonSecurityLog table."</span>
+                                <span class="text-emerald-400 font-bold text-base">"This is where I add the most value with firewalls—log engineering and detection engineering."</span>
+                                <br><br>
+                                <strong class="text-emerald-400">Log Ingestion (What I Validated):</strong>
+                                <br><br>
+                                Firewall logs were forwarded in CEF format via centralized syslog collectors into Microsoft Sentinel. I worked on validating log coverage, monitoring ingestion health, and ensuring the data was usable for detection.
                                 <br><br>
                                 <span class="text-gray-500 text-xs">(Why CEF? Raw syslog is harder to parse—CEF gives normalized fields out of the box.)</span>
                                 <br><br>
-                                <strong class="text-emerald-400">Detection Rules I've Built:</strong>
+                                <strong class="text-emerald-400">Detection Rules I Built Using Firewall Telemetry:</strong>
                                 <br><br>
                                 • <strong>DNS sinkhole hits:</strong> Identifies infected hosts trying to reach malicious domains
-                                <br>• <strong>FW + MDE correlation:</strong> Joins firewall blocks with endpoint process data
+                                <br>• <strong>FW + MDE correlation:</strong> Joins firewall threat logs with endpoint process data for full attack chain
                                 <br>• <strong>Large outbound transfers:</strong> Flags potential exfiltration over threshold
                                 <br>• <strong>Log health monitoring:</strong> Alerts when firewall log volume drops unexpectedly
                                 <br><br>
-                                <strong class="text-emerald-400">Example KQL:</strong>
+                                <strong class="text-emerald-400">Example KQL Correlation:</strong>
                                 <br><br>
-                                <code class='text-cyan-400'>CommonSecurityLog | where DeviceVendor == 'Palo Alto' | where Activity == 'THREAT' | join kind=inner (DeviceEvents) on $left.SourceIP == $right.RemoteIP</code>
+                                <code class='text-cyan-400'>CommonSecurityLog | where DeviceVendor == 'Palo Alto' | where Activity == 'THREAT' | join kind=inner (DeviceNetworkEvents) on $left.DestinationIP == $right.RemoteIP</code>
                                 <br><br>
-                                This correlates firewall threat detections with endpoint network activity—full picture across both control points."
+                                This correlates firewall threat detections with endpoint network activity—full picture across both control points. My focus was ensuring firewall alerts were <strong class="text-white">actionable for SOC</strong>, not just noisy indicators."
                             </p>
                         </div>
 
@@ -748,9 +752,16 @@
                             <p class="text-purple-400 text-sm font-semibold"><i class="fas fa-comments mr-2"></i>Follow-up Questions:</p>
                             
                             <div class="followup-card rounded-lg p-4">
-                                <p class="text-purple-300 text-sm font-medium mb-2">How do you handle firewall-related incidents in OT environments?</p>
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you detect if firewall logs stop flowing?</p>
                                 <p class="text-gray-400 text-sm">
-                                    "OT environments require extra caution. If a firewall change causes production impact: (1) <strong>Immediate coordination</strong>—call the OT/plant engineer first. Don't troubleshoot in isolation. (2) <strong>Rapid identification</strong>—pull recent change log, correlate timing with incident start. (3) <strong>Surgical rollback</strong>—if I can identify the specific change, rollback just that change, not the entire configuration. (4) <strong>Root cause analysis</strong>—understand why the change caused impact. Was it an IPS signature false positive on legitimate OT traffic? A URL category blocking a vendor system? (5) <strong>Prevention</strong>—update our testing process, add the scenario to our validation checklist. For OT, I lean toward alert-only mode for IPS rather than blocking, to avoid production impact from false positives."
+                                    "I built log health monitoring in Sentinel. A scheduled query checks expected log volume by source—if Palo Alto logs drop below 50% of the 7-day average, it fires an alert. This catches issues like: syslog collector disk full, network path blocked, agent crashed, or firewall logging disabled during maintenance and not re-enabled. Silent log failures are dangerous—you think you have visibility but you don't."
+                                </p>
+                            </div>
+
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">What's the value of correlating firewall logs with endpoint data?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "Each data source alone gives partial visibility. Firewall sees the connection attempt; endpoint sees what process initiated it. Combined: 'This blocked connection to a known C2 domain was initiated by powershell.exe running from a temp folder.' That's immediately actionable versus just 'blocked connection to bad IP.' The correlation turns two noisy data sources into high-fidelity alerts."
                                 </p>
                             </div>
                         </div>

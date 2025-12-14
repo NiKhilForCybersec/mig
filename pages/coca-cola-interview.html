@@ -929,22 +929,16 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                     <p class="text-gray-500 text-xs mb-3">This is YOUR comfort zone - Sentinel integration</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "I approach firewalls as a <strong class="text-emerald-400">data source and control point</strong> that feeds into Sentinel. My validation process focuses on ensuring alignment between what the firewall allows/blocks and what we can detect.<br><br>
+                            "I approach firewalls as a <strong class="text-emerald-400">data source</strong> that feeds into Sentinel. My focus is ensuring the telemetry supports our detection strategy.<br><br>
                             
                             <strong>1. Log Coverage Validation</strong><br>
                             I verify firewall logs are flowing into Sentinel correctly—traffic logs, threat logs, URL logs. I built a KQL dashboard that shows log volume by type, so I immediately know if something stops reporting. Gaps in firewall logs = gaps in detection.<br><br>
                             
-                            <strong>2. Security Profile Audit</strong><br>
-                            I periodically review rules to identify traffic that's allowed but <strong class="text-white">not inspected</strong>. If a rule doesn't have Threat Prevention profiles attached, we have a blind spot. I flag these for remediation with the network team.<br><br>
+                            <strong>2. Detection Rule Correlation</strong><br>
+                            When I build Sentinel analytics rules, I consider what the firewall should have caught. For example, if I'm detecting C2 beaconing at the endpoint level (MDE), I cross-reference with firewall threat logs. If the firewall isn't alerting on the same traffic, I flag it for the network team—either signatures need updating or SSL inspection is bypassed for that flow.<br><br>
                             
-                            <strong>3. Detection Rule Correlation</strong><br>
-                            When I build Sentinel analytics rules, I consider what the firewall should have caught. For example, if I'm detecting C2 beaconing at the endpoint level (MDE), I cross-reference with firewall threat logs. If the firewall isn't alerting on the same traffic, either the signatures need updating or SSL inspection is bypassed for that flow.<br><br>
-                            
-                            <strong>4. TLS Decryption Review</strong><br>
-                            Encrypted traffic is a blind spot if not decrypted. I maintain awareness of what's in the decryption exception list and ensure high-risk categories are being inspected. If marketing says 'decrypt everything except banking,' I make sure the exception list isn't overly broad.<br><br>
-                            
-                            <strong>5. Threat Intel Alignment</strong><br>
-                            Firewall threat intelligence feeds should align with what we're seeing in Sentinel. If our threat intel watchlist has IOCs that the firewall should be blocking, I validate that mapping."
+                            <strong>3. Visibility Gap Identification</strong><br>
+                            I identify gaps from the detection side. If I see encrypted traffic to suspicious destinations that the firewall didn't inspect, I document it and share findings with the network team who owns the TLS decryption configuration."
                         </p>
                     </div>
                 </div>
@@ -955,20 +949,22 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                     <p class="text-gray-500 text-xs mb-3">This naturally leads to YOUR strengths (Sentinel, KQL)</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            <span class="text-emerald-400 font-bold text-base">"We standardized firewall ingestion using CEF over Syslog. Firewalls and Panorama forwarded logs to a Linux syslog collector VM in Azure running Azure Monitor Agent. AMA collected the CEF stream via a Data Collection Rule and events landed in Sentinel's CommonSecurityLog table."</span><br><br>
+                            <span class="text-emerald-400 font-bold text-base">"This is where I add the most value with firewalls—log engineering and detection engineering."</span><br><br>
+                            
+                            Firewall logs were forwarded in CEF format via centralized syslog collectors into Microsoft Sentinel. I worked on validating log coverage, monitoring ingestion health, and building KQL-based detection and correlation rules from NGFW data.<br><br>
                             
                             <span class="text-gray-500 text-xs">(Why CEF? Raw syslog is harder to parse—CEF gives normalized fields out of the box.)</span><br><br>
                             
-                            <strong>Detection Rules I've Built:</strong><br>
+                            <strong>Detection Rules I Built Using Firewall Telemetry:</strong><br>
                             • <strong class="text-emerald-400">DNS sinkhole hits:</strong> Identifies infected hosts trying to reach malicious domains<br>
-                            • <strong class="text-emerald-400">FW + MDE correlation:</strong> Joins firewall blocks with endpoint process data<br>
+                            • <strong class="text-emerald-400">FW + MDE correlation:</strong> Joins firewall threat logs with endpoint process data for full attack chain<br>
                             • <strong class="text-emerald-400">Large outbound transfers:</strong> Flags potential exfiltration over threshold<br>
                             • <strong class="text-emerald-400">Log health monitoring:</strong> Alerts when firewall log volume drops unexpectedly<br><br>
                             
-                            <strong>Example KQL:</strong><br>
-                            <code class='text-cyan-400'>CommonSecurityLog | where DeviceVendor == 'Palo Alto' | where Activity == 'THREAT' | join kind=inner (DeviceEvents) on $left.SourceIP == $right.RemoteIP</code><br><br>
+                            <strong>Example KQL Correlation:</strong><br>
+                            <code class='text-cyan-400'>CommonSecurityLog | where DeviceVendor == 'Palo Alto' | where Activity == 'THREAT' | join kind=inner (DeviceNetworkEvents) on $left.DestinationIP == $right.RemoteIP</code><br><br>
                             
-                            This correlates firewall threat detections with endpoint network activity—full picture across both control points."
+                            This correlates firewall threat detections with endpoint network activity—full picture across both control points. My focus was ensuring firewall alerts were <strong class="text-white">actionable for SOC</strong>, not just noisy indicators."
                         </p>
                     </div>
                 </div>
