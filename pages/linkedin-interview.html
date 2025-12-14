@@ -705,26 +705,20 @@
                         
                         <div class="answer-box">
                             <p class="text-gray-300 text-sm leading-relaxed">
-                                "Firewall logs are one of the most valuable data sources in Sentinel because they see all traffic—not just endpoints. Here's how I use them:
+                                <span class="text-emerald-400 font-bold text-base">"We ingested firewall logs via Panorama to a central syslog collector using AMA, primarily for visibility and correlation in Sentinel."</span>
+                                <br><br>
+                                <span class="text-gray-500 text-xs">(If they want more detail:)</span>
                                 <br><br>
                                 <strong class="text-emerald-400">Detection Rules I've Built:</strong>
                                 <br><br>
-                                • <strong>Threat log correlation:</strong> When firewall blocks something (IPS signature, malware, C2 domain), I enrich with MDE data to see if endpoint was compromised before/after
-                                <br>• <strong>DNS sinkhole hits:</strong> Query firewall logs for traffic to our sinkhole IP—identifies infected hosts attempting malicious domain resolution
-                                <br>• <strong>Anomalous outbound traffic:</strong> Large data transfers to new destinations, especially outside business hours
-                                <br>• <strong>Application tunneling:</strong> Traffic the firewall identifies as tunneling or proxy-avoidance
-                                <br>• <strong>Deny log spikes:</strong> Sudden increase in blocked traffic from a host—often indicates scanning or malware
-                                <br><br>
-                                <strong class="text-emerald-400">Investigation Workflows:</strong>
-                                <br><br>
-                                When investigating an incident, I start with the endpoint (MDE) to understand what happened, then pivot to firewall logs to see:
-                                <br>• What network connections did the compromised host make?
-                                <br>• What was blocked vs allowed?
-                                <br>• Were there earlier indicators in firewall logs before the endpoint alert?
+                                • <strong>DNS sinkhole hits:</strong> Identifies infected hosts trying to reach malicious domains
+                                <br>• <strong>FW + MDE correlation:</strong> Joins firewall blocks with endpoint process data
+                                <br>• <strong>Large outbound transfers:</strong> Flags potential exfiltration over threshold
+                                <br>• <strong>Log health monitoring:</strong> Alerts when firewall log volume drops unexpectedly
                                 <br><br>
                                 <strong class="text-emerald-400">Example KQL:</strong>
                                 <br><br>
-                                <code class='text-cyan-400'>CommonSecurityLog | where DeviceVendor == 'Palo Alto' | where Activity == 'THREAT' | join kind=inner (DeviceEvents | where ActionType == 'ConnectionFound') on $left.SourceIP == $right.RemoteIP</code>
+                                <code class='text-cyan-400'>CommonSecurityLog | where DeviceVendor == 'Palo Alto' | where Activity == 'THREAT' | join kind=inner (DeviceEvents) on $left.SourceIP == $right.RemoteIP</code>
                                 <br><br>
                                 This correlates firewall threat detections with endpoint network activity—full picture across both control points."
                             </p>

@@ -1564,6 +1564,834 @@
                 </div>
             </section>
 
+            <!-- ============================================ -->
+            <!-- WORKFLOW 9: Multi-NGFW → Panorama → Sentinel Integration (YOUR WHEELHOUSE) -->
+            <!-- ============================================ -->
+            <section>
+                <h2 class="text-2xl font-bold text-white mb-6">
+                    <span class="text-emerald-400">9.</span> Multi-NGFW → Panorama → Sentinel Log Integration
+                    <span class="ml-3 px-3 py-1 bg-emerald-500/20 text-emerald-400 text-sm rounded-full">YOUR CORE SKILL</span>
+                </h2>
+
+                <!-- This IS Your Role Callout -->
+                <div class="bg-emerald-500/10 border border-emerald-500/50 rounded-xl p-4 mb-6">
+                    <p class="text-emerald-400 font-bold"><i class="fas fa-check-circle mr-2"></i>THIS IS YOUR ACTUAL ROLE</p>
+                    <p class="text-gray-300 text-sm mt-2">Log integration, SIEM configuration, and detection engineering from firewall telemetry. This is where you add value - ensuring firewall logs flow correctly into Sentinel and building detection rules from that data.</p>
+                </div>
+
+                <!-- Architecture Diagram -->
+                <div class="workflow-box rounded-xl p-6 mb-6">
+                    <h4 class="text-emerald-400 font-bold mb-4"><i class="fas fa-network-wired mr-2"></i>Multi-Site Architecture Overview</h4>
+                    <pre class="text-xs text-gray-300 overflow-x-auto">
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    ENTERPRISE NGFW → SENTINEL ARCHITECTURE                                   │
+├─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                                             │
+│   ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐                  │
+│   │   PLANT-FW-01   │    │   PLANT-FW-02   │    │   PLANT-FW-03   │    │   PLANT-FW-04   │                  │
+│   │   Toronto       │    │   Calgary       │    │   Vancouver     │    │   Montreal      │                  │
+│   │   PA-3220       │    │   PA-3220       │    │   PA-3220       │    │   PA-3220       │                  │
+│   │                 │    │                 │    │                 │    │                 │                  │
+│   │  IT Zone        │    │  IT Zone        │    │  IT Zone        │    │  IT Zone        │                  │
+│   │  OT Zone        │    │  OT Zone        │    │  OT Zone        │    │  OT Zone        │                  │
+│   │  DMZ            │    │  DMZ            │    │  DMZ            │    │  DMZ            │                  │
+│   └────────┬────────┘    └────────┬────────┘    └────────┬────────┘    └────────┬────────┘                  │
+│            │                      │                      │                      │                           │
+│            │ Mgmt/Log             │ Mgmt/Log             │ Mgmt/Log             │ Mgmt/Log                  │
+│            │ Port 3978            │ Port 3978            │ Port 3978            │ Port 3978                  │
+│            └──────────────────────┼──────────────────────┼──────────────────────┘                           │
+│                                   │                      │                                                  │
+│   ┌─────────────────┐    ┌───────▼──────────────────────▼────────┐    ┌─────────────────┐                  │
+│   │   DC-FW-01      │    │                                       │    │   DC-FW-02      │                  │
+│   │   Primary DC    │───▶│           PANORAMA M-500              │◀───│   DR Site       │                  │
+│   │   PA-5220       │    │                                       │    │   PA-5220       │                  │
+│   │                 │    │  • Centralized Management             │    │                 │                  │
+│   │  Server Zone    │    │  • Device Groups (by site type)       │    │  Server Zone    │                  │
+│   │  User Zone      │    │  • Templates (security baselines)     │    │  User Zone      │                  │
+│   │  Internet       │    │  • Log Collector (aggregation)        │    │  Internet       │                  │
+│   └─────────────────┘    │  • 263 Managed Firewalls              │    └─────────────────┘                  │
+│                          │                                       │                                         │
+│   ┌─────────────────┐    └───────────────────┬───────────────────┘    ┌─────────────────┐                  │
+│   │   DIST-FW-01    │                        │                        │   DIST-FW-02    │                  │
+│   │   Distribution  │────────────────────────┤                        │   Distribution  │                  │
+│   │   Center #1     │                        │                        │   Center #2     │                  │
+│   │   PA-820        │                        │                        │   PA-820        │                  │
+│   └─────────────────┘                        │                        └─────────────────┘                  │
+│                                              │                                                              │
+│                                              │ Syslog (CEF Format)                                          │
+│                                              │ TCP 514 / TLS 6514                                           │
+│                                              ▼                                                              │
+│                          ┌───────────────────────────────────────┐                                         │
+│                          │        LOG FORWARDING OPTIONS         │                                         │
+│                          │                                       │                                         │
+│                          │  Option A: Direct to Azure            │                                         │
+│                          │  ┌─────────────────────────────────┐  │                                         │
+│                          │  │  Azure Monitor Agent (AMA)      │  │                                         │
+│                          │  │  on Linux Syslog Forwarder      │  │                                         │
+│                          │  │  (Recommended for new deploys)  │  │                                         │
+│                          │  └─────────────────────────────────┘  │                                         │
+│                          │                                       │                                         │
+│                          │  Option B: Via Log Analytics Agent    │                                         │
+│                          │  ┌─────────────────────────────────┐  │                                         │
+│                          │  │  Log Analytics Agent (Legacy)   │  │                                         │
+│                          │  │  CEF Collector VM               │  │                                         │
+│                          │  └─────────────────────────────────┘  │                                         │
+│                          │                                       │                                         │
+│                          │  Option C: Cortex XSIAM / XSOAR       │                                         │
+│                          │  (If using Palo Alto SIEM)            │                                         │
+│                          └───────────────────┬───────────────────┘                                         │
+│                                              │                                                              │
+│                                              │ HTTPS Ingestion                                              │
+│                                              │ Data Collection Endpoint                                     │
+│                                              ▼                                                              │
+│                          ┌───────────────────────────────────────┐                                         │
+│                          │         MICROSOFT SENTINEL            │                                         │
+│                          │                                       │                                         │
+│                          │  ┌─────────────────────────────────┐  │                                         │
+│                          │  │     CommonSecurityLog Table     │  │                                         │
+│                          │  │                                 │  │                                         │
+│                          │  │  • Traffic Logs                 │  │                                         │
+│                          │  │  • Threat Logs                  │  │                                         │
+│                          │  │  • URL Filtering Logs           │  │                                         │
+│                          │  │  • WildFire Logs                │  │                                         │
+│                          │  │  • Data Filtering Logs          │  │                                         │
+│                          │  │  • Authentication Logs          │  │                                         │
+│                          │  └─────────────────────────────────┘  │                                         │
+│                          │                                       │                                         │
+│                          │  ┌─────────────────────────────────┐  │                                         │
+│                          │  │     Analytics Rules (KQL)       │  │                                         │
+│                          │  │                                 │  │                                         │
+│                          │  │  • C2 Detection                 │  │                                         │
+│                          │  │  • DNS Sinkhole Hits            │  │                                         │
+│                          │  │  • Threat Correlation           │  │                                         │
+│                          │  │  • Anomalous Outbound           │  │                                         │
+│                          │  └─────────────────────────────────┘  │                                         │
+│                          └───────────────────────────────────────┘                                         │
+│                                                                                                             │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+
+                <!-- Step 1: Panorama Log Forwarding Configuration -->
+                <div class="workflow-box rounded-xl p-6 mb-6">
+                    <h4 class="text-emerald-400 font-bold mb-4"><i class="fas fa-cog mr-2"></i>Step 1: Configure Log Forwarding on Panorama</h4>
+                    
+                    <div class="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3 mb-4">
+                        <p class="text-blue-400 text-sm"><strong>Network Team Task:</strong> They configure the syslog server destination. You specify WHAT logs and WHICH format.</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-white font-semibold mb-2">1.1 Create Syslog Server Profile</p>
+                            <p class="text-gray-400 text-sm mb-2">Panorama → Device → Server Profiles → Syslog</p>
+                            <pre class="text-xs text-cyan-400 bg-black/50 rounded p-3 overflow-x-auto">
+Name:           Sentinel-Syslog-Profile
+Syslog Server:  10.100.50.25 (CEF Collector VM)
+Transport:      TCP (or TLS for encrypted)
+Port:           514 (or 6514 for TLS)
+Format:         BSD (required for CEF)
+Facility:       LOG_USER
+
+# For multiple collectors (HA):
+Server 1:       10.100.50.25 (Primary)
+Server 2:       10.100.50.26 (Secondary)
+                            </pre>
+                        </div>
+
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-white font-semibold mb-2">1.2 Create Log Forwarding Profile</p>
+                            <p class="text-gray-400 text-sm mb-2">Panorama → Objects → Log Forwarding</p>
+                            <pre class="text-xs text-cyan-400 bg-black/50 rounded p-3 overflow-x-auto">
+Profile Name:   Log-to-Sentinel
+
+┌──────────────────┬─────────────────┬────────────────────┬──────────────┐
+│ Log Type         │ Filter          │ Forward To         │ CEF Severity │
+├──────────────────┼─────────────────┼────────────────────┼──────────────┤
+│ Traffic          │ All             │ Sentinel-Syslog    │ Informational│
+│ Threat           │ All             │ Sentinel-Syslog    │ By Severity  │
+│ URL Filtering    │ All             │ Sentinel-Syslog    │ Informational│
+│ Data Filtering   │ All             │ Sentinel-Syslog    │ Warning      │
+│ WildFire         │ All             │ Sentinel-Syslog    │ By Verdict   │
+│ Authentication   │ All             │ Sentinel-Syslog    │ Informational│
+│ Tunnel           │ All             │ Sentinel-Syslog    │ Informational│
+│ GlobalProtect    │ All             │ Sentinel-Syslog    │ Informational│
+└──────────────────┴─────────────────┴────────────────────┴──────────────┘
+
+# CRITICAL: Attach this profile to ALL security rules
+# Rules without this profile = logs NOT forwarded = blind spot
+                            </pre>
+                        </div>
+
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-white font-semibold mb-2">1.3 Enable CEF Format (Critical for Sentinel)</p>
+                            <p class="text-gray-400 text-sm mb-2">Panorama → Device → Log Settings → CEF</p>
+                            <pre class="text-xs text-cyan-400 bg-black/50 rounded p-3 overflow-x-auto">
+# CEF (Common Event Format) is REQUIRED for CommonSecurityLog table
+# Without CEF, logs go to Syslog table (harder to parse)
+
+Panorama CLI:
+> configure
+# set deviceconfig setting logging enhanced-application-logging yes
+# set shared log-settings syslog Sentinel-Syslog server Sentinel format cef
+# commit
+
+# Verify CEF is enabled:
+> show log-settings syslog Sentinel-Syslog
+                            </pre>
+                        </div>
+
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-white font-semibold mb-2">1.4 Configure Log Types to Forward</p>
+                            <p class="text-gray-400 text-sm mb-2">What to forward (your decision as Security Engineer)</p>
+                            <pre class="text-xs text-gray-300 bg-black/50 rounded p-3 overflow-x-auto">
+┌─────────────────────┬────────────────────────────────────────────────────────────┐
+│ Log Type            │ Why Forward to Sentinel                                    │
+├─────────────────────┼────────────────────────────────────────────────────────────┤
+│ TRAFFIC             │ Network flow data, session info, bytes transferred         │
+│                     │ Use for: baseline behavior, data exfil detection           │
+│                     │ Volume: HIGH (filter if needed)                            │
+├─────────────────────┼────────────────────────────────────────────────────────────┤
+│ THREAT              │ IPS signatures, AV detections, spyware, vulnerability      │
+│                     │ Use for: active threat detection, correlation with MDE     │
+│                     │ Volume: LOW-MEDIUM (always forward)                        │
+├─────────────────────┼────────────────────────────────────────────────────────────┤
+│ URL                 │ Web filtering decisions (allow/block/alert)                │
+│                     │ Use for: policy violations, phishing attempts              │
+│                     │ Volume: MEDIUM                                             │
+├─────────────────────┼────────────────────────────────────────────────────────────┤
+│ WILDFIRE            │ Sandbox verdicts (benign/malware/grayware)                 │
+│                     │ Use for: unknown malware detection, zero-day               │
+│                     │ Volume: LOW (always forward)                               │
+├─────────────────────┼────────────────────────────────────────────────────────────┤
+│ DATA                │ DLP/Data filtering triggers                                │
+│                     │ Use for: sensitive data movement                           │
+│                     │ Volume: LOW                                                │
+├─────────────────────┼────────────────────────────────────────────────────────────┤
+│ AUTH                │ GlobalProtect, Admin logins, User-ID                       │
+│                     │ Use for: authentication anomalies, VPN monitoring          │
+│                     │ Volume: LOW                                                │
+├─────────────────────┼────────────────────────────────────────────────────────────┤
+│ SYSTEM              │ Firewall health, HA failover, config changes               │
+│                     │ Use for: infrastructure monitoring, change detection       │
+│                     │ Volume: LOW                                                │
+└─────────────────────┴────────────────────────────────────────────────────────────┘
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: CEF Collector VM Setup -->
+                <div class="workflow-box rounded-xl p-6 mb-6">
+                    <h4 class="text-emerald-400 font-bold mb-4"><i class="fas fa-server mr-2"></i>Step 2: Azure CEF Collector VM Configuration</h4>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-white font-semibold mb-2">2.1 Deploy CEF Collector (Linux VM)</p>
+                            <pre class="text-xs text-cyan-400 bg-black/50 rounded p-3 overflow-x-auto">
+# Azure CLI - Deploy Ubuntu VM for CEF Collection
+az vm create \
+  --resource-group rg-security-logging \
+  --name vm-cef-collector-01 \
+  --image Ubuntu2204 \
+  --size Standard_D2s_v3 \
+  --admin-username azureuser \
+  --generate-ssh-keys \
+  --nsg nsg-cef-collector \
+  --vnet-name vnet-security \
+  --subnet subnet-logging
+
+# VM Sizing Guide:
+# - 50 firewalls, ~5000 EPS  → Standard_D2s_v3 (2 vCPU, 8GB)
+# - 100 firewalls, ~15000 EPS → Standard_D4s_v3 (4 vCPU, 16GB)  
+# - 250+ firewalls, ~50000 EPS → Standard_D8s_v3 (8 vCPU, 32GB)
+                            </pre>
+                        </div>
+
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-white font-semibold mb-2">2.2 Install Azure Monitor Agent (AMA) - Recommended</p>
+                            <pre class="text-xs text-cyan-400 bg-black/50 rounded p-3 overflow-x-auto">
+# From Azure Portal:
+# Sentinel → Data Connectors → "Common Event Format (CEF) via AMA"
+# Click "Open connector page" → Follow setup wizard
+
+# Or manually via CLI:
+# Step 1: Install AMA extension
+az vm extension set \
+  --name AzureMonitorLinuxAgent \
+  --publisher Microsoft.Azure.Monitor \
+  --vm-name vm-cef-collector-01 \
+  --resource-group rg-security-logging
+
+# Step 2: Create Data Collection Rule (DCR)
+# This tells AMA what to collect and where to send it
+az monitor data-collection rule create \
+  --name dcr-paloalto-cef \
+  --resource-group rg-security-logging \
+  --location eastus \
+  --data-flows '[{
+    "streams": ["Microsoft-CommonSecurityLog"],
+    "destinations": ["la-security-workspace"]
+  }]' \
+  --log-analytics '[{
+    "name": "la-security-workspace",
+    "workspaceResourceId": "/subscriptions/{sub}/resourceGroups/rg-security/providers/Microsoft.OperationalInsights/workspaces/law-sentinel-prod"
+  }]' \
+  --syslog '[{
+    "name": "syslogDataSource",
+    "streams": ["Microsoft-CommonSecurityLog"],
+    "facilityNames": ["user"],
+    "logLevels": ["Debug", "Info", "Notice", "Warning", "Error", "Critical", "Alert", "Emergency"]
+  }]'
+
+# Step 3: Associate DCR with VM
+az monitor data-collection rule association create \
+  --name dcra-cef-collector \
+  --rule-id /subscriptions/{sub}/resourceGroups/rg-security-logging/providers/Microsoft.Insights/dataCollectionRules/dcr-paloalto-cef \
+  --resource /subscriptions/{sub}/resourceGroups/rg-security-logging/providers/Microsoft.Compute/virtualMachines/vm-cef-collector-01
+                            </pre>
+                        </div>
+
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-white font-semibold mb-2">2.3 Configure rsyslog to receive CEF</p>
+                            <pre class="text-xs text-cyan-400 bg-black/50 rounded p-3 overflow-x-auto">
+# SSH into CEF Collector VM
+ssh azureuser@vm-cef-collector-01
+
+# Edit rsyslog config
+sudo nano /etc/rsyslog.d/10-cef-collector.conf
+
+# Add this configuration:
+# ─────────────────────────────────────────────────────
+# Load TCP module for receiving syslog
+module(load="imtcp")
+input(type="imtcp" port="514")
+
+# Load TLS module (optional, for encrypted transport)
+# module(load="imtcp" StreamDriver.Name="gtls" StreamDriver.Mode="1" StreamDriver.Authmode="x509/name")
+# input(type="imtcp" port="6514")
+
+# Parse CEF messages and forward to local file (AMA picks up from here)
+# CEF messages contain "CEF:0|" pattern
+if $rawmsg contains "CEF:0|Palo Alto Networks" then {
+    action(type="omfile" file="/var/log/cef/paloalto.log")
+    stop
+}
+# ─────────────────────────────────────────────────────
+
+# Create log directory
+sudo mkdir -p /var/log/cef
+sudo chown syslog:adm /var/log/cef
+
+# Restart rsyslog
+sudo systemctl restart rsyslog
+
+# Verify listening on port 514
+sudo netstat -tlnp | grep 514
+                            </pre>
+                        </div>
+
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-white font-semibold mb-2">2.4 Firewall Rules (NSG)</p>
+                            <pre class="text-xs text-cyan-400 bg-black/50 rounded p-3 overflow-x-auto">
+# Allow syslog from Palo Alto firewalls to CEF Collector
+
+az network nsg rule create \
+  --resource-group rg-security-logging \
+  --nsg-name nsg-cef-collector \
+  --name Allow-Syslog-From-Firewalls \
+  --priority 100 \
+  --source-address-prefixes 10.0.0.0/8 172.16.0.0/12 \
+  --destination-port-ranges 514 6514 \
+  --protocol Tcp \
+  --access Allow \
+  --direction Inbound
+
+# For on-prem firewalls, ensure:
+# - ExpressRoute/VPN allows TCP 514/6514 to CEF Collector
+# - Source IPs of all firewall management interfaces
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: CommonSecurityLog Table Schema -->
+                <div class="workflow-box rounded-xl p-6 mb-6">
+                    <h4 class="text-emerald-400 font-bold mb-4"><i class="fas fa-table mr-2"></i>Step 3: CommonSecurityLog Table Schema (Where Logs Land)</h4>
+                    
+                    <div class="bg-black/30 rounded-lg p-4 mb-4">
+                        <p class="text-white font-semibold mb-2">Key Fields for Palo Alto Logs</p>
+                        <pre class="text-xs text-gray-300 bg-black/50 rounded p-3 overflow-x-auto">
+┌──────────────────────────┬─────────────────────────────────────────────────────────────────────────┐
+│ Field                    │ Description & Values for Palo Alto                                     │
+├──────────────────────────┼─────────────────────────────────────────────────────────────────────────┤
+│ TimeGenerated            │ When Sentinel received the log                                         │
+│ DeviceVendor             │ "Palo Alto Networks"                                                   │
+│ DeviceProduct            │ "PAN-OS" or "Panorama"                                                 │
+│ DeviceVersion            │ PAN-OS version (e.g., "10.2.3")                                        │
+├──────────────────────────┼─────────────────────────────────────────────────────────────────────────┤
+│ Activity                 │ Log subtype: TRAFFIC, THREAT, URL, WILDFIRE, DATA, SYSTEM             │
+│ DeviceAction             │ allow, deny, drop, reset-client, reset-server, reset-both, alert      │
+├──────────────────────────┼─────────────────────────────────────────────────────────────────────────┤
+│ SourceIP                 │ Source IP address                                                      │
+│ SourcePort               │ Source port number                                                     │
+│ SourceUserName           │ User-ID mapped user (if available)                                     │
+│ DestinationIP            │ Destination IP address                                                 │
+│ DestinationPort          │ Destination port number                                                │
+│ DestinationHostName      │ Resolved hostname (if DNS resolution enabled)                          │
+├──────────────────────────┼─────────────────────────────────────────────────────────────────────────┤
+│ Protocol                 │ tcp, udp, icmp                                                         │
+│ ApplicationProtocol      │ App-ID detected application (web-browsing, ssl, dns, etc.)            │
+├──────────────────────────┼─────────────────────────────────────────────────────────────────────────┤
+│ DeviceInboundInterface   │ Ingress zone/interface                                                 │
+│ DeviceOutboundInterface  │ Egress zone/interface                                                  │
+├──────────────────────────┼─────────────────────────────────────────────────────────────────────────┤
+│ SentBytes                │ Bytes sent (client to server)                                          │
+│ ReceivedBytes            │ Bytes received (server to client)                                      │
+├──────────────────────────┼─────────────────────────────────────────────────────────────────────────┤
+│ LogSeverity              │ 0-10 scale: 0=Info, 1=Low, 2=Medium, 3=High, 4=Critical               │
+├──────────────────────────┼─────────────────────────────────────────────────────────────────────────┤
+│ ThreatID                 │ For THREAT logs: Signature ID                                          │
+│ ThreatCategory           │ virus, spyware, vulnerability, url-filtering, wildfire, dns-security │
+│ ThreatDescription        │ Human-readable threat name                                             │
+├──────────────────────────┼─────────────────────────────────────────────────────────────────────────┤
+│ RequestURL               │ For URL/THREAT logs: Full URL accessed                                 │
+│ RequestContext           │ For URL logs: URL category (malware, adult, gambling, etc.)           │
+├──────────────────────────┼─────────────────────────────────────────────────────────────────────────┤
+│ DeviceCustomString1      │ Rule name that matched                                                 │
+│ DeviceCustomString2      │ Security profile name                                                  │
+│ DeviceCustomString3      │ Source zone                                                            │
+│ DeviceCustomString4      │ Destination zone                                                       │
+│ DeviceCustomString5      │ Session flags / additional context                                     │
+│ DeviceCustomString6      │ Source device name (firewall hostname)                                 │
+├──────────────────────────┼─────────────────────────────────────────────────────────────────────────┤
+│ AdditionalExtensions     │ Contains: SerialNumber, ActionFlags, Flags, etc.                       │
+│                          │ Parse with: extract_json() or parse_cef_extension()                   │
+└──────────────────────────┴─────────────────────────────────────────────────────────────────────────┘
+                        </pre>
+                    </div>
+
+                    <div class="bg-black/30 rounded-lg p-4">
+                        <p class="text-white font-semibold mb-2">Sample CEF Message (Raw)</p>
+                        <pre class="text-xs text-cyan-400 bg-black/50 rounded p-3 overflow-x-auto">
+CEF:0|Palo Alto Networks|PAN-OS|10.2.3|THREAT|threat|8|
+rt=Dec 13 2024 14:32:15 GMT
+src=192.168.1.100
+spt=52341
+dst=203.0.113.50
+dpt=443
+proto=tcp
+app=ssl
+act=alert
+cs1=Web-Outbound-Rule
+cs1Label=Rule
+cs2=AV-Standard
+cs2Label=SecurityProfile
+cs3=Corporate-Users
+cs3Label=SourceZone
+cs4=Internet
+cs4Label=DestZone
+cat=spyware
+cn1=54321
+cn1Label=SessionID
+cs6=PLANT-FW-01
+cs6Label=DeviceName
+msg=Emotet.Gen Command-and-Control Traffic Detected
+                        </pre>
+                    </div>
+                </div>
+
+                <!-- Step 4: Validation KQL Queries -->
+                <div class="workflow-box rounded-xl p-6 mb-6">
+                    <h4 class="text-emerald-400 font-bold mb-4"><i class="fas fa-search mr-2"></i>Step 4: Validation & Health Check Queries (KQL)</h4>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-white font-semibold mb-2">4.1 Verify Logs Are Flowing</p>
+                            <pre class="text-xs text-cyan-400 bg-black/50 rounded p-3 overflow-x-auto">
+// Check if Palo Alto logs are arriving
+CommonSecurityLog
+| where DeviceVendor == "Palo Alto Networks"
+| where TimeGenerated > ago(1h)
+| summarize 
+    LogCount = count(),
+    FirstLog = min(TimeGenerated),
+    LastLog = max(TimeGenerated)
+| extend 
+    LogsPerMinute = LogCount / 60.0,
+    TimeSinceLastLog = now() - LastLog
+
+// Expected: LogCount > 0, TimeSinceLastLog < 5 minutes
+                            </pre>
+                        </div>
+
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-white font-semibold mb-2">4.2 Log Volume by Firewall (Coverage Check)</p>
+                            <pre class="text-xs text-cyan-400 bg-black/50 rounded p-3 overflow-x-auto">
+// Identify which firewalls are reporting (and which are NOT)
+CommonSecurityLog
+| where DeviceVendor == "Palo Alto Networks"
+| where TimeGenerated > ago(24h)
+| extend FirewallName = tostring(DeviceCustomString6)
+| summarize 
+    LogCount = count(),
+    LastSeen = max(TimeGenerated),
+    LogTypes = make_set(Activity)
+| project 
+    FirewallName,
+    LogCount,
+    LastSeen,
+    HoursSinceLastLog = datetime_diff('hour', now(), LastSeen),
+    LogTypes
+| order by LogCount desc
+
+// ALERT: Any firewall with HoursSinceLastLog > 1 = logging gap
+// Compare against your asset list of 263 firewalls
+                            </pre>
+                        </div>
+
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-white font-semibold mb-2">4.3 Log Type Distribution (Are all types flowing?)</p>
+                            <pre class="text-xs text-cyan-400 bg-black/50 rounded p-3 overflow-x-auto">
+// Check that all expected log types are being received
+CommonSecurityLog
+| where DeviceVendor == "Palo Alto Networks"
+| where TimeGenerated > ago(24h)
+| summarize LogCount = count() by Activity
+| order by LogCount desc
+
+// Expected log types (if all enabled):
+// TRAFFIC    - High volume (network flows)
+// THREAT     - Medium volume (IPS/AV detections)
+// URL        - Medium volume (web filtering)
+// WILDFIRE   - Low volume (sandbox verdicts)
+// SYSTEM     - Low volume (config changes, HA)
+// AUTH       - Low volume (logins, User-ID)
+
+// MISSING any type? Check Log Forwarding Profile attachment
+                            </pre>
+                        </div>
+
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-white font-semibold mb-2">4.4 Create Log Health Workbook Dashboard</p>
+                            <pre class="text-xs text-cyan-400 bg-black/50 rounded p-3 overflow-x-auto">
+// Daily log volume trend (detect sudden drops)
+CommonSecurityLog
+| where DeviceVendor == "Palo Alto Networks"
+| where TimeGenerated > ago(7d)
+| summarize LogCount = count() by bin(TimeGenerated, 1h)
+| render timechart
+
+// Alert rule: Trigger if LogCount drops below 50% of baseline
+let baseline = toscalar(
+    CommonSecurityLog
+    | where DeviceVendor == "Palo Alto Networks"
+    | where TimeGenerated between (ago(8d) .. ago(1d))
+    | summarize avg(count()) by bin(TimeGenerated, 1h)
+    | summarize avg(avg_)
+);
+CommonSecurityLog
+| where DeviceVendor == "Palo Alto Networks"  
+| where TimeGenerated > ago(1h)
+| summarize CurrentCount = count()
+| where CurrentCount < baseline * 0.5
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5: Detection Rules from Firewall Data -->
+                <div class="workflow-box rounded-xl p-6 mb-6">
+                    <h4 class="text-emerald-400 font-bold mb-4"><i class="fas fa-bell mr-2"></i>Step 5: Detection Rules Built from Firewall Telemetry</h4>
+                    
+                    <p class="text-gray-400 text-sm mb-4">These are the detection rules YOU build from firewall data - your core value as Security Engineer.</p>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-white font-semibold mb-2">Detection 1: Threat Log with Block Action (Immediate Alert)</p>
+                            <pre class="text-xs text-cyan-400 bg-black/50 rounded p-3 overflow-x-auto">
+// Alert on high/critical severity threats blocked
+CommonSecurityLog
+| where DeviceVendor == "Palo Alto Networks"
+| where Activity == "THREAT"
+| where LogSeverity >= 3  // High or Critical
+| where DeviceAction in ("reset-both", "reset-client", "reset-server", "drop", "block")
+| extend 
+    FirewallName = tostring(DeviceCustomString6),
+    RuleName = tostring(DeviceCustomString1),
+    ThreatName = ThreatDescription,
+    SourceZone = tostring(DeviceCustomString3),
+    DestZone = tostring(DeviceCustomString4)
+| project 
+    TimeGenerated,
+    FirewallName,
+    SourceIP,
+    SourceUserName,
+    DestinationIP,
+    DestinationPort,
+    ThreatName,
+    ThreatCategory,
+    DeviceAction,
+    RuleName
+| order by TimeGenerated desc
+
+// USE CASE: Immediate visibility into active threats being stopped
+// CORRELATION: Join with MDE to check if endpoint is compromised
+                            </pre>
+                        </div>
+
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-white font-semibold mb-2">Detection 2: DNS Sinkhole Hits (Infected Host Detection)</p>
+                            <pre class="text-xs text-cyan-400 bg-black/50 rounded p-3 overflow-x-auto">
+// Identify hosts attempting to reach sinkholed domains
+// DNS Sinkhole IP configured in Anti-Spyware profile: 72.5.65.111 (PA default) or custom
+let SinkholeIPs = dynamic(["72.5.65.111", "10.0.0.254"]);  // Add your sinkhole IPs
+CommonSecurityLog
+| where DeviceVendor == "Palo Alto Networks"
+| where Activity == "THREAT"
+| where ThreatCategory == "dns-security" or ThreatCategory == "spyware"
+| where DestinationIP in (SinkholeIPs) or ThreatDescription contains "sinkhole"
+| extend 
+    FirewallName = tostring(DeviceCustomString6),
+    InfectedHost = SourceIP,
+    MaliciousDomain = DestinationHostName
+| summarize 
+    AttemptCount = count(),
+    Domains = make_set(MaliciousDomain),
+    FirstSeen = min(TimeGenerated),
+    LastSeen = max(TimeGenerated)
+by InfectedHost, FirewallName
+| where AttemptCount > 1  // Multiple attempts = likely infection
+| order by AttemptCount desc
+
+// ACTION: Investigate InfectedHost in MDE, isolate if confirmed
+                            </pre>
+                        </div>
+
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-white font-semibold mb-2">Detection 3: C2 Beaconing Pattern (Behavioral)</p>
+                            <pre class="text-xs text-cyan-400 bg-black/50 rounded p-3 overflow-x-auto">
+// Detect regular interval connections (C2 beaconing behavior)
+CommonSecurityLog
+| where DeviceVendor == "Palo Alto Networks"
+| where Activity == "TRAFFIC"
+| where DeviceAction == "allow"
+| where DestinationPort in (443, 80, 8080)  // Common C2 ports
+| extend FirewallName = tostring(DeviceCustomString6)
+| summarize 
+    ConnectionCount = count(),
+    ConnectionTimes = make_list(TimeGenerated),
+    BytesSent = sum(SentBytes),
+    BytesReceived = sum(ReceivedBytes)
+by SourceIP, DestinationIP, DestinationPort, bin(TimeGenerated, 1h)
+| where ConnectionCount > 10  // Frequent connections
+| extend 
+    // Calculate time intervals between connections
+    Intervals = array_sort_asc(ConnectionTimes)
+| where array_length(Intervals) > 5
+// Flag if intervals are suspiciously regular (within 10% variance)
+| project 
+    SourceIP,
+    DestinationIP,
+    DestinationPort,
+    ConnectionCount,
+    BytesSent,
+    BytesReceived,
+    SuspiciousBeaconing = ConnectionCount > 20
+
+// CORRELATION: Cross-reference DestinationIP with threat intel
+                            </pre>
+                        </div>
+
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-white font-semibold mb-2">Detection 4: Large Outbound Data Transfer (Exfiltration)</p>
+                            <pre class="text-xs text-cyan-400 bg-black/50 rounded p-3 overflow-x-auto">
+// Detect unusually large outbound data transfers
+let ExfilThresholdMB = 500;  // Adjust based on baseline
+CommonSecurityLog
+| where DeviceVendor == "Palo Alto Networks"
+| where Activity == "TRAFFIC"
+| where DeviceAction == "allow"
+| extend 
+    FirewallName = tostring(DeviceCustomString6),
+    SourceZone = tostring(DeviceCustomString3),
+    DestZone = tostring(DeviceCustomString4)
+| where SourceZone in ("Corporate-Users", "Servers", "OT-Zone")  // Internal zones
+| where DestZone == "Internet" or DestZone == "Untrust"
+| summarize 
+    TotalBytesSent = sum(SentBytes),
+    SessionCount = count(),
+    Destinations = make_set(DestinationIP)
+by SourceIP, SourceUserName, bin(TimeGenerated, 1h)
+| extend TotalMBSent = TotalBytesSent / 1048576.0
+| where TotalMBSent > ExfilThresholdMB
+| project 
+    TimeGenerated,
+    SourceIP,
+    SourceUserName,
+    TotalMBSent,
+    SessionCount,
+    UniqueDestinations = array_length(Destinations),
+    TopDestinations = Destinations
+| order by TotalMBSent desc
+
+// ACTION: Verify if legitimate (backup, cloud sync) or investigate
+                            </pre>
+                        </div>
+
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-white font-semibold mb-2">Detection 5: Correlate FW Threat with MDE Alert</p>
+                            <pre class="text-xs text-cyan-400 bg-black/50 rounded p-3 overflow-x-auto">
+// POWERFUL: Join firewall threat detection with endpoint detection
+// Shows full attack chain: network block + endpoint activity
+let FWThreats = 
+    CommonSecurityLog
+    | where DeviceVendor == "Palo Alto Networks"
+    | where Activity == "THREAT"
+    | where TimeGenerated > ago(24h)
+    | project 
+        FW_Time = TimeGenerated,
+        FW_SourceIP = SourceIP,
+        FW_DestIP = DestinationIP,
+        FW_Threat = ThreatDescription,
+        FW_Action = DeviceAction;
+let MDEAlerts = 
+    DeviceEvents
+    | where TimeGenerated > ago(24h)
+    | where ActionType in ("ConnectionFound", "NetworkConnectionCreated")
+    | project 
+        MDE_Time = TimeGenerated,
+        MDE_DeviceName = DeviceName,
+        MDE_LocalIP = LocalIP,
+        MDE_RemoteIP = RemoteIP,
+        MDE_Process = InitiatingProcessFileName;
+FWThreats
+| join kind=inner MDEAlerts on $left.FW_SourceIP == $right.MDE_LocalIP
+| where abs(datetime_diff('minute', FW_Time, MDE_Time)) < 5  // Within 5 minutes
+| project 
+    FW_Time,
+    MDE_DeviceName,
+    FW_SourceIP,
+    FW_DestIP,
+    FW_Threat,
+    FW_Action,
+    MDE_Process
+| order by FW_Time desc
+
+// VALUE: See BOTH the network block AND what process initiated it
+// If FW blocked but MDE shows process = investigate endpoint
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 6: Troubleshooting Log Flow Issues -->
+                <div class="workflow-box rounded-xl p-6 mb-6">
+                    <h4 class="text-red-400 font-bold mb-4"><i class="fas fa-exclamation-triangle mr-2"></i>Step 6: Troubleshooting Log Flow Issues</h4>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-white font-semibold mb-2">Symptom: No logs in CommonSecurityLog</p>
+                            <pre class="text-xs text-gray-300 bg-black/50 rounded p-3 overflow-x-auto">
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│ TROUBLESHOOTING CHECKLIST                                                       │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│ 1. CHECK PANORAMA/FIREWALL SIDE                                                 │
+│    ├─ Is Syslog Server Profile configured?                                      │
+│    │   > show log-settings syslog                                               │
+│    ├─ Is Log Forwarding Profile attached to rules?                              │
+│    │   > show running security-policy (check "log-end" and "log-profile")       │
+│    ├─ Is CEF format enabled?                                                    │
+│    │   > show log-settings syslog Sentinel format                               │
+│    └─ Can firewall reach CEF Collector?                                         │
+│        > ping source <mgmt-ip> host <collector-ip>                              │
+│        > tcpdump on collector: sudo tcpdump -i any port 514                     │
+│                                                                                 │
+│ 2. CHECK CEF COLLECTOR VM                                                       │
+│    ├─ Is rsyslog running?                                                       │
+│    │   > sudo systemctl status rsyslog                                          │
+│    ├─ Is port 514 listening?                                                    │
+│    │   > sudo netstat -tlnp | grep 514                                          │
+│    ├─ Are logs arriving at /var/log/cef/?                                       │
+│    │   > tail -f /var/log/cef/paloalto.log                                      │
+│    └─ Is Azure Monitor Agent running?                                           │
+│        > sudo systemctl status azuremonitoragent                                │
+│                                                                                 │
+│ 3. CHECK AZURE SIDE                                                             │
+│    ├─ Is Data Collection Rule associated?                                       │
+│    │   Azure Portal > VM > Extensions > AzureMonitorLinuxAgent                  │
+│    ├─ Is DCR pointing to correct workspace?                                     │
+│    │   Monitor > Data Collection Rules > dcr-paloalto-cef > Data Sources        │
+│    └─ Check Agent heartbeat                                                     │
+│        Heartbeat | where Computer == "vm-cef-collector-01" | take 10            │
+│                                                                                 │
+│ 4. COMMON ISSUES                                                                │
+│    ├─ Wrong format: BSD required for CEF (not RFC5424)                          │
+│    ├─ NSG blocking: Ensure TCP 514 allowed from FW management IPs               │
+│    ├─ Log Forwarding Profile not attached: Logs generated but not forwarded     │
+│    ├─ Wrong facility: rsyslog filtering on wrong facility                       │
+│    └─ Disk full on collector: Logs dropped if /var/log full                     │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                            </pre>
+                        </div>
+
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-white font-semibold mb-2">Quick Validation Commands</p>
+                            <pre class="text-xs text-cyan-400 bg-black/50 rounded p-3 overflow-x-auto">
+# On Panorama/Firewall CLI - Verify log forwarding
+> show log-settings syslog all
+> test log-collector-group log-type traffic
+> debug log-receiver statistics
+
+# On CEF Collector - Watch incoming logs
+sudo tcpdump -A -i any port 514 | grep "CEF:0|Palo Alto"
+tail -f /var/log/cef/paloalto.log
+
+# In Sentinel - Check last hour
+CommonSecurityLog
+| where DeviceVendor == "Palo Alto Networks"
+| where TimeGenerated > ago(1h)
+| count
+
+# Expected result: count_ > 0
+# If 0, work backwards through checklist above
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interview Callout -->
+                <div class="bg-emerald-500/10 border-2 border-emerald-500/50 rounded-xl p-6 mb-6">
+                    <h4 class="text-emerald-400 font-bold mb-3"><i class="fas fa-microphone mr-2"></i>Interview Talking Points for This Workflow</h4>
+                    
+                    <div class="space-y-4 text-sm">
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-yellow-400 font-semibold mb-2">Q: "How do you integrate firewall logs with your SIEM?"</p>
+                            <p class="text-gray-300">
+                                <span class="text-emerald-400 font-bold text-base">"We ingested firewall logs via Panorama to a central syslog collector using AMA, primarily for visibility and correlation in Sentinel."</span>
+                                <br><br>
+                                <span class="text-gray-500 text-xs">(If they ask for more detail, you can expand:)</span>
+                                <br><br>
+                                "The logs land in CommonSecurityLog in CEF format. From there, I built detection rules correlating firewall threat logs with MDE endpoint telemetry—when the firewall blocks something, I can see which endpoint process initiated it. I also monitor log health to catch gaps when a firewall stops reporting."
+                            </p>
+                        </div>
+
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <p class="text-yellow-400 font-semibold mb-2">Q: "What detection rules have you built from firewall data?"</p>
+                            <p class="text-gray-300">
+                                "A few key ones:
+                                <br><br>
+                                • <strong>DNS sinkhole hits</strong>—identifies infected hosts trying to reach malicious domains
+                                <br>• <strong>FW + MDE correlation</strong>—joins firewall blocks with endpoint process data
+                                <br>• <strong>Large outbound transfers</strong>—flags potential exfiltration over threshold
+                                <br>• <strong>Log health monitoring</strong>—alerts when firewall log volume drops unexpectedly"
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Summary Box -->
             <div class="glass-card rounded-xl p-6 mt-8">
                 <h3 class="text-xl font-bold text-white mb-4"><i class="fas fa-key text-emerald-400 mr-2"></i>Key Interview Points</h3>
@@ -1575,45 +2403,47 @@
                             <li>• Threat Prevention configuration</li>
                             <li>• URL Filtering policy design</li>
                             <li>• WildFire & File Blocking setup</li>
-                            <li>• SIEM integration & detection rules</li>
+                            <li>• <strong class="text-white">SIEM integration & log forwarding</strong></li>
+                            <li>• <strong class="text-white">Detection rules from FW telemetry</strong></li>
                             <li>• Quarterly rule reviews</li>
                         </ul>
                     </div>
                     <div>
-                        <p class="text-blue-400 font-semibold mb-2">Security Profile Components:</p>
+                        <p class="text-blue-400 font-semibold mb-2">Log Integration Components:</p>
                         <ul class="text-gray-400 space-y-1">
-                            <li>• Antivirus (AV-Standard)</li>
-                            <li>• Anti-Spyware + DNS Sinkhole</li>
-                            <li>• Vulnerability Protection (IPS)</li>
-                            <li>• URL Filtering (80+ categories)</li>
-                            <li>• File Blocking (dangerous types)</li>
-                            <li>• WildFire Analysis (cloud sandbox)</li>
-                            <li>• DNS Security</li>
+                            <li>• Panorama Syslog Profile</li>
+                            <li>• Log Forwarding Profile</li>
+                            <li>• CEF Format (required)</li>
+                            <li>• Azure CEF Collector VM</li>
+                            <li>• Azure Monitor Agent</li>
+                            <li>• Data Collection Rules</li>
+                            <li>• CommonSecurityLog table</li>
                         </ul>
                     </div>
                     <div>
-                        <p class="text-purple-400 font-semibold mb-2">Template Deployment:</p>
+                        <p class="text-purple-400 font-semibold mb-2">Detection Rules You Build:</p>
                         <ul class="text-gray-400 space-y-1">
-                            <li>• Create profiles in Panorama</li>
-                            <li>• Bundle into Profile Groups</li>
-                            <li>• Attach to security rules</li>
-                            <li>• Commit & Push to firewalls</li>
-                            <li>• Verify in Threat/Traffic logs</li>
-                            <li>• Test with EICAR file</li>
+                            <li>• Threat log correlation</li>
+                            <li>• DNS sinkhole hits</li>
+                            <li>• C2 beaconing detection</li>
+                            <li>• Large data exfiltration</li>
+                            <li>• FW + MDE correlation</li>
+                            <li>• Log health monitoring</li>
                         </ul>
                     </div>
                 </div>
                 <div class="mt-4 pt-4 border-t border-gray-700">
                     <p class="text-yellow-400 font-semibold mb-2">Workflows in This Page:</p>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs text-gray-400">
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-2 text-xs text-gray-400">
                         <span>1. Multi-Site Deployment</span>
                         <span>2. OT Troubleshooting</span>
                         <span>3. Quarterly Review</span>
                         <span>4. Profile Selection</span>
-                        <span>5. Baseline Template Structure</span>
-                        <span>6. Profile Config Deep Dive</span>
-                        <span>7. Panorama UI Walkthrough</span>
-                        <span>8. Config Export Format</span>
+                        <span>5. Baseline Templates</span>
+                        <span>6. Profile Deep Dive</span>
+                        <span>7. Panorama UI</span>
+                        <span>8. Config Export</span>
+                        <span class="text-emerald-400 font-semibold">9. Sentinel Integration ⭐</span>
                     </div>
                 </div>
             </div>
