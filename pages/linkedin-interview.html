@@ -543,7 +543,7 @@
                                 <br><br>
                                 <strong class="text-orange-400">I moved quickly into engineering-focused roles</strong> where I could design, deploy, and mature security controls at scale. At Infosys, I worked extensively with Trellix EDR/NDR and Symantec DLP—managing agents, tuning policies, improving detection fidelity, and supporting platform evaluations for next-generation EDR/XDR solutions. That experience strengthened my understanding of architectural decision-making and tool rationalization.
                                 <br><br>
-                                <strong class="text-orange-400">After relocating to Canada, I joined Siemens</strong>, where I supported a major security modernization program transitioning from RSA NetWitness and ESET to a cloud-native Microsoft security ecosystem using Sentinel, MDE, and Azure services. My responsibilities included converting RSA correlation rules into KQL, validating telemetry pipelines, onboarding endpoints at scale, developing Logic Apps automations, and ensuring smooth coexistence between legacy and modern tools.
+                                <strong class="text-orange-400">After relocating to Canada, I joined Siemens</strong>, where I supported a major security modernization program transitioning from RSA NetWitness and ESET to a cloud-native Microsoft security ecosystem using Sentinel, MDE, and Azure services. My focus was translating and operationalizing detections across core security controls—NGFW, endpoint/EDR, identity, email security, DLP, PAM, and vulnerability telemetry. I converted RSA correlation rules into KQL, validated telemetry pipelines, onboarded endpoints at scale, and developed Logic Apps automations.
                                 <br><br>
                                 <strong class="text-orange-400">More recently, I've been heavily involved in the enterprise-wide migration</strong> from Symantec DLP to Microsoft Purview Endpoint DLP. I joined during the pilot phase and contributed through simulation-mode testing, false-positive reduction, enforcement strategy design, and coordinating phased rollouts with various business units. It has been a full lifecycle engineering project—from design and testing to pilot, enforcement, and stabilization.
                                 <br><br>
@@ -1070,6 +1070,15 @@
                             </div>
                             
                             <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">How do you handle secrets management?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "For my personal project, I kept it simple. The platform doesn't have user authentication—no login page, no user accounts. It's an API-based tool. I store API keys (for external services) in <strong>Railway's environment variables</strong>, which are encrypted and not exposed in logs. For data storage, I use <strong>SQLite</strong> locally—lightweight, no database credentials to manage.
+                                    <br><br>
+                                    I understand this isn't enterprise-grade. In an enterprise environment, you'd use <strong>Azure Key Vault</strong> with AD integration, managed identities so applications authenticate without storing credentials, centralized rotation policies, and audit logging for compliance. My approach works for a simple personal project; enterprise needs proper secrets lifecycle management, access control, and governance."
+                                </p>
+                            </div>
+
+                            <div class="followup-card rounded-lg p-4">
                                 <p class="text-purple-300 text-sm font-medium mb-2">Why did you choose those specific tools?</p>
                                 <p class="text-gray-400 text-sm">
                                     "Mostly practical reasons—they're open source, well-documented, and have good GitHub Actions integrations. <strong>Gitleaks</strong> is fast and has comprehensive regex patterns for secrets. <strong>Semgrep</strong> has a great community ruleset and lets me write custom rules if needed. <strong>Trivy</strong> is widely used and scans both container images and filesystem. For an enterprise environment, I'd expect to use commercial tools like Snyk, Checkmarx, or GitHub Advanced Security that offer better reporting, compliance features, and support—but the concepts are the same."
@@ -1094,6 +1103,15 @@
                                 <p class="text-purple-300 text-sm font-medium mb-2">Have you worked with enterprise DevSecOps tools?</p>
                                 <p class="text-gray-400 text-sm">
                                     "Not hands-on in production, but I understand the landscape. Enterprise tools like <strong>Snyk, Checkmarx, Veracode, GitHub Advanced Security</strong> offer features beyond open-source: centralized dashboards, compliance reporting, policy enforcement across repositories, SLA tracking, and integration with ticketing systems. My experience is with the open-source equivalents, but the security concepts transfer—I'd need to learn the specific tooling and enterprise workflows, but I'm confident I can ramp up quickly."
+                                </p>
+                            </div>
+
+                            <div class="followup-card rounded-lg p-4">
+                                <p class="text-purple-300 text-sm font-medium mb-2">Did you integrate DevSecOps telemetry during your SIEM migration?</p>
+                                <p class="text-gray-400 text-sm">
+                                    "DevSecOps telemetry integration was <strong>not in my direct scope</strong> during the RSA-to-Sentinel migration. My focus was translating and operationalizing detections for the organization's core security controls—NGFW, endpoint/EDR, identity (AD/Entra), email security, DLP, PAM, and vulnerability telemetry like TVM and Qualys. The priority was achieving detection parity and SOC workflow stability for the controls driving the majority of security risk and SOC volume.
+                                    <br><br>
+                                    DevSecOps was planned as a <strong>later maturity step</strong> once the core migration baseline was stabilized. For detections that were out of scope, we translated the RSA NetWitness rules and documented them as part of the migration backlog—preserving the detection logic while keeping the migration focused on high-priority controls."
                                 </p>
                             </div>
                         </div>

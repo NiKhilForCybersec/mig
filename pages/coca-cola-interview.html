@@ -93,7 +93,7 @@
                             
                             I then moved into a security engineering position at Infosys, working across Trellix HX/EX/NX and Symantec DLP. I handled agent deployments, upgrades, policy tuning, and malware investigation. I also participated in evaluating next-generation EDR/XDR platforms such as CrowdStrike, Carbon Black, and Cortex XDR, and contributed to the migration from Trellix to Cortex XDR.<br><br>
                             
-                            After relocating to Canada, I joined a Siemens subsidiary. I initially worked on Cortex XDR agent rollouts, VM broker deployments, and developing XSOAR automations. Later, I transitioned to a major security modernization project—a hybrid environment with on-prem Windows servers moving into Azure. I supported the migration from RSA NetWitness and ESET to a cloud-native Microsoft ecosystem. My responsibilities included converting RSA correlation rules into KQL for Sentinel, onboarding MDE across endpoints and servers, managing the coexistence phase of legacy and new tools, and building Logic Apps automation.<br><br>
+                            After relocating to Canada, I joined a Siemens subsidiary. I initially worked on Cortex XDR agent rollouts, VM broker deployments, and developing XSOAR automations. Later, I transitioned to a major security modernization project—a hybrid environment with on-prem Windows servers moving into Azure. I supported the migration from RSA NetWitness and ESET to a cloud-native Microsoft ecosystem. My focus was translating detections for core security controls—NGFW, endpoint/EDR, identity, email security, DLP, PAM, and vulnerability telemetry. I converted RSA correlation rules into KQL for Sentinel, onboarded MDE across endpoints and servers, and built Logic Apps automations.<br><br>
                             
                             Currently, I'm working on the migration from Symantec DLP to Microsoft Purview Endpoint DLP. I joined during the pilot phase, helped with simulation-mode testing, reduced false positives, and now I'm part of the enforcement rollout—implementing block/warn actions and coordinating phased deployment with business teams. The project is nearing completion.<br><br>
                             
@@ -455,17 +455,51 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                     <p class="text-green-400 font-bold mb-3">Q: Walk me through how you migrated RSA NetWitness correlation rules to Sentinel KQL analytics.</p>
                     <div class="answer-box">
                         <p class="text-gray-300 text-sm leading-relaxed">
-                            "When we migrated from RSA NetWitness to Sentinel, I started by breaking down each RSA correlation rule, mapping the legacy meta keys to Sentinel's schema, and rewriting the logic in KQL with clean entity mapping and MITRE ATT&CK alignment.<br><br>
+                            "In the NetWitness-to-Sentinel migration, my focus was translating and operationalizing detections across the organization's <strong class="text-emerald-400">core security controls</strong>—NGFW, endpoint/EDR, identity (AD/Entra), email security, DLP, PAM, and vulnerability telemetry like TVM and Qualys. The priority was achieving detection parity, tuning, and incident workflow stability for the controls driving the majority of security risk and SOC volume.<br><br>
                             
-                            As I translated the rules, I noticed a lot of duplication in the legacy environment, so I consolidated overlapping detections and categorized everything into three groups:<br>
+                            <strong class="text-emerald-400">My Approach:</strong><br>
+                            I started by breaking down each RSA correlation rule, mapping legacy meta keys to Sentinel's schema, and rewriting the logic in KQL with clean entity mapping and MITRE ATT&CK alignment. As I translated rules, I noticed significant duplication in the legacy environment, so I consolidated overlapping detections and categorized into three groups:<br>
                             • High-value built-in Sentinel rules (use as-is)<br>
                             • Built-ins requiring customization<br>
                             • Fully custom analytics (KQL from scratch)<br><br>
                             
-                            I validated each rewritten rule using historical telemetry, tuned thresholds and suppression windows, and worked closely with the SOC to confirm the new detections behaved as expected. I also built a Sentinel workbook that monitored ingestion health, connector status, and telemetry completeness so we had a reliable view of detection readiness.<br><br>
+                            <strong class="text-emerald-400">Handling Out-of-Scope Detections:</strong><br>
+                            For detections that were out of scope for the current migration phase—like DevSecOps telemetry—we translated the RSA NetWitness rules and <strong>documented them as part of the migration backlog</strong> rather than immediately implementing them in Sentinel. This preserved detection logic and coverage intent while keeping the migration focused on high-priority controls.<br><br>
                             
-                            Between the deduplicated rule set, the improved KQL logic, and the visibility dashboards, we ended up with a cleaner, more accurate, and easier-to-maintain detection program than what existed in RSA. We actually finished about three months ahead of schedule."
+                            DevSecOps telemetry integration was planned as a later maturity step once the core migration baseline and SOC operations were stabilized.<br><br>
+                            
+                            I validated each rewritten rule using historical telemetry, tuned thresholds and suppression windows, and worked closely with the SOC to confirm detections behaved as expected. I also built a Sentinel workbook monitoring ingestion health, connector status, and telemetry completeness.<br><br>
+                            
+                            Between the deduplicated rule set, improved KQL logic, and visibility dashboards, we ended up with a cleaner, more accurate, and easier-to-maintain detection program than what existed in RSA. We finished about three months ahead of schedule."
                         </p>
+                    </div>
+                </div>
+
+                <!-- Scope Clarification Box -->
+                <div class="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 mb-4">
+                    <p class="text-blue-400 font-bold mb-2"><i class="fas fa-info-circle mr-2"></i>Migration Scope Clarification</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <p class="text-green-400 font-semibold mb-2">✅ In Scope (Phase 1):</p>
+                            <ul class="text-gray-400 space-y-1 text-xs">
+                                <li>• NGFW / Firewall logs</li>
+                                <li>• Endpoint/EDR (MDE)</li>
+                                <li>• Identity (AD/Entra ID)</li>
+                                <li>• Email Security</li>
+                                <li>• DLP telemetry</li>
+                                <li>• PAM / Privileged Access</li>
+                                <li>• Vulnerability (TVM, Qualys)</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-yellow-400 font-semibold mb-2">📋 Backlog (Future Phases):</p>
+                            <ul class="text-gray-400 space-y-1 text-xs">
+                                <li>• DevSecOps / CI/CD telemetry</li>
+                                <li>• Application-specific logs</li>
+                                <li>• Custom integrations</li>
+                                <li class="text-gray-500 italic">Rules translated & documented, not implemented</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
@@ -1678,7 +1712,7 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                             <br><br>
                             <strong class="text-emerald-400">Key CI/CD Security Risks I Understand:</strong>
                             <br><br>
-                            <strong>1. Secrets Exposure</strong> — Pipelines need credentials to deploy. If stored insecurely—plain text, logged environment variables—attackers steal them. I use GitHub Secrets and ensure nothing sensitive echoes to logs.
+                            <strong>1. Secrets Exposure</strong> — Pipelines need credentials to deploy. If stored insecurely—plain text, logged environment variables—attackers steal them. In my project, I store API keys in <strong>Railway's environment variables</strong> (encrypted, not logged). The app has no user authentication—just an API tool with SQLite for local storage, so minimal secrets to manage. For enterprise, I'd expect <strong>Azure Key Vault</strong> with AD integration, managed identities, rotation policies, and audit logging.
                             <br><br>
                             <strong>2. Dependency/Supply Chain Risks</strong> — SolarWinds and Codecov showed how compromised dependencies inject malicious code into deployments. I pin dependency versions and scan for known vulnerabilities.
                             <br><br>
@@ -1688,11 +1722,15 @@ OUTCOME: ISO A.12.4.1 is FULLY SATISFIED by:
                             <br><br>
                             <strong class="text-emerald-400">From My Work Experience:</strong>
                             <br><br>
-                            While I haven't owned CI/CD security at work, I've been on the receiving end—integrating DevOps telemetry into Sentinel, building detection rules for deployment anomalies, helping remediate when scans identified issues. I understand how CI/CD fits into the broader security ecosystem.
+                            While I haven't owned CI/CD security at work, I understand how it fits into the broader security ecosystem from the SIEM side—understanding what telemetry DevOps tools generate, how pipeline events could be monitored, and building detection rules for anomalies when that integration happens.
+                            <br><br>
+                            <strong class="text-emerald-400">Scope Clarification:</strong>
+                            <br><br>
+                            DevSecOps telemetry integration was <strong>not in my direct scope</strong> during the RSA-to-Sentinel migration. My focus was core security controls—NGFW, endpoint/EDR, identity, email security, DLP, PAM, and vulnerability telemetry. DevSecOps was planned as a later maturity step once the core migration was stabilized. For out-of-scope detections, we translated RSA rules and documented them as backlog rather than immediately implementing.
                             <br><br>
                             <strong class="text-emerald-400">What I'd Bring:</strong>
                             <br><br>
-                            I have foundational knowledge and hands-on experience. I understand the concepts, tools, and risks. Scaling to enterprise would be about learning specific tools (Snyk, Checkmarx, GitHub Advanced Security) and processes—not learning principles from scratch."
+                            I have foundational knowledge and hands-on experience from personal projects. I understand the concepts, tools, and risks. Scaling to enterprise would be about learning specific tools (Snyk, Checkmarx, GitHub Advanced Security) and processes—not learning principles from scratch."
                         </p>
                     </div>
                 </div>
