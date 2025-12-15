@@ -1054,31 +1054,40 @@ DeviceNetworkEvents
                 </div>
             </div>
 
-            <!-- Detection Tuning Story Full -->
+            <!-- Golden Image Disagreement Story Full -->
             <div class="bg-gray-800/50 rounded-lg p-4 mb-4">
-                <h3 class="text-lg font-bold text-white mb-3">Detection Tuning Disagreement — Full STAR</h3>
+                <h3 class="text-lg font-bold text-white mb-3">Disagreement — Golden Image / Duplicate Device IDs (Full STAR)</h3>
                 <div class="space-y-3 text-sm">
                     <div>
                         <p class="text-cyan-400 font-medium">Situation:</p>
-                        <p class="text-gray-400">A detection rule for "suspicious PowerShell activity" was generating 200+ alerts daily. Most were false positives from legitimate admin scripts. SOC was experiencing alert fatigue.</p>
+                        <p class="text-gray-400">After a new endpoint rollout, we noticed devices in the MDE console showing incorrect telemetry—some devices had duplicate entries, others were missing data entirely. I investigated and found the root cause: IT Ops had deployed endpoints using a golden image that already had the MDE agent onboarded. Multiple devices were reporting with the same device ID because the onboarding blob wasn't cleaned before imaging.</p>
+                    </div>
+                    <div>
+                        <p class="text-cyan-400 font-medium">The Disagreement:</p>
+                        <p class="text-gray-400">IT Ops wanted to just re-image all affected machines from scratch—their standard approach for any endpoint issue. I disagreed because that would mean 50+ machines, significant downtime, and user disruption. I proposed running an offboarding script followed by fresh onboarding instead.</p>
                     </div>
                     <div>
                         <p class="text-cyan-400 font-medium">Task:</p>
-                        <p class="text-gray-400">Colleague wanted to disable the rule entirely. I was concerned we'd lose visibility into real PowerShell-based attacks. Needed to find a solution that reduced noise without losing coverage.</p>
+                        <p class="text-gray-400">Find a solution that fixes the duplicate ID issue without mass re-imaging and disrupting users.</p>
                     </div>
                     <div>
                         <p class="text-cyan-400 font-medium">Action:</p>
                         <ul class="text-gray-400 ml-4 space-y-1">
-                            <li>1. Analyzed alert data → 90% came from 3 admin service accounts running scheduled scripts</li>
-                            <li>2. Proposed tuning: Add exclusions for known-good service accounts + specific script paths</li>
-                            <li>3. Tested both approaches in parallel for 1 week</li>
-                            <li>4. Disabled rule: 0 alerts, but also missed 2 test attacks we simulated</li>
-                            <li>5. Tuned rule: 40 alerts/day (80% reduction), caught both test attacks</li>
+                            <li>1. Ran MDE Client Analyzer to confirm devices had duplicate onboarding blobs</li>
+                            <li>2. Proposed alternative: Run offboarding script to clear existing registration, then re-run onboarding package</li>
+                            <li>3. Tested on 5 pilot machines—offboard, wait for deregistration, re-onboard with fresh ID</li>
+                            <li>4. Validated each device now had unique ID and telemetry was flowing correctly</li>
+                            <li>5. Created a remediation script to automate the process across remaining affected devices</li>
+                            <li>6. Worked with IT Ops to update the golden image process—remove onboarding blob before capture</li>
                         </ul>
                     </div>
                     <div>
                         <p class="text-cyan-400 font-medium">Result:</p>
-                        <p class="text-gray-400">Implemented tuned version. 80% noise reduction while maintaining detection coverage. Colleague agreed the compromise was better than either extreme. Used this as template for future rule tuning.</p>
+                        <p class="text-gray-400">Fixed all 50+ devices without re-imaging. Each device now has unique ID, telemetry is accurate. More importantly, updated the golden image SOP so this won't happen again. IT Ops appreciated the less disruptive approach once they saw it worked.</p>
+                    </div>
+                    <div>
+                        <p class="text-cyan-400 font-medium">Lesson:</p>
+                        <p class="text-gray-400">"Sometimes the 'standard fix' isn't the best fix. Taking time to understand the root cause often reveals a better solution that's less disruptive to the business."</p>
                     </div>
                 </div>
             </div>

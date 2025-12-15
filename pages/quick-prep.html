@@ -477,12 +477,12 @@
                 
                 <div class="bg-gray-800/50 rounded-lg p-4">
                     <p class="text-purple-300 font-medium mb-2">Q: Disagreement with a team member?</p>
-                    <p class="text-white font-medium">→ Detection Tuning Approach</p>
+                    <p class="text-white font-medium">→ Golden Image / Duplicate Device IDs</p>
                     <div class="text-gray-400 text-sm mt-2 space-y-1">
-                        <p><strong class="text-cyan-400">S:</strong> Noisy detection rule generating too many false positives</p>
-                        <p><strong class="text-cyan-400">T:</strong> Colleague wanted to disable it; I thought we'd lose visibility</p>
-                        <p><strong class="text-cyan-400">A:</strong> Proposed tuning thresholds instead. Tested both approaches in parallel</p>
-                        <p><strong class="text-cyan-400">R:</strong> Tuned version caught real incidents with 80% less noise. Compromise worked better</p>
+                        <p><strong class="text-cyan-400">S:</strong> MDE devices showing duplicate entries—IT Ops deployed golden image with agent already onboarded, multiple devices had same ID</p>
+                        <p><strong class="text-cyan-400">Disagreement:</strong> IT Ops wanted to re-image all 50+ machines. I proposed offboard/re-onboard instead—less disruptive</p>
+                        <p><strong class="text-cyan-400">A:</strong> Tested on 5 pilot machines, validated unique IDs, created remediation script, updated golden image SOP</p>
+                        <p><strong class="text-cyan-400">R:</strong> Fixed all devices without re-imaging. IT Ops appreciated less disruptive approach. Updated process prevents recurrence</p>
                     </div>
                 </div>
                 
