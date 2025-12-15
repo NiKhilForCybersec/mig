@@ -1113,11 +1113,11 @@ DeviceNetworkEvents
 
             <!-- Time You Failed -->
             <div class="bg-gray-800/50 rounded-lg p-4 mb-4">
-                <h3 class="text-lg font-bold text-white mb-3">Time You Failed — ASR Rule Blocked Admin Scripts (Full STAR)</h3>
+                <h3 class="text-lg font-bold text-white mb-3">Time You Failed — ASR Rule Blocked Weekly Business Script (Full STAR)</h3>
                 <div class="space-y-3 text-sm">
                     <div>
                         <p class="text-cyan-400 font-medium">Situation:</p>
-                        <p class="text-gray-400">During an MDE policy rollout, I was configuring Attack Surface Reduction rules. I enabled a rule to block PowerShell script execution to prevent fileless malware and living-off-the-land attacks.</p>
+                        <p class="text-gray-400">During an MDE policy rollout, I was configuring Attack Surface Reduction rules. I enabled a rule to block unsigned PowerShell script execution to prevent fileless malware and living-off-the-land attacks. Tested for a week in audit mode, looked clean, moved to enforcement.</p>
                     </div>
                     <div>
                         <p class="text-cyan-400 font-medium">Task:</p>
@@ -1125,21 +1125,21 @@ DeviceNetworkEvents
                     </div>
                     <div>
                         <p class="text-cyan-400 font-medium">What Went Wrong:</p>
-                        <p class="text-gray-400">I applied the rule too broadly—I didn't properly scope it and accidentally included the IT admin group. Within an hour, admins started reporting that their routine automation scripts weren't running. Tickets flooded in. These were legitimate scripts they used daily for system maintenance, patching, and monitoring.</p>
+                        <p class="text-gray-400">A week after enforcement, the Finance team reported their weekly reporting script failed. Turns out, they had a scheduled PowerShell task that runs every Friday to generate reports—it wasn't in our scope documentation, and since it only runs weekly, it didn't trigger during my audit window. The script was unsigned and got blocked.</p>
                     </div>
                     <div>
                         <p class="text-cyan-400 font-medium">Action:</p>
                         <ul class="text-gray-400 ml-4 space-y-1">
-                            <li>1. Immediately rolled back the rule to restore admin functionality</li>
-                            <li>2. Identified which admin accounts and script paths were affected</li>
-                            <li>3. Created proper exclusions for legitimate admin script directories and signed scripts</li>
-                            <li>4. Re-tested in audit mode first to catch any other conflicts</li>
-                            <li>5. Re-deployed with proper scoping—excluded admin group, applied to standard users first</li>
+                            <li>1. Immediately created an exclusion for the specific script path to restore functionality</li>
+                            <li>2. Worked with Finance to understand their full automation footprint</li>
+                            <li>3. Helped them get the script signed so it wouldn't need a permanent exclusion</li>
+                            <li>4. Audited other business units for similar scheduled tasks we might have missed</li>
+                            <li>5. Updated our scoping process to specifically ask about weekly/monthly scheduled tasks</li>
                         </ul>
                     </div>
                     <div>
                         <p class="text-cyan-400 font-medium">Result & Lesson:</p>
-                        <p class="text-gray-400">The rule is now in production with proper exclusions for admin accounts and signed scripts. Standard users have the protection without impacting IT operations. The lesson: <strong class="text-white">always scope security policies carefully</strong>—exclude admin groups from aggressive rules initially, test in audit mode, and do phased rollouts. A few hours of testing upfront prevents production outages.</p>
+                        <p class="text-gray-400">The rule is now in production. Finance script got signed and runs without exclusions. The lesson: <strong class="text-white">audit windows need to cover full business cycles</strong>—daily testing misses weekly or monthly jobs. Now I specifically ask teams about scheduled tasks during scoping, and I run audit mode for at least 2-3 weeks before enforcement to catch those edge cases.</p>
                     </div>
                 </div>
             </div>
