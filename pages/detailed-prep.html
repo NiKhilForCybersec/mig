@@ -1055,7 +1055,7 @@ DeviceNetworkEvents
             </div>
 
             <!-- Detection Tuning Story Full -->
-            <div class="bg-gray-800/50 rounded-lg p-4">
+            <div class="bg-gray-800/50 rounded-lg p-4 mb-4">
                 <h3 class="text-lg font-bold text-white mb-3">Detection Tuning Disagreement — Full STAR</h3>
                 <div class="space-y-3 text-sm">
                     <div>
@@ -1079,6 +1079,144 @@ DeviceNetworkEvents
                     <div>
                         <p class="text-cyan-400 font-medium">Result:</p>
                         <p class="text-gray-400">Implemented tuned version. 80% noise reduction while maintaining detection coverage. Colleague agreed the compromise was better than either extreme. Used this as template for future rule tuning.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Strengths and Weaknesses -->
+            <div class="bg-gray-800/50 rounded-lg p-4 mb-4">
+                <h3 class="text-lg font-bold text-white mb-3">Strengths and Weaknesses — Full Answer</h3>
+                <div class="space-y-3 text-sm">
+                    <div>
+                        <p class="text-emerald-400 font-medium mb-2">Strengths:</p>
+                        <div class="space-y-2">
+                            <div>
+                                <p class="text-white font-medium">1. Methodical Troubleshooting:</p>
+                                <p class="text-gray-400">"I don't just fix issues—I document root cause, resolution, and prevention. The ESET/MDE conflict became a runbook entry. When the same issue came up months later on a new device, the team had a ready reference."</p>
+                            </div>
+                            <div>
+                                <p class="text-white font-medium">2. Bridging Technical and Operational:</p>
+                                <p class="text-gray-400">"I can translate between detection logic and compliance requirements. When auditors ask 'how do you meet ISO A.12.4.1 for event logging?', I can map that directly to our Sentinel implementation and show evidence."</p>
+                            </div>
+                            <div>
+                                <p class="text-white font-medium">3. Self-Driven Learning:</p>
+                                <p class="text-gray-400">"I build personal security projects outside work to stay sharp. It keeps me curious and exposes me to problems I wouldn't see in my day job."</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-yellow-400 font-medium mb-2">Weakness:</p>
+                        <p class="text-gray-400">"Early in my career, I'd try to solve problems alone before asking for help. I thought asking for help was admitting I couldn't do my job. I've learned that reaching out earlier often gets to the solution faster and builds better team relationships. Now I'll spend maybe 30 minutes on my own, then reach out if I'm stuck. It's not weakness—it's efficiency."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Time You Failed -->
+            <div class="bg-gray-800/50 rounded-lg p-4 mb-4">
+                <h3 class="text-lg font-bold text-white mb-3">Time You Failed — ASR Rule Too Aggressive (Full STAR)</h3>
+                <div class="space-y-3 text-sm">
+                    <div>
+                        <p class="text-cyan-400 font-medium">Situation:</p>
+                        <p class="text-gray-400">During an MDE policy rollout, I was configuring Attack Surface Reduction rules. I enabled a rule to block Office applications from creating child processes—a common technique to prevent macro-based malware.</p>
+                    </div>
+                    <div>
+                        <p class="text-cyan-400 font-medium">Task:</p>
+                        <p class="text-gray-400">Roll out the ASR rule to improve endpoint protection across the environment.</p>
+                    </div>
+                    <div>
+                        <p class="text-cyan-400 font-medium">What Went Wrong:</p>
+                        <p class="text-gray-400">I pushed the rule too broadly, too fast. Within an hour, users started reporting that a critical business application wasn't working. Turns out, this application launched helper processes from Excel—legitimate behavior that the ASR rule blocked.</p>
+                    </div>
+                    <div>
+                        <p class="text-cyan-400 font-medium">Action:</p>
+                        <ul class="text-gray-400 ml-4 space-y-1">
+                            <li>1. Immediately rolled back the rule to stop the bleeding</li>
+                            <li>2. Worked with the app team to understand the behavior</li>
+                            <li>3. Created a proper exclusion for the specific application path</li>
+                            <li>4. Re-tested in audit mode first to confirm no other conflicts</li>
+                            <li>5. Re-deployed with the exclusion in place</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-cyan-400 font-medium">Result & Lesson:</p>
+                        <p class="text-gray-400">The rule is now in production with the proper exclusion. No further issues. The lesson: <strong class="text-white">always do phased rollouts</strong>. Now I deploy to a pilot group first, run in audit mode, validate for a week, then expand. The extra time upfront prevents production incidents.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How Do You Handle Feedback -->
+            <div class="bg-gray-800/50 rounded-lg p-4 mb-4">
+                <h3 class="text-lg font-bold text-white mb-3">How Do You Handle Feedback — Full Answer</h3>
+                <div class="space-y-3 text-sm">
+                    <div>
+                        <p class="text-cyan-400 font-medium">Seeking Feedback Proactively:</p>
+                        <p class="text-gray-400">"I actively seek it out. After completing the MDE onboarding runbook, I asked a colleague to follow it step-by-step and tell me where they got stuck. They found two steps that were unclear—I assumed certain pre-requisites that weren't obvious. I updated the doc immediately. Better to find those gaps before someone's struggling at 2 AM during an incident."</p>
+                    </div>
+                    <div>
+                        <p class="text-cyan-400 font-medium">Receiving Critical Feedback:</p>
+                        <p class="text-gray-400">"For critical feedback, I try to separate the emotional reaction from the content. My first instinct used to be defensive. Now, if someone says my detection rule has too many false positives, I focus on understanding <em>why</em> rather than defending it. Usually there's something to learn—maybe I didn't account for certain user behaviors, or the threshold is too sensitive."</p>
+                    </div>
+                    <div>
+                        <p class="text-cyan-400 font-medium">Giving Feedback:</p>
+                        <p class="text-gray-400">"I believe in giving feedback the same way I want to receive it—specific, actionable, and focused on the work, not the person. 'This rule is generating noise because it triggers on scheduled tasks' is more useful than 'this rule is bad.'"</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Something You've Learned Recently -->
+            <div class="bg-gray-800/50 rounded-lg p-4 mb-4">
+                <h3 class="text-lg font-bold text-white mb-3">Something You've Learned Recently — Personal Projects</h3>
+                <div class="space-y-3 text-sm">
+                    <div>
+                        <p class="text-cyan-400 font-medium">The Learning:</p>
+                        <p class="text-gray-400">"I've been building email security tools in my personal projects. Recently learned how to parse email headers to detect spoofing attempts and phishing indicators—things like mismatched envelope-from and header-from, suspicious Reply-To addresses, SPF/DKIM/DMARC failures."</p>
+                    </div>
+                    <div>
+                        <p class="text-cyan-400 font-medium">Why It Matters:</p>
+                        <p class="text-gray-400">"It reinforced how attackers exploit trust in email. Most users just see the display name—they don't check headers. Understanding the technical mechanics makes me better at building detection rules for phishing and BEC attacks in the enterprise context."</p>
+                    </div>
+                    <div>
+                        <p class="text-cyan-400 font-medium">Connection to Role:</p>
+                        <p class="text-gray-400">"This kind of self-driven learning is how I stay sharp. I don't wait for training—I build things. The email project started because I wanted to understand a domain I hadn't worked in deeply. Now I can apply that knowledge to detection engineering."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- First 30 Days -->
+            <div class="bg-gray-800/50 rounded-lg p-4">
+                <h3 class="text-lg font-bold text-white mb-3">First 30 Days — Full Answer</h3>
+                <div class="space-y-3 text-sm">
+                    <div>
+                        <p class="text-emerald-400 font-medium">Week 1: Listen and Learn</p>
+                        <ul class="text-gray-400 ml-4 space-y-1">
+                            <li>• Meet the team—understand current responsibilities, pain points, priorities</li>
+                            <li>• Get access to tools—Sentinel workspace, MDE console, ticketing system, documentation</li>
+                            <li>• Review existing detection rules, runbooks, incident history</li>
+                            <li>• Understand the environment—endpoint count, data sources, what's in scope</li>
+                            <li>• Learn the escalation paths and who owns what</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-emerald-400 font-medium">Week 2: Shadow and Observe</p>
+                        <ul class="text-gray-400 ml-4 space-y-1">
+                            <li>• Shadow alert triage to understand current workflows</li>
+                            <li>• Review recent incidents—what was detected, what was missed, how was it handled?</li>
+                            <li>• Identify quick wins—low-hanging fruit, obvious gaps, broken processes</li>
+                            <li>• Start building relationships with adjacent teams (network, identity, IT ops)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-emerald-400 font-medium">Week 3-4: Small Contributions</p>
+                        <ul class="text-gray-400 ml-4 space-y-1">
+                            <li>• Pick one detection rule to improve or one documentation gap to fill</li>
+                            <li>• Contribute something tangible—even small—to build credibility</li>
+                            <li>• Propose a 90-day plan based on what I've learned</li>
+                            <li>• Validate my understanding with the team before committing to big changes</li>
+                        </ul>
+                    </div>
+                    <div class="highlight p-3 rounded mt-3">
+                        <p class="text-emerald-400 font-medium">Key Principle:</p>
+                        <p class="text-gray-400">"I wouldn't come in trying to change everything. First 30 days is about understanding the environment, building relationships, and finding where I can add value quickly without disrupting what's already working. Earn trust before proposing big changes."</p>
                     </div>
                 </div>
             </div>
