@@ -1113,33 +1113,33 @@ DeviceNetworkEvents
 
             <!-- Time You Failed -->
             <div class="bg-gray-800/50 rounded-lg p-4 mb-4">
-                <h3 class="text-lg font-bold text-white mb-3">Time You Failed — ASR Rule Too Aggressive (Full STAR)</h3>
+                <h3 class="text-lg font-bold text-white mb-3">Time You Failed — ASR Rule Blocked Admin Scripts (Full STAR)</h3>
                 <div class="space-y-3 text-sm">
                     <div>
                         <p class="text-cyan-400 font-medium">Situation:</p>
-                        <p class="text-gray-400">During an MDE policy rollout, I was configuring Attack Surface Reduction rules. I enabled a rule to block Office applications from creating child processes—a common technique to prevent macro-based malware.</p>
+                        <p class="text-gray-400">During an MDE policy rollout, I was configuring Attack Surface Reduction rules. I enabled a rule to block PowerShell script execution to prevent fileless malware and living-off-the-land attacks.</p>
                     </div>
                     <div>
                         <p class="text-cyan-400 font-medium">Task:</p>
-                        <p class="text-gray-400">Roll out the ASR rule to improve endpoint protection across the environment.</p>
+                        <p class="text-gray-400">Roll out the ASR rule to improve endpoint protection and reduce attack surface across the environment.</p>
                     </div>
                     <div>
                         <p class="text-cyan-400 font-medium">What Went Wrong:</p>
-                        <p class="text-gray-400">I pushed the rule too broadly, too fast. Within an hour, users started reporting that a critical business application wasn't working. Turns out, this application launched helper processes from Excel—legitimate behavior that the ASR rule blocked.</p>
+                        <p class="text-gray-400">I applied the rule too broadly—I didn't properly scope it and accidentally included the IT admin group. Within an hour, admins started reporting that their routine automation scripts weren't running. Tickets flooded in. These were legitimate scripts they used daily for system maintenance, patching, and monitoring.</p>
                     </div>
                     <div>
                         <p class="text-cyan-400 font-medium">Action:</p>
                         <ul class="text-gray-400 ml-4 space-y-1">
-                            <li>1. Immediately rolled back the rule to stop the bleeding</li>
-                            <li>2. Worked with the app team to understand the behavior</li>
-                            <li>3. Created a proper exclusion for the specific application path</li>
-                            <li>4. Re-tested in audit mode first to confirm no other conflicts</li>
-                            <li>5. Re-deployed with the exclusion in place</li>
+                            <li>1. Immediately rolled back the rule to restore admin functionality</li>
+                            <li>2. Identified which admin accounts and script paths were affected</li>
+                            <li>3. Created proper exclusions for legitimate admin script directories and signed scripts</li>
+                            <li>4. Re-tested in audit mode first to catch any other conflicts</li>
+                            <li>5. Re-deployed with proper scoping—excluded admin group, applied to standard users first</li>
                         </ul>
                     </div>
                     <div>
                         <p class="text-cyan-400 font-medium">Result & Lesson:</p>
-                        <p class="text-gray-400">The rule is now in production with the proper exclusion. No further issues. The lesson: <strong class="text-white">always do phased rollouts</strong>. Now I deploy to a pilot group first, run in audit mode, validate for a week, then expand. The extra time upfront prevents production incidents.</p>
+                        <p class="text-gray-400">The rule is now in production with proper exclusions for admin accounts and signed scripts. Standard users have the protection without impacting IT operations. The lesson: <strong class="text-white">always scope security policies carefully</strong>—exclude admin groups from aggressive rules initially, test in audit mode, and do phased rollouts. A few hours of testing upfront prevents production outages.</p>
                     </div>
                 </div>
             </div>
@@ -1190,25 +1190,25 @@ DeviceNetworkEvents
                         <p class="text-emerald-400 font-medium">Week 1: Listen and Learn</p>
                         <ul class="text-gray-400 ml-4 space-y-1">
                             <li>• Meet the team—understand current responsibilities, pain points, priorities</li>
-                            <li>• Get access to tools—Sentinel workspace, MDE console, ticketing system, documentation</li>
-                            <li>• Review existing detection rules, runbooks, incident history</li>
-                            <li>• Understand the environment—endpoint count, data sources, what's in scope</li>
+                            <li>• Get access to tools—consoles, ticketing system, documentation, communication channels</li>
+                            <li>• Review existing processes, runbooks, recent project history</li>
+                            <li>• Understand the environment—scope, scale, what's in place</li>
                             <li>• Learn the escalation paths and who owns what</li>
                         </ul>
                     </div>
                     <div>
                         <p class="text-emerald-400 font-medium">Week 2: Shadow and Observe</p>
                         <ul class="text-gray-400 ml-4 space-y-1">
-                            <li>• Shadow alert triage to understand current workflows</li>
-                            <li>• Review recent incidents—what was detected, what was missed, how was it handled?</li>
-                            <li>• Identify quick wins—low-hanging fruit, obvious gaps, broken processes</li>
-                            <li>• Start building relationships with adjacent teams (network, identity, IT ops)</li>
+                            <li>• Shadow day-to-day workflows to understand how things actually work</li>
+                            <li>• Review recent incidents or projects—what went well, what didn't?</li>
+                            <li>• Identify quick wins—low-hanging fruit, obvious gaps, inefficiencies</li>
+                            <li>• Start building relationships with adjacent teams</li>
                         </ul>
                     </div>
                     <div>
                         <p class="text-emerald-400 font-medium">Week 3-4: Small Contributions</p>
                         <ul class="text-gray-400 ml-4 space-y-1">
-                            <li>• Pick one detection rule to improve or one documentation gap to fill</li>
+                            <li>• Pick one thing to improve—a process, a document, a small project</li>
                             <li>• Contribute something tangible—even small—to build credibility</li>
                             <li>• Propose a 90-day plan based on what I've learned</li>
                             <li>• Validate my understanding with the team before committing to big changes</li>
@@ -1216,7 +1216,7 @@ DeviceNetworkEvents
                     </div>
                     <div class="highlight p-3 rounded mt-3">
                         <p class="text-emerald-400 font-medium">Key Principle:</p>
-                        <p class="text-gray-400">"I wouldn't come in trying to change everything. First 30 days is about understanding the environment, building relationships, and finding where I can add value quickly without disrupting what's already working. Earn trust before proposing big changes."</p>
+                        <p class="text-gray-400">"First 30 days is about listening, learning, and earning trust—not changing everything. Understand before you optimize. Every environment has context that isn't obvious on day one. Earn credibility through small wins before proposing big changes."</p>
                     </div>
                 </div>
             </div>

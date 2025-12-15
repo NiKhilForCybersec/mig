@@ -519,12 +519,12 @@
                 
                 <div class="bg-gray-800/50 rounded-lg p-4">
                     <p class="text-purple-300 font-medium mb-2">Q: Describe a time you failed.</p>
-                    <p class="text-white font-medium">→ ASR Rule Too Aggressive</p>
+                    <p class="text-white font-medium">→ ASR Rule Blocked Admin Scripts</p>
                     <div class="text-gray-400 text-sm mt-2 space-y-1">
-                        <p><strong class="text-cyan-400">S:</strong> Pushed an ASR rule that blocked a legitimate business application</p>
-                        <p><strong class="text-cyan-400">T:</strong> Users reported issues within an hour</p>
-                        <p><strong class="text-cyan-400">A:</strong> Quickly rolled back, worked with app team to understand behavior, created proper exclusion</p>
-                        <p><strong class="text-cyan-400">R:</strong> Re-deployed successfully. Now I always do phased rollouts with pilot group first</p>
+                        <p><strong class="text-cyan-400">S:</strong> Enabled ASR rule to block PowerShell script execution—applied it too broadly, included admin group</p>
+                        <p><strong class="text-cyan-400">T:</strong> Admins couldn't run their routine automation scripts, tickets flooded in</p>
+                        <p><strong class="text-cyan-400">A:</strong> Rolled back immediately, identified admin accounts affected, created exclusions for legitimate admin paths, re-tested in audit mode</p>
+                        <p><strong class="text-cyan-400">R:</strong> Re-deployed with proper scoping. Lesson: always exclude admin groups from aggressive rules, test in audit mode first, phased rollouts</p>
                     </div>
                 </div>
                 
@@ -543,11 +543,11 @@
                 <div class="bg-gray-800/50 rounded-lg p-4">
                     <p class="text-purple-300 font-medium mb-2">Q: What would you do in your first 30 days?</p>
                     <div class="text-gray-400 text-sm space-y-1">
-                        <p><strong class="text-cyan-400">Week 1:</strong> Meet team, get tool access, review existing docs and detection rules, understand environment</p>
-                        <p><strong class="text-cyan-400">Week 2:</strong> Shadow alert triage, review recent incidents, identify quick wins</p>
-                        <p><strong class="text-cyan-400">Week 3-4:</strong> Pick one detection rule to improve or one doc gap to fill, build relationships with adjacent teams, propose 90-day plan</p>
+                        <p><strong class="text-cyan-400">Week 1:</strong> Meet the team, get tool access, review existing docs and processes, understand the environment</p>
+                        <p><strong class="text-cyan-400">Week 2:</strong> Shadow workflows, review recent incidents/projects, identify quick wins</p>
+                        <p><strong class="text-cyan-400">Week 3-4:</strong> Pick one thing to improve, build relationships with adjacent teams, propose 90-day plan</p>
                     </div>
-                    <p class="text-emerald-400 text-xs mt-2 italic">"I wouldn't come in trying to change everything. First 30 days is about understanding, building relationships, and finding where I can add value quickly."</p>
+                    <p class="text-emerald-400 text-xs mt-2 italic">"First 30 days is about listening, learning, and earning trust—not changing everything. Understand before you optimize."</p>
                 </div>
             </div>
         </section>
