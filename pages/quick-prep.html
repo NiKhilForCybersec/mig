@@ -314,11 +314,151 @@
         </section>
 
         <!-- ============================================ -->
+        <!-- FRAMEWORK MAPPING -->
+        <!-- ============================================ -->
+        <section class="section-card rounded-xl p-6 mb-6">
+            <h2 class="text-xl font-bold text-amber-400 mb-4 flex items-center gap-2">
+                <span class="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-sm">7</span>
+                Security Frameworks & Compliance
+            </h2>
+            
+            <div class="answer-text text-sm space-y-4">
+                <div>
+                    <p class="text-purple-300 font-medium mb-2">Q: How do you map security controls to frameworks?</p>
+                    <p>"I take the framework control list and map each requirement to an implemented security capability—tool, policy, or process."</p>
+                </div>
+                
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <p class="text-white font-medium mb-2">Example Mappings:</p>
+                    <ul class="text-gray-400 text-xs space-y-1">
+                        <li>• <strong class="text-amber-400">NIST PR.AC-1 (Identity Management)</strong> → Entra ID + Conditional Access + MFA</li>
+                        <li>• <strong class="text-amber-400">NIST DE.AE-1 (Anomaly Detection)</strong> → Sentinel Analytics + UEBA</li>
+                        <li>• <strong class="text-amber-400">ISO A.8.2.3 (Data Leakage Prevention)</strong> → Purview DLP policies</li>
+                        <li>• <strong class="text-amber-400">ISO A.12.4.1 (Event Logging)</strong> → Sentinel + Log Analytics + retention policies</li>
+                        <li>• <strong class="text-amber-400">CIS Control 8 (Audit Logs)</strong> → Centralized logging in Sentinel</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <p class="text-purple-300 font-medium mb-2">Q: How do you handle compliance gaps?</p>
+                    <div class="text-gray-400 text-sm">
+                        <p><strong class="text-white">1. Document the gap</strong> — Which control, what's missing</p>
+                        <p><strong class="text-white">2. Assess risk</strong> — Impact if not addressed</p>
+                        <p><strong class="text-white">3. Remediation options</strong> — Tool, process, or compensating control</p>
+                        <p><strong class="text-white">4. Assign owner + timeline</strong> — Track to closure</p>
+                    </div>
+                </div>
+                
+                <div class="highlight">
+                    <p class="text-emerald-400 text-xs font-bold">💎 Gold Phrase:</p>
+                    <p class="text-white text-sm">"Top-down traceability from compliance requirements to operational controls. During audits, you can show exactly which tool or process satisfies each framework requirement."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- PAM & SECRETS -->
+        <!-- ============================================ -->
+        <section class="section-card rounded-xl p-6 mb-6">
+            <h2 class="text-xl font-bold text-teal-400 mb-4 flex items-center gap-2">
+                <span class="w-8 h-8 rounded-full bg-teal-500/20 flex items-center justify-center text-sm">8</span>
+                PAM & Secrets Management
+            </h2>
+            
+            <div class="answer-text text-sm space-y-4">
+                <div>
+                    <p class="text-purple-300 font-medium mb-2">Q: What's your experience with PAM?</p>
+                    <p>"I've worked on the <strong class="text-white">detection and monitoring side</strong> of privileged access—building alerts for unusual admin behavior, tracking break-glass usage, and validating audit logs."</p>
+                </div>
+                
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <p class="text-white font-medium mb-2">Key PAM Concepts:</p>
+                    <ul class="text-gray-400 text-xs space-y-1">
+                        <li>• <strong class="text-teal-400">Break-glass accounts:</strong> Emergency access with heavy auditing, alerts on use</li>
+                        <li>• <strong class="text-teal-400">JIT (Just-In-Time):</strong> Temporary elevation, auto-expire after time window</li>
+                        <li>• <strong class="text-teal-400">Session recording:</strong> Capture privileged sessions for forensics</li>
+                        <li>• <strong class="text-teal-400">Credential vaulting:</strong> No shared passwords, rotate automatically</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <p class="text-purple-300 font-medium mb-2">Q: How do you manage secrets in cloud-native apps?</p>
+                    <p class="text-gray-400"><strong class="text-white">Azure Key Vault</strong> for secrets, keys, certificates. Managed identities for authentication (no credentials in code). Automated rotation. Never in environment variables or repos.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- OT/ICS SECURITY -->
+        <!-- ============================================ -->
+        <section class="section-card rounded-xl p-6 mb-6">
+            <h2 class="text-xl font-bold text-rose-400 mb-4 flex items-center gap-2">
+                <span class="w-8 h-8 rounded-full bg-rose-500/20 flex items-center justify-center text-sm">9</span>
+                OT/ICS Security (Manufacturing Context)
+            </h2>
+            
+            <div class="answer-text text-sm space-y-4">
+                <div>
+                    <p class="text-purple-300 font-medium mb-2">Q: What's your OT security experience?</p>
+                    <p>"My hands-on experience is in <strong class="text-white">IT security</strong>, but I understand OT fundamentals. The threat model is different—<strong class="text-rose-400">availability and safety come first</strong>."</p>
+                </div>
+                
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <p class="text-white font-medium mb-2">Key OT Concepts:</p>
+                    <ul class="text-gray-400 text-xs space-y-1">
+                        <li>• <strong class="text-rose-400">Purdue Model:</strong> Zone-based architecture (Levels 0-5), DMZ between IT/OT</li>
+                        <li>• <strong class="text-rose-400">IEC 62443:</strong> Industrial security standard for zones and conduits</li>
+                        <li>• <strong class="text-rose-400">No active scanning:</strong> Can disrupt PLCs, use passive monitoring instead</li>
+                        <li>• <strong class="text-rose-400">Patching challenges:</strong> Downtime = production loss, longer change windows</li>
+                        <li>• <strong class="text-rose-400">Air gaps / Segmentation:</strong> Critical for isolating control systems</li>
+                    </ul>
+                </div>
+                
+                <div class="warning">
+                    <p class="text-yellow-400 text-xs font-bold mb-1">⚠️ HONEST POSITIONING:</p>
+                    <p class="text-gray-400 text-xs">"While my hands-on experience is in IT security, I'm eager to apply those skills and grow into OT security with the right context. I understand the fundamentals and why the approach differs."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- CI/CD & DEVSECOPS -->
+        <!-- ============================================ -->
+        <section class="section-card rounded-xl p-6 mb-6">
+            <h2 class="text-xl font-bold text-violet-400 mb-4 flex items-center gap-2">
+                <span class="w-8 h-8 rounded-full bg-violet-500/20 flex items-center justify-center text-sm">10</span>
+                CI/CD & DevSecOps
+            </h2>
+            
+            <div class="answer-text text-sm space-y-4">
+                <div>
+                    <p class="text-purple-300 font-medium mb-2">Q: How would you secure a CI/CD pipeline?</p>
+                    <p>"Shift-left security with <strong class="text-white">frictionless guardrails</strong>—integrate security early without blocking velocity."</p>
+                </div>
+                
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <p class="text-white font-medium mb-2">Pipeline Security Controls:</p>
+                    <ul class="text-gray-400 text-xs space-y-1">
+                        <li>• <strong class="text-violet-400">Pre-commit:</strong> Secrets scanning (GitLeaks, detect-secrets)</li>
+                        <li>• <strong class="text-violet-400">Build:</strong> SAST (Semgrep, SonarQube), dependency scanning (Snyk, Dependabot)</li>
+                        <li>• <strong class="text-violet-400">Deploy:</strong> IaC scanning (Checkov, tfsec), container scanning (Trivy)</li>
+                        <li>• <strong class="text-violet-400">Post-deploy:</strong> DAST, CSPM monitoring</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <p class="text-purple-300 font-medium mb-2">Q: Blocking vs non-blocking checks?</p>
+                    <p class="text-gray-400"><strong class="text-white">Blocking:</strong> Critical/High vulns, secrets in code, license violations. <strong class="text-white">Non-blocking:</strong> Medium/Low vulns, style issues, informational findings. Balance security with developer velocity.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
         <!-- BEHAVIORAL -->
         <!-- ============================================ -->
         <section class="section-card rounded-xl p-6 mb-6">
             <h2 class="text-xl font-bold text-cyan-400 mb-4 flex items-center gap-2">
-                <span class="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-sm">7</span>
+                <span class="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-sm">11</span>
                 Behavioral Questions (STAR Format)
             </h2>
             
@@ -372,7 +512,7 @@
         <!-- ============================================ -->
         <section class="section-card rounded-xl p-6 mb-6">
             <h2 class="text-xl font-bold text-pink-400 mb-4 flex items-center gap-2">
-                <span class="w-8 h-8 rounded-full bg-pink-500/20 flex items-center justify-center text-sm">8</span>
+                <span class="w-8 h-8 rounded-full bg-pink-500/20 flex items-center justify-center text-sm">12</span>
                 Why This Role / Why Coca-Cola?
             </h2>
             
@@ -401,7 +541,7 @@
         <!-- ============================================ -->
         <section class="section-card rounded-xl p-6 mb-6">
             <h2 class="text-xl font-bold text-indigo-400 mb-4 flex items-center gap-2">
-                <span class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-sm">9</span>
+                <span class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-sm">13</span>
                 Questions to Ask Them
             </h2>
             

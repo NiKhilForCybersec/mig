@@ -36,9 +36,13 @@
                 <a href="#dlp" class="text-purple-400 hover:text-purple-300">3. DLP Migration (Symantec → Purview)</a>
                 <a href="#vuln" class="text-orange-400 hover:text-orange-300">4. Vulnerability Management</a>
                 <a href="#ngfw" class="text-red-400 hover:text-red-300">5. NGFW / Firewall</a>
-                <a href="#kql" class="text-cyan-400 hover:text-cyan-300">6. KQL Detection Examples</a>
-                <a href="#infosys" class="text-yellow-400 hover:text-yellow-300">7. Infosys Experience Details</a>
-                <a href="#behavioral" class="text-pink-400 hover:text-pink-300">8. Behavioral Deep Dives</a>
+                <a href="#frameworks" class="text-amber-400 hover:text-amber-300">6. Security Frameworks & Compliance</a>
+                <a href="#pam" class="text-teal-400 hover:text-teal-300">7. PAM & Secrets Management</a>
+                <a href="#ot" class="text-rose-400 hover:text-rose-300">8. OT/ICS Security</a>
+                <a href="#devsecops" class="text-violet-400 hover:text-violet-300">9. CI/CD & DevSecOps</a>
+                <a href="#kql" class="text-cyan-400 hover:text-cyan-300">10. KQL Detection Examples</a>
+                <a href="#infosys" class="text-yellow-400 hover:text-yellow-300">11. Infosys Experience Details</a>
+                <a href="#behavioral" class="text-pink-400 hover:text-pink-300">12. Behavioral Deep Dives</a>
             </div>
         </section>
 
@@ -546,12 +550,372 @@
         </section>
 
         <!-- ============================================ -->
+        <!-- FRAMEWORK MAPPING DETAILED -->
+        <!-- ============================================ -->
+        <section id="frameworks" class="section-card rounded-xl p-6 mb-8">
+            <h2 class="text-2xl font-bold text-amber-400 mb-6 flex items-center gap-3">
+                <i class="fas fa-clipboard-check"></i>
+                6. Security Frameworks & Compliance — Deep Dive
+            </h2>
+
+            <!-- Framework Overview -->
+            <div class="concept-box rounded-lg p-4 mb-6">
+                <h3 class="text-lg font-bold text-white mb-3">Common Security Frameworks</h3>
+                <div class="grid md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <p class="text-amber-400 font-medium mb-2">NIST Cybersecurity Framework:</p>
+                        <ul class="text-gray-400 space-y-1 text-xs">
+                            <li>• 5 Functions: Identify, Protect, Detect, Respond, Recover</li>
+                            <li>• Categories and Subcategories for each function</li>
+                            <li>• Implementation Tiers (1-4) for maturity</li>
+                            <li>• Widely adopted in US, especially critical infrastructure</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-blue-400 font-medium mb-2">ISO 27001:</p>
+                        <ul class="text-gray-400 space-y-1 text-xs">
+                            <li>• International standard for ISMS</li>
+                            <li>• Annex A: 93 controls across 4 themes</li>
+                            <li>• Requires certification audit</li>
+                            <li>• Focus on risk management and continuous improvement</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-green-400 font-medium mb-2">CIS Controls:</p>
+                        <ul class="text-gray-400 space-y-1 text-xs">
+                            <li>• 18 prioritized controls</li>
+                            <li>• Implementation Groups (IG1, IG2, IG3) by org size</li>
+                            <li>• Very prescriptive and actionable</li>
+                            <li>• CIS Benchmarks for specific technologies</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-purple-400 font-medium mb-2">SOC 2:</p>
+                        <ul class="text-gray-400 space-y-1 text-xs">
+                            <li>• Trust Service Criteria: Security, Availability, Processing Integrity, Confidentiality, Privacy</li>
+                            <li>• Type I (point-in-time) vs Type II (over period)</li>
+                            <li>• Common for SaaS/cloud service providers</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mapping Approach -->
+            <div class="mb-6">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">Control Mapping Approach</h3>
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <p class="text-gray-300 text-sm mb-3">"To align frameworks with security controls, I take the framework control list and map each requirement to an implemented security capability."</p>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs">
+                            <thead>
+                                <tr class="border-b border-gray-700">
+                                    <th class="text-left py-2 px-2 text-amber-400">Framework Control</th>
+                                    <th class="text-left py-2 px-2 text-amber-400">Requirement</th>
+                                    <th class="text-left py-2 px-2 text-amber-400">Implemented Control</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-400">
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-2">NIST PR.AC-1</td>
+                                    <td class="py-2 px-2">Identity management</td>
+                                    <td class="py-2 px-2">Entra ID + Conditional Access + MFA</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-2">NIST PR.AC-4</td>
+                                    <td class="py-2 px-2">Access permissions</td>
+                                    <td class="py-2 px-2">RBAC + PIM + Access Reviews</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-2">NIST DE.AE-1</td>
+                                    <td class="py-2 px-2">Anomaly detection</td>
+                                    <td class="py-2 px-2">Sentinel Analytics + UEBA</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-2">NIST DE.CM-1</td>
+                                    <td class="py-2 px-2">Network monitoring</td>
+                                    <td class="py-2 px-2">NGFW logs + NDR + Sentinel</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-2">ISO A.8.2.3</td>
+                                    <td class="py-2 px-2">Data leakage prevention</td>
+                                    <td class="py-2 px-2">Purview DLP policies</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-2">ISO A.12.4.1</td>
+                                    <td class="py-2 px-2">Event logging</td>
+                                    <td class="py-2 px-2">Sentinel + Log Analytics + 90-day retention</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-2 px-2">ISO A.12.6.1</td>
+                                    <td class="py-2 px-2">Vulnerability management</td>
+                                    <td class="py-2 px-2">TVM + Qualys + patch management</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-2">CIS Control 8</td>
+                                    <td class="py-2 px-2">Audit log management</td>
+                                    <td class="py-2 px-2">Centralized logging in Sentinel</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gap Handling -->
+            <div class="highlight p-4 rounded-lg">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">Handling Compliance Gaps</h3>
+                <div class="text-sm space-y-2">
+                    <p><strong class="text-white">1. Document the gap:</strong> Which control, what capability is missing, current state vs required state</p>
+                    <p><strong class="text-white">2. Assess risk:</strong> What's the impact if not addressed? Likelihood of audit finding?</p>
+                    <p><strong class="text-white">3. Remediation options:</strong> New tool, process change, or compensating control</p>
+                    <p><strong class="text-white">4. Assign ownership:</strong> Who's responsible, what's the timeline, track to closure</p>
+                    <p><strong class="text-white">5. Evidence collection:</strong> Screenshots, configs, logs that prove control is effective</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- PAM DETAILED -->
+        <!-- ============================================ -->
+        <section id="pam" class="section-card rounded-xl p-6 mb-8">
+            <h2 class="text-2xl font-bold text-teal-400 mb-6 flex items-center gap-3">
+                <i class="fas fa-key"></i>
+                7. PAM & Secrets Management — Deep Dive
+            </h2>
+
+            <!-- PAM Concepts -->
+            <div class="concept-box rounded-lg p-4 mb-6">
+                <h3 class="text-lg font-bold text-white mb-3">Privileged Access Management (PAM) Concepts</h3>
+                <div class="space-y-3 text-sm">
+                    <div>
+                        <p class="text-teal-400 font-medium">Break-Glass Accounts:</p>
+                        <p class="text-gray-400">Emergency access accounts for when normal access fails. Heavily audited, alerts on any use, credentials stored securely (often split between multiple people). Should trigger immediate investigation when used.</p>
+                    </div>
+                    <div>
+                        <p class="text-teal-400 font-medium">Just-In-Time (JIT) Access:</p>
+                        <p class="text-gray-400">Temporary elevation of privileges for specific tasks. User requests access, gets approval, privileges auto-expire after time window (e.g., 4 hours). Reduces standing privileges. Azure PIM is an example.</p>
+                    </div>
+                    <div>
+                        <p class="text-teal-400 font-medium">Session Recording:</p>
+                        <p class="text-gray-400">Record privileged sessions (RDP, SSH, console) for forensics and audit. Enables playback of exactly what admin did. Some solutions offer keystroke logging.</p>
+                    </div>
+                    <div>
+                        <p class="text-teal-400 font-medium">Credential Vaulting:</p>
+                        <p class="text-gray-400">No shared passwords. Credentials stored in vault, checked out when needed, automatically rotated. Users never see actual password—vault injects it.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detection Side -->
+            <div class="mb-6">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">My Role: Detection & Monitoring</h3>
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <p class="text-gray-300 text-sm mb-3">"I've worked on the detection and monitoring side of privileged access..."</p>
+                    <ul class="text-gray-400 text-xs space-y-1">
+                        <li>• <strong class="text-white">Unusual admin behavior:</strong> Logins at odd hours, from unusual locations, to unfamiliar systems</li>
+                        <li>• <strong class="text-white">Break-glass usage alerts:</strong> Any use triggers immediate alert and investigation</li>
+                        <li>• <strong class="text-white">Privilege escalation:</strong> Users added to admin groups, PIM role activations</li>
+                        <li>• <strong class="text-white">Audit log validation:</strong> Ensure PAM logs flow to SIEM, no gaps</li>
+                        <li>• <strong class="text-white">Password changes:</strong> Admin password resets, especially on service accounts</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Secrets Management -->
+            <div class="mb-6">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">Secrets Management in Cloud</h3>
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <p class="text-white font-medium mb-2">Azure Key Vault Best Practices:</p>
+                    <ul class="text-gray-400 text-xs space-y-1">
+                        <li>• <strong class="text-teal-400">Managed Identities:</strong> Apps authenticate to Azure without credentials in code</li>
+                        <li>• <strong class="text-teal-400">Secret Rotation:</strong> Automate rotation, never manual</li>
+                        <li>• <strong class="text-teal-400">Access Policies:</strong> Least privilege—only apps that need secrets can access them</li>
+                        <li>• <strong class="text-teal-400">Soft Delete + Purge Protection:</strong> Prevent accidental or malicious deletion</li>
+                        <li>• <strong class="text-teal-400">Audit Logging:</strong> All access logged to Log Analytics</li>
+                    </ul>
+                    <div class="bg-red-500/10 border border-red-500/30 rounded p-2 mt-3">
+                        <p class="text-red-400 text-xs font-bold">NEVER:</p>
+                        <p class="text-gray-400 text-xs">Store secrets in code, environment variables, config files, or Git repos</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- OT/ICS DETAILED -->
+        <!-- ============================================ -->
+        <section id="ot" class="section-card rounded-xl p-6 mb-8">
+            <h2 class="text-2xl font-bold text-rose-400 mb-6 flex items-center gap-3">
+                <i class="fas fa-industry"></i>
+                8. OT/ICS Security — Deep Dive
+            </h2>
+
+            <!-- OT vs IT -->
+            <div class="concept-box rounded-lg p-4 mb-6">
+                <h3 class="text-lg font-bold text-white mb-3">OT vs IT Security</h3>
+                <div class="grid md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <p class="text-blue-400 font-medium mb-2">IT Security (My Experience):</p>
+                        <ul class="text-gray-400 space-y-1 text-xs">
+                            <li>• CIA: Confidentiality first</li>
+                            <li>• Patch early, patch often</li>
+                            <li>• Regular reboots acceptable</li>
+                            <li>• Active scanning normal</li>
+                            <li>• Standard OS and applications</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-rose-400 font-medium mb-2">OT Security (Key Differences):</p>
+                        <ul class="text-gray-400 space-y-1 text-xs">
+                            <li>• AIC: <strong class="text-white">Availability first</strong>, then Integrity, then Confidentiality</li>
+                            <li>• Patching requires change windows, vendor approval</li>
+                            <li>• Downtime = production loss, safety risk</li>
+                            <li>• <strong class="text-white">No active scanning</strong>—can crash PLCs</li>
+                            <li>• Legacy systems, proprietary protocols</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Purdue Model -->
+            <div class="mb-6">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">Purdue Model (ISA-95)</h3>
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <p class="text-gray-300 text-sm mb-3">Zone-based architecture for industrial networks:</p>
+                    <div class="space-y-2 text-xs">
+                        <div class="flex items-center gap-2">
+                            <span class="w-16 text-rose-400 font-bold">Level 5:</span>
+                            <span class="text-gray-400">Enterprise Network (Corporate IT, Internet)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-16 text-rose-400 font-bold">Level 4:</span>
+                            <span class="text-gray-400">Site Business Planning (ERP, business apps)</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-yellow-500/10 p-1 rounded">
+                            <span class="w-16 text-yellow-400 font-bold">DMZ:</span>
+                            <span class="text-gray-400">Industrial DMZ (jump servers, data diodes)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-16 text-rose-400 font-bold">Level 3:</span>
+                            <span class="text-gray-400">Site Operations (SCADA, Historian)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-16 text-rose-400 font-bold">Level 2:</span>
+                            <span class="text-gray-400">Area Control (HMI, Engineering workstations)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-16 text-rose-400 font-bold">Level 1:</span>
+                            <span class="text-gray-400">Basic Control (PLCs, RTUs, DCS)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-16 text-rose-400 font-bold">Level 0:</span>
+                            <span class="text-gray-400">Physical Process (sensors, actuators)</span>
+                        </div>
+                    </div>
+                    <p class="text-yellow-400 text-xs mt-3">Key: DMZ between IT (L4-5) and OT (L0-3). All traffic must traverse DMZ.</p>
+                </div>
+            </div>
+
+            <!-- IEC 62443 -->
+            <div class="mb-6">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">IEC 62443 Key Concepts</h3>
+                <div class="bg-gray-800/50 rounded-lg p-4">
+                    <ul class="text-gray-400 text-xs space-y-2">
+                        <li>• <strong class="text-white">Zones:</strong> Logical grouping of assets with similar security requirements</li>
+                        <li>• <strong class="text-white">Conduits:</strong> Controlled communication channels between zones</li>
+                        <li>• <strong class="text-white">Security Levels (SL):</strong> 1-4, defines protection capability required</li>
+                        <li>• <strong class="text-white">Defense in Depth:</strong> Multiple layers, no single point of failure</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- My Positioning -->
+            <div class="highlight p-4 rounded-lg">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">Honest Positioning</h3>
+                <p class="text-gray-300 text-sm">"My hands-on experience is in IT security, but I understand OT fundamentals. The threat model is different—availability and safety come first. I'm eager to apply my IT security skills and grow into OT security with the right context."</p>
+                <p class="text-gray-400 text-xs mt-2">What I can bring: Detection engineering, SIEM integration, log analysis, incident response methodology—all transferable to OT with domain knowledge.</p>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- DEVSECOPS DETAILED -->
+        <!-- ============================================ -->
+        <section id="devsecops" class="section-card rounded-xl p-6 mb-8">
+            <h2 class="text-2xl font-bold text-violet-400 mb-6 flex items-center gap-3">
+                <i class="fas fa-code-branch"></i>
+                9. CI/CD & DevSecOps — Deep Dive
+            </h2>
+
+            <!-- Pipeline Security -->
+            <div class="concept-box rounded-lg p-4 mb-6">
+                <h3 class="text-lg font-bold text-white mb-3">CI/CD Pipeline Security Controls</h3>
+                <div class="space-y-3 text-sm">
+                    <div>
+                        <p class="text-violet-400 font-medium">Pre-Commit (Developer Workstation):</p>
+                        <p class="text-gray-400 text-xs">Secrets scanning (GitLeaks, detect-secrets), pre-commit hooks, IDE security plugins</p>
+                    </div>
+                    <div>
+                        <p class="text-violet-400 font-medium">Build Stage:</p>
+                        <p class="text-gray-400 text-xs">SAST (Semgrep, SonarQube, CodeQL), Dependency scanning (Snyk, Dependabot), License compliance</p>
+                    </div>
+                    <div>
+                        <p class="text-violet-400 font-medium">Package Stage:</p>
+                        <p class="text-gray-400 text-xs">Container scanning (Trivy, Aqua), Image signing, Base image validation</p>
+                    </div>
+                    <div>
+                        <p class="text-violet-400 font-medium">Deploy Stage:</p>
+                        <p class="text-gray-400 text-xs">IaC scanning (Checkov, tfsec), Policy as Code (OPA), Environment validation</p>
+                    </div>
+                    <div>
+                        <p class="text-violet-400 font-medium">Runtime:</p>
+                        <p class="text-gray-400 text-xs">DAST (OWASP ZAP), RASP, CSPM monitoring, Runtime container security</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blocking vs Non-Blocking -->
+            <div class="mb-6">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">Blocking vs Non-Blocking Checks</h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+                        <p class="text-red-400 font-medium mb-2">🛑 BLOCKING (Fail Pipeline):</p>
+                        <ul class="text-gray-400 text-xs space-y-1">
+                            <li>• Critical/High severity vulnerabilities</li>
+                            <li>• Secrets detected in code</li>
+                            <li>• License violations (GPL in proprietary code)</li>
+                            <li>• Known malware signatures</li>
+                            <li>• Authentication/authorization flaws</li>
+                        </ul>
+                    </div>
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
+                        <p class="text-yellow-400 font-medium mb-2">⚠️ NON-BLOCKING (Warning):</p>
+                        <ul class="text-gray-400 text-xs space-y-1">
+                            <li>• Medium/Low severity vulnerabilities</li>
+                            <li>• Code style/quality issues</li>
+                            <li>• Informational findings</li>
+                            <li>• Deprecated dependencies (without vulns)</li>
+                            <li>• Documentation gaps</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shift Left -->
+            <div class="highlight p-4 rounded-lg">
+                <h3 class="text-lg font-bold text-emerald-400 mb-3">Shift-Left Security Philosophy</h3>
+                <p class="text-gray-300 text-sm mb-2">"Find issues early when they're cheap to fix. A vulnerability found in dev costs 10x less to fix than in production."</p>
+                <p class="text-gray-400 text-xs"><strong class="text-white">Key principle:</strong> Frictionless guardrails—integrate security without blocking developer velocity. Security should enable, not obstruct.</p>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
         <!-- KQL EXAMPLES -->
         <!-- ============================================ -->
         <section id="kql" class="section-card rounded-xl p-6 mb-8">
             <h2 class="text-2xl font-bold text-cyan-400 mb-6 flex items-center gap-3">
                 <i class="fas fa-code"></i>
-                6. KQL Detection Examples
+                10. KQL Detection Examples
             </h2>
 
             <div class="space-y-4">
@@ -601,7 +965,7 @@ DeviceNetworkEvents
         <section id="infosys" class="section-card rounded-xl p-6 mb-8">
             <h2 class="text-2xl font-bold text-yellow-400 mb-6 flex items-center gap-3">
                 <i class="fas fa-building"></i>
-                7. Infosys Experience — Deep Dive
+                11. Infosys Experience — Deep Dive
             </h2>
 
             <!-- FireEye Stack -->
@@ -655,7 +1019,7 @@ DeviceNetworkEvents
         <section id="behavioral" class="section-card rounded-xl p-6 mb-8">
             <h2 class="text-2xl font-bold text-pink-400 mb-6 flex items-center gap-3">
                 <i class="fas fa-comments"></i>
-                8. Behavioral Deep Dives
+                12. Behavioral Deep Dives
             </h2>
 
             <!-- ESET Story Full -->
